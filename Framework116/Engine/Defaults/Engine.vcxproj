@@ -105,7 +105,8 @@
     <PostBuildEvent>
       <Command>xcopy			/y				..\Headers\*.h		..\..\Reference\Headers\
 xcopy			/y				..\Bin\*.lib		..\..\Reference\Libraries\
-xcopy			/y				..\Bin\*.dll		..\..\Client\Bin\</Command>
+xcopy			/y				..\Bin\*.dll		..\..\Client\Bin\
+xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,7 +145,8 @@ xcopy			/y				..\Bin\*.dll		..\..\Client\Bin\</Command>
     <PostBuildEvent>
       <Command>xcopy			/y				..\Headers\*.h		..\..\Reference\Headers\
 xcopy			/y				..\Bin\*.lib		..\..\Reference\Libraries\
-xcopy			/y				..\Bin\*.dll		..\..\Client\Bin\</Command>
+xcopy			/y				..\Bin\*.dll		..\..\Client\Bin\
+xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

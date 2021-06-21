@@ -32,9 +32,8 @@ public:
 #endif
 
 protected:  // 컨트롤 모음이 포함된 멤버입니다.
-	CToolBar          m_wndToolBar;
-	CStatusBar        m_wndStatusBar;
-	//CChildView    m_wndView;
+	CSplitterWnd m_tMainSplitterWnd;
+	CSplitterWnd m_tSecondSplitterWnd;
 
 // 생성된 메시지 맵 함수
 protected:
@@ -42,6 +41,7 @@ protected:
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
 	DECLARE_MESSAGE_MAP()
 
+	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 };
 
 

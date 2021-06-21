@@ -32,10 +32,7 @@
 #include "Tool_Enum.h"
 #include "Management.h"
 
-
-
-
-
+using namespace Engine;
 
 
 #ifdef _UNICODE
