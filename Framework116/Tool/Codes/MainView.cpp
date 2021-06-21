@@ -8,13 +8,13 @@
 #include "MainScene.h"
 
 // CMainView
+HWND g_hWnd;
 
 IMPLEMENT_DYNCREATE(CMainView, CScrollView)
 
 CMainView::CMainView() :
 	m_pManagement(CManagement::Get_Instance())
 {
-
 }
 
 CMainView::~CMainView()
@@ -34,15 +34,17 @@ END_MESSAGE_MAP()
 
 
 // CMainView 그리기
-
 void CMainView::OnInitialUpdate()
 {
+	if (false == m_bStart) return;
+
 	CScrollView::OnInitialUpdate();
 
 	CSize sizeTotal;
 	// TODO: 이 뷰의 전체 크기를 계산합니다.
 	sizeTotal.cx = sizeTotal.cy = 100;
 	SetScrollSizes(MM_TEXT, sizeTotal);
+	g_hWnd = m_hWnd;
 
 	CMainFrame* pMain = dynamic_cast<CMainFrame*>(::AfxGetApp()->GetMainWnd());
 	RECT rcMain{};
@@ -64,6 +66,7 @@ void CMainView::OnInitialUpdate()
 
 	m_pDevice = m_pManagement->Get_Device();
 	Safe_AddRef(m_pDevice);
+
 	if (nullptr == m_pDevice)
 	{
 		PRINT_LOG(L"Error", L"m_pDevice is nullptr");
@@ -72,7 +75,7 @@ void CMainView::OnInitialUpdate()
 
 	if (FAILED(m_pManagement->Setup_CurrentScene((_uint)ESceneType::MainScene, CMainScene::Create(m_pDevice))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Setup Logo Scene");
+		PRINT_LOG(L"Error", L"Failed To Setup MainScene Scene");
 		return;
 	}
 
@@ -87,6 +90,8 @@ void CMainView::OnInitialUpdate()
 		PRINT_LOG(L"Error", L"Failed To Setup Default Setting");
 		return;
 	}
+
+	m_bStart = false;
 }
 
 HRESULT CMainView::Ready_StaticResources()

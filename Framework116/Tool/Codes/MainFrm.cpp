@@ -114,7 +114,6 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 	m_tMainSplitterWnd.CreateView(0, 1, RUNTIME_CLASS(CMainView), CSize(MAINVIEW_WINCX, MAINVIEW_WINCY), pContext);
 
-	//return CFrameWnd::OnCreateClient(lpcs, pContext);
 	return TRUE;
 	//return CFrameWnd::OnCreateClient(lpcs, pContext);
 }

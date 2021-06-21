@@ -176,7 +176,7 @@ HRESULT CMainApp::Setup_DefaultSetting()
 	D3DCULL_CW(Clock Wise): 시계 방향으로 구성한 폴리곤을 추려낸다.
 	D3DCULL_NONE: 후면추려내기 안함.
 	*/
-	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE)))
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Set D3DRS_CULLMODE");
 		return E_FAIL;
