@@ -31,6 +31,18 @@
     <Filter Include="03.GameObject">
       <UniqueIdentifier>{4f42520a-4e7f-4df1-9562-92c55c7994a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\00.Player">
+      <UniqueIdentifier>{885b750e-dd59-402f-a242-8ca2bb11b074}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\01.Camera">
+      <UniqueIdentifier>{5167b6c2-f1f3-4958-a49d-e016fcd810be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\02.Skybox">
+      <UniqueIdentifier>{6e61f2d4-6f82-4c30-8d69-ae952cc8bb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameObject\03.Axis">
+      <UniqueIdentifier>{1bdb2459-962e-45e7-ace9-8258842ece8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">
@@ -69,6 +81,18 @@
     <ClInclude Include="..\Headers\MainScene.h">
       <Filter>02.Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Skybox.h">
+      <Filter>03.GameObject\02.Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MainCam.h">
+      <Filter>03.GameObject\01.Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player.h">
+      <Filter>03.GameObject\00.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Axis.h">
+      <Filter>03.GameObject\03.Axis</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -91,6 +115,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainScene.cpp">
       <Filter>02.Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MainCam.cpp">
+      <Filter>03.GameObject\01.Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player.cpp">
+      <Filter>03.GameObject\00.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Skybox.cpp">
+      <Filter>03.GameObject\02.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Axis.cpp">
+      <Filter>03.GameObject\03.Axis</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

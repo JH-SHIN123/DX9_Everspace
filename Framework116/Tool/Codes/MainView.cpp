@@ -7,6 +7,10 @@
 #include <MainFrm.h>
 #include "MainScene.h"
 
+#include "Player.h"
+#include "MainCam.h"
+#include "Axis.h"
+
 // CMainView
 HWND g_hWnd;
 
@@ -73,12 +77,6 @@ void CMainView::OnInitialUpdate()
 		return;
 	}
 
-	if (FAILED(m_pManagement->Setup_CurrentScene((_uint)ESceneType::MainScene, CMainScene::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Setup MainScene Scene");
-		return;
-	}
-
 	if (FAILED(Ready_StaticResources()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Ready Static Resources");
@@ -91,16 +89,153 @@ void CMainView::OnInitialUpdate()
 		return;
 	}
 
+	if (FAILED(m_pManagement->Setup_CurrentScene((_uint)ESceneType::MainScene, CMainScene::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Setup MainScene Scene");
+		return;
+	}
+
 	m_bStart = false;
 }
 
 HRESULT CMainView::Ready_StaticResources()
 {
+#pragma region GameObjects
+	/* For.GameObject_Player */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Player",
+		CPlayer::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_MainCam */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_MainCam",
+		CMainCam::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_MainCam");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Axis",
+		CAxis::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Axis");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region Components
+	/* For.Component_VIBuffer_TriColor */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_VIBuffer_TriColor",
+		CVIBuffer_TriColor::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_TriColor");
+		return E_FAIL;
+	}
+
+	/* For.Component_VIBuffer_RectColor */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_VIBuffer_RectColor",
+		CVIBuffer_RectColor::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_RectColor");
+		return E_FAIL;
+	}
+
+	/* For.Component_VIBuffer_RectTexture */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_VIBuffer_RectTexture",
+		CVIBuffer_RectTexture::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_RectTexture");
+		return E_FAIL;
+	}
+
+	/* For.Component_VIBuffer_CubeTexture */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_VIBuffer_CubeTexture",
+		CVIBuffer_CubeTexture::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_CubeTexture");
+		return E_FAIL;
+	}
+
+	/* For.Component_Transform */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Transform",
+		CTransform::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Transform");
+		return E_FAIL;
+	}
+
+	/* For.Component_Mesh_BigShip */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_BigShip",
+		CMesh::Create(m_pDevice, L"../../Resources/ship.X", L"../../Resources/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
+		return E_FAIL;
+	}
+
+	/* For.Component_Mesh_Axis */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Axis",
+		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
+		return E_FAIL;
+	}
+#pragma endregion
+
 	return S_OK;
 }
 
 HRESULT CMainView::Setup_DefaultSetting()
 {
+	// 조명 off
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
+		return E_FAIL;
+	}
+
+	///*
+	//D3DFILL_WIREFRAME: 색을 채우지말고 외곽선만 그려라.
+	//D3DFILL_SOLID: 색을 채워넣어라(디폴트)
+	//*/
+	//if (FAILED(m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Set wireframe");
+	//	return E_FAIL;
+	//}
+
+	/*
+	D3DCULL_CCW(Counter Clock Wise): 반시계 방향으로 구성한 폴리곤을 추려낸다. (디폴트값)
+	D3DCULL_CW(Clock Wise): 시계 방향으로 구성한 폴리곤을 추려낸다.
+	D3DCULL_NONE: 후면추려내기 안함.
+	*/
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set D3DRS_CULLMODE");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 

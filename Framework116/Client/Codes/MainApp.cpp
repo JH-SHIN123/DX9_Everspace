@@ -25,21 +25,21 @@ HRESULT CMainApp::Ready_MainApp()
 		return E_FAIL;
 	}
 
-	if (FAILED(m_pManagement->Setup_CurrentScene((_uint)ESceneType::Logo, CLogo::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Setup Logo Scene");
-		return E_FAIL;
-	}
-
 	if (FAILED(Ready_StaticResources()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Ready Static Resources");
 		return E_FAIL;
-	}	
+	}
 
 	if (FAILED(Setup_DefaultSetting()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Setup Default Setting");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Setup_CurrentScene((_uint)ESceneType::Logo, CLogo::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Setup Logo Scene");
 		return E_FAIL;
 	}
 
@@ -128,16 +128,6 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
-	/* For.Component_Texture_Player */
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_Texture_Player",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../Resources/Player%d.png"))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Player");
-		return E_FAIL;
-	}
-
 	/* For.Component_Mesh */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
@@ -145,6 +135,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CMesh::Create(m_pDevice,L"../../Resources/ship.X", L"../../Resources/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
+		return E_FAIL;
+	}
+
+	/* For.Component_Mesh_Axis */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Axis",
+		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
 		return E_FAIL;
 	}
 #pragma endregion

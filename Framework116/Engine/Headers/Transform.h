@@ -53,7 +53,10 @@ public:
 	_uint Update_Transform();
 	_uint Go_Straight(_float fDeltaTime);
 	_uint Go_Side(_float fDeltaTime);
+
+	_uint RotateX(_float fDeltaTime);
 	_uint RotateY(_float fDeltaTime);
+	_uint RotateZ(_float fDeltaTime);
 
 public:
 	static CTransform* Create(LPDIRECT3DDEVICE9 pDevice);

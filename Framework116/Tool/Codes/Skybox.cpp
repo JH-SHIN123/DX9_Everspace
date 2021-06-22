@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "..\Headers\Skybox.h"
 #include "Camera.h"
 

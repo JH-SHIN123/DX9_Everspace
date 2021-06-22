@@ -1,15 +1,15 @@
 #pragma once
-#ifndef __PLAYER_H__
+#ifndef __AXIS_H__
 
 #include "GameObject.h"
 
 USING(Engine)
-class CPlayer final : public CGameObject
+class CAxis final : public CGameObject
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice);
-	explicit CPlayer(const CPlayer& other);
-	virtual ~CPlayer() = default;
+	explicit CAxis(LPDIRECT3DDEVICE9 pDevice);
+	explicit CAxis(const CAxis& other);
+	virtual ~CAxis() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -22,19 +22,14 @@ private:
 	_uint Movement(_float fDeltaTime);
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CAxis* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
-
-private:
-	POINT m_tCurCursorPos = { 0,0 };
-	POINT m_tPrevCursorPos = { 0,0 };
-
 };
 
-#define __PLAYER_H__
+#define __AXIS_H__
 #endif

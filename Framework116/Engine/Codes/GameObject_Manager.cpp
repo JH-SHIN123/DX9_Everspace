@@ -97,7 +97,7 @@ CGameObject * CGameObject_Manager::Clone_GameObject(
 	auto iter_find = m_GameObjects[iTypeIndex].find(PrototypeTag);
 	if (m_GameObjects[iTypeIndex].end() == iter_find)
 	{
-		wstring ErrorMsg = PrototypeTag + L"is not found";
+		wstring ErrorMsg = PrototypeTag + L" is not found";
 		PRINT_LOG(L"Error", ErrorMsg.c_str());
 		return nullptr;
 	}

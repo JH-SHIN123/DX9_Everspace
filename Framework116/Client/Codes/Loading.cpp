@@ -224,6 +224,16 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Grass");
 		return E_FAIL;
 	}
+
+	/* For.Component_Texture_Skybox */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Skybox%d.dds",1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	return S_OK;

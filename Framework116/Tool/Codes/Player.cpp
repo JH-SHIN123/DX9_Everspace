@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "pch.h"
 #include "..\Headers\Player.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
@@ -29,7 +29,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		L"Com_Mesh",
 		(CComponent**)&m_pMesh)))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Mesh");
+		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Mesh_Axis");
 		return E_FAIL;
 	}
 
@@ -37,7 +37,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 5.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
-	TransformDesc.vScale = { 0.01f,0.01f,0.01f };
+	TransformDesc.vScale = { 0.005f,0.005f,0.005f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -50,9 +50,9 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// Setting Prev Cursor 
-	GetCursorPos(&m_tPrevCursorPos);
-	ScreenToClient(g_hWnd, &m_tPrevCursorPos);
+	//// Setting Prev Cursor 
+	//GetCursorPos(&m_tPrevCursorPos);
+	//ScreenToClient(g_hWnd, &m_tPrevCursorPos);
 
 	return S_OK;
 }

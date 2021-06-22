@@ -13,6 +13,10 @@ protected:
 
 public:
 	const class CComponent* Get_Component(const wstring& ComponentTag) const;
+	const _bool Get_IsPicking() const { return m_IsPicking; }
+
+public:
+	void Set_IsPicking(const bool _isPicking) { m_IsPicking = _isPicking; };
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() = 0;	/* 프로토타입 초기화 */
@@ -31,6 +35,7 @@ public:
 protected:
 	LPDIRECT3DDEVICE9 m_pDevice = nullptr;
 	_bool m_IsClone = false;
+	_bool m_IsPicking = false;
 
 	typedef unordered_map<wstring, class CComponent*>	COMPONENTS;
 	COMPONENTS m_Components; /* 클론 보관 */

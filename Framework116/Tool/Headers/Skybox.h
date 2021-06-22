@@ -1,15 +1,20 @@
 #pragma once
-#ifndef __PLAYER_H__
+#ifndef __SKYBOX_H__
 
 #include "GameObject.h"
 
+/* 엔진에 있는 클래스를 전방선언할 때!! */
+BEGIN(Engine)
+class CCamera;
+END
+
 USING(Engine)
-class CPlayer final : public CGameObject
+class CSkybox final : public CGameObject
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice);
-	explicit CPlayer(const CPlayer& other);
-	virtual ~CPlayer() = default;
+	explicit CSkybox(LPDIRECT3DDEVICE9 pDevice);
+	explicit CSkybox(const CSkybox& other);
+	virtual ~CSkybox() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -22,19 +27,16 @@ private:
 	_uint Movement(_float fDeltaTime);
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CSkybox* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
-	CMesh*  m_pMesh = nullptr;
+	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
-
-private:
-	POINT m_tCurCursorPos = { 0,0 };
-	POINT m_tPrevCursorPos = { 0,0 };
-
+	CTexture*	m_pTexture = nullptr;	
+	CCamera* m_pCamera = nullptr;
 };
 
-#define __PLAYER_H__
+#define __SKYBOX_H__
 #endif

@@ -1,15 +1,15 @@
 #pragma once
-#ifndef __PLAYER_H__
+#ifndef __MAINCAM_H__
 
-#include "GameObject.h"
+#include "Camera.h"
 
 USING(Engine)
-class CPlayer final : public CGameObject
+class CMainCam final : public CCamera
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice);
-	explicit CPlayer(const CPlayer& other);
-	virtual ~CPlayer() = default;
+	explicit CMainCam(LPDIRECT3DDEVICE9 pDevice);
+	explicit CMainCam(const CMainCam& other);
+	virtual ~CMainCam() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -20,21 +20,18 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint KeyInput(_float fDeltaTime);
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CMainCam* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
-	CMesh*  m_pMesh = nullptr;
-	CTransform* m_pTransform = nullptr;
-
-private:
-	POINT m_tCurCursorPos = { 0,0 };
-	POINT m_tPrevCursorPos = { 0,0 };
-
+	CTransform* m_pPlayerTransform = nullptr;
+	_float m_fDistanceFromTarget = 10.f;
+	_float m_fCamAngle = D3DXToRadian(45.f);
 };
 
-#define __PLAYER_H__
+#define __MAINCAM_H__
 #endif

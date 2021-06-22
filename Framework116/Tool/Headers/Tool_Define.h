@@ -2,7 +2,8 @@
 
 #ifndef __TOOL_DEFINE_H__
 
-//extern HWND g_hWnd;
+extern HWND g_hWnd;
+
 #define MAINVIEW_WINCX 800
 #define MAINVIEW_WINCY 600
 
