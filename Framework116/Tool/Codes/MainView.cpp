@@ -246,6 +246,8 @@ void CMainView::OnDraw(CDC* pDC)
 
 	// 툴별로 씬을 나누자.
 	m_pManagement->Update_Game();
+
+	Invalidate(FALSE);
 }
 
 
