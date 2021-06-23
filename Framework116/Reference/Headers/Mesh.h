@@ -29,6 +29,9 @@ private:
 	//IDirect3DBaseTexture9
 	const TCHAR* m_pFilePath = nullptr;
 	const TCHAR* m_pTexturePath = nullptr;
+
+	// 콜라이드툴을 사용해서 채워넣기
+	// vector<CCollideSphere>
 };
 END
 

@@ -42,48 +42,83 @@ typedef struct tagIndex32
 	DWORD _1, _2, _3;
 }INDEX32;
 
-typedef struct tagPassingData_Object {
+//<<<<<<< HEAD
+//typedef struct tagPassingData_Object {
+//
+//#ifdef _AFX
+//	CString wstrPrototypeTag;
+//	CString wstrPrototypeTag_Mesh;
+//#else 
+//	wstring wstrPrototypeTag_Object;
+//	wstring wstrPrototypeTag_Mesh;
+//
+//	// Material Info
+//	D3DMATERIAL9 tMaterial;
+//#endif // _AFX
+//
+//}PASSDATA_OBJECT;
+//
+//typedef struct tagPassingData_Map {
+//	UINT eObjectType;
+//	_float4x4 matWorld;
+//}PASSDATA_MAP;
+//=======
+//typedef struct tagBoundingBox : public BASE_DESC
+//{
+//	D3DXVECTOR3 _min = { 0.f, 0.f, 0.f };
+//	D3DXVECTOR3 _max = { 0.f, 0.f, 0.f };
+//}BOUNDING_BOX;
 
-#ifdef _AFX
-	CString wstrPrototypeTag;
-	CString wstrPrototypeTag_Mesh;
-#else 
-	wstring wstrPrototypeTag_Object;
-	wstring wstrPrototypeTag_Mesh;
+typedef struct tagBoundingSphere : public BASE_DESC
+{
+	tagBoundingSphere()
+	{
+		D3DXMatrixIdentity(&matWorld);
+	}
 
-	// Material Info
-	D3DMATERIAL9 tMaterial;
-#endif // _AFX
+	const _float3 Get_Position() const {
+		return {matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z};
+	};
 
-}PASSDATA_OBJECT;
-
-typedef struct tagPassingData_Map {
-	UINT eObjectType;
+	// World
 	_float4x4 matWorld;
-}PASSDATA_MAP;
 
-typedef struct tagPassingData_Route {
-	_float3 vNodePos;
-}PASSDATA_ROUTE;
+	// 각 축을 향한 반지름 길이
+	_float3 vCenter = { 0.f, 0.f ,0.f };
+	_float fRadius = 1.f;
+}BOUNDING_SPHERE;
 
-typedef struct tagPassingData_Resource {
-#ifdef _AFX
-	CString wstrPrototypeTag;
-	CString wstrFilePath;
-#else 
-	wstring wstrPrototypeTag;
-	wstring wstrFilePath;
-#endif // _AFX
+typedef struct tagRay
+{
+	_float3 vPos = { 0.f, 0.f, 0.f };
+	_float3 vDirection = { 0.f, 0.f, 0.f };
+}RAY;
 
-	DWORD dwResourceType;
-	DWORD dwTextureCount;
-}PASSDATA_RESOURCE;
-
-typedef struct tagPassingData_UI {
-	UINT eObjectType;
-	_float4x4 matWorld;
-}PASSDATA_UI;
 END
+//>>>>>>> origin/main
+//
+//typedef struct tagPassingData_Route {
+//	_float3 vNodePos;
+//}PASSDATA_ROUTE;
+//
+//typedef struct tagPassingData_Resource {
+//#ifdef _AFX
+//	CString wstrPrototypeTag;
+//	CString wstrFilePath;
+//#else 
+//	wstring wstrPrototypeTag;
+//	wstring wstrFilePath;
+//#endif // _AFX
+//
+//	DWORD dwResourceType;
+//	DWORD dwTextureCount;
+//}PASSDATA_RESOURCE;
+//
+//typedef struct tagPassingData_UI {
+//	UINT eObjectType;
+//	_float4x4 matWorld;
+//}PASSDATA_UI;
+//END
 #define __ENGINE_STRUCT_H__
 #endif
 
