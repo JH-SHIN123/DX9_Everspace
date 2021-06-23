@@ -42,7 +42,48 @@ typedef struct tagIndex32
 	DWORD _1, _2, _3;
 }INDEX32;
 
-END
+typedef struct tagPassingData_Object {
 
+#ifdef _AFX
+	CString wstrPrototypeTag;
+	CString wstrPrototypeTag_Mesh;
+#else 
+	wstring wstrPrototypeTag_Object;
+	wstring wstrPrototypeTag_Mesh;
+
+	// Material Info
+	D3DMATERIAL9 tMaterial;
+#endif // _AFX
+
+}PASSDATA_OBJECT;
+
+typedef struct tagPassingData_Map {
+	UINT eObjectType;
+	_float4x4 matWorld;
+}PASSDATA_MAP;
+
+typedef struct tagPassingData_Route {
+	_float3 vNodePos;
+}PASSDATA_ROUTE;
+
+typedef struct tagPassingData_Resource {
+#ifdef _AFX
+	CString wstrPrototypeTag;
+	CString wstrFilePath;
+#else 
+	wstring wstrPrototypeTag;
+	wstring wstrFilePath;
+#endif // _AFX
+
+	DWORD dwResourceType;
+	DWORD dwTextureCount;
+}PASSDATA_RESOURCE;
+
+typedef struct tagPassingData_UI {
+	UINT eObjectType;
+	_float4x4 matWorld;
+}PASSDATA_UI;
+END
 #define __ENGINE_STRUCT_H__
 #endif
+

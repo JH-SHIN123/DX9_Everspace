@@ -34,6 +34,8 @@ CMainView::~CMainView()
 
 
 BEGIN_MESSAGE_MAP(CMainView, CScrollView)
+	ON_WM_KEYDOWN()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -231,6 +233,7 @@ HRESULT CMainView::Setup_DefaultSetting()
 	D3DCULL_NONE: 후면추려내기 안함.
 	*/
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
+
 	{
 		PRINT_LOG(L"Error", L"Failed To Set D3DRS_CULLMODE");
 		return E_FAIL;
@@ -239,6 +242,7 @@ HRESULT CMainView::Setup_DefaultSetting()
 	return S_OK;
 }
 
+
 void CMainView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
@@ -246,8 +250,15 @@ void CMainView::OnDraw(CDC* pDC)
 
 	// 툴별로 씬을 나누자.
 	m_pManagement->Update_Game();
+	
+	/*Invalidate(FALSE);*/
+}
 
+void CMainView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	Invalidate(FALSE);
+	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 

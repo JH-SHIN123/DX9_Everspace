@@ -34,6 +34,8 @@ private:
 	bool				m_bStart = true;
 	CManagement*		m_pManagement = nullptr;
 	LPDIRECT3DDEVICE9	m_pDevice = nullptr;
+public:
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 

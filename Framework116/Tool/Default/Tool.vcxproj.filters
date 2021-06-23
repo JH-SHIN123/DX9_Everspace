@@ -97,7 +97,10 @@
       <Filter>03.GameObject\03.Axis</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="MapTool.h">
+    <ClInclude Include="Tool_Struct.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\MapTool.h">
       <Filter>00.View\03.MapTool</Filter>
     </ClInclude>
   </ItemGroup>
@@ -135,7 +138,7 @@
     <ClCompile Include="..\Codes\Axis.cpp">
       <Filter>03.GameObject\03.Axis</Filter>
     </ClCompile>
-    <ClCompile Include="MapTool.cpp">
+    <ClCompile Include="..\Codes\MapTool.cpp">
       <Filter>00.View\03.MapTool</Filter>
     </ClCompile>
   </ItemGroup>

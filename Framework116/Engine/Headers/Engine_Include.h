@@ -12,6 +12,7 @@
 #include <string>
 #include <random>
 #include <ctime>
+#include <map>
 
 using namespace std;
 #pragma endregion
