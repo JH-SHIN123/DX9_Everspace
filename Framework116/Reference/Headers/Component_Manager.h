@@ -11,6 +11,8 @@
 #include "Transform.h"
 #include "Texture.h"
 #include "Mesh.h"
+#include "CollideSphere.h"
+#include "Controller.h"
 
 BEGIN(Engine)
 class CComponent_Manager : public CBase

@@ -29,6 +29,8 @@ public:
 private:
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
+	CCollideSphere*	m_pCollide = nullptr;
+	CController* m_pController = nullptr;
 
 private:
 	POINT m_tCurCursorPos = { 0,0 };

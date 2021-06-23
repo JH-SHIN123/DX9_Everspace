@@ -42,6 +42,7 @@ typedef struct tagIndex32
 	DWORD _1, _2, _3;
 }INDEX32;
 
+<<<<<<< HEAD
 typedef struct tagPassingData_Object {
 
 #ifdef _AFX
@@ -61,6 +62,40 @@ typedef struct tagPassingData_Map {
 	UINT eObjectType;
 	_float4x4 matWorld;
 }PASSDATA_MAP;
+=======
+//typedef struct tagBoundingBox : public BASE_DESC
+//{
+//	D3DXVECTOR3 _min = { 0.f, 0.f, 0.f };
+//	D3DXVECTOR3 _max = { 0.f, 0.f, 0.f };
+//}BOUNDING_BOX;
+
+typedef struct tagBoundingSphere : public BASE_DESC
+{
+	tagBoundingSphere()
+	{
+		D3DXMatrixIdentity(&matWorld);
+	}
+
+	const _float3 Get_Position() const {
+		return {matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z};
+	};
+
+	// World
+	_float4x4 matWorld;
+
+	// 각 축을 향한 반지름 길이
+	_float3 vCenter = { 0.f, 0.f ,0.f };
+	_float fRadius = 1.f;
+}BOUNDING_SPHERE;
+
+typedef struct tagRay
+{
+	_float3 vPos = { 0.f, 0.f, 0.f };
+	_float3 vDirection = { 0.f, 0.f, 0.f };
+}RAY;
+
+END
+>>>>>>> origin/main
 
 typedef struct tagPassingData_Route {
 	_float3 vNodePos;
