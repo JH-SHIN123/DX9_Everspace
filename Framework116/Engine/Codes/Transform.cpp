@@ -44,10 +44,16 @@ void CTransform::Set_Position(const _float3 & vPos)
 	m_TransformDesc.vPosition = vPos;
 }
 
+void CTransform::Set_Rot(const _float3 & vRot)
+{
+	m_TransformDesc.vRotate = vRot;
+}
+
 void CTransform::Set_WorldMatrix(const _float4x4 & NewWorld)
 {
 	m_TransformDesc.matWorld = NewWorld;
 }
+
 
 const TRANSFORM_DESC & CTransform::Get_TransformDesc() const
 {

@@ -65,6 +65,11 @@ _uint CMainCam::Movement(_float fDeltaTime)
 
 	/* 파란 벡터 */
 	_float3 vPlayerLook = m_pPlayerTransform->Get_State(EState::Look);
+	if (m_pPlayerTransform->Get_TransformDesc().vRotate.x > D3DXToRadian(45.f))
+		m_CameraDesc.vUp = { 0.f,-1.f,0.f };
+	else
+		m_CameraDesc.vUp = { 0.f,1.f,0.f };
+
 	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 
 	/* 보라색 벡터 */
@@ -81,6 +86,7 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	m_CameraDesc.vEye = vPlayerPos + vPlayerLook;
 
 	/* 바라볼 위치 */
+
 	m_CameraDesc.vAt = vPlayerPos;
 
 	return _uint();

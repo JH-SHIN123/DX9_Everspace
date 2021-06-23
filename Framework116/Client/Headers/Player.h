@@ -20,7 +20,6 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;

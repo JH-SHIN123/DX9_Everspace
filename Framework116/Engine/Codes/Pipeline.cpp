@@ -29,19 +29,33 @@ void CPipeline::Setup_WorldMatrix(
 	vLook.z *= pScale->z;
 
 	/* ÀÚÀü */
-	RotateX(&vRight, vRight, pRotate->x);
-	RotateY(&vRight, vRight, pRotate->y);
-	RotateZ(&vRight, vRight, pRotate->z);
+	//RotateX(&vRight, vRight, pRotate->x);
+	//RotateY(&vRight, vRight, pRotate->y);
+	//RotateZ(&vRight, vRight, pRotate->z);
 
-	RotateX(&vUp, vUp, pRotate->x);
-	RotateY(&vUp, vUp, pRotate->y);
-	RotateZ(&vUp, vUp, pRotate->z);
+	//RotateX(&vUp, vUp, pRotate->x);
+	//RotateY(&vUp, vUp, pRotate->y);
+	//RotateZ(&vUp, vUp, pRotate->z);
 
-	RotateX(&vLook, vLook, pRotate->x);
-	RotateY(&vLook, vLook, pRotate->y);
-	RotateZ(&vLook, vLook, pRotate->z);
+	//RotateX(&vLook, vLook, pRotate->x);
+	//RotateY(&vLook, vLook, pRotate->y);
+	//RotateZ(&vLook, vLook, pRotate->z);
 
-	Setup_StateMatrix(pOut, &vRight, &vUp, &vLook, pPosition);
+	D3DXQUATERNION Quaternion;
+	D3DXQuaternionNormalize(&Quaternion, &Quaternion);
+	_float4x4 matRot,matScale;
+	D3DXMatrixIdentity(&matScale);
+	D3DXMatrixIdentity(&matRot);
+	matScale._11 = pScale->x;
+	matScale._22 = pScale->y;
+	matScale._33 = pScale->z;
+	D3DXQuaternionRotationYawPitchRoll(&Quaternion, pRotate->y,pRotate->x,pRotate->z);
+	D3DXMatrixRotationQuaternion(&matRot, &Quaternion);
+	matScale *= matRot;
+	*pOut = matScale;
+	memcpy(&pOut->_41, pPosition, sizeof(_float3));
+	//Setup_StateMatrix(pOut, &vRight, &vUp, &vLook, pPosition);
+
 }
 
 void CPipeline::Setup_ViewMatrix(_float4x4* pOut, const _float4x4* matCameraWorld)

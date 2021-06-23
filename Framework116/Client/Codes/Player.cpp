@@ -122,10 +122,13 @@ _uint CPlayer::Movement(_float fDeltaTime)
 		bRotYDir = true;
 
 	_float fRotX = m_pTransform->Get_TransformDesc().vRotate.x;
+
 	if(fRotX >= -D3DXToRadian(90.f) && !bRotYDir)
 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
-	else if(fRotX <D3DXToRadian(44.f) && bRotYDir)
+	else if (fRotX < D3DXToRadian(90.f) && bRotYDir)
+	{
 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
+	}
 
 	m_pTransform->RotateY(D3DXToRadian(vGap.x)*fDeltaTime*fSpeed);
 	// Move
@@ -163,6 +166,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	return _uint();
 }
+
 
 CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice)
 {
