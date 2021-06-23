@@ -42,6 +42,24 @@ typedef struct tagIndex32
 	DWORD _1, _2, _3;
 }INDEX32;
 
+typedef struct tagBoundingBox
+{
+	D3DXVECTOR3 _min = { 0.f, 0.f, 0.f };
+	D3DXVECTOR3 _max = { 0.f, 0.f, 0.f };
+}BOUNDING_BOX;
+
+typedef struct tagBoundingSphere
+{
+	D3DXVECTOR3 _center = {0.f, 0.f ,0.f};
+	float       _radius = 0.f;
+}BOUNDING_SPHERE;
+
+typedef struct tagRay
+{
+	D3DXVECTOR3 _origin = {0.f, 0.f, 0.f};
+	D3DXVECTOR3 _direction = {0.f, 0.f, 0.f};
+}RAY;
+
 END
 
 #define __ENGINE_STRUCT_H__

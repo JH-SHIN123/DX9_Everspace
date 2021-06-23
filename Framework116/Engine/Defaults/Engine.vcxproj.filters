@@ -82,6 +82,9 @@
     <Filter Include="01.Utilities\04.Component\03.Mesh">
       <UniqueIdentifier>{48b061e9-8405-4044-88c6-4d771923c26e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\04.Collide">
+      <UniqueIdentifier>{eb272956-0c6d-435a-a14a-0bf9ea4f31a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -174,6 +177,9 @@
     <ClInclude Include="..\Headers\Mesh.h">
       <Filter>01.Utilities\04.Component\03.Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Collide.h">
+      <Filter>01.Utilities\04.Component\04.Collide</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -247,6 +253,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Mesh.cpp">
       <Filter>01.Utilities\04.Component\03.Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Collide.cpp">
+      <Filter>01.Utilities\04.Component\04.Collide</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
