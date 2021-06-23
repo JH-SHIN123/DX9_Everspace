@@ -48,8 +48,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// Test
-	// Test 2
+
 
 
 	return 0;

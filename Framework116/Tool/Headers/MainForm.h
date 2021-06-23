@@ -3,6 +3,7 @@
 
 
 // CMainForm 폼 보기
+#include "ObjectTool.h"
 
 class CMainForm : public CFormView
 {
@@ -27,6 +28,9 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnObjectToolButton1();
+	CObjectTool m_tObjectTool;
 };
 
 

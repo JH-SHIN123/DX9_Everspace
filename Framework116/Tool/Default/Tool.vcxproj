@@ -206,6 +206,7 @@
     <ClInclude Include="..\Headers\MainScene.h" />
     <ClInclude Include="..\Headers\MainView.h" />
     <ClInclude Include="..\Headers\MiniView.h" />
+    <ClInclude Include="..\Headers\ObjectTool.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
     <ClInclude Include="..\Headers\Tool_Define.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tool.h" />
   </ItemGroup>
@@ -224,6 +226,7 @@
     <ClCompile Include="..\Codes\MainForm.cpp" />
     <ClCompile Include="..\Codes\MainFrm.cpp" />
     <ClCompile Include="..\Codes\MainView.cpp" />
+    <ClCompile Include="..\Codes\ObjectTool.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="pch.cpp">
@@ -247,4 +250,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="Tool.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

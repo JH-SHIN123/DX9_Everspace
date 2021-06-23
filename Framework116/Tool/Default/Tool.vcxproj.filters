@@ -43,6 +43,9 @@
     <Filter Include="03.GameObject\03.Axis">
       <UniqueIdentifier>{1bdb2459-962e-45e7-ace9-8258842ece8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.View\99.Tool">
+      <UniqueIdentifier>{a4346ff5-1c78-4ddf-83b2-3d9896ba1a80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">
@@ -93,6 +96,10 @@
     <ClInclude Include="..\Headers\Axis.h">
       <Filter>03.GameObject\03.Axis</Filter>
     </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\Headers\ObjectTool.h">
+      <Filter>00.View\99.Tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -127,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Axis.cpp">
       <Filter>03.GameObject\03.Axis</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ObjectTool.cpp">
+      <Filter>00.View\99.Tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
