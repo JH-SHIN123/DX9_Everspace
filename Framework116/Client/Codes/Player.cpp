@@ -49,6 +49,22 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
+	
+	// For.Com_Collide
+	BOUNDING_SPHERE BoundingSphere;
+	BoundingSphere.vRadius = { 5.f,5.f,5.f };
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_CollideSphere",
+		L"Com_CollideSphere",
+		(CComponent**)&m_pCollide,
+		&BoundingSphere)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+	//
 
 	// Setting Prev Cursor 
 	GetCursorPos(&m_tPrevCursorPos);
@@ -62,7 +78,9 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);	
 	Movement(fDeltaTime);
 
-	return m_pTransform->Update_Transform();
+	m_pTransform->Update_Transform();
+	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vScale, m_pTransform->Get_TransformDesc().vPosition);
+	return NO_EVENT;
 }
 
 _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
@@ -81,6 +99,10 @@ _uint CPlayer::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pMesh->Render_Mesh();
+	
+#ifdef _DEBUG // Render Collide
+	m_pCollide->Render_Collide();
+#endif
 
 	return _uint();
 }
@@ -170,6 +192,7 @@ void CPlayer::Free()
 {
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
+	Safe_Release(m_pCollide);
 
 	CGameObject::Free();
 }
