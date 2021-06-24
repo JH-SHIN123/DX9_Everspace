@@ -332,10 +332,12 @@ void CMapTool::OnBnClickedAddnavi()
 	NaviPos->vNodePos.x = m_fNaviPosX;
 	NaviPos->vNodePos.y = m_fNaviPosY;
 	NaviPos->vNodePos.z = m_fNaviPosZ;
-
-	m_listNaviPos.emplace_back(NaviPos);
 	//_itow_s(NaviPos->vNodePos.x, szPosX, 10); // 10진수를 사용하겠다.
-	wstring wstrCombine = L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
+	int iOrder = CNavigationListBox.GetCount();
+	NaviPos->iNodeOrder = iOrder + 1;
+
+	wstring wstrCombine = to_wstring(NaviPos->iNodeOrder) + L"번째: " + L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
+	m_listNaviPos.emplace_back(NaviPos);
 	CNavigationListBox.AddString(wstrCombine.c_str());
 	Safe_Delete(NaviPos);
 	m_fNaviPosX = 0.f;
@@ -346,6 +348,8 @@ void CMapTool::OnBnClickedAddnavi()
 
 void CMapTool::OnBnClickedDeletenavi()
 {
+	int iIndex = CNavigationListBox.GetCurSel();
+	m_listNaviPos.
 }
 
 void CMapTool::OnBnClickedLoadPrototype()
