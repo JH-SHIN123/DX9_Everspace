@@ -327,21 +327,21 @@ void CMapTool::OnBnClickedDeleteclone()
 
 void CMapTool::OnBnClickedAddnavi()
 {
+	UpdateData(TRUE);
 	PASSDATA_ROUTE* NaviPos = new PASSDATA_ROUTE;
 	NaviPos->vNodePos.x = m_fNaviPosX;
 	NaviPos->vNodePos.y = m_fNaviPosY;
 	NaviPos->vNodePos.z = m_fNaviPosZ;
 
 	m_listNaviPos.emplace_back(NaviPos);
-	TCHAR szPosX[32] = L"";
-	_itow_s(NaviPos->vNodePos.x, szPosX, 10); // 10진수를 사용하겠다.
-	wstring wstrCombine = L"PosX: "; 
-	//CNavigationListBox.AddString();
-
+	//_itow_s(NaviPos->vNodePos.x, szPosX, 10); // 10진수를 사용하겠다.
+	wstring wstrCombine = L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
+	CNavigationListBox.AddString(wstrCombine.c_str());
 	Safe_Delete(NaviPos);
 	m_fNaviPosX = 0.f;
 	m_fNaviPosY = 0.f;
 	m_fNaviPosZ = 0.f;
+	UpdateData(FALSE);
 }
 
 void CMapTool::OnBnClickedDeletenavi()
@@ -394,8 +394,17 @@ void CMapTool::OnBnClickedLoadPrototype()
 				break;
 			}
 			m_mapPrototype.emplace(pObject->wstrPrototypeTag, pObject);
-			CPrototypeListBox.AddString(pObject->wstrPrototypeTag);
 
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				(wstring)pObject->wstrPrototypeTag,
+				L"Layer_Monster")))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
+				return;
+			}
+
+			CPrototypeListBox.AddString(pObject->wstrPrototypeTag);
 		}
 		CloseHandle(hFile);
 	}
