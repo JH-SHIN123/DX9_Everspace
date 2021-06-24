@@ -274,9 +274,16 @@ void CMapTool::OnBnClickedStageload()
 					Safe_Delete(pNavi);
 					break;
 				}
-				m_listNaviPos.emplace_back(pNavi);
-				CCloneListBox.AddString(L"asd");
-				
+				m_listNaviPos.emplace_back(pNavi);		
+			}
+			for (auto& Navi : m_listNaviPos)
+			{
+				int iOrder = CNavigationListBox.GetCount();
+				Navi->iNodeOrder = iOrder + 1;
+
+				wstring wstrCombine = to_wstring(Navi->iNodeOrder) + L"번째: " + L"X: " + to_wstring((int)Navi->vNodePos.x) + L" / " + L"Y: " + to_wstring((int)Navi->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)Navi->vNodePos.z);
+
+				CNavigationListBox.AddString(wstrCombine.c_str());
 			}
 			CloseHandle(hFile);
 		}
@@ -339,7 +346,7 @@ void CMapTool::OnBnClickedAddnavi()
 	wstring wstrCombine = to_wstring(NaviPos->iNodeOrder) + L"번째: " + L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
 	m_listNaviPos.emplace_back(NaviPos);
 	CNavigationListBox.AddString(wstrCombine.c_str());
-	Safe_Delete(NaviPos);
+	/*Safe_Delete(NaviPos);*/
 	m_fNaviPosX = 0.f;
 	m_fNaviPosY = 0.f;
 	m_fNaviPosZ = 0.f;
@@ -348,8 +355,38 @@ void CMapTool::OnBnClickedAddnavi()
 
 void CMapTool::OnBnClickedDeletenavi()
 {
+	UpdateData(TRUE);
 	int iIndex = CNavigationListBox.GetCurSel();
-	m_listNaviPos.
+	auto& iter = m_listNaviPos.begin();
+	for (; iter != m_listNaviPos.end();)
+	{
+		if ((*iter)->iNodeOrder - 1 == iIndex)
+		{
+			Safe_Delete(*iter);
+			m_listNaviPos.erase(iter);
+			CNavigationListBox.DeleteString(iIndex);
+			break;
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	// 문제점 : 마지막으로 찍은 애만 Delete 해야 순서가 안꼬임.
+	// 해결책 : NodeOrder 다시 정렬할 수 있는 방법이 있는감?? 
+	
+
+	//for (auto& Navi : m_listNaviPos)
+	//{
+	//	if (Navi->iNodeOrder - 1 == iIndex )
+	//	{
+	//		Safe_Delete(Navi);
+	//		CNavigationListBox.DeleteString(iIndex);
+	//		return;
+	//	}
+	//}
+	UpdateData(FALSE);
 }
 
 void CMapTool::OnBnClickedLoadPrototype()
