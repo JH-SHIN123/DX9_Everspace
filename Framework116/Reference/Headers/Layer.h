@@ -13,6 +13,7 @@ protected:
 public:
 	const class CGameObject* Get_GameObject(_uint iIndex = 0) const;
 	const class CComponent* Get_Component(const wstring& ComponentTag, _uint iIndex = 0) const;
+	const class list<class CGameObject*>* Get_GameObjectList() const { return &m_GameObjects; }
 
 public:
 	HRESULT Add_GameObject_InLayer(class CGameObject* pObject);

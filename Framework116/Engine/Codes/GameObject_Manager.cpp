@@ -9,6 +9,15 @@ CGameObject_Manager::CGameObject_Manager()
 {
 }
 
+const list<class CGameObject*>* CGameObject_Manager::Get_GameObjectList(const wstring& LayerTag) const
+{
+	auto iter = m_Layers.find(LayerTag);
+	if (m_Layers.end() == iter)
+		return nullptr;
+
+	return iter->second->Get_GameObjectList();
+}
+
 const CGameObject* CGameObject_Manager::Get_GameObject(const wstring& LayerTag, _uint iIndex) const
 {
 	auto iter = m_Layers.find(LayerTag);

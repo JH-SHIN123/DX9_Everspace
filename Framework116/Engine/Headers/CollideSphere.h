@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __COLLIDE_H__
+#ifndef __COLLIDESPHERE_H__
 
 #include "Component.h"
 
@@ -38,5 +38,5 @@ private:
 };
 END
 
-#define __COLLIDE_H__
+#define __COLLIDESPHERE_H__
 #endif

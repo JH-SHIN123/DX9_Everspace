@@ -13,6 +13,8 @@ private:
 	~CCollision() = default;
 
 public:
+	static void PickingObject(const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice,
+		const list<class CGameObject>* listObject, const wstring& wstrComponentTag);
 	static void CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice);
 	static void TransformRay(RAY& pOutRay, _float4x4& matrix);
 	static bool IntersectRayToSphere(const RAY& pInRay, const BOUNDING_SPHERE& pBounds);

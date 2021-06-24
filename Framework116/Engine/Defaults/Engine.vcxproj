@@ -170,6 +170,10 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
   <ItemGroup>
     <ClInclude Include="..\Headers\Base.h" />
     <ClInclude Include="..\Headers\Camera.h" />
+    <ClInclude Include="..\Headers\Collide.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\Headers\CollideSphere.h" />
     <ClInclude Include="..\Headers\Collision.h" />
     <ClInclude Include="..\Headers\Component.h" />
@@ -206,6 +210,10 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
   <ItemGroup>
     <ClCompile Include="..\Codes\Base.cpp" />
     <ClCompile Include="..\Codes\Camera.cpp" />
+    <ClCompile Include="..\Codes\Collide.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Codes\CollideSphere.cpp" />
     <ClCompile Include="..\Codes\Collision.cpp" />
     <ClCompile Include="..\Codes\Component.cpp" />

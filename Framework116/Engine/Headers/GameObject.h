@@ -40,7 +40,18 @@ protected:
 	typedef unordered_map<wstring, class CComponent*>	COMPONENTS;
 	COMPONENTS m_Components; /* 클론 보관 */
 
+	typedef vector<class CComponent*>	COLLIDES;
+
+
 	class CManagement* m_pManagement = nullptr;
+
+// Tool 전용 함수 / 변수들
+public:
+	void Set_ListBoxIndex(const int _iListBoxIndex) { m_iListBoxIndex = _iListBoxIndex; }
+	const int Get_ListBoxIndex() const { return m_iListBoxIndex; }
+
+protected: 
+	int m_iListBoxIndex = -1;
 };
 END
 

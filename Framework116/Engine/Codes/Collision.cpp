@@ -1,6 +1,28 @@
 #include "Collision.h"
+#include "Layer.h"
+#include "GameObject.h"
 
 USING(Engine)
+
+void CCollision::PickingObject(const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice,
+	const list<CGameObject>* listObject, const wstring& wstrComponentTag)
+{
+	//RAY ray;
+	//CCollision::CreatePickingRay(ray, hWnd, iWinCX, iWinCY, pDevice);
+
+	//D3DXMATRIX view;
+	//pDevice->GetTransform(D3DTS_VIEW, &view);
+	//CCollision::TransformRay(ray, view);
+
+	//for (auto& p : (*listObject)) {
+	//	p.Get_Component(L"wstrComponentTag");
+	//}
+
+	//// Layer에 모든 오브젝트들의 바운딩박스 검사
+	//if (CCollision::IntersectRayToSphere(ray, m_pCollide->Get_BoundingSphere())) {
+	//	PRINT_LOG(L"Hit!", L"Hit!");
+	//}
+}
 
 void CCollision::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice)
 {
