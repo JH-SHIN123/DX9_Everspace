@@ -19,7 +19,7 @@ const _uint FVF_VTX_COLOR = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX0;
 typedef struct tagVertexTexture
 {
 	_float3 vPosition = _float3(0.f, 0.f, 0.f);
-	_float2 vUV = _float2(0.f, 0.f);	
+	_float2 vUV = _float2(0.f, 0.f);
 }VTX_TEXTURE;
 
 const _uint FVF_VTX_TEXTURE = D3DFVF_XYZ | D3DFVF_TEX1/* | D3DFVF_TEXCOORDSIZE2(0)*/;
@@ -42,27 +42,6 @@ typedef struct tagIndex32
 	DWORD _1, _2, _3;
 }INDEX32;
 
-//<<<<<<< HEAD
-//typedef struct tagPassingData_Object {
-//
-//#ifdef _AFX
-//	CString wstrPrototypeTag;
-//	CString wstrPrototypeTag_Mesh;
-//#else 
-//	wstring wstrPrototypeTag_Object;
-//	wstring wstrPrototypeTag_Mesh;
-//
-//	// Material Info
-//	D3DMATERIAL9 tMaterial;
-//#endif // _AFX
-//
-//}PASSDATA_OBJECT;
-//
-//typedef struct tagPassingData_Map {
-//	UINT eObjectType;
-//	_float4x4 matWorld;
-//}PASSDATA_MAP;
-//=======
 //typedef struct tagBoundingBox : public BASE_DESC
 //{
 //	D3DXVECTOR3 _min = { 0.f, 0.f, 0.f };
@@ -77,7 +56,7 @@ typedef struct tagBoundingSphere : public BASE_DESC
 	}
 
 	const _float3 Get_Position() const {
-		return {matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z};
+		return{ matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z };
 	};
 
 	// World
@@ -95,30 +74,6 @@ typedef struct tagRay
 }RAY;
 
 END
-//>>>>>>> origin/main
-//
-//typedef struct tagPassingData_Route {
-//	_float3 vNodePos;
-//}PASSDATA_ROUTE;
-//
-//typedef struct tagPassingData_Resource {
-//#ifdef _AFX
-//	CString wstrPrototypeTag;
-//	CString wstrFilePath;
-//#else 
-//	wstring wstrPrototypeTag;
-//	wstring wstrFilePath;
-//#endif // _AFX
-//
-//	DWORD dwResourceType;
-//	DWORD dwTextureCount;
-//}PASSDATA_RESOURCE;
-//
-//typedef struct tagPassingData_UI {
-//	UINT eObjectType;
-//	_float4x4 matWorld;
-//}PASSDATA_UI;
-//END
+
 #define __ENGINE_STRUCT_H__
 #endif
-

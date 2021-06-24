@@ -30,6 +30,8 @@ public: // 함수
 	afx_msg void OnBnClickedDeleteclone();
 	afx_msg void OnBnClickedAddnavi();
 	afx_msg void OnBnClickedDeletenavi();
+	afx_msg void OnBnClickedLoadPrototype();
+	afx_msg void OnLbnSelchangeClonelist3();
 
 private: // 변수
 	CManagement* m_pManagement = nullptr;
@@ -57,7 +59,18 @@ private: // 변수
 	//Test
 	PASSDATA_MAP* a;
 
+	// Transform / NaviPos 변수들.
+
 public:
-	afx_msg void OnBnClickedLoadPrototype();
-	int m_iNaviPosX;
+	float m_fScaleX;
+	float m_fScaleY;
+	float m_fScaleZ;
+	float m_fRotateX;
+	float m_fRotateY;
+	float m_fRotateZ;
+	float m_fPositionX;
+	float m_fPositionY;
+	float m_fPositionZ;
+
+	CString m_strCloneName;
 };

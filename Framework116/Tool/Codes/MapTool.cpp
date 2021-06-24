@@ -15,7 +15,16 @@ CMapTool::CMapTool(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_MAPTOOL, pParent)
 	, m_bPickMode(true) // PickMode == true 면 Object, PickMode == false 면 Navigation
 	, m_pManagement(CManagement::Get_Instance())
-	, m_iNaviPosX(0)
+	, m_fScaleX(1.f)
+	, m_fScaleY(1.f)
+	, m_fScaleZ(1.f)
+	, m_fRotateX(0.f)
+	, m_fRotateY(0.f)
+	, m_fRotateZ(0.f)
+	, m_fPositionX(0.f)
+	, m_fPositionY(0.f)
+	, m_fPositionZ(0.f)
+	, m_strCloneName(_T(""))
 {
 
 }
@@ -32,6 +41,16 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CLONELIST3, CCloneListBox);
 	DDX_Control(pDX, IDC_NAVILIST, CNavigationListBox);
 	DDX_Control(pDX, IDC_STAGELIST, m_CStageListBox);
+	DDX_Text(pDX, IDC_SCALEX, m_fScaleX);
+	DDX_Text(pDX, IDC_SCALEY, m_fScaleY);
+	DDX_Text(pDX, IDC_SCALEZ, m_fScaleZ);
+	DDX_Text(pDX, IDC_ROTATEX, m_fRotateX);
+	DDX_Text(pDX, IDC_ROTATEY, m_fRotateY);
+	DDX_Text(pDX, IDC_ROTATEZ, m_fRotateZ);
+	DDX_Text(pDX, IDC_POSITIONX, m_fPositionX);
+	DDX_Text(pDX, IDC_POSITIONY, m_fPositionY);
+	DDX_Text(pDX, IDC_POSITIONZ, m_fPositionZ);
+	DDX_Text(pDX, IDC_EDIT1, m_strCloneName);
 }
 
 BEGIN_MESSAGE_MAP(CMapTool, CDialog)
@@ -45,6 +64,7 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_BN_CLICKED(IDC_ADDNAVI, &CMapTool::OnBnClickedAddnavi)
 	ON_BN_CLICKED(IDC_DELETENAVI, &CMapTool::OnBnClickedDeletenavi)
 	ON_BN_CLICKED(IDC_LOADPROTOTYPE, &CMapTool::OnBnClickedLoadPrototype)
+	ON_LBN_SELCHANGE(IDC_CLONELIST3, &CMapTool::OnLbnSelchangeClonelist3)
 END_MESSAGE_MAP()
 
 // CMapTool 메시지 처리기입니다.
@@ -259,6 +279,32 @@ void CMapTool::OnBnClickedStageload()
 
 void CMapTool::OnBnClickedAddclone()
 {
+	UpdateData(TRUE);
+	PASSDATA_MAP* pClone = new PASSDATA_MAP;
+	D3DXMATRIX matWorld, matScale, matRotX, matRotY, matRotZ, matTrans;
+
+	D3DXMatrixScaling(&matScale, m_fScaleX, m_fScaleY, m_fScaleZ);
+	D3DXMatrixRotationX(&matRotX, D3DXToRadian(m_fRotateX));
+	D3DXMatrixRotationY(&matRotY, D3DXToRadian(m_fRotateY));
+	D3DXMatrixRotationZ(&matRotZ, D3DXToRadian(m_fRotateZ));
+	D3DXMatrixTranslation(&matTrans, m_fPositionX, m_fPositionY, m_fPositionZ);
+
+	matWorld = matScale * matRotX * matRotY * matRotZ * matTrans;
+
+	pClone->eObjectType = 1;
+	pClone->matWorld = matWorld;
+
+	m_pManagement->Get_Device()->SetTransform(D3DTS_WORLD, &pClone->matWorld);
+
+	m_listCloneData.emplace_back(pClone);
+	CCloneListBox.AddString(m_strCloneName);
+
+	m_fScaleX = 1.f;	m_fScaleY = 1.f;	m_fScaleZ = 1.f;
+	m_fRotateX = 0.f;	m_fRotateY = 0.f;	m_fRotateZ = 0.f;
+	m_fPositionX = 0.f;	m_fPositionY = 0.f;	m_fPositionZ = 0.f;
+	UpdateData(FALSE);
+	
+	
 }
 
 void CMapTool::OnBnClickedDeleteclone()
@@ -324,4 +370,19 @@ void CMapTool::OnBnClickedLoadPrototype()
 		}
 		CloseHandle(hFile);
 	}
+}
+
+
+
+void CMapTool::OnLbnSelchangeClonelist3()
+{
+	UpdateData(TRUE);
+
+	int iIndex = CCloneListBox.GetCurSel();
+	CString strFindName = L"";
+	CCloneListBox.GetText(iIndex, strFindName);
+	// 구조체에 인덱스도 같이 저장하면 좋을 듯?
+
+
+	UpdateData(FALSE);
 }
