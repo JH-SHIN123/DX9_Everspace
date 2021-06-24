@@ -90,6 +90,27 @@ HRESULT CGameObject_Manager::Add_GameObject_InLayer(
 	return m_Layers[LayerTag]->Add_GameObject_InLayer(pClone);
 }
 
+HRESULT CGameObject_Manager::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag,
+	const int _iListboxIndex, void* pArg)
+{
+	CGameObject* pClone = Clone_GameObject(eType, PrototypeTag, pArg);
+	if (nullptr == pClone)
+	{
+		PRINT_LOG(L"Error", L"Failed To Clone_GameObject");
+		return E_FAIL;
+	}
+	pClone->Set_ListBoxIndex(_iListboxIndex);
+
+	auto iter_find = m_Layers.find(LayerTag);
+	if (m_Layers.end() == iter_find)
+	{
+		CLayer* pLayer = CLayer::Create();
+		m_Layers.insert(make_pair(LayerTag, pLayer));
+	}
+
+	return m_Layers[LayerTag]->Add_GameObject_InLayer(pClone);
+}
+
 CGameObject * CGameObject_Manager::Clone_GameObject(
 	EResourceType eType, 
 	const wstring & PrototypeTag, 

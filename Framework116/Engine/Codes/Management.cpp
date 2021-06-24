@@ -204,6 +204,17 @@ HRESULT CManagement::Add_GameObject_InLayer(
 	return m_pGameObject_Manager->Add_GameObject_InLayer(eType, PrototypeTag, LayerTag, pArg);
 }
 
+HRESULT CManagement::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, const int _iListboxIndex, void* pArg)
+{
+	if (nullptr == m_pGameObject_Manager)
+	{
+		PRINT_LOG(L"Error", L"GameObject_Manager Manager is nullptr");
+		return E_FAIL;
+	}
+
+	return m_pGameObject_Manager->Add_GameObject_InLayer_Tool(eType, PrototypeTag, LayerTag, _iListboxIndex, pArg);
+}
+
 CGameObject * CManagement::Clone_GameObject(
 	EResourceType eType, 
 	const wstring & PrototypeTag, 
