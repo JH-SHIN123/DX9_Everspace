@@ -156,6 +156,9 @@ _uint CRenderer::Render_UI()
 	_uint iRenderIndex = (_uint)ERenderType::UI;
 	_uint iEvent = NO_EVENT;
 
+	// 직교투영행렬 세팅
+
+
 	for (auto& pObject : m_GameObjects[iRenderIndex])
 	{
 		iEvent = pObject->Render_GameObject();

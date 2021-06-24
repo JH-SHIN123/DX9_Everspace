@@ -186,3 +186,8 @@ void CPipeline::RotateZ(_float3 * pOut, _float3 vIn, _float fRadian)
 	pOut->x = vIn.x * cosf(fRadian) + vIn.y * -sinf(fRadian);
 	pOut->y = vIn.x * sinf(fRadian) + vIn.y * cosf(fRadian);
 }
+
+float CPipeline::Get_Distance(const _float3& vPos1, const _float3& vPos2)
+{
+	return sqrtf((vPos1.x - vPos2.x) * (vPos1.x - vPos2.x) + (vPos1.y - vPos2.y) * (vPos1.y - vPos2.y) + (vPos1.z - vPos2.z) * (vPos1.z - vPos2.z));
+}

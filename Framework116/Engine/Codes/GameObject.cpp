@@ -28,6 +28,11 @@ const CComponent * CGameObject::Get_Component(const wstring & ComponentTag) cons
 	return iter->second;
 }
 
+const _bool CGameObject::Get_IsEmptyCollides() const
+{
+	return m_Collides.empty();
+}
+
 HRESULT CGameObject::Ready_GameObject_Prototype()
 {
 	return S_OK;
@@ -57,7 +62,8 @@ HRESULT CGameObject::Add_Component(
 	EResourceType eType, 
 	const wstring & PrototypeTag, 
 	const wstring & ComponentTag, 
-	CComponent** ppComponent, void * pArg)
+	CComponent** ppComponent, void * pArg, 
+	const bool _bCollide)
 {
 	auto iter_find = m_Components.find(ComponentTag);
 	if (m_Components.end() == iter_find)
@@ -77,6 +83,12 @@ HRESULT CGameObject::Add_Component(
 			*ppComponent = pClone;
 			Safe_AddRef(pClone);
 		}
+
+		if (_bCollide)
+		{
+			m_Collides.emplace_back(static_cast<CCollide*>(pClone));
+			Safe_AddRef(pClone);
+		}
 	}	
 
 	return S_OK;
@@ -88,8 +100,13 @@ void CGameObject::Free()
 	{
 		Safe_Release(Pair.second);
 	}
-
 	m_Components.clear();
+
+	for (auto& Collide : m_Collides)
+	{
+		Safe_Release(Collide);
+	}
+	m_Collides.clear();
 
 	Safe_Release(m_pDevice);
 }
