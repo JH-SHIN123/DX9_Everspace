@@ -31,6 +31,7 @@
 #include "Tool_Define.h"
 #include "Tool_Enum.h"
 #include "Management.h"
+#include "../../Protocol.h"
 
 using namespace Engine;
 

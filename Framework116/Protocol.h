@@ -23,6 +23,7 @@ typedef struct tagPassingData_Map {
 	UINT eObjectType;
 	_float4x4 matWorld;
 	int iNodeOrder;
+	wstring wstrCloneName;
 }PASSDATA_MAP;
 
 typedef struct tagPassingData_Route {

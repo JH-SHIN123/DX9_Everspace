@@ -79,11 +79,6 @@ BOOL CMapTool::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	a = new PASSDATA_MAP;
-
-	a->eObjectType = 1;
-	m_listCloneData.emplace_back(a);
-
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -305,15 +300,17 @@ void CMapTool::OnBnClickedAddclone()
 	matWorld = matScale * matRotX * matRotY * matRotZ * matTrans;
 
 	pClone->eObjectType = 1;
-	pClone->matWorld = matWorld;
+ 	pClone->matWorld = matWorld;
+	pClone->wstrCloneName = m_strCloneName;
+
+	//int iOrder = CCloneListBox.GetCount();
+	//pClone->iNodeOrder = iOrder + 1; // 보류.
+
 
 	m_pManagement->Get_Device()->SetTransform(D3DTS_WORLD, &pClone->matWorld);
 
 	
-	//int iOrder = CNavigationListBox.GetCount();
-	//pClone->iNodeOrder = iOrder + 1; // 보류.
 	// 구조체안에 wstring 하나 넣어서 구별하도록 할까?
-	pClone->스트링 = m_strCloneName;
 
 	//m_pManagement->Add_GameObject_InLayer_Tool(EResourceType::Static, //프로토타입태그/레이어태그/리스트박스인덱스/아규먼트);
 
@@ -331,12 +328,9 @@ void CMapTool::OnBnClickedAddclone()
 void CMapTool::OnBnClickedDeleteclone()
 {
 	UpdateData(TRUE);
-	int iSelect = CCloneListBox.GetCurSel();
-	
 
 	// map이 아니라서 String 으로 list안에있는걸 찾아서 지우는게 안대넹. 저장할때 구분할 수 있는 무언가를 또 저장합시다.
 	
-	CCloneListBox.DeleteString(iSelect);
 	UpdateData(FALSE);
 }
 
@@ -351,7 +345,7 @@ void CMapTool::OnBnClickedAddnavi()
 	int iOrder = CNavigationListBox.GetCount();
 	NaviPos->iNodeOrder = iOrder + 1;
 
-	wstring wstrCombine = to_wstring(NaviPos->iNodeOrder) + L"번째: " + L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
+	wstring wstrCombine = to_wstring(NaviPos->iNodeOrder) + L"번: " + L"X: " + to_wstring((int)NaviPos->vNodePos.x) + L" / " +  L"Y: " + to_wstring((int)NaviPos->vNodePos.y) + L" / " + L"Z: " + to_wstring((int)NaviPos->vNodePos.z);
 	m_listNaviPos.emplace_back(NaviPos);
 	CNavigationListBox.AddString(wstrCombine.c_str());
 	/*Safe_Delete(NaviPos);*/
@@ -452,12 +446,30 @@ void CMapTool::OnLbnSelchangeClonelist3()
 {
 	UpdateData(TRUE);
 
-	int iIndex = CCloneListBox.GetCurSel();
-	
-	// 구조체에 인덱스도 같이 저장하면 좋을 듯?
+	int iSelect = CCloneListBox.GetCurSel();
+	CString strFindName = L"";
+	CCloneListBox.GetText(iSelect, strFindName);
 
-	// map에서 strFindName 키값을주고 map안에서 얘랑 똑같은 애들 찾아서 second를 반환해야하는데. list라서 find 함수가 없음.
-	// Add_Clone 할때 리스트박스의 인덱스를 같이 저장해서. 툴에서만 쓰는 용도로 하나 만들어준다고 했음.
+  	for (auto& Clone : m_listCloneData)
+	{
+		if (Clone->wstrCloneName.c_str() == strFindName)
+		{
+			m_strCloneName = Clone->wstrCloneName.c_str();
+
+			m_fPositionX = Clone->matWorld._41;
+			m_fPositionY = Clone->matWorld._42;
+			m_fPositionZ = Clone->matWorld._43;
+
+			m_fScaleX = Clone->matWorld._11;
+			m_fScaleY = Clone->matWorld._22;
+			m_fScaleZ = Clone->matWorld._33;
+
+			//m_fRotateX = ? ;
+			//m_fRotateY = ? ;
+			//m_fRotateZ = ? ;
+			break;
+		}
+	}
 
 
 	UpdateData(FALSE);

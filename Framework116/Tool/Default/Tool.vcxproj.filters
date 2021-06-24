@@ -103,6 +103,9 @@
     <ClInclude Include="..\Headers\MapTool.h">
       <Filter>00.View\03.MapTool</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Protocol.h">
+      <Filter>99.Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
