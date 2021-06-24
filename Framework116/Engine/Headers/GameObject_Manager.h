@@ -13,6 +13,7 @@ private:
 	virtual ~CGameObject_Manager() = default;
 
 public:
+	const class list<class CGameObject*>* Get_GameObjectList(const wstring& LayerTag) const;
 	const class CGameObject* Get_GameObject(const wstring& LayerTag, _uint iIndex = 0) const;
 	const class CComponent* Get_Component(const wstring& LayerTag, const wstring& ComponentTag, _uint iIndex = 0) const;
 

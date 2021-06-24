@@ -128,7 +128,7 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
-	/* For.Component_Mesh */
+	/* For.Component_Mesh_BigShip */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_BigShip",
@@ -145,6 +145,26 @@ HRESULT CMainApp::Ready_StaticResources()
 		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
+		return E_FAIL;
+	}
+
+	/* For.Component_CollideSphere */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_CollideSphere",
+		CCollideSphere::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_CollideSphere");
+		return E_FAIL;
+	}
+
+	/* For.Component_Controller */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Controller",
+		CController::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Controller");
 		return E_FAIL;
 	}
 #pragma endregion
