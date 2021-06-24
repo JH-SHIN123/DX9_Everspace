@@ -214,6 +214,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Texture.h" />
     <ClInclude Include="..\Headers\Time_Manager.h" />
     <ClInclude Include="..\Headers\Transform.h" />
+    <ClInclude Include="..\Headers\UI.h" />
     <ClInclude Include="..\Headers\VIBuffer.h" />
     <ClInclude Include="..\Headers\VIBuffer_CubeTexture.h" />
     <ClInclude Include="..\Headers\VIBuffer_RectColor.h" />
@@ -247,6 +248,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Texture.cpp" />
     <ClCompile Include="..\Codes\Time_Manager.cpp" />
     <ClCompile Include="..\Codes\Transform.cpp" />
+    <ClCompile Include="..\Codes\UI.cpp" />
     <ClCompile Include="..\Codes\VIBuffer.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_CubeTexture.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_RectColor.cpp" />
