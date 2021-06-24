@@ -25,6 +25,9 @@ CMapTool::CMapTool(CWnd* pParent /*=NULL*/)
 	, m_fPositionY(0.f)
 	, m_fPositionZ(0.f)
 	, m_strCloneName(_T(""))
+	, m_fNaviPosX(0.f)
+	, m_fNaviPosY(0.f)
+	, m_fNaviPosZ(0.f)
 {
 
 }
@@ -51,6 +54,9 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_POSITIONY, m_fPositionY);
 	DDX_Text(pDX, IDC_POSITIONZ, m_fPositionZ);
 	DDX_Text(pDX, IDC_EDIT1, m_strCloneName);
+	DDX_Text(pDX, IDC_NAVIPOSX, m_fNaviPosX);
+	DDX_Text(pDX, IDC_NAVIPOSY, m_fNaviPosY);
+	DDX_Text(pDX, IDC_NAVIPOSZ, m_fNaviPosZ);
 }
 
 BEGIN_MESSAGE_MAP(CMapTool, CDialog)
@@ -309,10 +315,33 @@ void CMapTool::OnBnClickedAddclone()
 
 void CMapTool::OnBnClickedDeleteclone()
 {
+	UpdateData(TRUE);
+	int iSelect = CCloneListBox.GetCurSel();
+	CString strFindName = L"";
+
+	// map이 아니라서 String 으로 list안에있는걸 찾아서 지우는게 안대넹. 저장할때 구분할 수 있는 무언가를 또 저장합시다.
+	
+	CCloneListBox.DeleteString(iSelect);
+	UpdateData(FALSE);
 }
 
 void CMapTool::OnBnClickedAddnavi()
 {
+	PASSDATA_ROUTE* NaviPos = new PASSDATA_ROUTE;
+	NaviPos->vNodePos.x = m_fNaviPosX;
+	NaviPos->vNodePos.y = m_fNaviPosY;
+	NaviPos->vNodePos.z = m_fNaviPosZ;
+
+	m_listNaviPos.emplace_back(NaviPos);
+	TCHAR szPosX[32] = L"";
+	_itow_s(NaviPos->vNodePos.x, szPosX, 10); // 10진수를 사용하겠다.
+	wstring wstrCombine = L"PosX: "; 
+	//CNavigationListBox.AddString();
+
+	Safe_Delete(NaviPos);
+	m_fNaviPosX = 0.f;
+	m_fNaviPosY = 0.f;
+	m_fNaviPosZ = 0.f;
 }
 
 void CMapTool::OnBnClickedDeletenavi()
@@ -372,8 +401,6 @@ void CMapTool::OnBnClickedLoadPrototype()
 	}
 }
 
-
-
 void CMapTool::OnLbnSelchangeClonelist3()
 {
 	UpdateData(TRUE);
@@ -382,6 +409,9 @@ void CMapTool::OnLbnSelchangeClonelist3()
 	CString strFindName = L"";
 	CCloneListBox.GetText(iIndex, strFindName);
 	// 구조체에 인덱스도 같이 저장하면 좋을 듯?
+
+	// map에서 strFindName 키값을주고 map안에서 얘랑 똑같은 애들 찾아서 second를 반환해야하는데. list라서 find 함수가 없음.
+	// Add_Clone 할때 리스트박스의 인덱스를 같이 저장해서. 툴에서만 쓰는 용도로 하나 만들어준다고 했음.
 
 
 	UpdateData(FALSE);

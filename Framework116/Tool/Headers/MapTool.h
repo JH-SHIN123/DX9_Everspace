@@ -60,7 +60,6 @@ private: // 변수
 	PASSDATA_MAP* a;
 
 	// Transform / NaviPos 변수들.
-
 public:
 	float m_fScaleX;
 	float m_fScaleY;
@@ -73,4 +72,8 @@ public:
 	float m_fPositionZ;
 
 	CString m_strCloneName;
+
+	float m_fNaviPosX;
+	float m_fNaviPosY;
+	float m_fNaviPosZ;
 };
