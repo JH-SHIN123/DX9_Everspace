@@ -14,6 +14,7 @@ protected:
 public:
 	const class CComponent* Get_Component(const wstring& ComponentTag) const;
 	const vector<class CCollide*>* Get_Collides() const { return &m_Collides; };
+	const _bool Get_IsEmptyCollides() const;
 	const _bool Get_IsPicking() const { return m_IsPicking; }
 
 public:

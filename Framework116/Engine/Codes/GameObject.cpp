@@ -28,6 +28,11 @@ const CComponent * CGameObject::Get_Component(const wstring & ComponentTag) cons
 	return iter->second;
 }
 
+const _bool CGameObject::Get_IsEmptyCollides() const
+{
+	return m_Collides.empty();
+}
+
 HRESULT CGameObject::Ready_GameObject_Prototype()
 {
 	return S_OK;

@@ -76,7 +76,8 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		L"Component_CollideSphere",
 		L"Com_CollideSphere",
 		(CComponent**)&m_pCollide,
-		&BoundingSphere)))
+		&BoundingSphere,
+		true)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
