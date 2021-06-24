@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "MapTool.h"
 
 
 // CMainForm 폼 보기
@@ -23,13 +23,23 @@ public:
 #endif
 #endif
 public:
+<<<<<<< HEAD
 	CResourceTool m_tResourceTool;
+=======
+	CMapTool m_tMapTool;
+
+>>>>>>> origin/New_YoonYoung
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	DECLARE_MESSAGE_MAP()
+<<<<<<< HEAD
 
 public:
 	afx_msg void OnBnClickedResourceToolButton();
+=======
+public:
+	afx_msg void OnBnClickedMapTool();
+>>>>>>> origin/New_YoonYoung
 };
 
 

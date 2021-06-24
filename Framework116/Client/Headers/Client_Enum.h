@@ -10,5 +10,6 @@ enum class ESceneType : unsigned int
 	None = 4294967295
 };
 
+
 #define __CLIENT_ENUM_H__
 #endif

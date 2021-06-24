@@ -3,12 +3,12 @@
 USING(Engine)
 
 CCollideSphere::CCollideSphere(LPDIRECT3DDEVICE9 pDevice)
-	: CComponent(pDevice)
+	: CCollide(pDevice)
 {
 }
 
 CCollideSphere::CCollideSphere(const CCollideSphere& other)
-	: CComponent(other),
+	: CCollide(other),
 	m_pSphere(other.m_pSphere),
 	m_tBoundingSphere(other.m_tBoundingSphere),
 	m_tMaterial(other.m_tMaterial)
@@ -23,7 +23,8 @@ const BOUNDING_SPHERE& CCollideSphere::Get_BoundingSphere() const
 
 HRESULT CCollideSphere::Ready_Component_Prototype()
 {
-	CComponent::Ready_Component_Prototype();
+	CCollide::Ready_Component_Prototype();
+	m_eCollideType = ECollideType::Sphere;
 
 	// 바운딩 박스 확인용 메시 생성
 	// Radius 미터 단위로 변경(*100)
@@ -47,7 +48,7 @@ HRESULT CCollideSphere::Ready_Component_Prototype()
 
 HRESULT CCollideSphere::Ready_Component(void* pArg)
 {
-	CComponent::Ready_Component(pArg);
+	CCollide::Ready_Component(pArg);
 
 	if (auto ptr = (BASE_DESC*)pArg)
 	{
@@ -114,5 +115,5 @@ CComponent* CCollideSphere::Clone(void* pArg)
 void CCollideSphere::Free()
 {
 	Safe_Release(m_pSphere);
-	CComponent::Free();
+	CCollide::Free();
 }

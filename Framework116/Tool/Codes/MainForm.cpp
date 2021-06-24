@@ -25,6 +25,7 @@ void CMainForm::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 }
 
+<<<<<<< HEAD
 void CMainForm::OnBnClickedResourceToolButton()
 {
 	if (nullptr == m_tResourceTool.GetSafeHwnd())
@@ -34,6 +35,17 @@ void CMainForm::OnBnClickedResourceToolButton()
 
 BEGIN_MESSAGE_MAP(CMainForm, CFormView)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnBnClickedResourceToolButton)
+=======
+void CMainForm::OnBnClickedMapTool()
+{
+	if (nullptr == m_tMapTool.GetSafeHwnd())
+		m_tMapTool.Create(IDD_MAPTOOL);
+	m_tMapTool.ShowWindow(SW_SHOW);
+}
+
+BEGIN_MESSAGE_MAP(CMainForm, CFormView)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMainForm::OnBnClickedMapTool)
+>>>>>>> origin/New_YoonYoung
 END_MESSAGE_MAP()
 
 

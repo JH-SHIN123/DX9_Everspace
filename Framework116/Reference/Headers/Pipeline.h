@@ -21,6 +21,10 @@ public:
 	static void RotateX(_float3* pOut, _float3 vIn, _float fRadian);
 	static void RotateY(_float3* pOut, _float3 vIn, _float fRadian);
 	static void RotateZ(_float3* pOut, _float3 vIn,  _float fRadian);
+
+public: // Math
+	static float Get_Distance(const _float3& vPos1, const _float3& vPos2);
+
 };
 END
 

@@ -257,5 +257,10 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+<<<<<<< HEAD
 *.db
 *.opendb
+=======
+*.opendb
+*.db
+>>>>>>> origin/New_YoonYoung

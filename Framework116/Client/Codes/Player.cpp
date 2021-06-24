@@ -60,7 +60,8 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		L"Component_CollideSphere",
 		L"Com_CollideSphere",
 		(CComponent**)&m_pCollide,
-		&BoundingSphere)))
+		&BoundingSphere,
+		true)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
@@ -202,17 +203,15 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	
 	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
-		RAY ray;
-		CCollision::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice);
-
-		D3DXMATRIX view;
-		m_pDevice->GetTransform(D3DTS_VIEW, &view);
-		CCollision::TransformRay(ray, view);
-
-		// Layer에 모든 오브젝트들의 바운딩박스 검사
-		if (CCollision::IntersectRayToSphere(ray, m_pCollide->Get_BoundingSphere())) {
-			PRINT_LOG(L"Hit!", L"Hit!");
+		float fDist_Monster = 0.f;
+		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+			m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
+			PRINT_LOG(L"", L"Pick!");
 		}
+
+		//float fDist_Player = 0.f;
+		//CCollision::PickingObject(fDist_Player, g_hWnd, WINCX, WINCY, m_pDevice,
+		//	m_pManagement->Get_GameObjectList(L"Layer_Player"));
 	}
 
 	return _uint();

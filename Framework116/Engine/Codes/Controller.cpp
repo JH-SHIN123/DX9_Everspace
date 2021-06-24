@@ -1,5 +1,7 @@
 #include "Controller.h"
 
+USING(Engine)
+
 CController::CController(LPDIRECT3DDEVICE9 pDevice)
     : CComponent(pDevice)
 {
