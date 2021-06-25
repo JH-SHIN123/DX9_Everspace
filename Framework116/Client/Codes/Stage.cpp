@@ -25,10 +25,15 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
 
-	//if (FAILED(Add_Layer_Grass(L"Layer_Grass")))
-	//	return E_FAIL;
-
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
+	TRANSFORM_DESC uiTransformDesc;
+	uiTransformDesc.vScale = { 150.f, 150.f,0.f };
+	if (FAILED(Add_Layer_UI(L"Layer_UI", uiTransformDesc, L"Component_Texture_Grass")))
+		return E_FAIL;
+
+	if (FAILED(Add_Layer_DirectionalLight(L"Layer_DirectionalLight", { 1.0f, -0.0f, 0.25f }, D3DCOLOR_XRGB(255, 255, 255))))
 		return E_FAIL;
 
 	return S_OK;
@@ -148,6 +153,45 @@ HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
 		LayerTag)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Skybox In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const TRANSFORM_DESC& tTransformDesc, const wstring& wstrTexturePrototypeTag)
+{
+	UI_DESC uiDesc;
+	uiDesc.tTransformDesc = tTransformDesc;
+	uiDesc.wstrTexturePrototypeTag = wstrTexturePrototypeTag;
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_UI",
+		LayerTag,
+		&uiDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_DirectionalLight(const wstring& LayerTag, const _float3 vDir, const D3DXCOLOR tColor)
+{
+	LIGHT_DESC lightDesc;
+	lightDesc.eLightType = ELightType::Directional;
+	lightDesc.vLightDir = vDir;
+	lightDesc.tLightColor = tColor;
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_DirectionalLight",
+		LayerTag,
+		&lightDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Directional Light In Layer");
 		return E_FAIL;
 	}
 

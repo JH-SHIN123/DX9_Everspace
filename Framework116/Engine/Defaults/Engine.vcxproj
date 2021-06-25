@@ -205,6 +205,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\GameObject_Manager.h" />
     <ClInclude Include="..\Headers\Layer.h" />
+    <ClInclude Include="..\Headers\Light.h" />
     <ClInclude Include="..\Headers\Management.h" />
     <ClInclude Include="..\Headers\Mesh.h" />
     <ClInclude Include="..\Headers\Pipeline.h" />
@@ -239,6 +240,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GameObject_Manager.cpp" />
     <ClCompile Include="..\Codes\Layer.cpp" />
+    <ClCompile Include="..\Codes\Light.cpp" />
     <ClCompile Include="..\Codes\Management.cpp" />
     <ClCompile Include="..\Codes\Mesh.cpp" />
     <ClCompile Include="..\Codes\Pipeline.cpp" />

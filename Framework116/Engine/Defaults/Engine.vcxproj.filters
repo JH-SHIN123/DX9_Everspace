@@ -98,7 +98,16 @@
       <UniqueIdentifier>{b403dff7-d381-47f7-91b4-4e8a44b4606a}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utilities\03.GameObject\01.UI">
-      <UniqueIdentifier>{7a601358-de91-4d32-938c-28336cb2060b}</UniqueIdentifier>
+      <UniqueIdentifier>{a219de65-a36f-43b0-8b1e-1a891fdecf24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\01.UI\Button">
+      <UniqueIdentifier>{f7183172-6d89-431f-bb28-a13f070c1b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\06.Material">
+      <UniqueIdentifier>{c076f8e6-e360-499b-be32-73c60447e3eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\02.Light">
+      <UniqueIdentifier>{51994e74-58b5-409f-a319-7a53ba7fbb88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +216,9 @@
     <ClInclude Include="..\Headers\UI.h">
       <Filter>01.Utilities\03.GameObject\01.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Light.h">
+      <Filter>01.Utilities\03.GameObject\02.Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -295,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\UI.cpp">
       <Filter>01.Utilities\03.GameObject\01.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Light.cpp">
+      <Filter>01.Utilities\03.GameObject\02.Light</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
