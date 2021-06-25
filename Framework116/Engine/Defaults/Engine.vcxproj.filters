@@ -100,6 +100,9 @@
     <Filter Include="01.Utilities\03.GameObject\01.UI">
       <UniqueIdentifier>{a219de65-a36f-43b0-8b1e-1a891fdecf24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\03.GameObject\01.UI\Button">
+      <UniqueIdentifier>{f7183172-6d89-431f-bb28-a13f070c1b98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">

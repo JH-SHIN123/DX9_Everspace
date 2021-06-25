@@ -28,6 +28,7 @@ protected:
 	class CVIBuffer* m_pVIBuffer = nullptr;
 	class CTransform* m_pTransform = nullptr;
 	class CTexture* m_pTexture = nullptr;
+	RECT m_tUIBounds;
 };
 END
 
