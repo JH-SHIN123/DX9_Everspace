@@ -6,6 +6,7 @@
 #include "MapTool.h"
 #include "afxdialogex.h"
 #include "GameObject.h"
+#include "Player.h"
 
 // CMapTool 대화 상자입니다.
 
@@ -40,6 +41,16 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+	m_fScaleX = matPlayerWorld._11;
+	m_fScaleY = matPlayerWorld._22;
+	m_fScaleZ = matPlayerWorld._33;
+
+	m_fPositionX = matPlayerWorld._41;
+	m_fPositionY = matPlayerWorld._42;
+	m_fPositionZ = matPlayerWorld._43;
+
 	DDX_Control(pDX, IDC_PROTOTYPELIST, CPrototypeListBox);
 	DDX_Control(pDX, IDC_CLONELIST3, CCloneListBox);
 	DDX_Control(pDX, IDC_NAVILIST, CNavigationListBox);
@@ -59,6 +70,29 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_NAVIPOSZ, m_fNaviPosZ);
 }
 
+_uint CMapTool::Movement(_float fDeltaTime)
+{
+	if (GetAsyncKeyState('W') & 0x8000)
+		UpdateData(TRUE);
+
+	if (GetAsyncKeyState('S') & 0x8000)
+		UpdateData(TRUE);
+
+	if (GetAsyncKeyState('D') & 0x8000)
+		UpdateData(TRUE);
+
+	if (GetAsyncKeyState('A') & 0x8000)
+		UpdateData(TRUE);
+
+	if (GetAsyncKeyState('Q') & 0x8000)
+		UpdateData(TRUE);
+
+	if (GetAsyncKeyState('E') & 0x8000)
+		UpdateData(TRUE);
+	
+	return _uint();
+}
+
 BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 
 	ON_BN_CLICKED(IDC_RADIOOBJECT, &CMapTool::OnBnClickedRadioobject)
@@ -71,6 +105,8 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_BN_CLICKED(IDC_DELETENAVI, &CMapTool::OnBnClickedDeletenavi)
 	ON_BN_CLICKED(IDC_LOADPROTOTYPE, &CMapTool::OnBnClickedLoadPrototype)
 	ON_LBN_SELCHANGE(IDC_CLONELIST3, &CMapTool::OnLbnSelchangeClonelist3)
+	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 // CMapTool 메시지 처리기입니다.
@@ -79,6 +115,7 @@ BOOL CMapTool::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -292,6 +329,10 @@ void CMapTool::OnBnClickedStageload()
 void CMapTool::OnBnClickedAddclone()
 {
 	UpdateData(TRUE);
+	//m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+	//D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+	
+
 	PASSDATA_MAP* pClone = new PASSDATA_MAP;
 	D3DXMATRIX matWorld, matScale, matRotX, matRotY, matRotZ, matTrans;
 
@@ -490,7 +531,5 @@ void CMapTool::OnLbnSelchangeClonelist3()
 			break;
 		}
 	}
-
-
 	UpdateData(FALSE);
 }

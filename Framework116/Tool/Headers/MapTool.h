@@ -19,6 +19,9 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
+public:
+	_uint Movement(_float fDeltaTime);
+
 	DECLARE_MESSAGE_MAP()
 public: // 함수
 	virtual BOOL OnInitDialog();
@@ -76,4 +79,7 @@ public:
 	float m_fNaviPosX;
 	float m_fNaviPosY;
 	float m_fNaviPosZ;
+
+	// Player 월드행렬 얻어오기 위한 변수
+	CTransform* m_pPlayerTransform;
 };
