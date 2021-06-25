@@ -28,6 +28,7 @@ public: /* For.Device Manager */
 
 public: /* For.Time Manager */
 	_float Get_DeltaTime() const;
+	const _float2 Get_WindowSize() const { return _float2((float)m_iWinCX, (float)m_iWinCY); }
 
 public: /* For.Scene Manager */
 	HRESULT Setup_CurrentScene(_uint iNewSceneType, class CScene* pNewScene);
@@ -48,7 +49,6 @@ public: /* For.GameObject Manager */
 public: /* For.Renderer */
 	HRESULT Add_GameObject_InRenderer(ERenderType eType, class CGameObject* pObject);
 	
-
 public:
 	virtual void Free() override;
 
@@ -59,6 +59,10 @@ private:
 	CGameObject_Manager*	m_pGameObject_Manager = nullptr;
 	CRenderer*				m_pRenderer = nullptr;
 	CTime_Manager*			m_pTime_Manager = nullptr;
+
+private:
+	_uint m_iWinCX = 0;
+	_uint m_iWinCY = 0;
 };
 END
 

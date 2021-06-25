@@ -32,6 +32,9 @@ HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayM
 		return E_FAIL;
 	}
 
+	m_iWinCX = iWinCX;
+	m_iWinCY = iWinCY;
+
 	return S_OK;
 }
 

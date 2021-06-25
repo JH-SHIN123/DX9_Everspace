@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "..\Headers\MainCam.h"
-#include "Engine_Enum.h"
 
 CMainCam::CMainCam(LPDIRECT3DDEVICE9 pDevice)
 	: CCamera(pDevice)
@@ -24,8 +23,6 @@ HRESULT CMainCam::Ready_GameObject_Prototype()
 HRESULT CMainCam::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CCamera::Ready_GameObject(pArg);
-
-	m_eProjectionType = EProjectionType::Perspective;
 
 	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
 	Safe_AddRef(m_pPlayerTransform);

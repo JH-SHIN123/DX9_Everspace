@@ -16,12 +16,6 @@ enum class ECollideType {
 	End
 };
 
-enum class EProjectionType {
-	Perspective,
-	Orthogonal,
-	End
-};
-
 END
 
 #define __ENGINE_ENUM_H__

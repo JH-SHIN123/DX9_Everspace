@@ -97,6 +97,9 @@
     <Filter Include="01.Utilities\04.Component\04.Collide\CollideBox">
       <UniqueIdentifier>{b403dff7-d381-47f7-91b4-4e8a44b4606a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\03.GameObject\01.UI">
+      <UniqueIdentifier>{a219de65-a36f-43b0-8b1e-1a891fdecf24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">

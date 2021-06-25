@@ -28,7 +28,7 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_UI(L"Layer_UI", 0.f, 0.f)))
+	if (FAILED(Add_Layer_UI(L"Layer_UI", { 150.f, 150.f }, {0.f, 0.f})))
 		return E_FAIL;
 
 	return S_OK;
@@ -83,8 +83,6 @@ HRESULT CStage::Add_Layer_Cam(const wstring & LayerTag)
 	CameraDesc.fAspect = (_float)WINCX / WINCY;
 	CameraDesc.fNear = 1.f;
 	CameraDesc.fFar = 1000.f;
-	CameraDesc.iWinCx = WINCX;
-	CameraDesc.iWinCy = WINCY;
 
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -156,13 +154,13 @@ HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const float fWidth, const float fHeight)
+HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const _float2& vScale, const _float2& vPos)
 {
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition.x = 3.f;
-	TransformDesc.vPosition.z = 3.f;
-	TransformDesc.vScale.x = 5.f;
-	TransformDesc.vScale.y = 5.f;
+	TransformDesc.vScale.x = vScale.x;
+	TransformDesc.vScale.y = vScale.y;
+	TransformDesc.vPosition.x = vPos.x;
+	TransformDesc.vPosition.y = vPos.y;
 
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,

@@ -61,24 +61,13 @@ _uint CCamera::LateUpdate_GameObject(_float fDeltaTime)
 
 
 	/* 원근 투영행렬 만들기 */
-	if (EProjectionType::Perspective == m_eProjectionType) {
-		CPipeline::Setup_ProjectionMatrix(
-			&m_CameraDesc.matProj, /* 투영행렬 반환 */
-			m_CameraDesc.fFovY, /* FovY: Y축 시야각. */
-			m_CameraDesc.fAspect, /* Aspect 종횡비 */
-			m_CameraDesc.fNear, /* Near평면의 z값. 현재 카메라와의 깊이 */
-			m_CameraDesc.fFar /* Far평면의 z값. 현재 카메라와의 깊이 */);
-		m_pDevice->SetTransform(D3DTS_PROJECTION, &m_CameraDesc.matProj);
-	}
-	else {
-		D3DXMatrixOrthoLH(
-			&m_CameraDesc.matOrtho, 
-			(FLOAT)m_CameraDesc.iWinCx,
-			(FLOAT)m_CameraDesc.iWinCy,
-			0.f,
-			1.f);
-		m_pDevice->SetTransform(D3DTS_PROJECTION, &m_CameraDesc.matOrtho);
-	}
+	CPipeline::Setup_ProjectionMatrix(
+		&m_CameraDesc.matProj, /* 투영행렬 반환 */
+		m_CameraDesc.fFovY, /* FovY: Y축 시야각. */
+		m_CameraDesc.fAspect, /* Aspect 종횡비 */
+		m_CameraDesc.fNear, /* Near평면의 z값. 현재 카메라와의 깊이 */
+		m_CameraDesc.fFar /* Far평면의 z값. 현재 카메라와의 깊이 */);
+	m_pDevice->SetTransform(D3DTS_PROJECTION, &m_CameraDesc.matProj);
 
 	return _uint();
 }

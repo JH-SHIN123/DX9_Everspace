@@ -22,7 +22,7 @@ private:
 	HRESULT Add_Layer_Monster(const wstring& LayerTag);
 	HRESULT Add_Layer_Grass(const wstring& LayerTag);
 	HRESULT Add_Layer_Skybox(const wstring& LayerTag);
-	HRESULT Add_Layer_UI(const wstring& LayerTag, const float fWidth, const float fHeight);
+	HRESULT Add_Layer_UI(const wstring& LayerTag, const _float2& vScale, const _float2& vPos);
 
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);

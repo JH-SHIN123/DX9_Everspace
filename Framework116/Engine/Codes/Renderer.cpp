@@ -114,8 +114,6 @@ _uint CRenderer::Render_Alpha()
 
 	m_GameObjects[iRenderIndex].clear();
 
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
 	///////////////// 알파 블렌딩 ///////////////////////////////////////////////
 	//pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 
@@ -154,10 +152,34 @@ _uint CRenderer::Render_Alpha()
 
 _uint CRenderer::Render_UI()
 {
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
 	_uint iRenderIndex = (_uint)ERenderType::UI;
 	_uint iEvent = NO_EVENT;
 
-	// Camera 가져와서 Ortho로 변경해주자.
+	///////////////// 알파 테스팅 ///////////////////////////////////////////////
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
+
+	// UI Render 후 기존으로 세팅하기 위한 변수들
+	_float4x4 matPrevView;
+	pDevice->GetTransform(D3DTS_VIEW, &matPrevView);
+
+	_float4x4 matPrevProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matPrevProj);
+
+	// World 항등행렬 세팅
+	_float4x4 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+	_float2 winSize = CManagement::Get_Instance()->Get_WindowSize();
+	_float4x4 matOrtho;
+	D3DXMatrixOrthoLH(&matOrtho, winSize.x, winSize.y, 0.f, 1.f);
+	pDevice->SetTransform(D3DTS_PROJECTION, &matOrtho);
 
 	for (auto& pObject : m_GameObjects[iRenderIndex])
 	{
@@ -169,6 +191,12 @@ _uint CRenderer::Render_UI()
 	}
 
 	m_GameObjects[iRenderIndex].clear();
+
+	// 기존 세팅으로 돌려놓기
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	pDevice->SetTransform(D3DTS_VIEW, &matPrevView);
+	pDevice->SetTransform(D3DTS_PROJECTION, &matPrevProj);
 
 	return iEvent;
 }
