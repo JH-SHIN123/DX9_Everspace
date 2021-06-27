@@ -56,8 +56,16 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	{
+		PARTICLESYSTEM_DESC pSystemDesc;
+		pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+		pSystemDesc.iNumParticles = 6000;
+		pSystemDesc.fParticleSize = 0.9f;
+		if (FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
+			return E_FAIL;
 
-
+	}
 
 	return _uint();
 }

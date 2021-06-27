@@ -9,6 +9,7 @@ enum class ERenderType
 	Priority,
 	NonAlpha,
 	Alpha,
+	Particle,
 	UI,
 	End
 };
@@ -29,6 +30,7 @@ private:
 	_uint Render_Priority();
 	_uint Render_NonAlpha();
 	_uint Render_Alpha();
+	_uint Render_Particle();
 	_uint Render_UI();
 
 public:

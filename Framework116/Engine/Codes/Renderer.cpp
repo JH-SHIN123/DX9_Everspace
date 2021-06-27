@@ -1,7 +1,8 @@
 #include "..\Headers\Renderer.h"
 #include "GameObject.h"
 #include "Management.h"
-#include <Camera.h>
+#include "Camera.h"
+#include "Pipeline.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CRenderer)
@@ -43,6 +44,9 @@ _uint CRenderer::Render_GameObject()
 		return iEvent;
 
 	if (iEvent = Render_Alpha())
+		return iEvent;
+
+	if (iEvent = Render_Particle())
 		return iEvent;
 
 	if (iEvent = Render_UI())
@@ -146,6 +150,55 @@ _uint CRenderer::Render_Alpha()
 	//m_GameObjects[iRenderIndex].clear();
 
 	//pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+	return iEvent;
+}
+
+_uint CRenderer::Render_Particle()
+{
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
+	_uint iRenderIndex = (_uint)ERenderType::Particle;
+	_uint iEvent = NO_EVENT;
+
+	///////////////// 알파 테스팅 ///////////////////////////////////////////////
+	pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+
+	// Set PointSize Min
+	pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, CPipeline::FtoDw(0.0f));
+
+	// control the size of the particle relative to distance
+	pDevice->SetRenderState(D3DRS_POINTSCALE_A, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_B, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_C, CPipeline::FtoDw(1.0f));
+
+	// use alpha from texture
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	for (auto& pObject : m_GameObjects[iRenderIndex])
+	{
+		iEvent = pObject->Render_GameObject();
+		Safe_Release(pObject);
+
+		if (iEvent)
+			return iEvent;
+	}
+
+	m_GameObjects[iRenderIndex].clear();
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, true);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, false);
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
 
 	return iEvent;
 }

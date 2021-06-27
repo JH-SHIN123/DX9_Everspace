@@ -87,8 +87,8 @@ _uint CExplosionSystem::Update_GameObject(_float fDeltaTime)
 			p.fAge += fDeltaTime;
 
 			if (p.fAge > p.fLifeTime) {
-				ResetParticle_ParticleSystem(p);
-				//p.isAlive = false;
+				//ResetParticle_ParticleSystem(p);
+				p.isAlive = false;
 			}
 		}
 	}
@@ -101,7 +101,7 @@ _uint CExplosionSystem::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::LateUpdate_GameObject(fDeltaTime);
 
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Particle, this)))
 		return UPDATE_ERROR;
 
 	return _uint();
@@ -109,7 +109,16 @@ _uint CExplosionSystem::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CExplosionSystem::Render_GameObject()
 {
+	m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+	// read, but don't write particles to z-buffer
+	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+
 	CParticleSystem::Render_GameObject();
+
+	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+
 
 	return _uint();
 }

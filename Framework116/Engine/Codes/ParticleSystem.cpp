@@ -167,8 +167,9 @@ _uint CParticleSystem::Render_GameObject()
 {
 	if (false == m_listParticles.empty())
 	{
-		PreRender_ParticleSystem();
-
+		//PreRender_ParticleSystem();
+		m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_fParticleSize));
+		
 		m_pTexture->Set_Texture(0);
 		m_pDevice->SetFVF(FVF_VTX_COLOR);
 		m_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(VTX_COLOR));
@@ -262,7 +263,7 @@ _uint CParticleSystem::Render_GameObject()
 		// reset render states
 		//
 
-		PostRender_ParticleSystem();
+		//PostRender_ParticleSystem();
 	}
 
 	return _uint();
