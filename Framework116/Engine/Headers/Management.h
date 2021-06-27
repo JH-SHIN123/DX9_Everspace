@@ -20,7 +20,7 @@ private:
 	virtual ~CManagement() = default;
 
 public: /* For.General */
-	HRESULT Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode = EDisplayMode::Win);
+	HRESULT Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode = EDisplayMode::Win, const float _fSPF = 60.f);
 	_uint Update_Game();
 	void Clear_NonStatic_Resources();
 
@@ -32,6 +32,7 @@ public: /* For.Time Manager */
 	const _float2 Get_WindowSize() const { return _float2((float)m_iWinCX, (float)m_iWinCY); }
 
 public:  /* For.Frame Manager */
+	HRESULT FrameLock();
 	void ShowFrame(const HWND hWnd);
 
 public: /* For.Scene Manager */

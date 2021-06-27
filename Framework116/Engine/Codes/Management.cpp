@@ -14,7 +14,7 @@ CManagement::CManagement()
 {
 }
 
-HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode)
+HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode, const float _fSPF)
 {
 	if (nullptr == m_pDevice_Manager || 
 		nullptr == m_pScene_Manager || 
@@ -34,7 +34,7 @@ HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayM
 		return E_FAIL;
 	}
 
-	if (FAILED(m_pFrame_Manager->Ready_FrameManager(60.f)))
+	if (FAILED(m_pFrame_Manager->Ready_FrameManager(_fSPF)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Ready_FrameManager");
 		return E_FAIL;
@@ -57,9 +57,6 @@ _uint CManagement::Update_Game()
 		PRINT_LOG(L"Error", L"One of Managers is nullptr");
 		return UPDATE_ERROR;
 	}
-
-	if (false == m_pFrame_Manager->FrameLock())
-		return NO_EVENT;
 
 	_uint iEvent = NO_EVENT;
 	_float fDeltaTime = m_pTime_Manager->Update_Time_Manager();
@@ -116,6 +113,17 @@ _float CManagement::Get_DeltaTime() const
 	}
 
 	return m_pTime_Manager->Get_DeltaTime();
+}
+
+HRESULT CManagement::FrameLock()
+{
+	if (nullptr == m_pFrame_Manager)
+	{
+		PRINT_LOG(L"Error", L"Frame Manager is nullptr");
+		return E_FAIL;
+	}
+
+	return m_pFrame_Manager->FrameLock();
 }
 
 void CManagement::ShowFrame(const HWND hWnd)
