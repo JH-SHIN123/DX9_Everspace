@@ -11,8 +11,9 @@ typedef struct tagParticleSystemDesc : public BASE_DESC
 {
 	TRANSFORM_DESC tTransformDesc;
 	wstring wstrTexturePrototypeTag = L"";
-	_uint numParticles;
-	float particleSize = 0.f;
+	_uint iNumParticles = 0;
+	float fParticleSize = 0.f;
+	float fEmitRate = 0.f;
 }PARTICLESYSTEM_DESC;
 
 class ENGINE_DLL CParticleSystem abstract : public CGameObject
@@ -78,7 +79,7 @@ protected: // Component
 
 protected:
 	list<tagAttribute> m_listParticles;
-	_uint m_iMaxParticles = 0;
+	_uint m_iNumParticles = 0;
 	float m_fEmitRate = 0.f; // 새로운 파티클들이 추가되는 레이트
 	float m_fParticleSize = 0.f;
 

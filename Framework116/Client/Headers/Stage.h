@@ -24,6 +24,7 @@ private:
 	HRESULT Add_Layer_Skybox(const wstring& LayerTag);
 	HRESULT Add_Layer_UI(const wstring& LayerTag, const TRANSFORM_DESC& tTransformDesc, const wstring& wstrTexturePrototypeTag);
 	HRESULT Add_Layer_DirectionalLight(const wstring& LayerTag, const _float3 vDir, const D3DXCOLOR tColor);
+	HRESULT Add_Layer_Particle_Explosion(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc);
 
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);

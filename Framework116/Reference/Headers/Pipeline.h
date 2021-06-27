@@ -24,8 +24,9 @@ public:
 	static void RotateZ(_float3* pOut, _float3 vIn,  _float fRadian);
 
 public: // Math
-	static float Get_Distance(const _float3& vPos1, const _float3& vPos2);
-
+	static float	Get_Distance(const _float3& vPos1, const _float3& vPos2);
+	static float	GetRandomFloat(float lowBound, float highBound);
+	static void		GetRandomVector(_float3* out, _float3* min, _float3* max);
 
 public: // Etc
 	static DWORD FtoDw(float f) { return *((DWORD*)&f); }

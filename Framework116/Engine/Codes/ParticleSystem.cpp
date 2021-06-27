@@ -12,7 +12,12 @@ CParticleSystem::CParticleSystem(LPDIRECT3DDEVICE9 pDevice)
 
 CParticleSystem::CParticleSystem(const CParticleSystem& other)
 	: CGameObject(other)
+	, m_pVB(other.m_pVB)
+	, m_vbSize(other.m_vbSize)
+	, m_vbOffset(other.m_vbOffset)
+	, m_vbBatchSize(other.m_vbBatchSize)
 {
+	m_pVB->AddRef();
 }
 
 bool CParticleSystem::IsEmpty_ParticleSystem()
@@ -112,6 +117,9 @@ HRESULT CParticleSystem::Ready_GameObject(void* pArg)
 		{
 			transformDesc = psDescPtr->tTransformDesc;
 			m_wstrTexturePrototypeTag = psDescPtr->wstrTexturePrototypeTag;
+			m_iNumParticles = psDescPtr->iNumParticles;
+			m_fParticleSize = psDescPtr->fParticleSize;
+			m_fEmitRate = psDescPtr->fEmitRate;
 		}
 	}
 

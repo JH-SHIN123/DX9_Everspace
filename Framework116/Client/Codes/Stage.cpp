@@ -36,12 +36,23 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_DirectionalLight(L"Layer_DirectionalLight", { 1.0f, -0.0f, 0.25f }, D3DCOLOR_XRGB(255, 255, 255))))
 		return E_FAIL;
 
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+	pSystemDesc.iNumParticles = 6000;
+	pSystemDesc.fParticleSize = 0.9f;
+	if(FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
+
+
+
 
 	return _uint();
 }
@@ -192,6 +203,22 @@ HRESULT CStage::Add_Layer_DirectionalLight(const wstring& LayerTag, const _float
 		&lightDesc)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Directional Light In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_Particle_Explosion(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc)
+{
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Particle_Explosion",
+		LayerTag,
+		(void*)pParticleSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
 		return E_FAIL;
 	}
 
