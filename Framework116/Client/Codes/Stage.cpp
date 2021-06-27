@@ -43,8 +43,10 @@ HRESULT CStage::Ready_Scene()
 
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-	pSystemDesc.iNumParticles = 6000;
-	pSystemDesc.fParticleSize = 0.9f;
+	pSystemDesc.iNumParticles = 500;
+	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
 	if(FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
 		return E_FAIL;
 
@@ -60,8 +62,10 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 	{
 		PARTICLESYSTEM_DESC pSystemDesc;
 		pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-		pSystemDesc.iNumParticles = 6000;
-		pSystemDesc.fParticleSize = 0.9f;
+		pSystemDesc.iNumParticles = 500;
+		pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
+		pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
+		pSystemDesc.tResetAttribute.fLifeTime = 2.f;
 		if (FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
 			return E_FAIL;
 

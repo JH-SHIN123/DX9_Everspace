@@ -7,36 +7,48 @@
 
 BEGIN(Engine)
 
+typedef struct tagParticleResetAttribute {
+	float	fParticleSize = 0.f;
+	float	fEmitRate = 0.f;
+
+	float	fParticleSpeed = 0.f;
+	_float2 vColorRed_RandomRange = { 0.f,1.f };
+	_float2 vColorGreen_RandomRange = { 0.f,1.f };
+	_float2 vColorBlue_RandomRange = { 0.f,1.f };
+	float	fLifeTime = 1.f;
+}PARTICLE_RESETATTRIBUTE;
+
 typedef struct tagParticleSystemDesc : public BASE_DESC
 {
 	TRANSFORM_DESC tTransformDesc;
 	wstring wstrTexturePrototypeTag = L"";
 	_uint iNumParticles = 0;
-	float fParticleSize = 0.f;
-	float fEmitRate = 0.f;
+	
+	// 파티클 리셋 어트리뷰트 파라미터
+	PARTICLE_RESETATTRIBUTE tResetAttribute;
 }PARTICLESYSTEM_DESC;
 
 class ENGINE_DLL CParticleSystem abstract : public CGameObject
 {
 public:
-	struct tagAttribute
+	typedef struct tagParticleAttribute
+{
+	tagParticleAttribute()
 	{
-		tagAttribute()
-		{
-			fLifeTime = 0.f;
-			fAge = 0.f;
-			isAlive = true;
-		}
+		fLifeTime = 0.f;
+		fAge = 0.f;
+		isAlive = true;
+	}
 
-		_float3		vPos;
-		_float3		vVel;
-		_float3		vAcc;
-		float		fLifeTime;
-		float		fAge;
-		D3DXCOLOR	tColor;
-		D3DXCOLOR	tColorFade;
-		_bool		isAlive;
-	};
+	_float3		vPos;
+	_float3		vVel;
+	_float3		vAcc;
+	float		fLifeTime;
+	float		fAge;
+	D3DXCOLOR	tColor;
+	D3DXCOLOR	tColorFade;
+	_bool		isAlive;
+}PARTICLE_ATTRIBUTE;
 
 protected:
 	explicit CParticleSystem(LPDIRECT3DDEVICE9 pDevice);
@@ -49,11 +61,8 @@ public:
 
 protected:
 	virtual void Reset_ParticleSystem();
-	virtual void ResetParticle_ParticleSystem(tagAttribute& attribute) PURE;
+	virtual void ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute) PURE;
 	virtual void AddParticle_ParticleSystem();
-
-	virtual void PreRender_ParticleSystem();
-	virtual void PostRender_ParticleSystem();
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override PURE;
@@ -78,12 +87,11 @@ protected: // Component
 	//class CCollideSphere*	m_pCollide;
 
 protected:
-	list<tagAttribute> m_listParticles;
+	list<PARTICLE_ATTRIBUTE> m_listParticles;
 	_uint m_iNumParticles = 0;
-	float m_fEmitRate = 0.f; // 새로운 파티클들이 추가되는 레이트
-	float m_fParticleSize = 0.f;
 
 	wstring m_wstrTexturePrototypeTag = L"";
+	PARTICLE_RESETATTRIBUTE m_tResetAttribute;
 };
 END
 

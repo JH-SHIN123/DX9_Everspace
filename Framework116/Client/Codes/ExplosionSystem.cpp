@@ -12,7 +12,7 @@ CExplosionSystem::CExplosionSystem(const CExplosionSystem& other)
 {
 }
 
-void CExplosionSystem::ResetParticle_ParticleSystem(tagAttribute& attribute)
+void CExplosionSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute)
 {
 	if (nullptr == m_pTransform) return;
 
@@ -30,32 +30,15 @@ void CExplosionSystem::ResetParticle_ParticleSystem(tagAttribute& attribute)
 	D3DXVec3Normalize(&attribute.vVel,&attribute.vVel);
 
 	// Speed Àû¿ë
-	attribute.vVel *= 100.0f;
+	attribute.vVel *= m_tResetAttribute.fParticleSpeed;
 	attribute.tColor = D3DXCOLOR(
-		CPipeline::GetRandomFloat(0.0f, 1.0f),
-		CPipeline::GetRandomFloat(0.0f, 1.0f),
-		CPipeline::GetRandomFloat(0.0f, 1.0f),
+		CPipeline::GetRandomFloat(m_tResetAttribute.vColorRed_RandomRange),
+		CPipeline::GetRandomFloat(m_tResetAttribute.vColorGreen_RandomRange),
+		CPipeline::GetRandomFloat(m_tResetAttribute.vColorBlue_RandomRange),
 	1.f);
 
 	attribute.fAge = 0.f;
-	attribute.fLifeTime = 2.f;
-}
-
-void CExplosionSystem::PreRender_ParticleSystem()
-{
-	CParticleSystem::PreRender_ParticleSystem();
-
-	m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-	m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
-	// read, but don't write particles to z-buffer
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
-}
-
-void CExplosionSystem::PostRender_ParticleSystem()
-{
-	CParticleSystem::PostRender_ParticleSystem();
-	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+	attribute.fLifeTime = m_tResetAttribute.fLifeTime;
 }
 
 HRESULT CExplosionSystem::Ready_GameObject_Prototype()
@@ -118,7 +101,6 @@ _uint CExplosionSystem::Render_GameObject()
 	CParticleSystem::Render_GameObject();
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
-
 
 	return _uint();
 }

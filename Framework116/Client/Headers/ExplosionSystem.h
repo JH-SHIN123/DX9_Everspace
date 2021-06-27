@@ -3,6 +3,8 @@
 #ifndef __EXPLOSION_H__
 #include "ParticleSystem.h"
 
+// ¼Óµµ / RGB ·£´ý°ª
+
 USING(Engine)
 class CExplosionSystem final : public CParticleSystem
 {
@@ -12,9 +14,7 @@ private:
 	virtual ~CExplosionSystem() = default;
 
 public:
-	virtual void ResetParticle_ParticleSystem(tagAttribute& attribute) override;
-	virtual void PreRender_ParticleSystem() override;
-	virtual void PostRender_ParticleSystem() override;
+	virtual void ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute) override;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;

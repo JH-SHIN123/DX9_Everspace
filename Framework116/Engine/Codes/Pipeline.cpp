@@ -213,6 +213,18 @@ float CPipeline::GetRandomFloat(float lowBound, float highBound)
 	return (f * (highBound - lowBound)) + lowBound;
 }
 
+float CPipeline::GetRandomFloat(_float2& vBounds)
+{
+	if (vBounds.x >= vBounds.y) // bad input
+		return vBounds.x;
+
+	// get random float in [0, 1] interval
+	float f = (rand() % 10000) * 0.0001f;
+
+	// return float in [lowBound, highBound] interval. 
+	return (f * (vBounds.y - vBounds.x)) + vBounds.x;
+}
+
 void CPipeline::GetRandomVector(_float3* out, _float3* min, _float3* max)
 {
 	out->x = GetRandomFloat(min->x, max->x);

@@ -26,6 +26,7 @@ public:
 public: // Math
 	static float	Get_Distance(const _float3& vPos1, const _float3& vPos2);
 	static float	GetRandomFloat(float lowBound, float highBound);
+	static float	GetRandomFloat(_float2& vBounds);
 	static void		GetRandomVector(_float3* out, _float3* min, _float3* max);
 
 public: // Etc

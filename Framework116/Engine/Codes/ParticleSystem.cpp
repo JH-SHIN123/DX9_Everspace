@@ -44,39 +44,9 @@ void CParticleSystem::Reset_ParticleSystem()
 
 void CParticleSystem::AddParticle_ParticleSystem()
 {
-	tagAttribute attribute;
+	PARTICLE_ATTRIBUTE attribute;
 	ResetParticle_ParticleSystem(attribute);
 	m_listParticles.emplace_back(attribute);
-}
-
-void CParticleSystem::PreRender_ParticleSystem()
-{
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, false);
-	m_pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_fParticleSize));
-	m_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, CPipeline::FtoDw(0.0f));
-
-	// control the size of the particle relative to distance
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_A, CPipeline::FtoDw(0.0f));
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_B, CPipeline::FtoDw(0.0f));
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_C, CPipeline::FtoDw(1.0f));
-
-	// use alpha from texture
-	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-
-	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-}
-
-void CParticleSystem::PostRender_ParticleSystem()
-{
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
-	m_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, false);
-	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
 }
 
 HRESULT CParticleSystem::Ready_GameObject_Prototype()
@@ -118,8 +88,7 @@ HRESULT CParticleSystem::Ready_GameObject(void* pArg)
 			transformDesc = psDescPtr->tTransformDesc;
 			m_wstrTexturePrototypeTag = psDescPtr->wstrTexturePrototypeTag;
 			m_iNumParticles = psDescPtr->iNumParticles;
-			m_fParticleSize = psDescPtr->fParticleSize;
-			m_fEmitRate = psDescPtr->fEmitRate;
+			m_tResetAttribute = psDescPtr->tResetAttribute;
 		}
 	}
 
@@ -168,7 +137,7 @@ _uint CParticleSystem::Render_GameObject()
 	if (false == m_listParticles.empty())
 	{
 		//PreRender_ParticleSystem();
-		m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_fParticleSize));
+		m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_tResetAttribute.fParticleSize));
 		
 		m_pTexture->Set_Texture(0);
 		m_pDevice->SetFVF(FVF_VTX_COLOR);
