@@ -53,7 +53,7 @@ public:
 	
 	CString wstrPrototypeTag; = m_wstrObjectPrototypeTag
 	CString wstrPrototypeTag_Mesh; = m_wstrComponentProtoType_Tag
-
+	//
 	*/
 
 	// key tool에서 구별
