@@ -14,4 +14,5 @@
 // 정호 추가
 #include <map>
 #include <fstream>
+#include "Protocol.h"
 #endif //PCH_H

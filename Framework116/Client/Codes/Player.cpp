@@ -60,12 +60,23 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		L"Component_CollideSphere",
 		L"Com_CollideSphere",
 		(CComponent**)&m_pCollide,
-		&BoundingSphere)))
+		&BoundingSphere,
+		true)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	//
+
+	// For.Com_Controller
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Controller",
+		L"Com_Controller",
+		(CComponent**)&m_pController)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Controller");
+		return E_FAIL;
+	}
 
 	// Setting Prev Cursor 
 	GetCursorPos(&m_tPrevCursorPos);
@@ -76,7 +87,9 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 _uint CPlayer::Update_GameObject(_float fDeltaTime)
 {
-	CGameObject::Update_GameObject(fDeltaTime);	
+	CGameObject::Update_GameObject(fDeltaTime);
+
+	m_pController->Update_Controller();
 	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
@@ -162,19 +175,18 @@ _uint CPlayer::Movement(_float fDeltaTime)
 		m_pTransform->RotateY(fDeltaTime);
 	}	
 
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	
+	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
-		RAY ray;
-		CCollision::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice);
-
-		D3DXMATRIX view;
-		m_pDevice->GetTransform(D3DTS_VIEW, &view);
-		CCollision::TransformRay(ray, view);
-
-		// Layer에 모든 오브젝트들의 바운딩박스 검사
-		if (CCollision::IntersectRayToSphere(ray, m_pCollide->Get_BoundingSphere())) {
-			PRINT_LOG(L"Hit!", L"Hit!");
+		float fDist_Monster = 0.f;
+		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+			m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
+			PRINT_LOG(L"", L"Pick!");
 		}
+
+		//float fDist_Player = 0.f;
+		//CCollision::PickingObject(fDist_Player, g_hWnd, WINCX, WINCY, m_pDevice,
+		//	m_pManagement->Get_GameObjectList(L"Layer_Player"));
 	}
 
 	return _uint();
@@ -209,6 +221,7 @@ void CPlayer::Free()
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pCollide);
+	Safe_Release(m_pController);
 
 	CGameObject::Free();
 }

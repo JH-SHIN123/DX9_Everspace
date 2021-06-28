@@ -32,6 +32,9 @@ HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayM
 		return E_FAIL;
 	}
 
+	m_iWinCX = iWinCX;
+	m_iWinCY = iWinCY;
+
 	return S_OK;
 }
 
@@ -142,6 +145,17 @@ CComponent * CManagement::Clone_Component(
 	return m_pComponent_Manager->Clone_Component(eType, PrototypeTag, pArg);
 }
 
+const list<class CGameObject*>* CManagement::Get_GameObjectList(const wstring& LayerTag) const
+{
+	if (nullptr == m_pGameObject_Manager)
+	{
+		PRINT_LOG(L"Error", L"GameObject_Manager Manager is nullptr");
+		return nullptr;
+	}
+
+	return m_pGameObject_Manager->Get_GameObjectList(LayerTag);
+}
+
 const CGameObject* CManagement::Get_GameObject(const wstring& LayerTag, _uint iIndex) const
 {
 	if (nullptr == m_pGameObject_Manager)
@@ -191,6 +205,17 @@ HRESULT CManagement::Add_GameObject_InLayer(
 	}
 
 	return m_pGameObject_Manager->Add_GameObject_InLayer(eType, PrototypeTag, LayerTag, pArg);
+}
+
+HRESULT CManagement::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, const int _iListboxIndex, void* pArg)
+{
+	if (nullptr == m_pGameObject_Manager)
+	{
+		PRINT_LOG(L"Error", L"GameObject_Manager Manager is nullptr");
+		return E_FAIL;
+	}
+
+	return m_pGameObject_Manager->Add_GameObject_InLayer_Tool(eType, PrototypeTag, LayerTag, _iListboxIndex, pArg);
 }
 
 CGameObject * CManagement::Clone_GameObject(

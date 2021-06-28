@@ -88,6 +88,30 @@
     <Filter Include="01.Utilities\07.Collision">
       <UniqueIdentifier>{ffe58d15-b561-44b7-a05c-56c084e954c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\05.Controller">
+      <UniqueIdentifier>{8bd77ca6-30b1-4801-8588-74bb0412314f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\04.Collide\CollideSphere">
+      <UniqueIdentifier>{2afc8219-c47d-4bf8-8877-c5a273a7b35c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\04.Collide\CollideBox">
+      <UniqueIdentifier>{b403dff7-d381-47f7-91b4-4e8a44b4606a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\01.UI">
+      <UniqueIdentifier>{a219de65-a36f-43b0-8b1e-1a891fdecf24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\01.UI\Button">
+      <UniqueIdentifier>{f7183172-6d89-431f-bb28-a13f070c1b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\06.Material">
+      <UniqueIdentifier>{c076f8e6-e360-499b-be32-73c60447e3eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\02.Light">
+      <UniqueIdentifier>{51994e74-58b5-409f-a319-7a53ba7fbb88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\03.ParticleSystem">
+      <UniqueIdentifier>{5f42fed3-6b41-40f7-854b-0df984f5cfda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -180,14 +204,26 @@
     <ClInclude Include="..\Headers\Mesh.h">
       <Filter>01.Utilities\04.Component\03.Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\CollideSphere.h">
-      <Filter>01.Utilities\04.Component\04.Collide</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Protocol.h">
-      <Filter>99.Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Collision.h">
       <Filter>01.Utilities\07.Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Controller.h">
+      <Filter>01.Utilities\04.Component\05.Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Collide.h">
+      <Filter>01.Utilities\04.Component\04.Collide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\CollideSphere.h">
+      <Filter>01.Utilities\04.Component\04.Collide\CollideSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\UI.h">
+      <Filter>01.Utilities\03.GameObject\01.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Light.h">
+      <Filter>01.Utilities\03.GameObject\02.Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ParticleSystem.h">
+      <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,11 +299,26 @@
     <ClCompile Include="..\Codes\Mesh.cpp">
       <Filter>01.Utilities\04.Component\03.Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\CollideSphere.cpp">
-      <Filter>01.Utilities\04.Component\04.Collide</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Collision.cpp">
       <Filter>01.Utilities\07.Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Controller.cpp">
+      <Filter>01.Utilities\04.Component\05.Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Collide.cpp">
+      <Filter>01.Utilities\04.Component\04.Collide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CollideSphere.cpp">
+      <Filter>01.Utilities\04.Component\04.Collide\CollideSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\UI.cpp">
+      <Filter>01.Utilities\03.GameObject\01.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Light.cpp">
+      <Filter>01.Utilities\03.GameObject\02.Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ParticleSystem.cpp">
+      <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

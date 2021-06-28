@@ -13,6 +13,8 @@ protected:
 
 public:
 	const class CComponent* Get_Component(const wstring& ComponentTag) const;
+	const vector<class CCollide*>* Get_Collides() const { return &m_Collides; };
+	const _bool Get_IsEmptyCollides() const;
 	const _bool Get_IsPicking() const { return m_IsPicking; }
 
 public:
@@ -26,7 +28,8 @@ public:
 	virtual _uint Render_GameObject() = 0;
 
 protected:
-	HRESULT Add_Component(EResourceType eType, const wstring& PrototypeTag, const wstring& ComponentTag, class CComponent** ppComponent = nullptr, void* pArg = nullptr);
+	HRESULT Add_Component(EResourceType eType, const wstring& PrototypeTag, const wstring& ComponentTag, class CComponent** ppComponent = nullptr, 
+		void* pArg = nullptr, const bool _bCollide = false);
 
 public:
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
@@ -40,7 +43,18 @@ protected:
 	typedef unordered_map<wstring, class CComponent*>	COMPONENTS;
 	COMPONENTS m_Components; /* 클론 보관 */
 
+	typedef vector<class CCollide*>	COLLIDES;
+	COLLIDES m_Collides;
+
 	class CManagement* m_pManagement = nullptr;
+
+// Tool 전용 함수 / 변수들
+public:
+	void Set_ListBoxIndex(const int _iListBoxIndex) { m_iListBoxIndex = _iListBoxIndex; }
+	const int Get_ListBoxIndex() const { return m_iListBoxIndex; }
+
+protected: 
+	int m_iListBoxIndex = -1;
 };
 END
 

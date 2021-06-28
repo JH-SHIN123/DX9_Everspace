@@ -30,10 +30,12 @@ typedef struct tagPassingData_Object {
 typedef struct tagPassingData_Map {
 	UINT eObjectType;
 	_float4x4 matWorld;
+	int iNodeOrder;
 }PASSDATA_MAP;
 
 typedef struct tagPassingData_Route {
 	_float3 vNodePos;
+	int iNodeOrder;
 }PASSDATA_ROUTE;
 
 typedef struct tagPassingData_Resource {

@@ -122,6 +122,29 @@ void CPipeline::Setup_ProjectionMatrix(
 	pOut->_44 = 0.f;
 }
 
+void CPipeline::Setup_OrthoMatrix(_float4x4* pOut, _float fWidth, _float fHeight, _float fNear, _float fFar)
+{
+	//원근투영과는 다르게 월드의 Z 를 반영하지
+	//않습니다. (Far와 Near을 0,1 의 범위로
+	//변환하는 과정은 없다는 뜻입니다.)
+
+	//때문에 Z 는 고정값으로 
+	//Far = 1
+	//Near = 0 
+	//으로 삼도록 합니다.
+	D3DXMatrixIdentity(pOut);
+
+	float w = 2.f / fWidth;
+	float h = 2.f / fHeight;
+	float a = 1.f; //1.f / (fFar - fNear);
+	float b = 0.f; //-fNear * a;
+
+	pOut->_11 = w;
+	pOut->_22 = h;
+	pOut->_33 = a;
+	pOut->_43 = b;
+}
+
 void CPipeline::Setup_StateMatrix(
 	_float4x4 * pOut, 
 	const _float3 * pRight, 
@@ -171,4 +194,9 @@ void CPipeline::RotateZ(_float3 * pOut, _float3 vIn, _float fRadian)
 	*/	
 	pOut->x = vIn.x * cosf(fRadian) + vIn.y * -sinf(fRadian);
 	pOut->y = vIn.x * sinf(fRadian) + vIn.y * cosf(fRadian);
+}
+
+float CPipeline::Get_Distance(const _float3& vPos1, const _float3& vPos2)
+{
+	return sqrtf((vPos1.x - vPos2.x) * (vPos1.x - vPos2.x) + (vPos1.y - vPos2.y) * (vPos1.y - vPos2.y) + (vPos1.z - vPos2.z) * (vPos1.z - vPos2.z));
 }

@@ -9,6 +9,15 @@ CGameObject_Manager::CGameObject_Manager()
 {
 }
 
+const list<class CGameObject*>* CGameObject_Manager::Get_GameObjectList(const wstring& LayerTag) const
+{
+	auto iter = m_Layers.find(LayerTag);
+	if (m_Layers.end() == iter)
+		return nullptr;
+
+	return iter->second->Get_GameObjectList();
+}
+
 const CGameObject* CGameObject_Manager::Get_GameObject(const wstring& LayerTag, _uint iIndex) const
 {
 	auto iter = m_Layers.find(LayerTag);
@@ -77,6 +86,27 @@ HRESULT CGameObject_Manager::Add_GameObject_InLayer(
 		CLayer* pLayer = CLayer::Create();
 		m_Layers.insert(make_pair(LayerTag, pLayer));
 	}	
+
+	return m_Layers[LayerTag]->Add_GameObject_InLayer(pClone);
+}
+
+HRESULT CGameObject_Manager::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag,
+	const int _iListboxIndex, void* pArg)
+{
+	CGameObject* pClone = Clone_GameObject(eType, PrototypeTag, pArg);
+	if (nullptr == pClone)
+	{
+		PRINT_LOG(L"Error", L"Failed To Clone_GameObject");
+		return E_FAIL;
+	}
+	pClone->Set_ListBoxIndex(_iListboxIndex);
+
+	auto iter_find = m_Layers.find(LayerTag);
+	if (m_Layers.end() == iter_find)
+	{
+		CLayer* pLayer = CLayer::Create();
+		m_Layers.insert(make_pair(LayerTag, pLayer));
+	}
 
 	return m_Layers[LayerTag]->Add_GameObject_InLayer(pClone);
 }

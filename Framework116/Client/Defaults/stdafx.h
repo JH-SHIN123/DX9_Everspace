@@ -22,3 +22,4 @@
 #include "Client_Define.h"
 #include "Client_Enum.h"
 #include "Management.h"
+#include "Protocol.h"

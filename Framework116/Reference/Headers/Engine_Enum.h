@@ -10,6 +10,12 @@ enum class EResourceType
 	End
 };
 
+enum class ECollideType {
+	Sphere,
+	Box,
+	End
+};
+
 END
 
 #define __ENGINE_ENUM_H__

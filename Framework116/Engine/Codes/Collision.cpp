@@ -1,6 +1,53 @@
 #include "Collision.h"
+#include "Layer.h"
+#include "GameObject.h"
+#include "Collide.h"
+#include "CollideSphere.h"
+#include "Pipeline.h"
 
 USING(Engine)
+
+CGameObject* CCollision::PickingObject(float& OutDist, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice, const list<CGameObject*>* listObject)
+{
+	const CGameObject* pPickingObject = nullptr;
+	float fMinDist = -1.f;
+	OutDist = fMinDist;
+
+	if (nullptr == listObject) return nullptr;
+
+	RAY ray;
+	CCollision::CreatePickingRay(ray, hWnd, iWinCX, iWinCY, pDevice);
+
+	D3DXMATRIX view;
+	pDevice->GetTransform(D3DTS_VIEW, &view);
+	CCollision::TransformRay(ray, view);
+
+	for (auto& Obj : (*listObject)) {
+		if (nullptr == Obj || Obj->Get_IsEmptyCollides()) continue;
+
+		for (auto& Collide : (*Obj->Get_Collides())) {
+			if (ECollideType::Sphere == Collide->Get_CollideType()) {
+				const BOUNDING_SPHERE& bounds = static_cast<CCollideSphere*>(Collide)->Get_BoundingSphere();
+				if (CCollision::IntersectRayToSphere(ray, bounds)) {
+
+					// Ray Center <-> BoundingSphere : z üũ
+					float fDist = CPipeline::Get_Distance(ray.vPos, bounds.Get_Position());
+					if (fMinDist == -1.f) {
+						fMinDist = fDist;
+						pPickingObject = Obj;
+					}
+					else if (fMinDist >= fDist) {
+						fMinDist = fDist;
+						pPickingObject = Obj;
+					}
+				}
+			}
+		}
+	}
+
+	OutDist = fMinDist;
+	return const_cast<CGameObject*>(pPickingObject);
+}
 
 void CCollision::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice)
 {
