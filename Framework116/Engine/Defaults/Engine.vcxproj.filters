@@ -109,6 +109,12 @@
     <Filter Include="01.Utilities\03.GameObject\02.Light">
       <UniqueIdentifier>{51994e74-58b5-409f-a319-7a53ba7fbb88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\03.GameObject\03.ParticleSystem">
+      <UniqueIdentifier>{5f42fed3-6b41-40f7-854b-0df984f5cfda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00.Systems\02.Frame_Manager">
+      <UniqueIdentifier>{ce5ca9bc-eb1c-49a4-8baa-1bd667475ad3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -219,6 +225,12 @@
     <ClInclude Include="..\Headers\Light.h">
       <Filter>01.Utilities\03.GameObject\02.Light</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ParticleSystem.h">
+      <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Frame_Manager.h">
+      <Filter>00.Systems\02.Frame_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -310,6 +322,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Light.cpp">
       <Filter>01.Utilities\03.GameObject\02.Light</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ParticleSystem.cpp">
+      <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Frame_Manager.cpp">
+      <Filter>00.Systems\02.Frame_Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

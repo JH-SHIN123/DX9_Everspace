@@ -10,6 +10,8 @@
 #include "Monster.h"
 #include "Grass.h"
 #include "Skybox.h"
+#include "ExplosionSystem.h"
+#include "LaserSystem.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -170,6 +172,26 @@ HRESULT CLoading::Ready_StageResources()
 		CSkybox::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Skybox");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_ExplosionSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		CExplosionSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ExplosionSystem");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_Particle_Laser */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LaserSystem",
+		CLaserSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
 		return E_FAIL;
 	}
 #pragma endregion

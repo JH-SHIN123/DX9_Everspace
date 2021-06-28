@@ -206,7 +206,86 @@ void CPipeline::RotateZ(_float3 * pOut, _float3 vIn, _float fRadian)
 	pOut->y = vIn.x * sinf(fRadian) + vIn.y * cosf(fRadian);
 }
 
+void CPipeline::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice)
+{
+	if (nullptr == pDevice) {
+		PRINT_LOG(L"Error", L"CreatePickingRay - pDevice is nullptr");
+		return;
+	}
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	/* 뷰포트 -> 투영스페이스 */
+	_float3 vMouse = _float3(0.f, 0.f, 0.f);
+	vMouse.x = ptMouse.x / (iWinCX * 0.5f) - 1.f;
+	vMouse.y = 1.f - ptMouse.y / (iWinCY * 0.5f);
+
+	/* 투영스페이스 -> 뷰스페이스 */
+	_float4x4 matProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, 0, &matProj);
+	D3DXVec3TransformCoord(&vMouse, &vMouse, &matProj);
+
+	/* 뷰스페이스 상에서 광선의 출발점과 방향을 구해준다. */
+	pOutRay.vPos = { 0.f, 0.f, 0.f };
+	pOutRay.vDirection = vMouse - pOutRay.vPos;
+}
+
+void CPipeline::TransformRay(RAY& pOutRay, _float4x4& matrix)
+{
+	_float4x4 InvMatrix;
+	D3DXMatrixInverse(&InvMatrix, 0, &matrix);
+
+	// transform the ray's origin, w = 1.
+	D3DXVec3TransformCoord(
+		&pOutRay.vPos,
+		&pOutRay.vPos,
+		&InvMatrix);
+
+	// transform the ray's direction, w = 0.
+	D3DXVec3TransformNormal(
+		&pOutRay.vDirection,
+		&pOutRay.vDirection,
+		&InvMatrix);
+
+	// normalize the direction
+	D3DXVec3Normalize(&pOutRay.vDirection, &pOutRay.vDirection);
+}
+
 float CPipeline::Get_Distance(const _float3& vPos1, const _float3& vPos2)
 {
 	return sqrtf((vPos1.x - vPos2.x) * (vPos1.x - vPos2.x) + (vPos1.y - vPos2.y) * (vPos1.y - vPos2.y) + (vPos1.z - vPos2.z) * (vPos1.z - vPos2.z));
+}
+
+float CPipeline::GetRandomFloat(float lowBound, float highBound)
+{
+	if (lowBound >= highBound) // bad input
+		return lowBound;
+
+	// get random float in [0, 1] interval
+	float f = (rand() % 10000) * 0.0001f;
+
+	// return float in [lowBound, highBound] interval. 
+	return (f * (highBound - lowBound)) + lowBound;
+}
+
+float CPipeline::GetRandomFloat(_float2& vBounds)
+{
+	if (vBounds.x >= vBounds.y) // bad input
+		return vBounds.x;
+
+	// get random float in [0, 1] interval
+	float f = (rand() % 10000) * 0.0001f;
+
+	// return float in [lowBound, highBound] interval. 
+	return (f * (vBounds.y - vBounds.x)) + vBounds.x;
+}
+
+void CPipeline::GetRandomVector(_float3* out, _float3* min, _float3* max)
+{
+	out->x = GetRandomFloat(min->x, max->x);
+	out->y = GetRandomFloat(min->y, max->y);
+	out->z = GetRandomFloat(min->z, max->z);
 }
