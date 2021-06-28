@@ -30,16 +30,16 @@ HRESULT CDummy_Mon::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
-	// For.Com_VIBuffer
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		m_tPassData.wstrPrototypeTag_Mesh,
-		L"Com_Mesh",
-		(CComponent**)&m_pMesh)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Mesh");
-		return E_FAIL;
-	}
+	//// For.Com_VIBuffer
+	//if (FAILED(CGameObject::Add_Component(
+	//	EResourceType::Static,
+	//	m_tPassData.wstrPrototypeTag_Mesh,
+	//	L"Com_Mesh",
+	//	(CComponent**)&m_pMesh)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add_Component Com_Mesh");
+	//	return E_FAIL;
+	//}
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;

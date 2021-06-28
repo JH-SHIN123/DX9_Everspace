@@ -26,29 +26,6 @@ HRESULT CDummy_Object::Ready_GameObject(void * pArg /*= nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		m_tPassData.wstrPrototypeTag_Mesh.GetString(),
-		L"Com_Mesh",
-		(CComponent**)&m_pMesh)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Mesh_Axis");
-		return E_FAIL;
-	}
-
-	TRANSFORM_DESC TransformDesc;
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Transform",
-		L"Com_Transform",
-		(CComponent**)&m_pTransform,
-		&TransformDesc)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
-	}
-
 	return S_OK;
 }
 

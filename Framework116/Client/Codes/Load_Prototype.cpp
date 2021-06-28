@@ -75,9 +75,9 @@ _bool CLoad_Prototype::Load_PassData_Object(const wstring & wstrObjectPrototypeP
 		tMaterial.Power = (_float)_tstof(szMaterial_Power);
 
 		//Pair->first = strPath.GetString;
-		tPassDataObject.wstrPrototypeTag_Object = szObjectProtoTypeTag;
-		tPassDataObject.wstrPrototypeTag_Mesh = szMeshProtoTypeTag;
-		tPassDataObject.tMaterial = tMaterial;
+		//tPassDataObject.wstrPrototypeTag_Object = szObjectProtoTypeTag;
+		//tPassDataObject.wstrPrototypeTag_Mesh = szMeshProtoTypeTag;
+		//tPassDataObject.tMaterial = tMaterial;
 
 		
 

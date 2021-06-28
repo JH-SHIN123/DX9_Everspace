@@ -64,12 +64,15 @@ public:
 public:
 	afx_msg void OnBnClickedButton2(); // Add Component
 
-	afx_msg void OnLbnSelchangeList1();
-	afx_msg void OnLbnSelchangeList2();
-	afx_msg void OnLbnSelchangeList3();
+	afx_msg void OnLbnSelchangeList1();	// Object Prototype List Picked
+	afx_msg void OnLbnSelchangeList2();	// Added Components List (Save Data)
+	afx_msg void OnLbnSelchangeList3();	// Component List
 	afx_msg void OnBnClickedButton1();
 	afx_msg void OnBnClickedButton5();	//Save
 	afx_msg void OnBnClickedButton6();	//Load
+	
+										// // Yeah
+	CString r2;
 };
 
 #endif // !__OBJECT_PROTOTYPE_TOOL_H__

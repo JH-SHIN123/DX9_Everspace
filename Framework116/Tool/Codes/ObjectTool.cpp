@@ -19,6 +19,7 @@ CObjectTool::CObjectTool(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_OBJECTTOOL, pParent)
 	, m_wstrPickedObject(_T(""))
 	, m_wstrComponentProtoType_Tag(_T(""))
+	, r2(_T(""))
 {
 	ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
 }
@@ -73,6 +74,7 @@ void CObjectTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT19, m_tMaterial.Power);
 
 
+	DDX_LBString(pDX, IDC_LIST4, r2);
 }
 
 void CObjectTool::Setting_List_Box()
@@ -118,7 +120,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Player", pData));
@@ -129,7 +130,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Monster_Normal", pData));
@@ -140,7 +140,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Monster_Sniper", pData));
@@ -151,7 +150,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Monster_Stealth", pData));
@@ -162,7 +160,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Monster_Buff", pData));
@@ -173,7 +170,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"Monster_Boss", pData));
@@ -184,7 +180,6 @@ void CObjectTool::Setting_ObjectData()
 	{
 		PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
 		pData->wstrPrototypeTag = L"";
-		pData->wstrPrototypeTag_Mesh = L"";
 		ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
 
 		m_mapObjectData.insert(make_pair(L"DUMMY", pData));
@@ -221,7 +216,7 @@ void CObjectTool::OnBnClickedButton2() // Add Component Button
 	{
 		Pair->second->wstrPrototypeTag = m_wstrObjectPrototype_Tag;
 	
-		Pair->second->wstrPrototypeTag_Mesh = m_wstrComponentProtoType_Tag;
+		//Pair->second->wstrPrototypeTag_Mesh = m_wstrComponentProtoType_Tag;
 		Pair->second->tMaterial = m_tMaterial;
 
 		m_ListAddedCom.AddString(m_wstrComponentProtoType_Tag);
@@ -255,19 +250,19 @@ void CObjectTool::OnLbnSelchangeList1() // Object ListBox
 
 
 	auto Pair = m_mapObjectData.find(wstrTag);
-	if (Pair != m_mapObjectData.end())
-	{
-		if (Pair->second->wstrPrototypeTag_Mesh != L"")
-		{
-			m_wstrObjectPrototype_Tag = Pair->second->wstrPrototypeTag;
-			m_wstrComponentProtoType_Tag = Pair->second->wstrPrototypeTag_Mesh;
-			m_tMaterial = Pair->second->tMaterial;
+	//if (Pair != m_mapObjectData.end())
+	//{
+	//	if (Pair->second->wstrPrototypeTag_Mesh != L"")
+	//	{
+	//		m_wstrObjectPrototype_Tag = Pair->second->wstrPrototypeTag;
+	//		m_wstrComponentProtoType_Tag = Pair->second->wstrPrototypeTag_Mesh;
+	//		m_tMaterial = Pair->second->tMaterial;
 
-			m_ListAddedCom.AddString(m_wstrComponentProtoType_Tag);
-		}
-		else
-			ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
-	}
+	//		m_ListAddedCom.AddString(m_wstrComponentProtoType_Tag);
+	//	}
+	//	else
+	//		ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
+	//}
 
 
 	UpdateData(FALSE);
@@ -315,7 +310,7 @@ void CObjectTool::OnBnClickedButton5() // Save
 
 	CString wstrObjectKey = Pair->first;
 	wstring wstrObjectTag = Pair->second->wstrPrototypeTag;
-	wstring wstrMeshTag = Pair->second->wstrPrototypeTag_Mesh;
+	//wstring wstrMeshTag = Pair->second->wstrPrototypeTag_Mesh;
 	D3DMATERIAL9 tMaterial = Pair->second->tMaterial;
 	
 	wstring wstrDiffuse = to_wstring(_float (tMaterial.Diffuse.r)) + L"?" +
@@ -351,8 +346,8 @@ void CObjectTool::OnBnClickedButton5() // Save
 
 	if (!fout.fail())
 	{
-		fout << wstrObjectTag << "?" << wstrMeshTag << "?" << wstrDiffuse << "?" 
-			<< wstrAmbient << "?" << wstrSpecular << "?" << wstrEmissive << "?" << wstrPower;
+		//fout << wstrObjectTag << "?" << wstrMeshTag << "?" << wstrDiffuse << "?" 
+		//	<< wstrAmbient << "?" << wstrSpecular << "?" << wstrEmissive << "?" << wstrPower;
 	}
 
 	fout.close();
@@ -440,7 +435,7 @@ void CObjectTool::OnBnClickedButton6()
 
 					//Pair->first = strPath.GetString;
 					Pair->second->wstrPrototypeTag = szObjectProtoTypeTag;
-					Pair->second->wstrPrototypeTag_Mesh = szMeshProtoTypeTag;
+					//Pair->second->wstrPrototypeTag_Mesh = szMeshProtoTypeTag;
 					Pair->second->tMaterial = tMaterial;
 				}
 

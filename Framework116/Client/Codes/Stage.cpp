@@ -173,6 +173,8 @@ HRESULT CStage::Add_Layer_Dummy(const wstring & LayerTag)
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
 	}
+
+	return S_OK;
 }
 
 HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const TRANSFORM_DESC& tTransformDesc, const wstring& wstrTexturePrototypeTag)
