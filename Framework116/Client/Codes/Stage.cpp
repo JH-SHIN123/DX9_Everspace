@@ -50,9 +50,16 @@ HRESULT CStage::Ready_Scene()
 	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
 	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	if(FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
+	if(FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
 		return E_FAIL;
 
+	pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 100.f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+	if (FAILED(Add_Layer_LaserSystem(L"Layer_LaserSystem", &pSystemDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -69,7 +76,7 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 		pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 		pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
 		pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-		if (FAILED(Add_Layer_Particle_Explosion(L"Layer_Particle_Explosion", &pSystemDesc)))
+		if (FAILED(Add_Layer_ExplosionSystem(L"Layer_Particle_Explosion", &pSystemDesc)))
 			return E_FAIL;
 
 	}
@@ -220,12 +227,26 @@ HRESULT CStage::Add_Layer_Light(const wstring& LayerTag, const LIGHT_DESC* pLigh
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_Particle_Explosion(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc)
+HRESULT CStage::Add_Layer_ExplosionSystem(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc)
 {
-
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
-		L"GameObject_Particle_Explosion",
+		L"GameObject_ExplosionSystem",
+		LayerTag,
+		(void*)pParticleSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_LaserSystem(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc)
+{
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_LaserSystem",
 		LayerTag,
 		(void*)pParticleSystemDesc)))
 	{

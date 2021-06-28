@@ -23,6 +23,10 @@ public:
 	static void RotateY(_float3* pOut, _float3 vIn, _float fRadian);
 	static void RotateZ(_float3* pOut, _float3 vIn,  _float fRadian);
 
+public: // Ray
+	static void CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice);
+	static void TransformRay(RAY& pOutRay, _float4x4& matrix);
+
 public: // Math
 	static float	Get_Distance(const _float3& vPos1, const _float3& vPos2);
 	static float	GetRandomFloat(float lowBound, float highBound);

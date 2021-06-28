@@ -79,7 +79,6 @@ _uint CExplosionSystem::Update_GameObject(_float fDeltaTime)
 		}
 	}
 
-
 	return m_pTransform->Update_Transform();
 }
 

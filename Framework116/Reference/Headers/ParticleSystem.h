@@ -63,6 +63,7 @@ protected:
 	virtual void Reset_ParticleSystem();
 	virtual void ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute) PURE;
 	virtual void AddParticle_ParticleSystem();
+	virtual void RemoveDeadParticle_ParticleSystem();
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override PURE;

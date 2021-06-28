@@ -49,6 +49,24 @@ void CParticleSystem::AddParticle_ParticleSystem()
 	m_listParticles.emplace_back(attribute);
 }
 
+void CParticleSystem::RemoveDeadParticle_ParticleSystem()
+{
+	list<PARTICLE_ATTRIBUTE>::iterator iter;
+	iter = m_listParticles.begin();
+
+	while (iter != m_listParticles.end())
+	{
+		if (iter->isAlive == false) 
+		{
+			iter = m_listParticles.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
 HRESULT CParticleSystem::Ready_GameObject_Prototype()
 {
 	CGameObject::Ready_GameObject_Prototype();

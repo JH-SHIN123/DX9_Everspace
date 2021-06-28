@@ -16,11 +16,11 @@ CGameObject* CCollision::PickingObject(float& OutDist, const HWND hWnd, const in
 	if (nullptr == listObject) return nullptr;
 
 	RAY ray;
-	CCollision::CreatePickingRay(ray, hWnd, iWinCX, iWinCY, pDevice);
+	CPipeline::CreatePickingRay(ray, hWnd, iWinCX, iWinCY, pDevice);
 
 	D3DXMATRIX view;
 	pDevice->GetTransform(D3DTS_VIEW, &view);
-	CCollision::TransformRay(ray, view);
+	CPipeline::TransformRay(ray, view);
 
 	for (auto& Obj : (*listObject)) {
 		if (nullptr == Obj || Obj->Get_IsEmptyCollides()) continue;
@@ -47,54 +47,6 @@ CGameObject* CCollision::PickingObject(float& OutDist, const HWND hWnd, const in
 
 	OutDist = fMinDist;
 	return const_cast<CGameObject*>(pPickingObject);
-}
-
-void CCollision::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice)
-{
-	if (nullptr == pDevice) {
-		PRINT_LOG(L"Error", L"CreatePickingRay - pDevice is nullptr");
-		return;
-	}
-
-	POINT ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(hWnd, &ptMouse);
-
-	/* 뷰포트 -> 투영스페이스 */
-	_float3 vMouse = _float3(0.f, 0.f, 0.f);
-	vMouse.x = ptMouse.x / (iWinCX * 0.5f) - 1.f;
-	vMouse.y = 1.f - ptMouse.y / (iWinCY * 0.5f);
-
-	/* 투영스페이스 -> 뷰스페이스 */
-	_float4x4 matProj;
-	pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
-	D3DXMatrixInverse(&matProj, 0, &matProj);
-	D3DXVec3TransformCoord(&vMouse, &vMouse, &matProj);
-
-	/* 뷰스페이스 상에서 광선의 출발점과 방향을 구해준다. */
-	pOutRay.vPos = { 0.f, 0.f, 0.f };
-	pOutRay.vDirection = vMouse - pOutRay.vPos;
-}
-
-void CCollision::TransformRay(RAY& pOutRay, _float4x4& matrix)
-{
-	_float4x4 InvMatrix;
-	D3DXMatrixInverse(&InvMatrix, 0, &matrix);
-
-	// transform the ray's origin, w = 1.
-	D3DXVec3TransformCoord(
-		&pOutRay.vPos,
-		&pOutRay.vPos,
-		&InvMatrix);
-
-	// transform the ray's direction, w = 0.
-	D3DXVec3TransformNormal(
-		&pOutRay.vDirection,
-		&pOutRay.vDirection,
-		&InvMatrix);
-
-	// normalize the direction
-	D3DXVec3Normalize(&pOutRay.vDirection, &pOutRay.vDirection);
 }
 
 bool CCollision::IntersectRayToSphere(const RAY& pInRay, const BOUNDING_SPHERE& pBounds)
