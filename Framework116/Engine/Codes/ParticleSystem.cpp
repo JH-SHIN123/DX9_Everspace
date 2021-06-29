@@ -12,7 +12,12 @@ CParticleSystem::CParticleSystem(LPDIRECT3DDEVICE9 pDevice)
 
 CParticleSystem::CParticleSystem(const CParticleSystem& other)
 	: CGameObject(other)
+	, m_pVB(other.m_pVB)
+	, m_vbSize(other.m_vbSize)
+	, m_vbOffset(other.m_vbOffset)
+	, m_vbBatchSize(other.m_vbBatchSize)
 {
+	m_pVB->AddRef();
 }
 
 bool CParticleSystem::IsEmpty_ParticleSystem()
@@ -39,39 +44,27 @@ void CParticleSystem::Reset_ParticleSystem()
 
 void CParticleSystem::AddParticle_ParticleSystem()
 {
-	tagAttribute attribute;
+	PARTICLE_ATTRIBUTE attribute;
 	ResetParticle_ParticleSystem(attribute);
 	m_listParticles.emplace_back(attribute);
 }
 
-void CParticleSystem::PreRender_ParticleSystem()
+void CParticleSystem::RemoveDeadParticle_ParticleSystem()
 {
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, false);
-	m_pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_fParticleSize));
-	m_pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, CPipeline::FtoDw(0.0f));
+	list<PARTICLE_ATTRIBUTE>::iterator iter;
+	iter = m_listParticles.begin();
 
-	// control the size of the particle relative to distance
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_A, CPipeline::FtoDw(0.0f));
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_B, CPipeline::FtoDw(0.0f));
-	m_pDevice->SetRenderState(D3DRS_POINTSCALE_C, CPipeline::FtoDw(1.0f));
-
-	// use alpha from texture
-	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-
-	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
-	m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-}
-
-void CParticleSystem::PostRender_ParticleSystem()
-{
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, true);
-	m_pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
-	m_pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, false);
-	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+	while (iter != m_listParticles.end())
+	{
+		if (iter->isAlive == false) 
+		{
+			iter = m_listParticles.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
 }
 
 HRESULT CParticleSystem::Ready_GameObject_Prototype()
@@ -112,6 +105,8 @@ HRESULT CParticleSystem::Ready_GameObject(void* pArg)
 		{
 			transformDesc = psDescPtr->tTransformDesc;
 			m_wstrTexturePrototypeTag = psDescPtr->wstrTexturePrototypeTag;
+			m_iNumParticles = psDescPtr->iNumParticles;
+			m_tResetAttribute = psDescPtr->tResetAttribute;
 		}
 	}
 
@@ -159,8 +154,9 @@ _uint CParticleSystem::Render_GameObject()
 {
 	if (false == m_listParticles.empty())
 	{
-		PreRender_ParticleSystem();
-
+		//PreRender_ParticleSystem();
+		m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_tResetAttribute.fParticleSize));
+		
 		m_pTexture->Set_Texture(0);
 		m_pDevice->SetFVF(FVF_VTX_COLOR);
 		m_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(VTX_COLOR));
@@ -254,7 +250,7 @@ _uint CParticleSystem::Render_GameObject()
 		// reset render states
 		//
 
-		PostRender_ParticleSystem();
+		//PostRender_ParticleSystem();
 	}
 
 	return _uint();
@@ -265,8 +261,10 @@ void CParticleSystem::Free()
 {
 	Safe_Release(m_pVB);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pCollide);
 	Safe_Release(m_pTexture);
+	//Safe_Release(m_pCollide);
+
+	m_listParticles.clear();
 
 	CGameObject::Free();
 }

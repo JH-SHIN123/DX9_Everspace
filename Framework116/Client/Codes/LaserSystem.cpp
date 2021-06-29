@@ -24,6 +24,7 @@ void CLaserSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute)
 	CMainCam* pCam = (CMainCam*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Cam");
 	if (nullptr == pCam) return;
 
+<<<<<<< HEAD
 	attribute.isAlive = true;
 	RAY ray;
 	CPipeline::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice);
@@ -43,6 +44,16 @@ void CLaserSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute)
 
 	attribute.vPos = pTransform->Get_State(EState::Position);
 	attribute.vVel = bVector * m_tResetAttribute.fParticleSpeed;
+=======
+	RAY ray;
+	CPipeline::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice, 
+		pTransform->Get_State(EState::Position), pCam->Get_CameraDesc().vEye);
+
+	attribute.isAlive = true;
+
+	attribute.vPos = ray.vPos;
+	attribute.vVel = ray.vDirection * m_tResetAttribute.fParticleSpeed;
+>>>>>>> origin/main
 
 	attribute.tColor = D3DXCOLOR(
 		CPipeline::GetRandomFloat(m_tResetAttribute.vColorRed_RandomRange),
@@ -72,7 +83,11 @@ _uint CLaserSystem::Update_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
+<<<<<<< HEAD
 	//AddParticle_ParticleSystem();
+=======
+	AddParticle_ParticleSystem();
+>>>>>>> origin/main
 
 	for (auto& p : m_listParticles)
 	{

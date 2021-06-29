@@ -12,7 +12,7 @@ CMainApp::CMainApp()
 
 HRESULT CMainApp::Ready_MainApp()
 {
-	if (FAILED(m_pManagement->Ready_Game(g_hWnd, WINCX, WINCY, EDisplayMode::Win)))
+	if (FAILED(m_pManagement->Ready_Game(g_hWnd, WINCX, WINCY, EDisplayMode::Win, 120.f)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Ready Game");
 		return E_FAIL;
@@ -49,7 +49,11 @@ HRESULT CMainApp::Ready_MainApp()
 
 _uint CMainApp::Update_MainApp()
 {
-	m_pManagement->Update_Game();
+	if (m_pManagement->FrameLock())
+	{
+		m_pManagement->ShowFrame(g_hWnd);
+		m_pManagement->Update_Game();
+	}
 
 	return _uint();
 }

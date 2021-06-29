@@ -52,6 +52,15 @@
     <Filter Include="55.Load_Prototype">
       <UniqueIdentifier>{82e5c622-5f88-46c7-a6f2-081528fcf004}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Particle">
+      <UniqueIdentifier>{a6b351e6-cf62-4ed3-8e3d-a6c496e62870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Particle\Explosion">
+      <UniqueIdentifier>{2140617a-e811-4c98-b10a-b70367b5472f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Particle\Lazer">
+      <UniqueIdentifier>{40052efc-ffe1-4198-bb04-69d57a9b6437}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -108,6 +117,12 @@
     <ClInclude Include="..\Headers\Load_Prototype.h">
       <Filter>55.Load_Prototype</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ExplosionSystem.h">
+      <Filter>02.GameObject\06.Particle\Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LaserSystem.h">
+      <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -151,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Load_Prototype.cpp">
       <Filter>55.Load_Prototype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ExplosionSystem.cpp">
+      <Filter>02.GameObject\06.Particle\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LaserSystem.cpp">
+      <Filter>02.GameObject\06.Particle\Lazer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,8 @@
 #include "..\Headers\Renderer.h"
 #include "GameObject.h"
 #include "Management.h"
-#include <Camera.h>
+#include "Camera.h"
+#include "Pipeline.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CRenderer)
@@ -43,6 +44,9 @@ _uint CRenderer::Render_GameObject()
 		return iEvent;
 
 	if (iEvent = Render_Alpha())
+		return iEvent;
+
+	if (iEvent = Render_Particle())
 		return iEvent;
 
 	if (iEvent = Render_UI())
@@ -99,7 +103,7 @@ _uint CRenderer::Render_Alpha()
 	_uint iEvent = NO_EVENT;	
 
 	///////////////// 알파 테스팅 ///////////////////////////////////////////////
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);	
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
 
@@ -113,6 +117,8 @@ _uint CRenderer::Render_Alpha()
 	}
 
 	m_GameObjects[iRenderIndex].clear();
+
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
 	///////////////// 알파 블렌딩 ///////////////////////////////////////////////
 	//pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -150,6 +156,61 @@ _uint CRenderer::Render_Alpha()
 	return iEvent;
 }
 
+_uint CRenderer::Render_Particle()
+{
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
+	_uint iRenderIndex = (_uint)ERenderType::Particle;
+	_uint iEvent = NO_EVENT;
+
+	// 조명 Off
+	pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
+
+	// Set PointSize Min
+	pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, CPipeline::FtoDw(0.0f));
+
+	// control the size of the particle relative to distance
+	pDevice->SetRenderState(D3DRS_POINTSCALE_A, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_B, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_C, CPipeline::FtoDw(1.0f));
+
+	// use alpha from texture
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+
+	// 알파테스팅 + 알파블랜딩
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
+
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	for (auto& pObject : m_GameObjects[iRenderIndex])
+	{
+		iEvent = pObject->Render_GameObject();
+		Safe_Release(pObject);
+
+		if (iEvent)
+			return iEvent;
+	}
+
+	m_GameObjects[iRenderIndex].clear();
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, true);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, false);
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+	return iEvent;
+}
+
 _uint CRenderer::Render_UI()
 {
 	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
@@ -160,11 +221,7 @@ _uint CRenderer::Render_UI()
 	_uint iEvent = NO_EVENT;
 
 	// UI 조명 off
-	if (FAILED(pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
-		return E_FAIL;
-	}
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	///////////////// 알파 테스팅 ///////////////////////////////////////////////
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -205,11 +262,7 @@ _uint CRenderer::Render_UI()
 	pDevice->SetTransform(D3DTS_VIEW, &matPrevView);
 	pDevice->SetTransform(D3DTS_PROJECTION, &matPrevProj);
 
-	if (FAILED(pDevice->SetRenderState(D3DRS_LIGHTING, TRUE)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
-		return E_FAIL;
-	}
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	return iEvent;
 }

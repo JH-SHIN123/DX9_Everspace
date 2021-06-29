@@ -10,9 +10,9 @@ enum class ETextureType
 	Cube
 };
 
-class ENGINE_DLL CTexture final : public CComponent
+class ENGINE_DLL CTexture : public CComponent
 {
-private:
+protected:
 	explicit CTexture(LPDIRECT3DDEVICE9 pDevice, ETextureType eType, const TCHAR* pFilePath, _uint iCount = 1);
 	explicit CTexture(const CTexture& other);
 	virtual ~CTexture() = default;
@@ -22,14 +22,14 @@ public:
 	virtual HRESULT Ready_Component(void * pArg = nullptr) override;
 
 public:
-	_uint Set_Texture(_uint iIndex = 0);
+	virtual _uint Set_Texture(_uint iIndex = 0);
 
 public:
 	static CTexture* Create(LPDIRECT3DDEVICE9 pDevice, ETextureType eType, const TCHAR* pFilePath, _uint iCount = 1);
 	virtual CComponent * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
-private:	
+protected:
 	typedef vector<IDirect3DBaseTexture9*>	TEXTURES;
 	TEXTURES m_Textures;
 

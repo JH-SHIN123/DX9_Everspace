@@ -103,14 +103,20 @@
     <Filter Include="01.Utilities\03.GameObject\01.UI\Button">
       <UniqueIdentifier>{f7183172-6d89-431f-bb28-a13f070c1b98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utilities\04.Component\06.Material">
-      <UniqueIdentifier>{c076f8e6-e360-499b-be32-73c60447e3eb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utilities\03.GameObject\02.Light">
       <UniqueIdentifier>{51994e74-58b5-409f-a319-7a53ba7fbb88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.Systems\02.Frame_Manager">
+      <UniqueIdentifier>{ce5ca9bc-eb1c-49a4-8baa-1bd667475ad3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01.Utilities\03.GameObject\03.ParticleSystem">
-      <UniqueIdentifier>{5f42fed3-6b41-40f7-854b-0df984f5cfda}</UniqueIdentifier>
+      <UniqueIdentifier>{c880778d-dde3-473e-8899-1d374eb70471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\02.Texture\SpriteTexture">
+      <UniqueIdentifier>{cd5c3190-a6dc-43db-9c2b-bc92d91cbae1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\06.BezierCurve">
+      <UniqueIdentifier>{ae496e1d-e83f-42ce-a0d3-d3291bdaf342}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -222,8 +228,14 @@
     <ClInclude Include="..\Headers\Light.h">
       <Filter>01.Utilities\03.GameObject\02.Light</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Frame_Manager.h">
+      <Filter>00.Systems\02.Frame_Manager</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\ParticleSystem.h">
       <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\SpriteTexture.h">
+      <Filter>01.Utilities\04.Component\02.Texture\SpriteTexture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -317,8 +329,14 @@
     <ClCompile Include="..\Codes\Light.cpp">
       <Filter>01.Utilities\03.GameObject\02.Light</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Frame_Manager.cpp">
+      <Filter>00.Systems\02.Frame_Manager</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\ParticleSystem.cpp">
       <Filter>01.Utilities\03.GameObject\03.ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\SpriteTexture.cpp">
+      <Filter>01.Utilities\04.Component\02.Texture\SpriteTexture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

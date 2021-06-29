@@ -84,6 +84,7 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 			m_eLightType = lightDescPtr->eLightType;
 			vLightDir = lightDescPtr->vLightDir;
 			tLightColor = lightDescPtr->tLightColor;
+			m_iLightIndex = lightDescPtr->iLightIndex;
 		}
 	}
 
@@ -112,8 +113,11 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 		break;
 	}
 
-	m_pDevice->SetLight(0, &m_tLight);
-	m_pDevice->LightEnable(0, true);
+	// 일단 조명 한개만 설치할거임
+	m_pDevice->SetLight(m_iLightIndex, &m_tLight);
+	m_pDevice->LightEnable(m_iLightIndex, true);
+	//m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//m_pDevice->SetRenderState(D3DRS_DIF, 0x00202020);
 
 	return S_OK;
 }
