@@ -388,6 +388,8 @@ void CObjectTool::OnBnClickedButton5() // Save
 			{
 				D3DMATERIAL9 tMaterial = Pair.second->tMaterial;
 				wstring wstrObjectPrototypeTag = Pair.second->wstrPrototypeTag;
+				wstring wstrObjectClassTag = Pair.first;
+
 				wstring wstrDiffuse = to_wstring(_float(tMaterial.Diffuse.r)) + L"?" +
 					to_wstring(_float(tMaterial.Diffuse.g)) + L"?" +
 					to_wstring(_float(tMaterial.Diffuse.b)) + L"?" +
@@ -410,12 +412,13 @@ void CObjectTool::OnBnClickedButton5() // Save
 
 				wstring wstrPower = to_wstring(_float(tMaterial.Power));
 
-				fout << wstrObjectPrototypeTag << "?"
-					<< wstrDiffuse << "?"
-					<< wstrAmbient << "?"
+				fout << "%" << wstrObjectPrototypeTag << "("
+					<< wstrObjectClassTag << ")"
+					<< wstrDiffuse	<< "?"
+					<< wstrAmbient	<< "?"
 					<< wstrSpecular << "?"
 					<< wstrEmissive << "?"
-					<< wstrPower << endl;
+					<< wstrPower	<< "?" << endl;
 
 				wstring wstrComponentTags = L"";
 
@@ -423,6 +426,21 @@ void CObjectTool::OnBnClickedButton5() // Save
 					wstrComponentTags = wstrComponentTags.c_str() + Iter + L"|";
 
 				fout << wstrComponentTags << endl;
+
+				/*
+
+				%프로토타입태그?머?테?리?얼?
+				컴포|넌트|는|or연산자|로|구별|한다|
+
+				가독성을 위해 컴포넌트태그들은 개행을 한번 함
+
+				정리)
+				1. 프로토 타입 태그는 %로 시작해 ? 로 끝난다
+				2. 머테리얼 정보는 ? 까지 구별 하면 된다
+				3. 컴포넌트태그들은 |로 구별
+				4. %를 만났다는것은 새로 입력할 프로토 타입 태그의 시작점이라고 알리는 역할 (1번으로 다시 읽기)
+				
+				*/
 			}
 
 			fout.close();
@@ -434,7 +452,6 @@ void CObjectTool::OnBnClickedButton5() // Save
 void CObjectTool::OnBnClickedButton6() // Load
 {
 	UpdateData(TRUE);
-
 
 	CFileDialog Dlg(TRUE
 		, L".object", L"*.object"
@@ -457,6 +474,9 @@ void CObjectTool::OnBnClickedButton6() // Load
 
 		wifstream fin;
 		fin.open(strPath.GetString());
+
+		// 읽는 순서
+		// 프로토타입 태그 > 머테리얼 정보들 > 
 
 		if (!fin.fail())
 		{
