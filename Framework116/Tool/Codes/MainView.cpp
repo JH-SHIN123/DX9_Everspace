@@ -62,7 +62,7 @@ void CMainView::OnInitialUpdate()
 	pMain->SetWindowPos(nullptr, 0, 0, MAINVIEW_WINCX + iGapX, MAINVIEW_WINCY + iGapY, PM_NOREMOVE);
 
 	// Init Device 
-	if (FAILED(m_pManagement->Ready_Game(m_hWnd, MAINVIEW_WINCX, MAINVIEW_WINCY, EDisplayMode::Win)))
+	if (FAILED(m_pManagement->Ready_Game(m_hWnd, MAINVIEW_WINCX, MAINVIEW_WINCY, EDisplayMode::Win, 60.f)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Ready Game");
 		return;

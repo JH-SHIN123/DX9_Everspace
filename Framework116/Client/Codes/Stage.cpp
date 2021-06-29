@@ -28,15 +28,14 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
-<<<<<<< HEAD
 	if (FAILED(Add_Layer_Dummy(L"Layer_Dummy")))
 		return E_FAIL;
 
+	//TRANSFORM_DESC uiTransformDesc;
+	//uiTransformDesc.vScale = { 150.f, 150.f,0.f };
+	//if (FAILED(Add_Layer_UI(L"Layer_UI", uiTransformDesc, L"Component_Texture_Grass")))
+	//	return E_FAIL;
 
-	TRANSFORM_DESC uiTransformDesc;
-	uiTransformDesc.vScale = { 150.f, 150.f,0.f };
-	if (FAILED(Add_Layer_UI(L"Layer_UI", uiTransformDesc, L"Component_Texture_Grass")))
-=======
 	UI_DESC uiDesc;
 	uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
 	uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
@@ -51,7 +50,6 @@ HRESULT CStage::Ready_Scene()
 	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
 	lightDesc.iLightIndex = 0;
 	if (FAILED(Add_Layer_Light(L"Layer_DirectionalLight", &lightDesc)))
->>>>>>> origin/main
 		return E_FAIL;
 
 	PARTICLESYSTEM_DESC pSystemDesc;
@@ -207,7 +205,6 @@ HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
 	return S_OK;
 }
 
-<<<<<<< HEAD
 
 HRESULT CStage::Add_Layer_Dummy(const wstring & LayerTag)
 {
@@ -222,10 +219,8 @@ HRESULT CStage::Add_Layer_Dummy(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const TRANSFORM_DESC& tTransformDesc, const wstring& wstrTexturePrototypeTag)
-=======
+
 HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc)
->>>>>>> origin/main
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,

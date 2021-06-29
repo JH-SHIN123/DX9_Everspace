@@ -73,11 +73,6 @@ HRESULT CDummy_Mon::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	//
-
-	// Setting Prev Cursor 
-	GetCursorPos(&m_tPrevCursorPos);
-	ScreenToClient(g_hWnd, &m_tPrevCursorPos);
 
 	return S_OK;
 }
@@ -118,44 +113,6 @@ _uint CDummy_Mon::Render_GameObject()
 
 _uint CDummy_Mon::Movement(_float fDeltaTime)
 {
-	//// Mouse Rotate
-	//GetCursorPos(&m_tCurCursorPos);
-	//ScreenToClient(g_hWnd, &m_tCurCursorPos);
-
-	//// 이전 프레임과 현재프레임의 마우스 이동거리 구하기
-	//_float2 vGap = { float(m_tCurCursorPos.x - m_tPrevCursorPos.x) ,
-	//	float(m_tCurCursorPos.y - m_tPrevCursorPos.y) };
-
-	//m_tPrevCursorPos = m_tCurCursorPos;
-
-	//float dps = 100.f;
-	//m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * dps);
-	//m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * dps);
-
-	//// 마우스 중앙 고정
-	//POINT ptMouse = { WINCX >> 1, WINCY >> 1 };
-	//ClientToScreen(g_hWnd, &ptMouse);
-	//SetCursorPos(ptMouse.x, ptMouse.y);
-
-	// Move
-
-	// Rotate
-
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-	{
-		RAY ray;
-		CCollision::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice);
-
-		D3DXMATRIX view;
-		m_pDevice->GetTransform(D3DTS_VIEW, &view);
-		CCollision::TransformRay(ray, view);
-
-		// Layer에 모든 오브젝트들의 바운딩박스 검사
-		if (CCollision::IntersectRayToSphere(ray, m_pCollide->Get_BoundingSphere())) {
-			PRINT_LOG(L"Hit!", L"Hit!");
-		}
-	}
-
 	return _uint();
 }
 
