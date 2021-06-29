@@ -327,9 +327,9 @@ void CMapTool::OnBnClickedAddclone()
 	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
 	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
-	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x;
-	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y;
-	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z;
+	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x * 100.f;
+	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y * 100.f;
+	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z * 100.f;
 
 	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
 	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
@@ -365,7 +365,7 @@ void CMapTool::OnBnClickedAddclone()
 		EResourceType::Static, 
 		L"GameObject_Dummy",
 		L"Layer_Dummy", 
-		m_iCloneIndex - 1, 
+		m_iCloneIndex, 
 		&TransformDesc)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Picking Dummy");
