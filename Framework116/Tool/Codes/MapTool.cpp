@@ -50,6 +50,18 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 	m_fPositionX = matPlayerWorld._41;
 	m_fPositionY = matPlayerWorld._42;
 	m_fPositionZ = matPlayerWorld._43;
+	/* RotateX
+	1	0	0	0
+	0	c	s	0
+	0	-s	c	0
+	0	0	0	1
+	*/
+	//pOut->y = vIn.y * cosf(fRadian) + vIn.z * -sinf(fRadian);
+	//pOut->z = vIn.y * sinf(fRadian) + vIn.z * cosf(fRadian);
+
+	m_fRotateX = m_pPlayerTransform->Get_TransformDesc().vRotate.x;
+	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
+	m_fRotateZ = m_pPlayerTransform->Get_TransformDesc().vRotate.z;
 
 	DDX_Control(pDX, IDC_PROTOTYPELIST, CPrototypeListBox);
 	DDX_Control(pDX, IDC_CLONELIST3, CCloneListBox);
@@ -72,24 +84,24 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 
 _uint CMapTool::Movement(_float fDeltaTime)
 {
-	if (GetAsyncKeyState('W') & 0x8000)
-		UpdateData(TRUE);
+	//if (GetAsyncKeyState('W') & 0x8000)
+	//	UpdateData(TRUE);
 
-	if (GetAsyncKeyState('S') & 0x8000)
-		UpdateData(TRUE);
+	//if (GetAsyncKeyState('S') & 0x8000)
+	//	UpdateData(TRUE);
 
-	if (GetAsyncKeyState('D') & 0x8000)
-		UpdateData(TRUE);
+	//if (GetAsyncKeyState('D') & 0x8000)
+	//	UpdateData(TRUE);
 
-	if (GetAsyncKeyState('A') & 0x8000)
-		UpdateData(TRUE);
+	//if (GetAsyncKeyState('A') & 0x8000)
+	//	UpdateData(TRUE);
 
-	if (GetAsyncKeyState('Q') & 0x8000)
-		UpdateData(TRUE);
+	//if (GetAsyncKeyState('Q') & 0x8000)
+	//	UpdateData(TRUE);
 
-	if (GetAsyncKeyState('E') & 0x8000)
-		UpdateData(TRUE);
-	
+	//if (GetAsyncKeyState('E') & 0x8000)
+	//	UpdateData(TRUE);
+	//
 	return _uint();
 }
 
@@ -357,10 +369,14 @@ void CMapTool::OnBnClickedAddclone()
 	
 	// 구조체안에 wstring 하나 넣어서 구별하도록 할까?
 
-	//m_pManagement->Add_GameObject_InLayer_Tool(EResourceType::Static, //프로토타입태그/레이어태그/리스트박스인덱스/아규먼트);
 
 	m_listCloneData.emplace_back(pClone);
 	CCloneListBox.AddString(m_strCloneName);
+
+	int m_iCloneIndex = CCloneListBox.GetCount();
+
+	m_pManagement->Add_GameObject_InLayer_Tool(EResourceType::Static, L"GameObject_Player", L"Layer_Player", m_iCloneIndex);
+	
 
 	m_fScaleX = 1.f;	m_fScaleY = 1.f;	m_fScaleZ = 1.f;
 	m_fRotateX = 0.f;	m_fRotateY = 0.f;	m_fRotateZ = 0.f;

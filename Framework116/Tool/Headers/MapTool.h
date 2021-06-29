@@ -36,7 +36,7 @@ public: // 함수
 	afx_msg void OnBnClickedLoadPrototype();
 	afx_msg void OnLbnSelchangeClonelist3();
 
-private: // 변수
+public: // 변수
 	CManagement* m_pManagement = nullptr;
 
 	// PickMode 라디오 버튼
