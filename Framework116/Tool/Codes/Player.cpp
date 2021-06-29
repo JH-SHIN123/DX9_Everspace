@@ -65,11 +65,9 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	Movement(fDeltaTime);
-	if (m_pMapTool != nullptr)
+	if (m_pMapTool->m_bStart)
 	{
-		m_pMapTool->UpdateData(TRUE);
-		m_pMapTool->m_fPositionX = m_pTransform->Get_TransformDesc().vPosition.x;
-		m_pMapTool->UpdateData(FALSE);
+		m_pMapTool->OnBnClickedUpdateTrans();
 	}
 	return m_pTransform->Update_Transform();
 }

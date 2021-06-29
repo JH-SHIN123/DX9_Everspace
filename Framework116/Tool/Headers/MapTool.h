@@ -39,6 +39,9 @@ public: // 함수
 public: // 변수
 	CManagement* m_pManagement = nullptr;
 
+	//Dialog가 열렸니?
+	_bool m_bStart;
+
 	// PickMode 라디오 버튼
 	_bool m_bPickMode;
 
@@ -83,4 +86,5 @@ public:
 	// Player 월드행렬 얻어오기 위한 변수
 	CTransform* m_pPlayerTransform;
 
+	afx_msg void OnBnClickedUpdateTrans();
 };

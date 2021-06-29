@@ -29,6 +29,7 @@ CMapTool::CMapTool(CWnd* pParent /*=NULL*/)
 	, m_fNaviPosX(0.f)
 	, m_fNaviPosY(0.f)
 	, m_fNaviPosZ(0.f)
+	, m_bStart(false)
 {
 
 }
@@ -95,6 +96,7 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_BN_CLICKED(IDC_DELETENAVI, &CMapTool::OnBnClickedDeletenavi)
 	ON_BN_CLICKED(IDC_LOADPROTOTYPE, &CMapTool::OnBnClickedLoadPrototype)
 	ON_LBN_SELCHANGE(IDC_CLONELIST3, &CMapTool::OnLbnSelchangeClonelist3)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMapTool::OnBnClickedUpdateTrans)
 END_MESSAGE_MAP()
 
 // CMapTool 메시지 처리기입니다.
@@ -103,7 +105,7 @@ BOOL CMapTool::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	
+	m_bStart = true;
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
@@ -541,5 +543,29 @@ void CMapTool::OnLbnSelchangeClonelist3()
 			break;
 		}
 	}
+	UpdateData(FALSE);
+}
+
+void CMapTool::OnBnClickedUpdateTrans()
+{
+	UpdateData(TRUE);
+
+	//m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+	//D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+
+	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x * 100.f;
+	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y * 100.f;
+	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z * 100.f;
+
+	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
+	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
+	m_fPositionZ = m_pPlayerTransform->Get_TransformDesc().vPosition.z;
+
+	m_fRotateX = m_pPlayerTransform->Get_TransformDesc().vRotate.x;
+	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
+	m_fRotateZ = m_pPlayerTransform->Get_TransformDesc().vRotate.z;
+
 	UpdateData(FALSE);
 }
