@@ -24,25 +24,14 @@ void CLaserSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute)
 	CMainCam* pCam = (CMainCam*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Cam");
 	if (nullptr == pCam) return;
 
-	attribute.isAlive = true;
 	RAY ray;
-	CPipeline::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice);
-	
-	_float4x4 view;
-	m_pDevice->GetTransform(D3DTS_VIEW, &view);
-	CPipeline::TransformRay(ray, view);
+	CPipeline::CreatePickingRay(ray, g_hWnd, WINCX, WINCY, m_pDevice, 
+		pTransform->Get_State(EState::Position), pCam->Get_CameraDesc().vEye);
 
-	// C Vector : Camera -> Mouse
-	// A Vector : Camera -> Player
-	_float3 cVector = ray.vDirection;
-	_float3 aVector = pTransform->Get_State(EState::Position) - pCam->Get_CameraDesc().vEye;
-	D3DXVec3Normalize(&cVector, &cVector);
-	D3DXVec3Normalize(&aVector,&aVector);
-	_float3 bVector = cVector - aVector;
-	D3DXVec3Normalize(&bVector, &bVector);
+	attribute.isAlive = true;
 
-	attribute.vPos = pTransform->Get_State(EState::Position);
-	attribute.vVel = bVector * m_tResetAttribute.fParticleSpeed;
+	attribute.vPos = ray.vPos;
+	attribute.vVel = ray.vDirection * m_tResetAttribute.fParticleSpeed;
 
 	attribute.tColor = D3DXCOLOR(
 		CPipeline::GetRandomFloat(m_tResetAttribute.vColorRed_RandomRange),
@@ -72,7 +61,7 @@ _uint CLaserSystem::Update_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
-	//AddParticle_ParticleSystem();
+	AddParticle_ParticleSystem();
 
 	for (auto& p : m_listParticles)
 	{

@@ -233,6 +233,50 @@ void CPipeline::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX
 	pOutRay.vDirection = vMouse - pOutRay.vPos;
 }
 
+void CPipeline::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice, _float3 vSubjPos, _float3 vCamPos)
+{
+	if (nullptr == pDevice) {
+		PRINT_LOG(L"Error", L"CreatePickingRay - pDevice is nullptr");
+		return;
+	}
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	/* 뷰포트 -> 투영스페이스 */
+	_float3 vMouse = _float3(0.f, 0.f, 0.f);
+	vMouse.x = ptMouse.x / (iWinCX * 0.5f) - 1.f;
+	vMouse.y = 1.f - ptMouse.y / (iWinCY * 0.5f);
+
+	/* 투영스페이스 -> 뷰스페이스 */
+	_float4x4 matProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, 0, &matProj);
+	D3DXVec3TransformCoord(&vMouse, &vMouse, &matProj);
+
+	/* 뷰스페이스 상에서 광선의 출발점과 방향을 구해준다. */
+	pOutRay.vPos = { 0.f, 0.f, 0.f };
+	pOutRay.vDirection = vMouse - pOutRay.vPos;
+
+	_float4x4 invMatView;
+	pDevice->GetTransform(D3DTS_VIEW, &invMatView);
+	CPipeline::TransformRay(pOutRay, invMatView);
+
+	// C Vector : Camera -> Mouse
+	// A Vector : Camera -> Player
+	_float3 cVector = pOutRay.vDirection;
+	_float3 aVector = vSubjPos - vCamPos;
+	D3DXVec3Normalize(&cVector, &cVector);
+	D3DXVec3Normalize(&aVector, &aVector);
+
+	_float3 bVector = cVector - aVector;
+	D3DXVec3Normalize(&bVector, &bVector);
+
+	pOutRay.vPos = vSubjPos;
+	pOutRay.vDirection = bVector;
+}
+
 void CPipeline::TransformRay(RAY& pOutRay, _float4x4& matrix)
 {
 	_float4x4 InvMatrix;
