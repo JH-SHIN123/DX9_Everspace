@@ -48,4 +48,5 @@ public:
 	afx_msg void OnLbnSelchangeIndexList();
 	afx_msg void OnBnClickedSaveButton();
 	afx_msg void OnBnClickedLoadButton();
+	CString m_strPassFileName;
 };

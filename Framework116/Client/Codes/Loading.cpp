@@ -221,7 +221,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Terrain",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../Resources/Terrain/Terrain%d.png"))))
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../Resources/Terrain/Terrain%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Terrain");
 		return E_FAIL;
@@ -241,7 +241,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Grass",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../Resources/BillboardGrass%d.png"))))
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../Resources/BillboardGrass%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Grass");
 		return E_FAIL;
@@ -251,7 +251,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Skybox",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Skybox%d.dds",1))))
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../../Resources/Skybox%d.dds",1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;

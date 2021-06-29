@@ -6,7 +6,8 @@
 BEGIN(Engine)
 enum class ETextureType
 {
-	Normal,
+	SINGLE,
+	MULTI,
 	Cube
 };
 
@@ -36,7 +37,8 @@ private:
 	const TCHAR* m_pFilePath = nullptr;
 	_uint m_iCount = 0;
 
-	ETextureType m_eType = ETextureType::Normal;
+
+	ETextureType m_eType = ETextureType::SINGLE;
 };
 END
 

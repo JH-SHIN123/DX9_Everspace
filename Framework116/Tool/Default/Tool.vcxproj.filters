@@ -46,6 +46,9 @@
     <Filter Include="00.View\03.ResourceTool">
       <UniqueIdentifier>{5b3c1964-f704-4e36-b2fe-eaec7c05a62c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00.View\04.UiTool">
+      <UniqueIdentifier>{99f29add-5d17-41d7-8a2f-e1d8d49f7410}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">

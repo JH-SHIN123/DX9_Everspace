@@ -149,9 +149,9 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	if(fRotX >= -D3DXToRadian(90.f) && !bRotYDir)
 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
-	else if (fRotX < D3DXToRadian(89.f) && bRotYDir)
+	else if (fRotX < D3DXToRadian(65.f) && bRotYDir)
 	{
-		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
+ 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
 	}
 
 	m_pTransform->RotateY(D3DXToRadian(vGap.x)*fDeltaTime*fSpeed);

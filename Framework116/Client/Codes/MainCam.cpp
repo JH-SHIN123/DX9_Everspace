@@ -64,13 +64,13 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 
 	/* 파란 벡터 */
-	_float3 vPlayerLook = m_pPlayerTransform->Get_State(EState::Look);
 	
+	_float3 vPlayerLook = m_pPlayerTransform->Get_State(EState::Look);
+	//if(D3DXVecCross())
+
 	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 
 	/* 보라색 벡터 */
-
-
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 	D3DXVec3Normalize(&vPlayerRight, &vPlayerRight);
 
@@ -82,13 +82,13 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	/* 초록 벡터 */
 	/*_float3 vPreEye = m_CameraDesc.vEye;
 	_float3 vCurEye = vPlayerPos + (vPlayerLook);*/
-	m_CameraDesc.vEye = vPlayerPos + (vPlayerLook)*-m_fDistanceFromTarget*1.5f;
+	m_CameraDesc.vEye = vPlayerPos + (vPlayerLook)*-m_fDistanceFromTarget*2.f;
 	
 	/* 바라볼 위치 */
 	//한 프레임전의 에임
 	_float3 vPreAim = m_CameraDesc.vAt;
 	//이번에 바뀔 에임 
-	_float3 vCurAim = vPlayerPos - (vPlayerLook)*-m_fDistanceFromTarget*3.f;
+	_float3 vCurAim = vPlayerPos - (vPlayerLook)*-m_fDistanceFromTarget*2.f;
 
 	D3DXVec3Normalize(&vPreAim, &vPreAim);
 	D3DXVec3Normalize(&vCurAim, &vCurAim);
@@ -108,15 +108,12 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	vCurAim += vPlayerPos;
 	m_CameraDesc.vAt = vCurAim;
 
-	//카메라 앵글값보정.
-	/*_float3 vPlayerUp = m_pPlayerTransform->Get_State(EState::Up);
-	m_fCamAngle = -D3DXVec3Dot(&vCurAim, &vPlayerUp);
-	*/
 	m_fCamAngle = 0.f;
 	//카메라 위치를 조금 위로
 	_float3 vCamDist;
 	D3DXVec3Cross(&vCamDist, &vPlayerLook, &vPlayerRight);
 	m_CameraDesc.vEye += vCamDist*m_fDistanceFromTarget;
+
 	return _uint();
 }
 

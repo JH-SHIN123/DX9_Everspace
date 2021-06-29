@@ -13,14 +13,13 @@ IMPLEMENT_DYNAMIC(CResourceTool, CDialog)
 
 CResourceTool::CResourceTool(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_RESOURCETOOL, pParent)
+	, m_strPassFileName(_T(""))
 {
 	
 }
 
 CResourceTool::~CResourceTool()
 {
-	Safe_Release(m_pManagement);
-	Safe_Release(m_pDevice);
 }
 
 void CResourceTool::DoDataExchange(CDataExchange* pDX)
@@ -29,14 +28,13 @@ void CResourceTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DROPFILELIST, CDropFileList);
 	DDX_Control(pDX, IDC_LIST1, CTextureIndexList);
 	DDX_Control(pDX, IDC_PICTURE, m_Picture);
+	DDX_Text(pDX, IDC_PASSEDIT, m_strPassFileName);
 }
 
 void CResourceTool::OnDropFiles(HDROP hDropInfo)
 {
 	m_pManagement = CManagement::Get_Instance();
-	m_pManagement->AddRef();
 	m_pDevice = CManagement::Get_Instance()->Get_Device();
-	m_pDevice->AddRef();
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	TCHAR szFileName[MAX_PATH] = L""; //뭐 반환한다 했는지 기억하는게 좋을 것이야. 
 	int iSize = DragQueryFile(hDropInfo, -1, nullptr, 0);
@@ -60,8 +58,11 @@ void CResourceTool::OnDropFiles(HDROP hDropInfo)
 		case (DWORD)ETextureType::Cube:
 			swprintf_s(szType, L"CUBE");
 			break;
-		case (DWORD)ETextureType::Normal:
-			swprintf_s(szType, L"TEXTURE");
+		case (DWORD)ETextureType::SINGLE:
+			swprintf_s(szType, L"SINGLE");
+			break;
+		case (DWORD)ETextureType::MULTI:
+			swprintf_s(szType, L"MULTI");
 			break;
 		}
 		wstring wstrPathCombine = pPathInfo->wstrFilePath + L"|" + pPathInfo->wstrPrototypeTag + L"|" 
@@ -70,14 +71,17 @@ void CResourceTool::OnDropFiles(HDROP hDropInfo)
 	}
 	for (auto& pPathInfo : m_ListResource)
 	{
-		ETextureType eType = ETextureType::Normal;
+		ETextureType eType = ETextureType::SINGLE;
 		switch (pPathInfo->dwResourceType)
 		{
 		case (DWORD)ETextureType::Cube:
 			eType = ETextureType::Cube;
 			break;
-		case (DWORD)ETextureType::Normal:
-			eType = ETextureType::Normal;
+		case (DWORD)ETextureType::SINGLE:
+			eType = ETextureType::SINGLE;
+			break;
+		case (DWORD)ETextureType::MULTI:
+			eType = ETextureType::MULTI;
 			break;
 		}
 		TCHAR szType[32] = L"";
@@ -86,7 +90,10 @@ void CResourceTool::OnDropFiles(HDROP hDropInfo)
 		case (DWORD)ETextureType::Cube:
 			swprintf_s(szType, L".dds");
 			break;
-		case (DWORD)ETextureType::Normal:
+		case (DWORD)ETextureType::SINGLE:
+			swprintf_s(szType, L".png");
+			break;
+		case (DWORD)ETextureType::MULTI:
 			swprintf_s(szType, L".png");
 			break;
 		}
@@ -123,6 +130,7 @@ void CResourceTool::OnDropFiles(HDROP hDropInfo)
 	m_pCube = CVIBuffer_CubeTexture::Create(m_pDevice);
 	m_pCube->Ready_Component();
 	}
+
 	CDropFileList.SetHorizontalExtent(800);
 	UpdateData(FALSE);
 	CDialog::OnDropFiles(hDropInfo);
@@ -160,7 +168,10 @@ void CResourceTool::MultiTextureInfo_Extraction(const wstring wstrFilePath, list
 			wstring FileType = PathFindExtension(wstrTextureName.c_str());
 			if (L".png" == FileType)
 			{
-				pPathInfo->dwResourceType = (DWORD)ETextureType::Normal;
+				if(bContinue >=1)
+					pPathInfo->dwResourceType = (DWORD)ETextureType::MULTI;
+				else 
+					pPathInfo->dwResourceType = (DWORD)ETextureType::SINGLE;
 			}
 			else if (L".dds" == FileType)
 			{
@@ -230,17 +241,8 @@ void CResourceTool::Render_Texture()
 	DWORD dwIndex = _ttoi(strFileName.GetString());
 	TCHAR szType[32] = L"";
 	ETextureType eType;
-	switch (m_tPicturePathInfo.dwResourceType)
-	{
-	case (DWORD)ETextureType::Cube:
-		swprintf_s(szType, L".dds");
-		eType = ETextureType::Cube;
-		break;
-	case (DWORD)ETextureType::Normal:
-		swprintf_s(szType, L".png");
-		eType = ETextureType::Normal;
-		break;
-	}
+	swprintf_s(szType, L".png");
+	eType = ETextureType::SINGLE;
 	wstring wstrTag = L"Component_Texture_";
 	wstrTag += m_tPicturePathInfo.wstrPrototypeTag;
 	wstrTag += L"%d";
@@ -287,17 +289,9 @@ void CResourceTool::Render_Cube()
 	DWORD dwIndex = _ttoi(strFileName.GetString());
 	TCHAR szType[32] = L"";
 	ETextureType eType;
-	switch (m_tPicturePathInfo.dwResourceType)
-	{
-	case (DWORD)ETextureType::Cube:
-		swprintf_s(szType, L".dds");
-		eType = ETextureType::Cube;
-		break;
-	case (DWORD)ETextureType::Normal:
-		swprintf_s(szType, L".png");
-		eType = ETextureType::Normal;
-		break;
-	}
+	swprintf_s(szType, L".dds");
+	eType = ETextureType::Cube;
+	
 	wstring wstrTag = L"Component_Texture_";
 	wstrTag += m_tPicturePathInfo.wstrPrototypeTag;
 	wstrTag += L"%d";
@@ -358,7 +352,8 @@ void CResourceTool::OnLbnSelchangeDropfilelist()
 void CResourceTool::OnLbnSelchangeIndexList()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	if (m_tPicturePathInfo.dwResourceType == (DWORD)ETextureType::Normal)
+	if (m_tPicturePathInfo.dwResourceType == (DWORD)ETextureType::SINGLE ||
+		m_tPicturePathInfo.dwResourceType == (DWORD)ETextureType::MULTI)
 		Render_Texture();
 	else
 		Render_Cube();
@@ -368,7 +363,11 @@ void CResourceTool::OnLbnSelchangeIndexList()
 void CResourceTool::OnBnClickedSaveButton()
 {
 	wofstream fout;
-	fout.open("../../Data/PathInfo.txt");
+	UpdateData(TRUE);
+	wstring strPassFileName = L"../../Data/";
+	strPassFileName += m_strPassFileName;
+	strPassFileName += L".txt";
+	fout.open(strPassFileName);
 
 	if (!fout.fail())
 	{
@@ -380,8 +379,11 @@ void CResourceTool::OnBnClickedSaveButton()
 			case (DWORD)ETextureType::Cube:
 				swprintf_s(szType, L"CUBE");
 				break;
-			case (DWORD)ETextureType::Normal:
-				swprintf_s(szType, L"NORMAL");
+			case (DWORD)ETextureType::SINGLE:
+				swprintf_s(szType, L"SINGLE");
+				break;
+			case (DWORD)ETextureType::MULTI:
+				swprintf_s(szType, L"MULTI");
 				break;
 			}
 			fout << pPathInfo->wstrFilePath.GetString() << "|" << pPathInfo->wstrPrototypeTag.GetString()
@@ -411,7 +413,11 @@ void CResourceTool::OnBnClickedLoadButton()
 	m_ListResource.clear();
 
 	wifstream fin;
-	fin.open("../../Data/PathInfo.txt");
+	UpdateData(TRUE);
+	wstring strPassFileName = L"../../Data/";
+	strPassFileName += m_strPassFileName;
+	strPassFileName += L".txt";
+	fin.open(strPassFileName);
 
 	if (!fin.fail())
 	{
@@ -433,8 +439,10 @@ void CResourceTool::OnBnClickedLoadButton()
 			PASSDATA_RESOURCE* pPathInfo = new PASSDATA_RESOURCE;
 			pPathInfo->wstrFilePath = szFilePath;
 			pPathInfo->wstrPrototypeTag = szPrototypeTag;
-			if(!lstrcmp(szType,L"NORMAL"))
-				pPathInfo->dwResourceType = (_uint)ETextureType::Normal;
+			if(!lstrcmp(szType,L"SINGLE"))
+				pPathInfo->dwResourceType = (_uint)ETextureType::SINGLE;
+			else if (!lstrcmp(szType, L"MULTI"))
+				pPathInfo->dwResourceType = (_uint)ETextureType::MULTI;
 			else if (!lstrcmp(szType, L"CUBE"))
 				pPathInfo->dwResourceType = (_uint)ETextureType::Cube;
 			pPathInfo->dwTextureCount = _ttoi(szCount);
@@ -456,14 +464,17 @@ void CResourceTool::OnBnClickedLoadButton()
 		}
 		for (auto& pPathInfo : m_ListResource)
 		{
-			ETextureType eType = ETextureType::Normal;
+			ETextureType eType = ETextureType::SINGLE;
 			switch (pPathInfo->dwResourceType)
 			{
 			case (DWORD)ETextureType::Cube:
 				eType = ETextureType::Cube;
 				break;
-			case (DWORD)ETextureType::Normal:
-				eType = ETextureType::Normal;
+			case (DWORD)ETextureType::SINGLE:
+				eType = ETextureType::SINGLE;
+				break;
+			case(DWORD)ETextureType::MULTI:
+				eType = ETextureType::MULTI;
 				break;
 			}
 			TCHAR szType[32] = L"";
@@ -472,7 +483,10 @@ void CResourceTool::OnBnClickedLoadButton()
 			case (DWORD)ETextureType::Cube:
 				swprintf_s(szType, L".dds");
 				break;
-			case (DWORD)ETextureType::Normal:
+			case (DWORD)ETextureType::SINGLE:
+				swprintf_s(szType, L".png");
+				break;
+			case (DWORD)ETextureType::MULTI:
 				swprintf_s(szType, L".png");
 				break;
 			}

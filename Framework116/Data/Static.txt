@@ -1,0 +1,1 @@
+..\..\Resources\Example\Example%d.png|Example|SINGLE|1
