@@ -362,56 +362,72 @@ void CObjectTool::OnBnClickedButton1() // Object ProtoType Tag / Insert Button
 void CObjectTool::OnBnClickedButton5() // Save
 {
 	UpdateData(TRUE);
-	auto Pair = m_mapObjectData.find(m_wstrPickedObject);
 
-	if (Pair == m_mapObjectData.end())
-		return;
+	CFileDialog Dlg(TRUE
+		, L".object", L"*.object"
+		, OFN_OVERWRITEPROMPT, L"Data File(*.object) | *.object||"
+		, 0, 0, 0);
 
-	CString wstrObjectKey = Pair->first;
-	wstring wstrObjectTag = Pair->second->wstrPrototypeTag;
-	//wstring wstrMeshTag = Pair->second->wstrPrototypeTag_Mesh;
-	D3DMATERIAL9 tMaterial = Pair->second->tMaterial;
-	
-	wstring wstrDiffuse = to_wstring(_float (tMaterial.Diffuse.r)) + L"?" +
-		to_wstring(_float(tMaterial.Diffuse.g)) + L"?" +
-		to_wstring(_float(tMaterial.Diffuse.b)) + L"?" +
-		to_wstring(_float(tMaterial.Diffuse.a));
+	TCHAR szBuf[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szBuf);
+	PathRemoveFileSpec(szBuf);
+	PathRemoveFileSpec(szBuf);
+	lstrcat(szBuf, L"\\Data\\PrototypeData");
+	Dlg.m_ofn.lpstrInitialDir = szBuf;
 
-	wstring wstrAmbient = to_wstring(_float(tMaterial.Ambient.r)) + L"?" +
-		to_wstring(_float(tMaterial.Ambient.g)) + L"?" +
-		to_wstring(_float(tMaterial.Ambient.b)) + L"?" +
-		to_wstring(_float(tMaterial.Ambient.a));
-
-	wstring wstrSpecular = to_wstring(_float(tMaterial.Specular.r)) + L"?" +
-		to_wstring(_float(tMaterial.Specular.g)) + L"?" +
-		to_wstring(_float(tMaterial.Specular.b)) + L"?" +
-		to_wstring(_float(tMaterial.Specular.a));
-
-	wstring wstrEmissive = to_wstring(_float(tMaterial.Emissive.r)) + L"?" +
-		to_wstring(_float(tMaterial.Emissive.g)) + L"?" +
-		to_wstring(_float(tMaterial.Emissive.b)) + L"?" +
-		to_wstring(_float(tMaterial.Emissive.a));
-
-	wstring wstrPower = to_wstring(_float(tMaterial.Power));
-
-	CString wstrPath = L"../../Data/PrototypeData/" + wstrObjectKey + L".object";
-	CStringA wstrPath_A = (CStringA)wstrPath;
-	CHAR szRealPath[MAX_PATH] = "";
-	memcpy(szRealPath, wstrPath_A.GetBuffer(), wstrPath_A.GetLength());
-
-
-	wofstream fout;
-	fout.open(szRealPath);
-
-	if (!fout.fail())
+	if (Dlg.DoModal())
 	{
-		//fout << wstrObjectTag << "?" << wstrMeshTag << "?" << wstrDiffuse << "?" 
-		//	<< wstrAmbient << "?" << wstrSpecular << "?" << wstrEmissive << "?" << wstrPower;
+		CString strPath = Dlg.GetPathName();
+		wofstream fout;
+
+		fout.open(strPath.GetString());
+
+		if (!fout.fail())
+		{
+			for (auto& Pair : m_mapObjectData)
+			{
+				D3DMATERIAL9 tMaterial = Pair.second->tMaterial;
+				wstring wstrObjectPrototypeTag = Pair.second->wstrPrototypeTag;
+				wstring wstrDiffuse = to_wstring(_float(tMaterial.Diffuse.r)) + L"?" +
+					to_wstring(_float(tMaterial.Diffuse.g)) + L"?" +
+					to_wstring(_float(tMaterial.Diffuse.b)) + L"?" +
+					to_wstring(_float(tMaterial.Diffuse.a));
+
+				wstring wstrAmbient = to_wstring(_float(tMaterial.Ambient.r)) + L"?" +
+					to_wstring(_float(tMaterial.Ambient.g)) + L"?" +
+					to_wstring(_float(tMaterial.Ambient.b)) + L"?" +
+					to_wstring(_float(tMaterial.Ambient.a));
+
+				wstring wstrSpecular = to_wstring(_float(tMaterial.Specular.r)) + L"?" +
+					to_wstring(_float(tMaterial.Specular.g)) + L"?" +
+					to_wstring(_float(tMaterial.Specular.b)) + L"?" +
+					to_wstring(_float(tMaterial.Specular.a));
+
+				wstring wstrEmissive = to_wstring(_float(tMaterial.Emissive.r)) + L"?" +
+					to_wstring(_float(tMaterial.Emissive.g)) + L"?" +
+					to_wstring(_float(tMaterial.Emissive.b)) + L"?" +
+					to_wstring(_float(tMaterial.Emissive.a));
+
+				wstring wstrPower = to_wstring(_float(tMaterial.Power));
+
+				fout << wstrObjectPrototypeTag << "?"
+					<< wstrDiffuse << "?"
+					<< wstrAmbient << "?"
+					<< wstrSpecular << "?"
+					<< wstrEmissive << "?"
+					<< wstrPower << endl;
+
+				wstring wstrComponentTags = L"";
+
+				for (auto& Iter : Pair.second->vecPrototypeTag_Mesh)
+					wstrComponentTags = wstrComponentTags.c_str() + Iter + L"|";
+
+				fout << wstrComponentTags << endl;
+			}
+
+			fout.close();
+		}
 	}
-
-	fout.close();
-
-
 	UpdateData(FALSE);
 }
 
