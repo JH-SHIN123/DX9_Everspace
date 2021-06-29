@@ -86,6 +86,21 @@ HRESULT CMainScene::Add_Layer_Axis(const wstring& LayerTag)
 	return S_OK;
 }
 
+HRESULT CMainScene::Add_Layer_Dummy(const wstring & LayerTag, int iIndex, TRANSFORM_DESC TransformDesc)
+{
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer_(
+	//	EResourceType::Static,
+	//	L"GameObject_Dummy",
+	//	LayerTag
+	//	, iIndex
+	//	, TransformDesc)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Dummy In Layer");
+	//	return E_FAIL;
+	//}
+	return S_OK;
+}
+
 CMainScene* CMainScene::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)

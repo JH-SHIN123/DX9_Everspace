@@ -43,21 +43,14 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 
 	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
 	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
-	m_fScaleX = matPlayerWorld._11;
-	m_fScaleY = matPlayerWorld._22;
-	m_fScaleZ = matPlayerWorld._33;
 
-	m_fPositionX = matPlayerWorld._41;
-	m_fPositionY = matPlayerWorld._42;
-	m_fPositionZ = matPlayerWorld._43;
-	/* RotateX
-	1	0	0	0
-	0	c	s	0
-	0	-s	c	0
-	0	0	0	1
-	*/
-	//pOut->y = vIn.y * cosf(fRadian) + vIn.z * -sinf(fRadian);
-	//pOut->z = vIn.y * sinf(fRadian) + vIn.z * cosf(fRadian);
+	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x;
+	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y;
+	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z;
+
+	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
+	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
+	m_fPositionZ = m_pPlayerTransform->Get_TransformDesc().vPosition.z;
 
 	m_fRotateX = m_pPlayerTransform->Get_TransformDesc().vRotate.x;
 	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
@@ -172,6 +165,7 @@ void CMapTool::OnBnClickedStagesave()
 				WriteFile(hFile, &Clone->eObjectType, sizeof(_uint), &dwByte, nullptr);
 				WriteFile(hFile, &Clone->matWorld, sizeof(_float4x4), &dwByte, nullptr);
 				WriteFile(hFile, &Clone->wstrCloneName, sizeof(wstring), &dwByte, nullptr);
+				WriteFile(hFile, &Clone->Rotate, sizeof(_float3), &dwByte, nullptr);
 			}
 
 			//for (auto& Navi : m_listNaviPos)
@@ -258,6 +252,7 @@ void CMapTool::OnBnClickedStageload()
 				ReadFile(hFile, &pMap->eObjectType, sizeof(_uint), &dwByte, nullptr);
 				ReadFile(hFile, &pMap->matWorld, sizeof(D3DXMATRIX), &dwByte, nullptr);
 				ReadFile(hFile, &pMap->wstrCloneName, sizeof(wstring), &dwByte, nullptr);
+				ReadFile(hFile, &pMap->Rotate, sizeof(_float3), &dwByte, nullptr);
 
 				if (0 == dwByte)
 				{
@@ -341,46 +336,62 @@ void CMapTool::OnBnClickedStageload()
 void CMapTool::OnBnClickedAddclone()
 {
 	UpdateData(TRUE);
+
 	//m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
 	//D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
-	
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+
+	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x;
+	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y;
+	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z;
+
+	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
+	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
+	m_fPositionZ = m_pPlayerTransform->Get_TransformDesc().vPosition.z;
+
+	m_fRotateX = m_pPlayerTransform->Get_TransformDesc().vRotate.x;
+	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
+	m_fRotateZ = m_pPlayerTransform->Get_TransformDesc().vRotate.z;
 
 	PASSDATA_MAP* pClone = new PASSDATA_MAP;
-	D3DXMATRIX matWorld, matScale, matRotX, matRotY, matRotZ, matTrans;
-
-	D3DXMatrixScaling(&matScale, m_fScaleX, m_fScaleY, m_fScaleZ);
-	D3DXMatrixRotationX(&matRotX, D3DXToRadian(m_fRotateX));
-	D3DXMatrixRotationY(&matRotY, D3DXToRadian(m_fRotateY));
-	D3DXMatrixRotationZ(&matRotZ, D3DXToRadian(m_fRotateZ));
-	D3DXMatrixTranslation(&matTrans, m_fPositionX, m_fPositionY, m_fPositionZ);
-
-	matWorld = matScale * matRotX * matRotY * matRotZ * matTrans;
 
 	pClone->eObjectType = 1;
- 	pClone->matWorld = matWorld;
+ 	pClone->matWorld = matPlayerWorld;
 	pClone->wstrCloneName = m_strCloneName;
 
-	//int iOrder = CCloneListBox.GetCount();
-	//pClone->iNodeOrder = iOrder + 1; // 보류.
-
-
-	m_pManagement->Get_Device()->SetTransform(D3DTS_WORLD, &pClone->matWorld);
-
-	
-	// 구조체안에 wstring 하나 넣어서 구별하도록 할까?
-
-
+	pClone->Rotate.x = m_fRotateX;
+	pClone->Rotate.y = m_fRotateY;
+	pClone->Rotate.z = m_fRotateZ;
+		
 	m_listCloneData.emplace_back(pClone);
-	CCloneListBox.AddString(m_strCloneName);
+	CCloneListBox.AddString(pClone->wstrCloneName.c_str());
 
 	int m_iCloneIndex = CCloneListBox.GetCount();
 
-	m_pManagement->Add_GameObject_InLayer_Tool(EResourceType::Static, L"GameObject_Player", L"Layer_Player", m_iCloneIndex);
-	
+	TRANSFORM_DESC TransformDesc;
+	TransformDesc.vPosition = { m_fPositionX, m_fPositionY, m_fPositionZ };
+	TransformDesc.vRotate = { m_fRotateX, m_fRotateY, m_fRotateZ };
+	TransformDesc.vScale = { m_fScaleX, m_fScaleY, m_fScaleZ };
+	TransformDesc.matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer_Tool(
+		EResourceType::Static, 
+		L"GameObject_Dummy",
+		L"Layer_Dummy", 
+		m_iCloneIndex - 1, 
+		&TransformDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Picking Dummy");
+		return;
+	}
+	
 	m_fScaleX = 1.f;	m_fScaleY = 1.f;	m_fScaleZ = 1.f;
 	m_fRotateX = 0.f;	m_fRotateY = 0.f;	m_fRotateZ = 0.f;
 	m_fPositionX = 0.f;	m_fPositionY = 0.f;	m_fPositionZ = 0.f;
+
+
 	UpdateData(FALSE);
 	
 	
@@ -541,9 +552,9 @@ void CMapTool::OnLbnSelchangeClonelist3()
 			m_fScaleY = Clone->matWorld._22;
 			m_fScaleZ = Clone->matWorld._33;
 
-			//m_fRotateX = ? ;
-			//m_fRotateY = ? ;
-			//m_fRotateZ = ? ;
+			m_fRotateX = Clone->Rotate.x;
+			m_fRotateY = Clone->Rotate.y;
+			m_fRotateZ = Clone->Rotate.z;
 			break;
 		}
 	}

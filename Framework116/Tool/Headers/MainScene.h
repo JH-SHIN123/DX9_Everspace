@@ -20,6 +20,7 @@ private:
 	HRESULT Add_Layer_Player(const wstring & LayerTag);
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
 	HRESULT Add_Layer_Axis(const wstring& LayerTag);
+	HRESULT Add_Layer_Dummy(const wstring& LayerTag, int iIndex, TRANSFORM_DESC TransformDesc);
 
 public:
 	static CMainScene* Create(LPDIRECT3DDEVICE9 pDevice);

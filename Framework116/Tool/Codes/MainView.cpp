@@ -10,8 +10,11 @@
 #include "Player.h"
 #include "MainCam.h"
 #include "Axis.h"
+#include "Dummy.h"
 
 #include "MapTool.h"
+
+
 
 // CMainView
 HWND g_hWnd;
@@ -133,6 +136,17 @@ HRESULT CMainView::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Axis");
 		return E_FAIL;
 	}
+	
+	/* For.GameObject_Dummy */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Dummy",
+		CDummy::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Dummy");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -203,6 +217,17 @@ HRESULT CMainView::Ready_StaticResources()
 		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Monster */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Monster",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Dummy%d.dds", 1))))
+	{
+		
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Dummy");
 		return E_FAIL;
 	}
 #pragma endregion

@@ -45,45 +45,21 @@ HRESULT CDummy::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
 		return E_FAIL;
 	}
-
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
+	
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Transform",
 		L"Com_Transform",
-		(CComponent**)&m_pTransform,
-		&TransformDesc)))
+		(CComponent**)&m_pTransform
+		,pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
 
-	m_pTerrainBuffer = (CVIBuffer_TerrainTexture*)m_pManagement->Get_Component(L"Layer_Terrain", L"Com_VIBuffer");
-	Safe_AddRef(m_pTerrainBuffer);
-	if (nullptr == m_pTerrainBuffer)
-	{
-		PRINT_LOG(L"Error", L"m_pTerrainBuffer is nullptr");
-		return E_FAIL;
-	}
-
-	// For.Com_Collide
-	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_CollideSphere",
-		L"Com_CollideSphere",
-		(CComponent**)&m_pCollide,
-		&BoundingSphere,
-		true)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
-	}
+	//m_pTransform->Set_WorldMatrix(TransformDesc->matWorld);
 
 	return S_OK;
 }
@@ -91,10 +67,8 @@ HRESULT CDummy::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CDummy::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
-	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
 	return NO_EVENT;
 }
 
@@ -113,11 +87,10 @@ _uint CDummy::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(1);
+	m_pTexture->Set_Texture(0);
 	m_pVIBuffer->Render_VIBuffer();
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -125,13 +98,6 @@ _uint CDummy::Render_GameObject()
 
 _uint CDummy::Movement(_float fDeltaTime)
 {
-	_float3 vOutPos = m_pTransform->Get_State(EState::Position);
-	if (true == m_pTerrainBuffer->Is_OnTerrain(&vOutPos))
-	{
-		vOutPos.y += 0.5f;
-		m_pTransform->Set_Position(vOutPos);
-	}	
-
 	return _uint();
 }
 
@@ -140,7 +106,7 @@ CDummy * CDummy::Create(LPDIRECT3DDEVICE9 pDevice)
 	CDummy* pInstance = new CDummy(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
-		PRINT_LOG(L"Error", L"Failed To Create Player");
+		PRINT_LOG(L"Error", L"Failed To Create Dummy");
 		Safe_Release(pInstance);
 	}
 
@@ -152,7 +118,7 @@ CGameObject * CDummy::Clone(void * pArg/* = nullptr*/)
 	CDummy* pClone = new CDummy(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
-		PRINT_LOG(L"Error", L"Failed To Clone Player");
+		PRINT_LOG(L"Error", L"Failed To Clone Dummy");
 		Safe_Release(pClone);
 	}
 
@@ -161,11 +127,9 @@ CGameObject * CDummy::Clone(void * pArg/* = nullptr*/)
 
 void CDummy::Free()
 {
-	Safe_Release(m_pTerrainBuffer);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
-	Safe_Release(m_pCollide);
 
 	CGameObject::Free();
 }

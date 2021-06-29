@@ -46,6 +46,9 @@
     <Filter Include="00.View\03.MapTool">
       <UniqueIdentifier>{46ca5f85-e092-4c0d-859b-790fc863daa5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameObject\04.Dummy">
+      <UniqueIdentifier>{8ce63f21-d204-4e62-9981-ebd0d0a0ef83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tool.h">
@@ -106,6 +109,9 @@
     <ClInclude Include="..\..\Protocol.h">
       <Filter>99.Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Dummy.h">
+      <Filter>03.GameObject\04.Dummy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -143,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MapTool.cpp">
       <Filter>00.View\03.MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Dummy.cpp">
+      <Filter>03.GameObject\04.Dummy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
