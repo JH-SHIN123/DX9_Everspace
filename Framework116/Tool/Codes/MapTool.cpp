@@ -41,21 +41,6 @@ void CMapTool::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 
-	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
-	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
-
-	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x;
-	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y;
-	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z;
-
-	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
-	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
-	m_fPositionZ = m_pPlayerTransform->Get_TransformDesc().vPosition.z;
-
-	m_fRotateX = m_pPlayerTransform->Get_TransformDesc().vRotate.x;
-	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
-	m_fRotateZ = m_pPlayerTransform->Get_TransformDesc().vRotate.z;
-
 	DDX_Control(pDX, IDC_PROTOTYPELIST, CPrototypeListBox);
 	DDX_Control(pDX, IDC_CLONELIST3, CCloneListBox);
 	DDX_Control(pDX, IDC_NAVILIST, CNavigationListBox);
@@ -387,9 +372,9 @@ void CMapTool::OnBnClickedAddclone()
 		return;
 	}
 	
-	m_fScaleX = 1.f;	m_fScaleY = 1.f;	m_fScaleZ = 1.f;
-	m_fRotateX = 0.f;	m_fRotateY = 0.f;	m_fRotateZ = 0.f;
-	m_fPositionX = 0.f;	m_fPositionY = 0.f;	m_fPositionZ = 0.f;
+	//m_fScaleX = 1.f;	m_fScaleY = 1.f;	m_fScaleZ = 1.f;
+	//m_fRotateX = 0.f;	m_fRotateY = 0.f;	m_fRotateZ = 0.f;
+	//m_fPositionX = 0.f;	m_fPositionY = 0.f;	m_fPositionZ = 0.f;
 
 
 	UpdateData(FALSE);
