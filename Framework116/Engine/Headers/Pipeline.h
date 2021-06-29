@@ -24,7 +24,8 @@ public:
 	static void RotateZ(_float3* pOut, _float3 vIn,  _float fRadian);
 
 public: // Ray
-	static void CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice);
+	static void CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice); // @Return View Space
+	static void CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice, _float3 vSubjPos, _float3 vCamPos); // @Return World Space
 	static void TransformRay(RAY& pOutRay, _float4x4& matrix);
 
 public: // Math

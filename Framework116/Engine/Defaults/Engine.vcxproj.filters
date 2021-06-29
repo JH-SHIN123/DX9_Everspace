@@ -115,6 +115,9 @@
     <Filter Include="00.Systems\02.Frame_Manager">
       <UniqueIdentifier>{ce5ca9bc-eb1c-49a4-8baa-1bd667475ad3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\07.ParticleSystem">
+      <UniqueIdentifier>{2e04ae50-d655-43ae-b1af-e6aa9f64f961}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
