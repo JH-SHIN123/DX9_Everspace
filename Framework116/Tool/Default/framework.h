@@ -32,6 +32,7 @@
 #include "Tool_Enum.h"
 #include "Management.h"
 #include "../../Protocol.h"
+#include <fstream>
 
 using namespace Engine;
 

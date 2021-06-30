@@ -5,17 +5,17 @@
 USING(Engine)
 // Passing Data
 typedef struct tagPassingData_Object {
-	
+
 #ifdef _AFX
 	CString wstrPrototypeTag;
-	CString wstrPrototypeTag_Mesh;
+	vector<CString> vecPrototypeTag_Mesh;
 #else 
 	wstring wstrPrototypeTag_Object;
-	wstring wstrPrototypeTag_Mesh;
-	
+	vector<wstring> vecPrototypeTag_Mesh;
+#endif // _AFX
+
 	// Material Info
 	D3DMATERIAL9 tMaterial;
-#endif // _AFX
 
 }PASSDATA_OBJECT;
 

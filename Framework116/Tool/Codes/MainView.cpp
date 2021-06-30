@@ -18,6 +18,7 @@
 
 // CMainView
 HWND g_hWnd;
+bool g_IsMainViewInvalidate = true;
 
 IMPLEMENT_DYNCREATE(CMainView, CScrollView)
 
@@ -142,7 +143,7 @@ HRESULT CMainView::Ready_StaticResources()
 	/* For.GameObject_Dummy */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
-		L"GameObject_Dummy",
+		L"DUMMY",
 		CDummy::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Dummy");
@@ -279,7 +280,9 @@ void CMainView::OnDraw(CDC* pDC)
 
 	// 툴별로 씬을 나누자.
 	m_pManagement->Update_Game();
-	Invalidate(FALSE);
+
+	if(g_IsMainViewInvalidate)
+		Invalidate(FALSE);
 }
 
 

@@ -3,6 +3,7 @@
 #ifndef __TOOL_DEFINE_H__
 
 extern HWND g_hWnd;
+extern bool g_IsMainViewInvalidate;
 
 #define MAINVIEW_WINCX 800
 #define MAINVIEW_WINCY 600

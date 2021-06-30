@@ -97,6 +97,7 @@ BEGIN_MESSAGE_MAP(CMapTool, CDialog)
 	ON_BN_CLICKED(IDC_LOADPROTOTYPE, &CMapTool::OnBnClickedLoadPrototype)
 	ON_LBN_SELCHANGE(IDC_CLONELIST3, &CMapTool::OnLbnSelchangeClonelist3)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMapTool::OnBnClickedUpdateTrans)
+	ON_LBN_SELCHANGE(IDC_PROTOTYPELIST, &CMapTool::OnLbnSelchangePrototypelist)
 END_MESSAGE_MAP()
 
 // CMapTool 메시지 처리기입니다.
@@ -360,11 +361,13 @@ void CMapTool::OnBnClickedAddclone()
 	TransformDesc.vScale = { m_fScaleX, m_fScaleY, m_fScaleZ };
 	TransformDesc.matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
+	wstring PrototypeTag = m_strPrototypeTag;
+	wstring LayerTag = (wstring)L"Layer_" + PrototypeTag;
 
 	if (FAILED(m_pManagement->Add_GameObject_InLayer_Tool(
 		EResourceType::Static, 
-		L"GameObject_Dummy",
-		L"Layer_Dummy", 
+		PrototypeTag,
+		LayerTag,
 		m_iCloneIndex, 
 		&TransformDesc)))
 	{
@@ -464,55 +467,187 @@ void CMapTool::OnBnClickedDeletenavi()
 
 void CMapTool::OnBnClickedLoadPrototype()
 {
-	CFileDialog Dlg(TRUE,
-		L"object", L"*.object",
-		OFN_OVERWRITEPROMPT, L"Data File(*.object) | *.object||");
+	//CFileDialog Dlg(TRUE,
+	//	L"object", L"*.object",
+	//	OFN_OVERWRITEPROMPT, L"Data File(*.object) | *.object||");
+
+	//TCHAR szBuf[MAX_PATH] = L"";
+	//GetCurrentDirectory(MAX_PATH, szBuf);
+	//PathRemoveFileSpec(szBuf);
+	//lstrcat(szBuf, L"\\Data");
+	//Dlg.m_ofn.lpstrInitialDir = szBuf;
+
+	//if (Dlg.DoModal())
+	//{
+	//	CString strPath = Dlg.GetPathName();
+	//	HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	//	if (INVALID_HANDLE_VALUE == hFile)
+	//		return;
+	//	CPrototypeListBox.ResetContent();
+	//	for (auto& rPair : m_mapPrototype)
+	//		Safe_Delete(rPair.second);
+	//	m_mapPrototype.clear();
+
+	//	DWORD dwByte = 0;
+	//	DWORD dwStrByte = 0;
+	//	PASSDATA_OBJECT* pObject = nullptr;
+	//	TCHAR* pFilePath = nullptr;
+
+	//	while (true)
+	//	{
+	//		// 불러올때 순서 어케할지?
+	//		pObject = new PASSDATA_OBJECT;
+	//		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	//		pFilePath = new TCHAR[dwStrByte];
+	//		ReadFile(hFile, pFilePath, dwStrByte, &dwByte, nullptr);
+	//		pObject->wstrPrototypeTag = pFilePath;
+	//		Safe_Delete_Array(pFilePath);
+	//		ReadFile(hFile, &pObject->wstrPrototypeTag, sizeof(wstring), &dwByte, nullptr);
+	//		ReadFile(hFile, &pObject->wstrPrototypeTag_Mesh, sizeof(wstring), &dwByte, nullptr);
+
+	//		if (0 == dwByte)
+	//		{
+	//			Safe_Delete(pObject);
+	//			break;
+	//		}
+	//		m_mapPrototype.emplace(pObject->wstrPrototypeTag, pObject);
+
+	//		CPrototypeListBox.AddString(pObject->wstrPrototypeTag);
+	//	}
+	//	CloseHandle(hFile);
+	//}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	UpdateData(TRUE);
+
+	g_IsMainViewInvalidate = false;
+
+	CFileDialog Dlg(TRUE
+		, L".object", L"*.object"
+		, OFN_OVERWRITEPROMPT, L"Data File(*.object) | *.object||"
+		, 0, 0, 0);
 
 	TCHAR szBuf[MAX_PATH] = L"";
 	GetCurrentDirectory(MAX_PATH, szBuf);
 	PathRemoveFileSpec(szBuf);
-	lstrcat(szBuf, L"\\Data");
+	PathRemoveFileSpec(szBuf);
+	lstrcat(szBuf, L"\\Data\\PrototypeData");
+
 	Dlg.m_ofn.lpstrInitialDir = szBuf;
 
 	if (Dlg.DoModal())
 	{
 		CString strPath = Dlg.GetPathName();
-		HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
-		if (INVALID_HANDLE_VALUE == hFile)
-			return;
-		CPrototypeListBox.ResetContent();
-		for (auto& rPair : m_mapPrototype)
-			Safe_Delete(rPair.second);
-		m_mapPrototype.clear();
+		CString strFileName = Dlg.GetFileName();
+		AfxExtractSubString(strFileName, strFileName, 0, '.');
 
-		DWORD dwByte = 0;
-		DWORD dwStrByte = 0;
-		PASSDATA_OBJECT* pObject = nullptr;
-		TCHAR* pFilePath = nullptr;
+		wifstream fin;
+		fin.open(strPath.GetString());
 
-		while (true)
+		// 읽는 순서
+		// 프로토타입 태그 > 클래스 이름 > 머테리얼 정보들 >
+		// 수많은 컴포넌트 태그들
+
+		if (!fin.fail())
 		{
-			// 불러올때 순서 어케할지?
-			pObject = new PASSDATA_OBJECT;
-			ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-			pFilePath = new TCHAR[dwStrByte];
-			ReadFile(hFile, pFilePath, dwStrByte, &dwByte, nullptr);
-			pObject->wstrPrototypeTag = pFilePath;
-			Safe_Delete_Array(pFilePath);
-			ReadFile(hFile, &pObject->wstrPrototypeTag, sizeof(wstring), &dwByte, nullptr);
-			ReadFile(hFile, &pObject->wstrPrototypeTag_Mesh, sizeof(wstring), &dwByte, nullptr);
+			//TCHAR szObjectProtoTypeTag_Start[MAX_PATH]	= L"";
+			TCHAR szObjectProtoTypeTag[MAX_PATH] = L"";
+			TCHAR szObjectClassName[MAX_PATH] = L"";
+			TCHAR szMaterial_Diffuse[MAX_PATH][4] = { L"" };
+			TCHAR szMaterial_Ambient[MAX_PATH][4] = { L"" };
+			TCHAR szMaterial_Specular[MAX_PATH][4] = { L"" };
+			TCHAR szMaterial_Emissive[MAX_PATH][4] = { L"" };
+			TCHAR szMaterial_Power[MAX_PATH] = L"";
+			TCHAR szComponentTag_Count[MAX_PATH] = L"";
+			TCHAR szComponentTag[MAX_PATH] = L"";
 
-			if (0 == dwByte)
+
+			while (true)
 			{
-				Safe_Delete(pObject);
-				break;
-			}
-			m_mapPrototype.emplace(pObject->wstrPrototypeTag, pObject);
+				PASSDATA_OBJECT* pData = new PASSDATA_OBJECT;
+				pData->wstrPrototypeTag = L"";
+				ZeroMemory(&pData->tMaterial, sizeof(D3DMATERIAL9));
+				pData->vecPrototypeTag_Mesh.reserve(10);
 
-			CPrototypeListBox.AddString(pObject->wstrPrototypeTag);
+				//fin.getline(szObjectProtoTypeTag_Start, MAX_PATH, L'%');// % 건너 뛰고
+				fin.getline(szObjectProtoTypeTag, MAX_PATH, L'(');		// PrototypeTag
+				fin.getline(szObjectClassName, MAX_PATH, L')');			// ClassName
+
+				if (fin.eof())
+				{
+					delete pData;
+					pData = nullptr;
+					break;
+				}
+
+				for (_int i = 0; i < 4; ++i)
+					fin.getline(szMaterial_Diffuse[i], MAX_PATH, L'?');
+				for (_int i = 0; i < 4; ++i)
+					fin.getline(szMaterial_Ambient[i], MAX_PATH, L'?');
+				for (_int i = 0; i < 4; ++i)
+					fin.getline(szMaterial_Specular[i], MAX_PATH, L'?');
+				for (_int i = 0; i < 4; ++i)
+					fin.getline(szMaterial_Emissive[i], MAX_PATH, L'?');
+
+				fin.getline(szMaterial_Power, MAX_PATH, L'?');
+
+				// 읽은 값 삽입
+				pData->wstrPrototypeTag = szObjectProtoTypeTag;
+
+				pData->tMaterial.Diffuse.r = _ttof(szMaterial_Diffuse[0]);
+				pData->tMaterial.Diffuse.g = _ttof(szMaterial_Diffuse[1]);
+				pData->tMaterial.Diffuse.b = _ttof(szMaterial_Diffuse[2]);
+				pData->tMaterial.Diffuse.a = _ttof(szMaterial_Diffuse[3]);
+
+				pData->tMaterial.Ambient.r = _ttof(szMaterial_Ambient[0]);
+				pData->tMaterial.Ambient.g = _ttof(szMaterial_Ambient[1]);
+				pData->tMaterial.Ambient.b = _ttof(szMaterial_Ambient[2]);
+				pData->tMaterial.Ambient.a = _ttof(szMaterial_Ambient[3]);
+
+				pData->tMaterial.Specular.r = _ttof(szMaterial_Specular[0]);
+				pData->tMaterial.Specular.g = _ttof(szMaterial_Specular[1]);
+				pData->tMaterial.Specular.b = _ttof(szMaterial_Specular[2]);
+				pData->tMaterial.Specular.a = _ttof(szMaterial_Specular[3]);
+
+				pData->tMaterial.Emissive.r = _ttof(szMaterial_Emissive[0]);
+				pData->tMaterial.Emissive.g = _ttof(szMaterial_Emissive[1]);
+				pData->tMaterial.Emissive.b = _ttof(szMaterial_Emissive[2]);
+				pData->tMaterial.Emissive.a = _ttof(szMaterial_Emissive[3]);
+
+				pData->tMaterial.Power = _ttof(szMaterial_Power);
+
+
+				// 카운트 만큼 읽어서 삽입
+				fin.getline(szComponentTag_Count, MAX_PATH, L'|');
+				_uint iComponentTag_Count = _ttoi(szComponentTag_Count);
+
+				for (_uint i = 0; i < iComponentTag_Count; ++i)
+				{
+					fin.getline(szComponentTag, MAX_PATH, L'|');
+					pData->vecPrototypeTag_Mesh.emplace_back(szComponentTag);
+				}
+
+				auto Pair = m_mapPrototype.find(szObjectProtoTypeTag); // ClassName으로 탐색
+
+				if (Pair != m_mapPrototype.end())
+					break;
+
+				m_mapPrototype.insert(make_pair(szObjectClassName, pData));
+				CPrototypeListBox.AddString(szObjectClassName);
+
+			}
+			fin.close();
 		}
-		CloseHandle(hFile);
 	}
+
+	g_IsMainViewInvalidate = true;
+	UpdateData(FALSE);
+
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void CMapTool::OnLbnSelchangeClonelist3()
@@ -567,5 +702,14 @@ void CMapTool::OnBnClickedUpdateTrans()
 	m_fRotateY = m_pPlayerTransform->Get_TransformDesc().vRotate.y;
 	m_fRotateZ = m_pPlayerTransform->Get_TransformDesc().vRotate.z;
 
+	UpdateData(FALSE);
+}
+
+void CMapTool::OnLbnSelchangePrototypelist()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	int iIndex = CPrototypeListBox.GetCurSel();
+	CPrototypeListBox.GetText(iIndex, m_strPrototypeTag);
 	UpdateData(FALSE);
 }

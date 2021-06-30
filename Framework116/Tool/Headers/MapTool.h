@@ -77,14 +77,17 @@ public:
 	float m_fPositionY;
 	float m_fPositionZ;
 
-	CString m_strCloneName;
 
 	float m_fNaviPosX;
 	float m_fNaviPosY;
 	float m_fNaviPosZ;
 
+	CString m_strCloneName;
+	CString m_strPrototypeTag;
+
 	// Player 월드행렬 얻어오기 위한 변수
 	CTransform* m_pPlayerTransform;
 
 	afx_msg void OnBnClickedUpdateTrans();
+	afx_msg void OnLbnSelchangePrototypelist();
 };
