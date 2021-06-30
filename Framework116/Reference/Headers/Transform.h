@@ -58,6 +58,7 @@ public:
 	_uint Update_Transform();
 	_uint Go_Straight(_float fDeltaTime);
 	_uint Go_Side(_float fDeltaTime);
+	_uint Go_Up(_float fDeltaTime);
 
 	_uint RotateX(_float fDeltaTime);
 	_uint RotateY(_float fDeltaTime);
