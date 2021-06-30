@@ -245,6 +245,11 @@ void CMainView::OnDraw(CDC* pDC)
 	// TODO: 여기에 그리기 코드를 추가합니다.
 
 	// 툴별로 씬을 나누자.
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
+	}
+
 	m_pManagement->Update_Game();
 
 	Invalidate(FALSE);

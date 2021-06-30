@@ -266,7 +266,10 @@ void CResourceTool::Render_Texture()
 	D3DXMatrixTranslation(&matTrans, 1.f, 1.f, 3.f);
 	matWorld = matScale*matRot*matTrans;
 	m_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
-
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
+	}
 
 	m_pDevice->BeginScene();
 	m_pDevice->Clear(
@@ -317,6 +320,10 @@ void CResourceTool::Render_Cube()
 
 	m_pTex = CTexture::Create(m_pManagement->Get_Device(), eType,
 		szPathBuf);
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
+	}
 
 	m_pDevice->BeginScene();
 	m_pDevice->Clear(
@@ -513,7 +520,6 @@ void CResourceTool::OnBnClickedLoadButton()
 
 			}
 		}
-		CDropFileList.SetHorizontalExtent(800);
 		CDropFileList.SetHorizontalExtent(800);
 		UpdateData(FALSE);
 	}
