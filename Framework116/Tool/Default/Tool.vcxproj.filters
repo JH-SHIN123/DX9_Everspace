@@ -167,11 +167,11 @@
     <ClCompile Include="..\Codes\CustomMesh.cpp">
       <Filter>04.Component\00.CustomMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\Headers\MESHTOOL.CPP">
-      <Filter>04.Dialog\MeshTool</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\GeometryMesh.cpp">
       <Filter>04.Component\01.GeometryMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Headers\MESHTOOL.CPP">
+      <Filter>04.Dialog\MeshTool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

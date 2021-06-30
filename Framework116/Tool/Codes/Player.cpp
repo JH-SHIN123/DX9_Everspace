@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Player.h"
 #include "GeometryMesh.h"
+#include "MeshTool.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -103,6 +104,17 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	// Mesh Tool Info Update
+	if (CMeshTool::s_pInstance)
+	{
+		const _float3 vPos = m_pTransform->Get_State(EState::Position);
+
+		CMeshTool::s_pInstance->m_Edit_PosX.SetWindowTextW(to_wstring(vPos.x).c_str());
+		CMeshTool::s_pInstance->m_Edit_PosY.SetWindowTextW(to_wstring(vPos.y).c_str());
+		CMeshTool::s_pInstance->m_Edit_PosZ.SetWindowTextW(to_wstring(vPos.z).c_str());
+	}
+
+
 	return _uint();
 }
 
@@ -120,25 +132,6 @@ _uint CPlayer::Render_GameObject()
 
 _uint CPlayer::Movement(_float fDeltaTime)
 {
-	//// Mouse Rotate
-	//GetCursorPos(&m_tCurCursorPos);
-	//ScreenToClient(g_hWnd, &m_tCurCursorPos);
-
-	//// 이전 프레임과 현재프레임의 마우스 이동거리 구하기
-	//_float2 vGap = { float(m_tCurCursorPos.x - m_tPrevCursorPos.x) ,
-	//	float(m_tCurCursorPos.y - m_tPrevCursorPos.y) };
-
-	//m_tPrevCursorPos = m_tCurCursorPos;
-
-	//float dps = 100.f;
-	//m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * dps);
-	//m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * dps);
-
-	//// 마우스 중앙 고정
-	//POINT ptMouse = { WINCX >> 1, WINCY >> 1 };
-	//ClientToScreen(g_hWnd, &ptMouse);
-	//SetCursorPos(ptMouse.x, ptMouse.y);
-
 	// Move
 	_float3 vOutPos = m_pTransform->Get_State(EState::Position);
 	if (GetAsyncKeyState('W') & 0x8000)

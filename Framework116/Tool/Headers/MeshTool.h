@@ -20,10 +20,22 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+
 public:
 	CListBox m_listbox_InstallableMesh;
+
+public:
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 	virtual BOOL OnInitDialog();
 	virtual INT_PTR DoModal();
 	afx_msg void OnLbnSelchangeList_SelectContent();
+	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+
+public:
+	static CMeshTool* s_pInstance;
+
+public:
+	CEdit m_Edit_PosX;
+	CEdit m_Edit_PosY;
+	CEdit m_Edit_PosZ;
 };

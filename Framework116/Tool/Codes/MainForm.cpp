@@ -6,14 +6,11 @@
 #include "../Headers/MainForm.h"
 
 
-// CMainForm
-
 IMPLEMENT_DYNCREATE(CMainForm, CFormView)
 
 CMainForm::CMainForm()
 	: CFormView(IDD_CMainForm)
 {
-
 }
 
 CMainForm::~CMainForm()

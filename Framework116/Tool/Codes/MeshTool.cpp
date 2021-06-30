@@ -9,13 +9,13 @@
 
 
 // CMeshTool 대화 상자
+CMeshTool* CMeshTool::s_pInstance = nullptr;
 
 IMPLEMENT_DYNAMIC(CMeshTool, CDialog)
 
 CMeshTool::CMeshTool(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_CMeshTool, pParent)
 {
-
 }
 
 CMeshTool::~CMeshTool()
@@ -27,6 +27,9 @@ void CMeshTool::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_listbox_InstallableMesh);
 
+	DDX_Control(pDX, IDC_EDIT2, m_Edit_PosX);
+	DDX_Control(pDX, IDC_EDIT3, m_Edit_PosY);
+	DDX_Control(pDX, IDC_EDIT4, m_Edit_PosZ);
 }
 
 void CMeshTool::OnShowWindow(BOOL bShow, UINT nStatus)
@@ -52,6 +55,8 @@ BOOL CMeshTool::OnInitDialog()
 	m_listbox_InstallableMesh.AddString(L"실린더");
 	m_listbox_InstallableMesh.AddString(L"스피어");
 	m_listbox_InstallableMesh.AddString(L"토러스");
+
+	s_pInstance = this;
 
 	return TRUE; 
 }
@@ -96,10 +101,16 @@ void CMeshTool::OnLbnSelchangeList_SelectContent()
 	}
 }
 
+void CMeshTool::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+	CDialog::OnActivate(nState, pWndOther, bMinimized);
+}
+
 
 BEGIN_MESSAGE_MAP(CMeshTool, CDialog)
 	ON_WM_SHOWWINDOW()
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMeshTool::OnLbnSelchangeList_SelectContent)
+	ON_WM_ACTIVATE()
 END_MESSAGE_MAP()
 
 
