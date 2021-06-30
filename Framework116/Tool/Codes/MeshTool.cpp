@@ -126,7 +126,39 @@ void CMeshTool::OnEnChangeEdit_ScaleX()
 	m_Edit_ScaleX.GetWindowTextW(strScaleX);
 
 	float fScaleX = _ttof(strScaleX);
-	pPlayerTransform->Set_Scale({ fScaleX, 1.f, 1.f });
+	pPlayerTransform->Set_ScaleX(fScaleX);
+
+}
+
+void CMeshTool::OnEnChangeEdit_ScaleY()
+{
+	CTransform* pPlayerTransform = (CTransform*)CManagement::Get_Instance()->Get_Component(L"Layer_Player", L"Com_Transform");
+	if (pPlayerTransform == nullptr) {
+		PRINT_LOG(L"Warning", L"pPlayerTransform is nullptr");
+		return;
+	}
+
+	CString strScaleY;
+	m_Edit_ScaleY.GetWindowTextW(strScaleY);
+
+	float fScaleY = _ttof(strScaleY);
+	pPlayerTransform->Set_ScaleY(fScaleY);
+}
+
+
+void CMeshTool::OnEnChangeEdit_ScaleZ()
+{
+	CTransform* pPlayerTransform = (CTransform*)CManagement::Get_Instance()->Get_Component(L"Layer_Player", L"Com_Transform");
+	if (pPlayerTransform == nullptr) {
+		PRINT_LOG(L"Warning", L"pPlayerTransform is nullptr");
+		return;
+	}
+
+	CString strScaleZ;
+	m_Edit_ScaleZ.GetWindowTextW(strScaleZ);
+
+	float fScaleZ = _ttof(strScaleZ);
+	pPlayerTransform->Set_ScaleZ(fScaleZ);
 }
 
 
@@ -135,6 +167,8 @@ BEGIN_MESSAGE_MAP(CMeshTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CMeshTool::OnLbnSelchangeList_SelectContent)
 	ON_WM_ACTIVATE()
 	ON_EN_CHANGE(IDC_EDIT8, &CMeshTool::OnEnChangeEdit_ScaleX)
+	ON_EN_CHANGE(IDC_EDIT9, &CMeshTool::OnEnChangeEdit_ScaleY)
+	ON_EN_CHANGE(IDC_EDIT10, &CMeshTool::OnEnChangeEdit_ScaleZ)
 END_MESSAGE_MAP()
 
 
