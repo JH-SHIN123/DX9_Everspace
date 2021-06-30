@@ -41,6 +41,7 @@ public:
 public:
 	void Set_Position(const _float3& vPos);
 	void Set_Rot(const _float3& vRot);
+	void Set_Size(const _float3& vSize);
 	void Set_WorldMatrix(const _float4x4& NewWorld);
 	
 public:

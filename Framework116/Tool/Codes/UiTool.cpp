@@ -6,6 +6,9 @@
 #include "Tool.h"
 #include "../Headers/UiTool.h"
 #include "afxdialogex.h"
+#include"../../Reference/Headers/Transform.h"
+#include"../../Reference/Headers/Pipeline.h"
+#include"ToolUI.h"
 
 // CUiTool 대화 상자입니다.
 
@@ -13,6 +16,12 @@ IMPLEMENT_DYNAMIC(CUiTool, CDialog)
 
 CUiTool::CUiTool(CWnd* pParent /*=NULL*/)
 	: CDialog(IDD_UITOOL, pParent)
+	, m_fPosX(0)
+	, m_fPosY(0)
+	, m_fRotX(0)
+	, m_fRotY(0)
+	, m_fScaleX(0)
+	, m_fScaleY(0)
 {
 }
 
@@ -24,6 +33,13 @@ void CUiTool::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, CTextureList);
+	DDX_Control(pDX, IDC_LIST2, m_CloneList);
+	DDX_Text(pDX, IDC_EDIT1, m_fPosX);
+	DDX_Text(pDX, IDC_EDIT2, m_fPosY);
+	DDX_Text(pDX, IDC_EDIT3, m_fRotX);
+	DDX_Text(pDX, IDC_EDIT4, m_fRotY);
+	DDX_Text(pDX, IDC_EDIT5, m_fScaleX);
+	DDX_Text(pDX, IDC_EDIT6, m_fScaleY);
 }
 
 void CUiTool::OnInitialUpdate()
@@ -32,6 +48,7 @@ void CUiTool::OnInitialUpdate()
 
 void CUiTool::OnLbnSelchangeTextureList()
 {
+	
 	int iSelect = CTextureList.GetCurSel();
 	auto& iter = m_ListTexturePrototypeTag.begin();
 	for (int i = 0; i<iSelect; iter++,i++)
@@ -77,14 +94,14 @@ void CUiTool::OnBnClickedLoadButton()
 
 void CUiTool::OnBnClickedCreateUiButton()
 {
-	if (0 < CTextureList.GetCurSel())
+	if (0 <= CTextureList.GetCurSel())
 	{
-		static int iCount = 0;
-		CUI* pUi = CUI::Create(m_pManageMent->Get_Device());
-
+		
+		CToolUI* pUi = CToolUI::Create(m_pManageMent->Get_Device(),this);
+		pUi->Set_ListBoxIndex(m_iUiCount);
 		TRANSFORM_DESC UiTrans;
 		UiTrans.vPosition = { 0,0,0 };
-		UiTrans.vScale = { 5.f,5.f,0.f };
+		UiTrans.vScale = { 30.f,30.f,0.f };
 		UI_DESC UiDesc;
 		UiDesc.wstrTexturePrototypeTag = L"Component_Texture_"+m_strSelectPrototypeTag;
 		UiDesc.tTransformDesc = UiTrans;
@@ -119,11 +136,85 @@ void CUiTool::OnBnClickedCreateUiButton()
 		}
 
 		if (FAILED(m_pManageMent->Add_GameObject_InLayer_Tool(EResourceType::NonStatic, strProtoTypeTag
-			, L"Layer_Ui", iCount,&UiDesc)))
+			, L"Layer_Ui", m_iUiCount,&UiDesc)))
 		{
 			PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
 		}
+		m_ListUi.emplace_back(pUi);
+		TCHAR szCountBuf[32]; 
+		_itow_s(m_iUiCount,szCountBuf,10);
+		wstring strCount;
+		if (m_iUiCount < 100)
+		{
+			if (m_iUiCount >= 10)
+			{
+				strCount = szCountBuf;
+				strCount = L"0" + wstring(szCountBuf);
+			}
+
+			else
+			{
+				strCount = szCountBuf;
+				strCount = L"00" + wstring(szCountBuf);
+			}
+		}
+		wstring strCloneName = strCount + L" | "+strProtoTypeTag;
+		m_CloneList.AddString(strCloneName.c_str());
+		m_iUiCount++;
+	}
+}
+
+void CUiTool::OnLbnSelchangeCloneUIList()
+{
+	UpdateData(TRUE);
+	int iSelect = m_CloneList.GetCurSel();
+	int iCount = 0;
+	m_pManageMent->Get_GameObjectList(L"Layer_Ui");
+	auto& iter = m_pManageMent->Get_GameObjectList(L"Layer_Ui")->begin();
+	for (; iter != m_pManageMent->Get_GameObjectList(L"Layer_Ui")->end(); iter++)
+	{
+		if (iCount != (*iter)->Get_ListBoxIndex())
+		{
+			for (; iCount != (*iter)->Get_ListBoxIndex();)
+			{
+				iSelect++;
+				iCount++;
+			}
+		}
+		if (iSelect ==(*iter)->Get_ListBoxIndex() )
+		{
+			m_pTargetUi = static_cast<CUI*>(*iter);
+			CTransform* pUiTransform = (CTransform*)((*iter)->Get_Component(L"Com_Transform"));
+			if (pUiTransform == nullptr)
+				return;
+			m_fPosX = pUiTransform->Get_TransformDesc().vPosition.x;
+			m_fPosY = pUiTransform->Get_TransformDesc().vPosition.y;
+			m_fRotX = pUiTransform->Get_TransformDesc().vRotate.x;
+			m_fRotY = pUiTransform->Get_TransformDesc().vRotate.y;
+			m_fScaleX = pUiTransform->Get_TransformDesc().vScale.x;
+			m_fScaleY = pUiTransform->Get_TransformDesc().vScale.y;
+		}
 		iCount++;
+		
+	}
+	UpdateData(FALSE);
+}
+
+void CUiTool::OnBnClickedDeleteButton()
+{
+	if (m_pTargetUi)
+	{
+		auto& iter = m_pManageMent->Get_GameObjectList(L"Layer_Ui")->begin();
+		for (; iter != m_pManageMent->Get_GameObjectList(L"Layer_Ui")->end(); iter++)
+		{
+			if ((*iter) == m_pTargetUi)
+			{
+				static_cast<CToolUI*>(*iter)->Set_Dead();
+				m_pTargetUi = nullptr;
+				int iSelect = m_CloneList.GetCurSel();
+				m_CloneList.DeleteString(iSelect);
+			}
+		}
 	}
 }
 
@@ -132,6 +223,8 @@ BEGIN_MESSAGE_MAP(CUiTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CUiTool::OnLbnSelchangeTextureList)
 	ON_BN_CLICKED(IDC_BUTTON1, &CUiTool::OnBnClickedLoadButton)
 	ON_BN_CLICKED(IDC_BUTTON3, &CUiTool::OnBnClickedCreateUiButton)
+	ON_LBN_SELCHANGE(IDC_LIST2, &CUiTool::OnLbnSelchangeCloneUIList)
+	ON_BN_CLICKED(IDC_BUTTON4, &CUiTool::OnBnClickedDeleteButton)
 END_MESSAGE_MAP()
 
 

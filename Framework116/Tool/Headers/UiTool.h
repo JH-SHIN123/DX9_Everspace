@@ -25,12 +25,24 @@ public:
 	CListBox CTextureList;
 	list<PASSDATA_RESOURCE*>* m_pListResource;
 	list<wstring> m_ListTexturePrototypeTag;
+	list<CUI*> m_ListUi;
+	CManagement* m_pManageMent;
+	wstring m_strSelectPrototypeTag;
+	CListBox m_CloneList;
 
 	afx_msg void OnLbnSelchangeTextureList();
 	afx_msg void OnBnClickedLoadButton();
 	afx_msg void OnBnClickedCreateUiButton();
+	afx_msg void OnLbnSelchangeCloneUIList();
+	float m_fPosX;
+	float m_fPosY;
+	float m_fRotX;
+	float m_fRotY;
+	float m_fScaleX;
+	float m_fScaleY;
 
-	CManagement* m_pManageMent;
-
-	wstring m_strSelectPrototypeTag;
+	CUI* m_pTargetUi;
+	afx_msg void OnBnClickedDeleteButton();
+	int m_iUiCount = 0;
 };
+

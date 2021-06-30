@@ -300,6 +300,7 @@ void CResourceTool::Render_Cube()
 	wstrTag += L"%d";
 	wstrTag += szType;
 	TCHAR szTagBuf[MAX_PATH] = {};
+
 	TCHAR szPathBuf[MAX_PATH] = {};
 
 	swprintf_s(szTagBuf, wstrTag.c_str(), iSelect);
