@@ -108,10 +108,19 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 	if (CMeshTool::s_pInstance)
 	{
 		const _float3 vPos = m_pTransform->Get_State(EState::Position);
-
 		CMeshTool::s_pInstance->m_Edit_PosX.SetWindowTextW(to_wstring(vPos.x).c_str());
 		CMeshTool::s_pInstance->m_Edit_PosY.SetWindowTextW(to_wstring(vPos.y).c_str());
 		CMeshTool::s_pInstance->m_Edit_PosZ.SetWindowTextW(to_wstring(vPos.z).c_str());
+
+		const _float3 vRotate = m_pTransform->Get_TransformDesc().vRotate;
+		CMeshTool::s_pInstance->m_Edit_RotateX.SetWindowTextW(to_wstring(vRotate.x).c_str());
+		CMeshTool::s_pInstance->m_Edit_RotateY.SetWindowTextW(to_wstring(vRotate.y).c_str());
+		CMeshTool::s_pInstance->m_Edit_RotateZ.SetWindowTextW(to_wstring(vRotate.z).c_str());
+
+		const _float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+		CMeshTool::s_pInstance->m_Edit_ScaleX.SetWindowTextW(to_wstring(vScale.x).c_str());
+		CMeshTool::s_pInstance->m_Edit_ScaleY.SetWindowTextW(to_wstring(vScale.y).c_str());
+		CMeshTool::s_pInstance->m_Edit_ScaleZ.SetWindowTextW(to_wstring(vScale.z).c_str());
 	}
 
 
@@ -164,6 +173,8 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	{
 		m_pTransform->RotateY(fDeltaTime);
 	}	
+
+
 
 	return _uint();
 }

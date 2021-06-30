@@ -30,6 +30,12 @@ void CMeshTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT2, m_Edit_PosX);
 	DDX_Control(pDX, IDC_EDIT3, m_Edit_PosY);
 	DDX_Control(pDX, IDC_EDIT4, m_Edit_PosZ);
+	DDX_Control(pDX, IDC_EDIT5, m_Edit_RotateX);
+	DDX_Control(pDX, IDC_EDIT6, m_Edit_RotateY);
+	DDX_Control(pDX, IDC_EDIT7, m_Edit_RotateZ);
+	DDX_Control(pDX, IDC_EDIT8, m_Edit_ScaleX);
+	DDX_Control(pDX, IDC_EDIT9, m_Edit_ScaleY);
+	DDX_Control(pDX, IDC_EDIT10, m_Edit_ScaleZ);
 }
 
 void CMeshTool::OnShowWindow(BOOL bShow, UINT nStatus)

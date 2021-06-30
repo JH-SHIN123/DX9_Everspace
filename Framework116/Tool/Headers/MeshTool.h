@@ -38,4 +38,10 @@ public:
 	CEdit m_Edit_PosX;
 	CEdit m_Edit_PosY;
 	CEdit m_Edit_PosZ;
+	CEdit m_Edit_RotateX;
+	CEdit m_Edit_RotateY;
+	CEdit m_Edit_RotateZ;
+	CEdit m_Edit_ScaleX;
+	CEdit m_Edit_ScaleY;
+	CEdit m_Edit_ScaleZ;
 };
