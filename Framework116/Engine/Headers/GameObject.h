@@ -16,9 +16,11 @@ public:
 	const vector<class CCollide*>* Get_Collides() const { return &m_Collides; };
 	const _bool Get_IsEmptyCollides() const;
 	const _bool Get_IsPicking() const { return m_IsPicking; }
+	const _bool Get_IsDead() const { return m_IsDead; }
 
 public:
-	void Set_IsPicking(const bool _isPicking) { m_IsPicking = _isPicking; };
+	void Set_IsPicking(const _bool _isPicking) { m_IsPicking = _isPicking; };
+	void Set_IsDead(const _bool _isDead) { m_IsDead = _isDead; }
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() = 0;	/* 프로토타입 초기화 */
@@ -34,6 +36,9 @@ protected:
 public:
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
 	virtual void Free() = 0;
+
+protected:
+	_bool m_IsDead = false;
 
 protected:
 	LPDIRECT3DDEVICE9 m_pDevice = nullptr;

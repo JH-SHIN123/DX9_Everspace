@@ -189,6 +189,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 		//	m_pManagement->Get_GameObjectList(L"Layer_Player"));
 	}
 
+
 	return _uint();
 }
 
