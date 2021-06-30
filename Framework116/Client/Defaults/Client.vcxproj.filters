@@ -46,9 +46,6 @@
     <Filter Include="02.GameObject\05.Skybox">
       <UniqueIdentifier>{3ca2e3df-4489-45bc-9137-32396005b4bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\88.Dummy_Mon">
-      <UniqueIdentifier>{ddd69403-a9c0-4524-be6e-03eafb46a6af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="55.Load_Prototype">
       <UniqueIdentifier>{82e5c622-5f88-46c7-a6f2-081528fcf004}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,12 @@
     </Filter>
     <Filter Include="02.GameObject\06.Particle\Lazer">
       <UniqueIdentifier>{40052efc-ffe1-4198-bb04-69d57a9b6437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\SJH.99.Dummy_Mon">
+      <UniqueIdentifier>{e387dc62-1845-442f-a70f-cf5d239ddbed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\SJH.00.Boss Monster">
+      <UniqueIdentifier>{c0516616-c0c1-46dc-b331-2965594d218a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,9 +114,6 @@
     <ClInclude Include="..\Headers\Skybox.h">
       <Filter>02.GameObject\05.Skybox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Dummy_Mon.h">
-      <Filter>02.GameObject\88.Dummy_Mon</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Load_Prototype.h">
       <Filter>55.Load_Prototype</Filter>
     </ClInclude>
@@ -122,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\LaserSystem.h">
       <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Dummy_Mon.h">
+      <Filter>02.GameObject\SJH.99.Dummy_Mon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Boss_Monster.h">
+      <Filter>02.GameObject\SJH.00.Boss Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -161,9 +167,6 @@
     <ClCompile Include="..\Codes\Skybox.cpp">
       <Filter>02.GameObject\05.Skybox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Dummy_Mon.cpp">
-      <Filter>02.GameObject\88.Dummy_Mon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Load_Prototype.cpp">
       <Filter>55.Load_Prototype</Filter>
     </ClCompile>
@@ -172,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LaserSystem.cpp">
       <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Dummy_Mon.cpp">
+      <Filter>02.GameObject\SJH.99.Dummy_Mon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Boss_Monster.cpp">
+      <Filter>02.GameObject\SJH.00.Boss Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

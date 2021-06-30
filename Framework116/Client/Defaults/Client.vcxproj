@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Headers\Boss_Monster.h" />
     <ClInclude Include="..\Headers\Client_Define.h" />
     <ClInclude Include="..\Headers\Client_Enum.h" />
     <ClInclude Include="..\Headers\Dummy_Mon.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\Boss_Monster.cpp" />
     <ClCompile Include="..\Codes\Dummy_Mon.cpp" />
     <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
