@@ -130,6 +130,17 @@ _uint CTransform::Go_Side(_float fDeltaTime)
 	return _uint();
 }
 
+_uint CTransform::Go_Up(_float fDeltaTime)
+{
+	_float3 vUp;
+	memcpy(&vUp, &m_TransformDesc.matWorld._21, sizeof(_float3));
+	D3DXVec3Normalize(&vUp, &vUp);
+
+	m_TransformDesc.vPosition += vUp * m_TransformDesc.fSpeedPerSec * fDeltaTime;
+
+	return _uint();
+}
+
 _uint CTransform::RotateX(_float fDeltaTime)
 {
 	m_TransformDesc.vRotate.x += m_TransformDesc.fRotatePerSec * fDeltaTime;
