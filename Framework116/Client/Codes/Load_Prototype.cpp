@@ -179,27 +179,27 @@ HRESULT CLoad_Prototype::Load_PassData_Object_Static(const wstring & wstrObjectP
 		// 읽은 값 삽입
 		pData->wstrPrototypeTag_Object = szObjectProtoTypeTag;
 
-		pData->tMaterial.Diffuse.r = _ttof(szMaterial_Diffuse_r);
-		pData->tMaterial.Diffuse.g = _ttof(szMaterial_Diffuse_g);
-		pData->tMaterial.Diffuse.b = _ttof(szMaterial_Diffuse_b);
-		pData->tMaterial.Diffuse.a = _ttof(szMaterial_Diffuse_a);
+		pData->tMaterial.Diffuse.r = (_float)_ttof(szMaterial_Diffuse_r);
+		pData->tMaterial.Diffuse.g = (_float)_ttof(szMaterial_Diffuse_g);
+		pData->tMaterial.Diffuse.b = (_float)_ttof(szMaterial_Diffuse_b);
+		pData->tMaterial.Diffuse.a = (_float)_ttof(szMaterial_Diffuse_a);
 
-		pData->tMaterial.Ambient.r = _ttof(szMaterial_Ambient_r);
-		pData->tMaterial.Ambient.g = _ttof(szMaterial_Ambient_g);
-		pData->tMaterial.Ambient.b = _ttof(szMaterial_Ambient_b);
-		pData->tMaterial.Ambient.a = _ttof(szMaterial_Ambient_a);
+		pData->tMaterial.Ambient.r = (_float)_ttof(szMaterial_Ambient_r);
+		pData->tMaterial.Ambient.g = (_float)_ttof(szMaterial_Ambient_g);
+		pData->tMaterial.Ambient.b = (_float)_ttof(szMaterial_Ambient_b);
+		pData->tMaterial.Ambient.a = (_float)_ttof(szMaterial_Ambient_a);
 
-		pData->tMaterial.Specular.r = _ttof(szMaterial_Specular_r);
-		pData->tMaterial.Specular.g = _ttof(szMaterial_Specular_g);
-		pData->tMaterial.Specular.b = _ttof(szMaterial_Specular_b);
-		pData->tMaterial.Specular.a = _ttof(szMaterial_Specular_a);
+		pData->tMaterial.Specular.r = (_float)_ttof(szMaterial_Specular_r);
+		pData->tMaterial.Specular.g = (_float)_ttof(szMaterial_Specular_g);
+		pData->tMaterial.Specular.b = (_float)_ttof(szMaterial_Specular_b);
+		pData->tMaterial.Specular.a = (_float)_ttof(szMaterial_Specular_a);
 
-		pData->tMaterial.Emissive.r = _ttof(szMaterial_Emissive_r);
-		pData->tMaterial.Emissive.g = _ttof(szMaterial_Emissive_g);
-		pData->tMaterial.Emissive.b = _ttof(szMaterial_Emissive_b);
-		pData->tMaterial.Emissive.a = _ttof(szMaterial_Emissive_a);
+		pData->tMaterial.Emissive.r = (_float)_ttof(szMaterial_Emissive_r);
+		pData->tMaterial.Emissive.g = (_float)_ttof(szMaterial_Emissive_g);
+		pData->tMaterial.Emissive.b = (_float)_ttof(szMaterial_Emissive_b);
+		pData->tMaterial.Emissive.a = (_float)_ttof(szMaterial_Emissive_a);
 
-		pData->tMaterial.Power = _ttof(szMaterial_Power);
+		pData->tMaterial.Power = (_float)_ttof(szMaterial_Power);
 
 
 		// 카운트 만큼 읽어서 삽입
