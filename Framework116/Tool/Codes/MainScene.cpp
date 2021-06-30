@@ -20,6 +20,9 @@ HRESULT CMainScene::Ready_Scene()
 	if (FAILED(Add_Layer_Axis(L"Layer_Axis")))
 		return E_FAIL;
 
+	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -86,18 +89,17 @@ HRESULT CMainScene::Add_Layer_Axis(const wstring& LayerTag)
 	return S_OK;
 }
 
-HRESULT CMainScene::Add_Layer_Dummy(const wstring & LayerTag, int iIndex, TRANSFORM_DESC TransformDesc)
+HRESULT CMainScene::Add_Layer_Skybox(const wstring & LayerTag)
 {
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer_(
-	//	EResourceType::Static,
-	//	L"GameObject_Dummy",
-	//	LayerTag
-	//	, iIndex
-	//	, TransformDesc)))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Dummy In Layer");
-	//	return E_FAIL;
-	//}
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_Skybox",
+		LayerTag)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Skybox In Layer");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 

@@ -71,10 +71,10 @@ _uint CAxis::LateUpdate_GameObject(_float fDeltaTime)
 _uint CAxis::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
-
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pMesh->Render_Mesh();
-
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	return _uint();
 }
 

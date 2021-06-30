@@ -11,6 +11,7 @@
 #include "MainCam.h"
 #include "Axis.h"
 #include "Dummy.h"
+#include "Skybox.h"
 
 #include "MapTool.h"
 
@@ -150,6 +151,16 @@ HRESULT CMainView::Ready_StaticResources()
 		return E_FAIL;
 	}
 
+	/* For.GameObject_Skybox*/
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Skybox",
+		CSkybox::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Skybox");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -233,6 +244,19 @@ HRESULT CMainView::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Dummy");
 		return E_FAIL;
 	}
+
+	/* For.Component_Texture_Skybox */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_Skybox",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Skybox%d.dds", 1))))
+	{
+
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
+		return E_FAIL;
+	}
+
+
 #pragma endregion
 
 	return S_OK;

@@ -36,7 +36,7 @@ HRESULT CSkybox::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
+		EResourceType::Static,
 		L"Component_Texture_Skybox",
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
@@ -103,6 +103,7 @@ _uint CSkybox::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	*/
 
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
@@ -112,6 +113,8 @@ _uint CSkybox::Render_GameObject()
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 
 	return _uint();
 }
