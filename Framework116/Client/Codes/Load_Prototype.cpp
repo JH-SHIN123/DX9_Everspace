@@ -215,10 +215,8 @@ HRESULT CLoad_Prototype::Load_PassData_Object_Static(const wstring & wstrObjectP
 		Create_Object_Prototype_Static(szObjectClassName, pData);
 
 	}
-
+	//
 	fin.close();
-
-
 
 	return S_OK;
 }
