@@ -49,6 +49,21 @@ void CTransform::Set_Scale(const _float3& vScale)
 	m_TransformDesc.vScale = vScale;
 }
 
+void CTransform::Set_ScaleX(const _float fScaleX)
+{
+	m_TransformDesc.vScale.x = fScaleX;
+}
+
+void CTransform::Set_ScaleY(const _float fScaleY)
+{
+	m_TransformDesc.vScale.y = fScaleY;
+}
+
+void CTransform::Set_ScaleZ(const _float fScaleZ)
+{
+	m_TransformDesc.vScale.z = fScaleZ;
+}
+
 void CTransform::Set_WorldMatrix(const _float4x4 & NewWorld)
 {
 	m_TransformDesc.matWorld = NewWorld;
