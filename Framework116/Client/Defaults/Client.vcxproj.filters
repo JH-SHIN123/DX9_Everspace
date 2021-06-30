@@ -55,6 +55,9 @@
     <Filter Include="02.GameObject\06.Particle\Lazer">
       <UniqueIdentifier>{40052efc-ffe1-4198-bb04-69d57a9b6437}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.Dummy">
+      <UniqueIdentifier>{40f212a5-fc86-4708-b602-323a53030839}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -111,6 +114,9 @@
     <ClInclude Include="..\Headers\LaserSystem.h">
       <Filter>02.GameObject\06.Particle\Lazer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Dummy.h">
+      <Filter>02.GameObject\07.Dummy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -154,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LaserSystem.cpp">
       <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Dummy.cpp">
+      <Filter>02.GameObject\07.Dummy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

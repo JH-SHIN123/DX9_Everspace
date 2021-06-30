@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "MainCam.h"
 #include "UI.h"
+#include "Dummy.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())

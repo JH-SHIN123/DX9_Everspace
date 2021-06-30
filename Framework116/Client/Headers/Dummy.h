@@ -1,0 +1,36 @@
+#pragma once
+#ifndef __DUMMY_H__
+
+#include "GameObject.h"
+
+USING(Engine)
+class CDummy final : public CGameObject
+{
+public:
+	explicit CDummy(LPDIRECT3DDEVICE9 pDevice);
+	explicit CDummy(const CDummy& other);
+	virtual ~CDummy() = default;
+
+public:
+	virtual HRESULT Ready_GameObject_Prototype() override;
+	virtual HRESULT Ready_GameObject(void * pArg = nullptr) override;
+	virtual _uint Update_GameObject(_float fDeltaTime) override;
+	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
+	virtual _uint Render_GameObject() override;
+
+private:
+	_uint Movement(_float fDeltaTime);
+
+public:
+	static CDummy* Create(LPDIRECT3DDEVICE9 pDevice);
+	virtual CGameObject * Clone(void * pArg = nullptr) override;
+	virtual void Free() override;
+
+private:
+	CVIBuffer*  m_pVIBuffer = nullptr;
+	CTransform* m_pTransform = nullptr;
+	CTexture*	m_pTexture = nullptr;
+};
+
+#define __DUMMY_H__
+#endif

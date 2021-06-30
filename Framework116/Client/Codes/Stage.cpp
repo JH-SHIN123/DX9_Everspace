@@ -2,6 +2,7 @@
 #include "..\Headers\Stage.h"
 #include "Camera.h"
 
+
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -25,8 +26,13 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
 
+	if (FAILED(Load_Stage1_Clone()))
+		return E_FAIL;
+
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
+
+
 
 	UI_DESC uiDesc;
 	uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
@@ -281,4 +287,55 @@ void CStage::Free()
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
 
 	CScene::Free(); // 2.부모 리소스 정리	
+}
+
+HRESULT CStage::Load_Stage1_Clone()
+{
+	HANDLE hFile = CreateFile(L"../../1234.mapInfo", GENERIC_READ
+		, NULL, NULL
+		, OPEN_EXISTING
+		, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+	{
+		MessageBox(g_hWnd, L"불러오기 실패!", L"실패", MB_OK);
+		return E_FAIL;
+	}
+
+	PASSDATA_MAP* pMap = new PASSDATA_MAP;
+	DWORD		dwByte = 0;
+
+	/*typedef struct tagPassingData_Map {
+		UINT eObjectType;
+		_float4x4 matWorld;
+		_float3 Rotate;
+		int iNodeOrder;
+		wstring wstrCloneName;
+	}PASSDATA_MAP;*/
+
+
+
+	while (true)
+	{
+		ReadFile(hFile, &pMap->wstrPrototypeTag, sizeof(wstring), &dwByte, nullptr);
+		ReadFile(hFile, &pMap->matWorld, sizeof(D3DXMATRIX), &dwByte, nullptr);
+		ReadFile(hFile, &pMap->wstrCloneName, sizeof(wstring), &dwByte, nullptr);
+		ReadFile(hFile, &pMap->Rotate, sizeof(_float3), &dwByte, nullptr);
+
+		if (0 == dwByte)
+			break;
+
+		TRANSFORM_DESC TransformDesc;
+		TransformDesc.vPosition = { pMap->matWorld._41, pMap->matWorld._42, pMap->matWorld._43 };
+		TransformDesc.vRotate = { pMap->Rotate.x, pMap->Rotate.y, pMap->Rotate.z };
+		TransformDesc.vScale = { pMap->matWorld._11, pMap->matWorld._22, pMap->matWorld._33 };
+		TransformDesc.matWorld = pMap->matWorld;
+
+	
+		m_pManagement->Add_GameObject_InLayer(EResourceType::NonStatic, pMap->wstrPrototypeTag, L"Layer_Dummy", &TransformDesc);
+	}
+
+	CloseHandle(hFile);
+
+	return S_OK;
 }

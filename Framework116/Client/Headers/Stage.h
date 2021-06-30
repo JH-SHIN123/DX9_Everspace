@@ -2,6 +2,7 @@
 #ifndef __STAGE_H__
 
 #include "Scene.h"
+#include "../../Protocol.h"
 
 USING(Engine)
 class CStage final : public CScene
@@ -30,6 +31,9 @@ private:
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
+
+public:
+	HRESULT Load_Stage1_Clone();
 };
 
 #define __STAGE_H__

@@ -1,0 +1,2 @@
+%GameObject_DUMMY(DUMMY)1.000000?1.000000?1.000000?1.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?0.000000?
+10|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|Component_Mesh|

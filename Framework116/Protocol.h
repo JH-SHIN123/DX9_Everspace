@@ -20,7 +20,7 @@ typedef struct tagPassingData_Object {
 }PASSDATA_OBJECT;
 
 typedef struct tagPassingData_Map {
-	UINT eObjectType;
+	wstring wstrPrototypeTag;
 	_float4x4 matWorld;
 	_float3 Rotate;
 	int iNodeOrder;

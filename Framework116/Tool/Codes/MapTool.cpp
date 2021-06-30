@@ -123,6 +123,7 @@ void CMapTool::OnBnClickedRadionavigation()
 
 void CMapTool::OnBnClickedStagesave()
 {
+	g_IsMainViewInvalidate = false;
 	if (m_bPickMode)
 	{
 		CFileDialog Dlg(FALSE,
@@ -148,7 +149,7 @@ void CMapTool::OnBnClickedStagesave()
 			{
 				//dwstrByte = sizeof(TCHAR) * (rPair.first.GetLength() + 1);
 				//WriteFile(hFile, &dwstrByte, sizeof(DWORD), &dwByte, nullptr);
-				WriteFile(hFile, &Clone->eObjectType, sizeof(_uint), &dwByte, nullptr);
+				WriteFile(hFile, &Clone->wstrPrototypeTag, sizeof(wstring), &dwByte, nullptr);
 				WriteFile(hFile, &Clone->matWorld, sizeof(_float4x4), &dwByte, nullptr);
 				WriteFile(hFile, &Clone->wstrCloneName, sizeof(wstring), &dwByte, nullptr);
 				WriteFile(hFile, &Clone->Rotate, sizeof(_float3), &dwByte, nullptr);
@@ -193,10 +194,12 @@ void CMapTool::OnBnClickedStagesave()
 			CloseHandle(hFile);
 		}
 	}
+	g_IsMainViewInvalidate = true;
 }
 
 void CMapTool::OnBnClickedStageload()
 {
+	g_IsMainViewInvalidate = false;
 	if (m_bPickMode)
 	{
 		CFileDialog Dlg(TRUE,
@@ -235,7 +238,7 @@ void CMapTool::OnBnClickedStageload()
 				//pFilePath = new TCHAR[dwStrByte];
 				//ReadFile(hFile, pFilePath, dwStrByte, &dwByte, nullptr);
 
-				ReadFile(hFile, &pMap->eObjectType, sizeof(_uint), &dwByte, nullptr);
+				ReadFile(hFile, &pMap->wstrPrototypeTag, sizeof(wstring), &dwByte, nullptr);
 				ReadFile(hFile, &pMap->matWorld, sizeof(D3DXMATRIX), &dwByte, nullptr);
 				ReadFile(hFile, &pMap->wstrCloneName, sizeof(wstring), &dwByte, nullptr);
 				ReadFile(hFile, &pMap->Rotate, sizeof(_float3), &dwByte, nullptr);
@@ -317,6 +320,7 @@ void CMapTool::OnBnClickedStageload()
 			CloseHandle(hFile);
 		}
 	}
+	g_IsMainViewInvalidate = true;
 }
 
 void CMapTool::OnBnClickedAddclone()
@@ -328,9 +332,9 @@ void CMapTool::OnBnClickedAddclone()
 	m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
 	D3DXMATRIX matPlayerWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
-	m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x * 100.f;
-	m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y * 100.f;
-	m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z * 100.f;
+	//m_fScaleX = m_pPlayerTransform->Get_TransformDesc().vScale.x;
+	//m_fScaleY = m_pPlayerTransform->Get_TransformDesc().vScale.y;
+	//m_fScaleZ = m_pPlayerTransform->Get_TransformDesc().vScale.z;
 
 	m_fPositionX = m_pPlayerTransform->Get_TransformDesc().vPosition.x;
 	m_fPositionY = m_pPlayerTransform->Get_TransformDesc().vPosition.y;
@@ -342,8 +346,11 @@ void CMapTool::OnBnClickedAddclone()
 
 	PASSDATA_MAP* pClone = new PASSDATA_MAP;
 
-	pClone->eObjectType = 1;
+	pClone->wstrPrototypeTag = m_strPrototypeTag;
  	pClone->matWorld = matPlayerWorld;
+	pClone->matWorld._11 = m_fScaleX;
+	pClone->matWorld._22 = m_fScaleY;
+	pClone->matWorld._33 = m_fScaleZ;
 	pClone->wstrCloneName = m_strCloneName;
 
 	pClone->Rotate.x = m_fRotateX;
@@ -360,6 +367,9 @@ void CMapTool::OnBnClickedAddclone()
 	TransformDesc.vRotate = { m_fRotateX, m_fRotateY, m_fRotateZ };
 	TransformDesc.vScale = { m_fScaleX, m_fScaleY, m_fScaleZ };
 	TransformDesc.matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
+	TransformDesc.matWorld._11 = m_fScaleX;
+	TransformDesc.matWorld._22 = m_fScaleY;
+	TransformDesc.matWorld._33 = m_fScaleZ;
 
 	wstring PrototypeTag = m_strPrototypeTag;
 	wstring LayerTag = (wstring)L"Layer_" + PrototypeTag;

@@ -69,6 +69,9 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	{
 		m_pMapTool->OnBnClickedUpdateTrans();
 	}
+
+
+
 	return m_pTransform->Update_Transform();
 }
 
