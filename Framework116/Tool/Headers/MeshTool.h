@@ -56,4 +56,5 @@ public:
 	afx_msg void OnBnClickedButton_Install();
 	afx_msg void OnBnClickedButton_Delete();
 	afx_msg void OnBnClickedButton_Clear();
+	afx_msg void OnLbnSelchangeList_SelectContent_InstalledMeshList();
 };

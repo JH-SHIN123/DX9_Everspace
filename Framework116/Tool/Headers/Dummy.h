@@ -18,6 +18,9 @@ public:
 	virtual ~CDummy() = default;
 
 public:
+	const wstring& Get_MeshPrototypeTag() const { return m_wstrMeshPrototypeTag; }
+
+public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
 	virtual HRESULT Ready_GameObject(void* pArg = nullptr) override;
 	virtual _uint Update_GameObject(_float fDeltaTime) override;
@@ -32,7 +35,7 @@ public:
 private:
 	class CGeometryMesh* m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
-
+	wstring m_wstrMeshPrototypeTag = L"";
 };
 
 #define __DUMMY_H__

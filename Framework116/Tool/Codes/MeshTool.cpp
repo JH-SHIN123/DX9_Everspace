@@ -78,6 +78,27 @@ INT_PTR CMeshTool::DoModal()
 	return CDialog::DoModal();
 }
 
+void CMeshTool::OnLbnSelchangeList_SelectContent_InstalledMeshList()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	int iCurSel = m_Listbox_InstalledMesh.GetCurSel();
+
+	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Dummy");
+	if (nullptr == dummyList) return;
+
+	for (auto& p : *dummyList)
+	{
+		p->Set_IsPicking(false);
+	}
+
+	for (auto& p : *dummyList)
+	{
+		if (p->Get_ListBoxIndex() == iCurSel) {
+			p->Set_IsPicking(true);
+			break;
+		}
+	}
+}
 
 void CMeshTool::OnLbnSelchangeList_SelectContent()
 {
@@ -242,26 +263,70 @@ void CMeshTool::OnBnClickedButton_Delete()
 	int iSelect = m_Listbox_InstalledMesh.GetCurSel();
 	if (iSelect == -1) return;
 
-	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"GameObject_Dummy");
+	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Dummy");
 	if (nullptr == dummyList) return;
 
 	CGameObject* pDummy = nullptr;
 	for (auto& p : *dummyList)
 	{
 		if (p->Get_ListBoxIndex() == iSelect) {
-			pDummy = (CGameObject*)p;
+			p->Set_IsDead(true);
 			break;
 		}
 	}
 
-	//pDummy->Set_Dead();
+	// 인덱스 / 리스트박스 리셋
+	m_Listbox_InstalledMesh.ResetContent();
 
-	// 리스트박스에서 삭제
-	m_Listbox_InstalledMesh.DeleteString(iSelect);
+	int iIndex = 0;
+	for (auto& p : *dummyList)
+	{
+		if (p->Get_IsDead())
+			continue;
+
+		wstring objIndex = to_wstring(iIndex);
+		CDummy* pDummy = (CDummy*)(p);
+		if (nullptr == pDummy) continue;
+		wstring meshTag = pDummy->Get_MeshPrototypeTag();
+
+		if (meshTag == L"Component_GeoMesh_Cube")
+		{
+			meshTag = L"박스";
+		}
+		else if (meshTag == L"Component_GeoMesh_Cylinder")
+		{
+			meshTag = L"실린더";
+		}
+		else if (meshTag == L"Component_GeoMesh_Sphere")
+		{
+			meshTag = L"스피어";
+		}
+		else if (meshTag == L"Component_GeoMesh_Torus")
+		{
+			meshTag = L"토러스";
+		}
+
+		objIndex += L"/";
+		objIndex += meshTag;
+
+		p->Set_ListBoxIndex(iIndex);
+		m_Listbox_InstalledMesh.AddString(objIndex.c_str());
+
+		++iIndex;
+	}
 }
 
 void CMeshTool::OnBnClickedButton_Clear()
 {
+	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Dummy");
+	if (nullptr == dummyList) return;
+
+	for (auto& p : *dummyList)
+	{
+		if(p) p->Set_IsDead(true);
+	}
+
+	m_Listbox_InstalledMesh.ResetContent();
 }
 
 
@@ -275,6 +340,7 @@ BEGIN_MESSAGE_MAP(CMeshTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON4, &CMeshTool::OnBnClickedButton_Install)
 	ON_BN_CLICKED(IDC_BUTTON5, &CMeshTool::OnBnClickedButton_Delete)
 	ON_BN_CLICKED(IDC_BUTTON6, &CMeshTool::OnBnClickedButton_Clear)
+	ON_LBN_SELCHANGE(IDC_LIST2, &CMeshTool::OnLbnSelchangeList_SelectContent_InstalledMeshList)
 END_MESSAGE_MAP()
 
 

@@ -24,13 +24,12 @@ HRESULT CDummy::Ready_GameObject(void* pArg)
     CGameObject::Ready_GameObject(pArg);
 
     DUMMY_DESC* pDummyDesc = nullptr;
-    wstring wstrMeshPrototypeTag = L"";
     TRANSFORM_DESC tTransformDesc;
     if (auto ptr = (BASE_DESC*)pArg)
     {
         if (pDummyDesc = dynamic_cast<DUMMY_DESC*>(ptr))
         {
-            wstrMeshPrototypeTag = pDummyDesc->wstrMeshPrototypeTag;
+            m_wstrMeshPrototypeTag = pDummyDesc->wstrMeshPrototypeTag;
             tTransformDesc = pDummyDesc->tTransformDesc;
         }
     }
@@ -38,7 +37,7 @@ HRESULT CDummy::Ready_GameObject(void* pArg)
     // For.Com_Mesh
     if (FAILED(CGameObject::Add_Component(
         EResourceType::Static,
-        wstrMeshPrototypeTag,
+        m_wstrMeshPrototypeTag,
         L"Com_Mesh",
         (CComponent**)&m_pMesh)))
     {
@@ -67,6 +66,8 @@ HRESULT CDummy::Ready_GameObject(void* pArg)
 
 _uint CDummy::Update_GameObject(_float fDeltaTime)
 {
+    if (m_IsDead) return DEAD_OBJECT;
+
     CGameObject::Update_GameObject(fDeltaTime);
 
     return m_pTransform->Update_Transform();
@@ -88,8 +89,30 @@ _uint CDummy::Render_GameObject()
 
     m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 
+    if (m_IsPicking)
+    {
+        D3DMATERIAL9 mat;
+        mat.Diffuse = D3DXCOLOR(1.f, 0.f, 0.f, 1.f);
+        mat.Ambient = mat.Diffuse;
+        mat.Specular = mat.Diffuse;
+        mat.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+        mat.Power = 5.f;
+        m_pDevice->SetMaterial(&mat);
+    }
+    else
+    {
+        D3DMATERIAL9 mat;
+        mat.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+        mat.Ambient = mat.Diffuse;
+        mat.Specular = mat.Diffuse;
+        mat.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+        mat.Power = 5.f;
+        m_pDevice->SetMaterial(&mat);
+    }
+
     if (m_pMesh)
         m_pMesh->Render_Mesh();
+
 
     return _uint();
 }
