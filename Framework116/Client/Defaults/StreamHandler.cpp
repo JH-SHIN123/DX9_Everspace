@@ -171,181 +171,169 @@ HRESULT CStreamHandler::Load_PassData_Map(const wstring& wstrFilePath)
 	return S_OK;
 }
 
-HRESULT CStreamHandler::Load_PassData_Ui(const wstring& wstrFilePath)
+HRESULT CStreamHandler::Load_PassData_Resource(const wstring & wstrFilePath)
 {
-	//wifstream fin;
-	//wstring strPassFileName = L"../../Resources/Data/";
-	//strPassFileName += wstrFilePath;
-	//strPassFileName += L".txt";
-	//fin.open(strPassFileName);
+	
+	wifstream fin;
+	wstring strPassFileName = L"../../Resources/Data/";
+	strPassFileName += wstrFilePath;
+	strPassFileName += L".txt";
+	fin.open(strPassFileName);
 
-	//if (!fin.fail())
-	//{
-	//	TCHAR szTexturePrototypeTag[MAX_PATH] = L"";
-	//	TCHAR szPosX[MAX_PATH] = L"";
-	//	TCHAR szPosY[MAX_PATH] = L"";
-	//	TCHAR szScaleX[MAX_PATH] = L"";
-	//	TCHAR szScaleY[MAX_PATH] = L"";
+	if (!fin.fail())
+	{
+		TCHAR szFilePath[MAX_PATH] = L"";
+		TCHAR szPrototypeTag[MAX_PATH] = L"";
 
-	//	while (true)
-	//	{
-	//		fin.getline(szTexturePrototypeTag, MAX_PATH, L'|');
-	//		fin.getline(szPosX, MAX_PATH, L'|');
-	//		fin.getline(szPosY, MAX_PATH, L'|');
-	//		fin.getline(szScaleX, MAX_PATH, L'|');
-	//		fin.getline(szScaleY, MAX_PATH);
+		TCHAR szType[MAX_PATH] = L"";
+		TCHAR szCount[MAX_PATH] = L"";
 
-	//		if (fin.eof())
-	//			break;
-	//		// 코드 띄어쓰기나, 주석, 함수로분리 하자! (코드 가독성 떨어짐)
+		while (true)
+		{
+			fin.getline(szFilePath, MAX_PATH, L'|');
+			fin.getline(szPrototypeTag, MAX_PATH, L'|');
+			fin.getline(szType, MAX_PATH, L'|');
+			fin.getline(szCount, MAX_PATH);
 
-	//		// 이런거 현재 프레임워크 이해가 안된상태임
-	//		// 구조분석 다시 ㄱㄱ
-	//		CUI* pUi = CUI::Create(CManagement::Get_Instance()->Get_Device());
-	//		TRANSFORM_DESC UiTrans;
-	//		_float PosX = _ttof(szPosX);
-	//		_float PosY = _ttof(szPosY);
-	//		_float ScaleX = _ttof(szScaleX);
-	//		_float ScaleY = _ttof(szScaleY);
-	//		UiTrans.vPosition = { PosX,PosY,0 };
-	//		UiTrans.vScale = { ScaleX,ScaleY,0.f };
-	//		UI_DESC UiDesc;
-	//		UiDesc.wstrTexturePrototypeTag = szTexturePrototypeTag;
-	//		wstring strObjectName = szTexturePrototypeTag;
-	//		L"Component_Texture_";
-	//		strObjectName.erase(0, 18);
-	//		UiDesc.tTransformDesc = UiTrans;
-	//		wstring strProtoTypeTag = L"GameObject_" + strObjectName;
-	//		pUi->Ready_GameObject(&UiDesc);
-	//		//////////////////////////////////////////////////////////////////////////
+			if (fin.eof())
+				break;
 
-	//		if (FAILED(CManagement::Get_Instance()->Add_GameObject_Prototype(EResourceType::NonStatic, szTexturePrototypeTag, pUi)))
-	//		{
-	//			PRINT_LOG(L"Error", L"Add_GameObject_Prototype Ui Failed");
-	//			Safe_Release(pUi);
-	//			return E_FAIL;
-	//		}
+			PASSDATA_RESOURCE* pPathInfo = new PASSDATA_RESOURCE;
+			pPathInfo->wstrFilePath = szFilePath;
+			pPathInfo->wstrPrototypeTag = szPrototypeTag;
+			ETextureType eType = ETextureType::SINGLE;
+			if (!lstrcmp(szType, L"SINGLE"))
+				pPathInfo->dwResourceType = (DWORD)ETextureType::SINGLE;
+			else if (!lstrcmp(szType, L"MULTI"))
+				pPathInfo->dwResourceType = (DWORD)ETextureType::MULTI;
+			else if (!lstrcmp(szType, L"CUBE"))
+				pPathInfo->dwResourceType = (DWORD)ETextureType::Cube;
+			pPathInfo->dwTextureCount = _ttoi(szCount);
+		
+			TCHAR szType[32] = L"";
+			switch (pPathInfo->dwResourceType)
+			{
+			case (DWORD)ETextureType::Cube:
+				eType = ETextureType::Cube;
+				swprintf_s(szType, L".dds");
+				break;
+			case (DWORD)ETextureType::SINGLE:
+				eType = ETextureType::SINGLE;
+				swprintf_s(szType, L".png");
+				break;
+			case(DWORD)ETextureType::MULTI:
+				eType = ETextureType::MULTI;
+				swprintf_s(szType, L".png");
+				break;
+			}
+			
+			wstring wstrTag = L"Component_Texture_";
+			wstrTag += pPathInfo->wstrPrototypeTag;
+			wstrTag += L"%d";
+			wstrTag += szType;
+			TCHAR szTagBuf[MAX_PATH] = {};
+			TCHAR szPathBuf[MAX_PATH] = {};
+			for (int i = 0; i < pPathInfo->dwTextureCount; i++)
+			{
+				swprintf_s(szTagBuf, wstrTag.c_str());
+				swprintf_s(szPathBuf, pPathInfo->wstrFilePath.c_str(),i);
+				if (wstrFilePath == L"Static")
+				{
 
-	//		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(EResourceType::NonStatic, szTexturePrototypeTag
-	//			, L"Layer_Ui", &UiDesc)))
-	//		{
-	//			PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
-	//			Safe_Release(pUi);
-	//			return E_FAIL;
-	//		}
-	//	}
-	//}
+					if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
+						EResourceType::Static,szTagBuf,
+						CTexture::Create(CManagement::Get_Instance()->Get_Device()
+							,eType,szPathBuf))))
+					{
+						wstring Err = L"Failed To Add " + wstrTag;
+						PRINT_LOG(L"Error", Err.c_str());
+						return E_FAIL;
+					}
+				}
+				else
+				{
+
+					if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
+						EResourceType::NonStatic, szTagBuf, 
+						CTexture::Create(CManagement::Get_Instance()->Get_Device()
+							,eType, szPathBuf))))
+					{
+						wstring Err = L"Failed To Add " + wstrTag;
+						PRINT_LOG(L"Error", Err.c_str());
+						return E_FAIL;
+					}
+				}
+			}
+		}
+
+	}
+	fin.close();
+	return S_OK;
+}
+
+HRESULT CStreamHandler::Load_PassData_Ui(const wstring & wstrFilePath)
+{
+	wifstream fin;
+	wstring strPassFileName = L"../../Resources/Data/";
+	strPassFileName += wstrFilePath;
+	strPassFileName += L".txt";
+	fin.open(strPassFileName);
+
+	if (!fin.fail())
+	{
+		TCHAR szTexturePrototypeTag[MAX_PATH] = L"";
+		TCHAR szPosX[MAX_PATH] = L"";
+		TCHAR szPosY[MAX_PATH] = L"";
+		TCHAR szScaleX[MAX_PATH] = L"";
+		TCHAR szScaleY[MAX_PATH] = L"";
+
+		
+		while (true)
+		{
+			fin.getline(szTexturePrototypeTag, MAX_PATH, L'|');
+			fin.getline(szPosX, MAX_PATH, L'|');
+			fin.getline(szPosY, MAX_PATH, L'|');
+			fin.getline(szScaleX, MAX_PATH, L'|');
+			fin.getline(szScaleY, MAX_PATH);
+
+			if (fin.eof())
+				break;
+			CUI* pUi = CUI::Create(CManagement::Get_Instance()->Get_Device());
+			TRANSFORM_DESC UiTrans;
+			_float PosX = _ttof(szPosX);
+			_float PosY = _ttof(szPosY);
+			_float ScaleX = _ttof(szScaleX);
+			_float ScaleY = _ttof(szScaleY);
+			UiTrans.vPosition = { PosX,PosY,0 };
+			UiTrans.vScale = { ScaleX,ScaleY,0.f };
+			UI_DESC UiDesc;
+			UiDesc.wstrTexturePrototypeTag = szTexturePrototypeTag;
+			wstring strObjectName = szTexturePrototypeTag;
+			L"Component_Texture_";
+			strObjectName.erase(0, 18);
+			UiDesc.tTransformDesc = UiTrans;
+			wstring strProtoTypeTag = L"GameObject_" + strObjectName;
+			pUi->Ready_GameObject(&UiDesc);
+			if (FAILED(CManagement::Get_Instance()->Add_GameObject_Prototype(EResourceType::NonStatic, szTexturePrototypeTag, pUi)))
+			{
+				PRINT_LOG(L"Error", L"Add_GameObject_Prototype Ui Failed");
+				Safe_Release(pUi);
+				return E_FAIL;
+			}
+
+			if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(EResourceType::NonStatic, szTexturePrototypeTag
+				, L"Layer_Ui",&UiDesc)))
+			{
+				PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+				Safe_Release(pUi);
+				return E_FAIL;
+			}
+		}
+	}
 
 	return S_OK;
 }
 
-HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath)
-{
-	//// 함수로 구분짓기 (코드 가독성 너무 떨어짐)
-	//// 파일경로 풀로 받는게 더 유연성있음
-	//wifstream fin;
-	//wstring strPassFileName = L"../../Resources/Data/";
-	//strPassFileName += wstrFilePath;
-	//strPassFileName += L".txt";
-	//fin.open(strPassFileName);
-
-	//if (!fin.fail())
-	//{
-	//	TCHAR szFilePath[MAX_PATH] = L"";
-	//	TCHAR szPrototypeTag[MAX_PATH] = L"";
-
-	//	TCHAR szType[MAX_PATH] = L"";
-	//	TCHAR szCount[MAX_PATH] = L"";
-
-	//	while (true)
-	//	{
-	//		fin.getline(szFilePath, MAX_PATH, L'|');
-	//		fin.getline(szPrototypeTag, MAX_PATH, L'|');
-	//		fin.getline(szType, MAX_PATH, L'|');
-	//		fin.getline(szCount, MAX_PATH);
-
-	//		if (fin.eof())
-	//			break;
-
-	//		PASSDATA_RESOURCE pPathInfo;
-	//		pPathInfo.wstrFilePath = szFilePath;
-	//		pPathInfo.wstrPrototypeTag = szPrototypeTag;
-
-	//		// 텍스쳐 타입 안맞음 (엔진쪽 건들어서 그럼)
-	//		// Texture Type
-	//		ETextureType eType = ETextureType::SINGLE;
-	//		if (!lstrcmp(szType, L"SINGLE"))
-	//			pPathInfo.dwResourceType = (DWORD)ETextureType::SINGLE;
-	//		else if (!lstrcmp(szType, L"MULTI"))
-	//			pPathInfo.dwResourceType = (DWORD)ETextureType::MULTI;
-	//		else if (!lstrcmp(szType, L"CUBE"))
-	//			pPathInfo.dwResourceType = (DWORD)ETextureType::Cube;
-
-	//		// Texture Count
-	//		pPathInfo.dwTextureCount = _ttoi(szCount);
-
-	//		TCHAR szType[32] = L"";
-	//		switch (pPathInfo.dwResourceType)
-	//		{
-	//		case (DWORD)ETextureType::Cube:
-	//			eType = ETextureType::Cube;
-	//			swprintf_s(szType, L".dds");
-	//			break;
-	//		case (DWORD)ETextureType::SINGLE:
-	//			eType = ETextureType::SINGLE;
-	//			swprintf_s(szType, L".png");
-	//			break;
-	//		case(DWORD)ETextureType::MULTI:
-	//			eType = ETextureType::MULTI;
-	//			swprintf_s(szType, L".png");
-	//			break;
-	//		}
-
-	//		// 멀티텍스쳐 사용하는 구조 다시보고 오기
-	//		wstring wstrTag = L"Component_Texture_";
-	//		wstrTag += pPathInfo.wstrPrototypeTag;
-	//		wstrTag += L"%d";
-	//		wstrTag += szType;
-	//		TCHAR szTagBuf[MAX_PATH] = {};
-	//		TCHAR szPathBuf[MAX_PATH] = {};
-	//		for (int i = 0; i < pPathInfo.dwTextureCount; i++)
-	//		{
-	//			swprintf_s(szTagBuf, wstrTag.c_str(), i);
-	//			swprintf_s(szPathBuf, pPathInfo.wstrFilePath.c_str(), i);
-	//			if (wstrFilePath == L"Static")
-	//			{
-	//				// 1장짜리 멀티텍스쳐가 여러개생겨버림
-	//				if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
-	//					EResourceType::Static, szTagBuf,
-	//					CTexture::Create(CManagement::Get_Instance()->Get_Device()
-	//						, eType, szPathBuf))))
-	//				{
-	//					wstring Err = L"Failed To Add " + wstrTag;
-	//					PRINT_LOG(L"Error", Err.c_str());
-	//					return E_FAIL;
-	//				}
-	//			}
-	//			else
-	//			{
-
-	//				if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
-	//					EResourceType::NonStatic, szTagBuf,
-	//					CTexture::Create(CManagement::Get_Instance()->Get_Device()
-	//						, eType, szPathBuf))))
-	//				{
-	//					wstring Err = L"Failed To Add " + wstrTag;
-	//					PRINT_LOG(L"Error", Err.c_str());
-	//					return E_FAIL;
-	//				}
-	//			}
-	//		}
-	//	}
-
-	//}
-	//fin.close();
-
-	return S_OK;
-}
 
 HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject)
 {
