@@ -170,11 +170,33 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 
+	RECT rc;
+	POINT p1, p2;
+
+	GetClientRect(g_hWnd, &rc);
+
+	p1.x = rc.left + 100.f;
+	p1.y = rc.top + 100.f;
+	p2.x = rc.right - 100.f;
+	p2.y = rc.bottom - 100.f;
+
+	ClientToScreen(g_hWnd, &p1);
+	ClientToScreen(g_hWnd, &p2);
+
+	rc.left = p1.x;
+	rc.top = p1.y;
+	rc.right = p2.x;
+	rc.bottom = p2.y;
+
+	ClipCursor(&rc);
+	
+
+
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
-	
-	_float fSpeed = D3DXVec3Length(&vGap) * 5.f;
+
+	_float fSpeed = D3DXVec3Length(&vGap) * 1.f;
 	D3DXVec3Normalize(&vGap, &vGap);
 	_float fNewRotX = vGap.y;
 	_bool bRotYDir = false; // true면 위쪽 회전, false면 밑에 회전
@@ -193,9 +215,11 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	}
 
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed);
-	POINT ptMouse = { WINCX >> 1, WINCY >> 1 };
-	ClientToScreen(g_hWnd, &ptMouse);
-	SetCursorPos(ptMouse.x, ptMouse.y);
+
+	
+	//POINT ptMouse = { WINCX >> 1, WINCY >> 1 }; // 400 / 300
+	//ClientToScreen(g_hWnd, &ptMouse);
+	//	SetCursorPos(ptMouse.x, ptMouse.y);
 
 	// 범위 정해줘야함. 100 ~ WINCX - 100 , 100 ~ WINCY;
 
