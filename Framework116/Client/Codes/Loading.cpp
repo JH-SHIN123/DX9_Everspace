@@ -252,7 +252,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Skybox",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Skybox%d.dds",1))))
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox%d.dds",1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;
