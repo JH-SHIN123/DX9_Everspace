@@ -22,6 +22,7 @@ CUiTool::CUiTool(CWnd* pParent /*=NULL*/)
 	, m_fRotY(0)
 	, m_fScaleX(0)
 	, m_fScaleY(0)
+	, m_strFileName(_T(""))
 {
 }
 
@@ -40,6 +41,7 @@ void CUiTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT4, m_fRotY);
 	DDX_Text(pDX, IDC_EDIT5, m_fScaleX);
 	DDX_Text(pDX, IDC_EDIT6, m_fScaleY);
+	DDX_Text(pDX, IDC_EDIT7, m_strFileName);
 }
 
 void CUiTool::OnInitialUpdate()
@@ -160,6 +162,7 @@ void CUiTool::OnBnClickedCreateUiButton()
 		}
 		wstring strCloneName = strCount + L" | "+strProtoTypeTag;
 		m_CloneList.AddString(strCloneName.c_str());
+		m_ListCloneID.emplace_back(strCloneName);
 		m_iUiCount++;
 	}
 }
@@ -218,6 +221,122 @@ void CUiTool::OnBnClickedDeleteButton()
 	}
 }
 
+void CUiTool::OnBnClickedSaveButton()
+{
+	wofstream fout;
+	UpdateData(TRUE);
+	wstring strPassFileName = L"../../Data/";
+	strPassFileName += m_strFileName;
+	strPassFileName += L".txt";
+	fout.open(strPassFileName);
+
+	if (!fout.fail())
+	{
+		auto& iter = m_pManageMent->Get_GameObjectList(L"Layer_Ui")->begin();
+		for (; iter != m_pManageMent->Get_GameObjectList(L"Layer_Ui")->end(); iter++)
+		{
+			wstring strPrototypeTag = static_cast<CToolUI*>(*iter)->Get_TexturePrototypeTag();
+			CTransform* CloneTrans = (CTransform*)(*iter)->Get_Component(L"Com_Transform");
+			fout << strPrototypeTag.c_str() 
+				<< "|" <<
+				CloneTrans->Get_TransformDesc().vPosition.x
+				<<"|" <<
+				CloneTrans->Get_TransformDesc().vPosition.y
+				<< "|" <<
+				CloneTrans->Get_TransformDesc().vScale.x
+				<< "|" <<
+				CloneTrans->Get_TransformDesc().vScale.y
+				<< endl;
+		}
+		}
+		fout.close();
+}
+
+void CUiTool::OnBnClickedLoadFileButton()
+{
+
+	wifstream fin;
+	UpdateData(TRUE);
+	wstring strPassFileName = L"../../Data/";
+	strPassFileName += m_strFileName;
+	strPassFileName += L".txt";
+	m_iUiCount = 0;
+	m_CloneList.ResetContent();
+	fin.open(strPassFileName);
+
+	if (!fin.fail())
+	{
+		TCHAR szTexturePrototypeTag[MAX_PATH] = L"";
+		TCHAR szPosX[MAX_PATH] = L"";
+		TCHAR szPosY[MAX_PATH] = L"";
+		TCHAR szScaleX[MAX_PATH] = L"";
+		TCHAR szScaleY[MAX_PATH] = L"";
+
+		while (true)
+		{
+			fin.getline(szTexturePrototypeTag, MAX_PATH, L'|');
+			fin.getline(szPosX, MAX_PATH, L'|');
+			fin.getline(szPosY, MAX_PATH, L'|');
+			fin.getline(szScaleX, MAX_PATH,L'|');
+			fin.getline(szScaleY, MAX_PATH);
+
+			if (fin.eof())
+				break;
+			CToolUI* pUi = CToolUI::Create(m_pManageMent->Get_Device(), this);
+			pUi->Set_ListBoxIndex(m_iUiCount);
+			TRANSFORM_DESC UiTrans;
+			_float PosX = _ttof(szPosX);
+			_float PosY = _ttof(szPosY);
+			_float ScaleX = _ttof(szScaleX);
+			_float ScaleY = _ttof(szScaleY);
+			UiTrans.vPosition = { PosX,PosY,0 };
+			UiTrans.vScale = { ScaleX,ScaleY,0.f };
+			UI_DESC UiDesc;
+			UiDesc.wstrTexturePrototypeTag =szTexturePrototypeTag;
+			wstring strObjectName = szTexturePrototypeTag;
+			L"Component_Texture_";
+			strObjectName.erase(0, 18);
+			UiDesc.tTransformDesc = UiTrans;
+			wstring strProtoTypeTag = L"GameObject_" + strObjectName;
+			pUi->Ready_GameObject(&UiDesc);
+
+			if (FAILED(m_pManageMent->Add_GameObject_Prototype(EResourceType::NonStatic, szTexturePrototypeTag, pUi)))
+			{
+				PRINT_LOG(L"Error", L"Add_GameObject_Prototype Ui Failed");
+			}
+
+			if (FAILED(m_pManageMent->Add_GameObject_InLayer_Tool(EResourceType::NonStatic, szTexturePrototypeTag
+				, L"Layer_Ui", m_iUiCount, &UiDesc)))
+			{
+				PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+			}
+			m_ListUi.emplace_back(pUi);
+			TCHAR szCountBuf[32];
+			_itow_s(m_iUiCount, szCountBuf, 10);
+			wstring strCount;
+			if (m_iUiCount < 100)
+			{
+				if (m_iUiCount >= 10)
+				{
+					strCount = szCountBuf;
+					strCount = L"0" + wstring(szCountBuf);
+				}
+
+				else
+				{
+					strCount = szCountBuf;
+					strCount = L"00" + wstring(szCountBuf);
+				}
+			}
+			wstring strCloneName = strCount + L" | " + strProtoTypeTag;
+			m_CloneList.AddString(strCloneName.c_str());
+			m_iUiCount++;
+		}
+	}
+}
+
+
+
 
 BEGIN_MESSAGE_MAP(CUiTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST1, &CUiTool::OnLbnSelchangeTextureList)
@@ -225,6 +344,8 @@ BEGIN_MESSAGE_MAP(CUiTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON3, &CUiTool::OnBnClickedCreateUiButton)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CUiTool::OnLbnSelchangeCloneUIList)
 	ON_BN_CLICKED(IDC_BUTTON4, &CUiTool::OnBnClickedDeleteButton)
+	ON_BN_CLICKED(IDC_BUTTON2, &CUiTool::OnBnClickedSaveButton)
+	ON_BN_CLICKED(IDC_BUTTON6, &CUiTool::OnBnClickedLoadFileButton)
 END_MESSAGE_MAP()
 
 

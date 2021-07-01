@@ -26,12 +26,12 @@ public:
 	list<PASSDATA_RESOURCE*>* m_pListResource;
 	list<wstring> m_ListTexturePrototypeTag;
 	list<CUI*> m_ListUi;
+	list<wstring> m_ListCloneID;
 	CManagement* m_pManageMent;
 	wstring m_strSelectPrototypeTag;
 	CListBox m_CloneList;
 
 	afx_msg void OnLbnSelchangeTextureList();
-	afx_msg void OnBnClickedLoadButton();
 	afx_msg void OnBnClickedCreateUiButton();
 	afx_msg void OnLbnSelchangeCloneUIList();
 	float m_fPosX;
@@ -44,5 +44,9 @@ public:
 	CUI* m_pTargetUi;
 	afx_msg void OnBnClickedDeleteButton();
 	int m_iUiCount = 0;
+	afx_msg void OnBnClickedLoadButton();
+	afx_msg void OnBnClickedSaveButton();
+	CString m_strFileName;
+	afx_msg void OnBnClickedLoadFileButton();
 };
 

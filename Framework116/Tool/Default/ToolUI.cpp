@@ -32,17 +32,7 @@ _uint CToolUI::Update_GameObject(_float fDeltaTime)
 
 	CUI::Update_GameObject(fDeltaTime);
 	
-	if (m_pUiTool->m_pTargetUi != nullptr)
-	{
-	if((m_pUiTool->m_pTargetUi) == this)
-		{
-			m_pUiTool->UpdateData(TRUE);
-			m_pTransform->Set_Size(_float3(m_pUiTool->m_fScaleX,m_pUiTool->m_fScaleY,0.f));
-			m_pTransform->Set_Position(_float3(m_pUiTool->m_fPosX, m_pUiTool->m_fPosY, 0.f));
-			m_pTransform->Set_Rot(_float3(m_pUiTool->m_fRotX, m_pUiTool->m_fRotY, 0.f));
-			m_pUiTool->UpdateData(FALSE);
-		}
-	}
+	
 	return _uint();
 }
 
@@ -50,6 +40,17 @@ _uint CToolUI::LateUpdate_GameObject(_float fDeltaTime)
 {
 
 	CUI::LateUpdate_GameObject(fDeltaTime);
+	if (m_pUiTool->m_pTargetUi != nullptr)
+	{
+		if ((m_pUiTool->m_pTargetUi) == this)
+		{
+			m_pUiTool->UpdateData(TRUE);
+			m_pTransform->Set_Size(_float3(m_pUiTool->m_fScaleX, m_pUiTool->m_fScaleY, 0.f));
+			m_pTransform->Set_Position(_float3(m_pUiTool->m_fPosX, m_pUiTool->m_fPosY, 0.f));
+			m_pTransform->RotateZ(m_pUiTool->m_fRotX);
+			m_pUiTool->UpdateData(FALSE);
+		}
+	}
 	return _uint();
 }
 

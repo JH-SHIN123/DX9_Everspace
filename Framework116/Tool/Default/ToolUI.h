@@ -16,6 +16,7 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+	const wstring& Get_TexturePrototypeTag() const{ return m_wstrTexturePrototypeTag; }
 public:
 	static CToolUI* Create(LPDIRECT3DDEVICE9 pDevice, class  CUiTool* pUiTool);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
