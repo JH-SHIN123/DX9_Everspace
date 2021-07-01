@@ -40,6 +40,7 @@ public:
 
 public:
 	void Set_Position(const _float3& vPos);
+	void Set_Rotate(const _float3& vRotate);
 	void Set_Scale(const _float3& vScale);
 	void Set_ScaleX(const _float fScaleX);
 	void Set_ScaleY(const _float fScaleY);

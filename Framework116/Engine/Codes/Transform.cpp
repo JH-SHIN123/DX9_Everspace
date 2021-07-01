@@ -44,6 +44,11 @@ void CTransform::Set_Position(const _float3 & vPos)
 	m_TransformDesc.vPosition = vPos;
 }
 
+void CTransform::Set_Rotate(const _float3& vRotate)
+{
+	m_TransformDesc.vRotate = vRotate;
+}
+
 void CTransform::Set_Scale(const _float3& vScale)
 {
 	m_TransformDesc.vScale = vScale;
