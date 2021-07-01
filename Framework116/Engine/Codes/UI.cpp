@@ -105,12 +105,16 @@ _uint CUI::Render_GameObject()
 
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 
-	_float4x4 matView;
+	_float4x4 matView, matScale, matTrans,matRot;
+
 	D3DXMatrixIdentity(&matView);
+	
 	matView._11 = transformDesc.vScale.x;
 	matView._22 = transformDesc.vScale.y;
+
 	matView._41 = transformDesc.vPosition.x;
-	matView._42 = transformDesc.vPosition.y;
+	matView._42 = transformDesc.vPosition.y
+		;
 	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
 
 	/////////////////////////////////////////////////////////////////

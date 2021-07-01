@@ -261,6 +261,16 @@ void CUiTool::OnBnClickedLoadFileButton()
 	strPassFileName += m_strFileName;
 	strPassFileName += L".txt";
 	m_iUiCount = 0;
+	if (m_ListUi.size())
+	{
+		auto& iter = m_pManageMent->Get_GameObjectList(L"Layer_Ui")->begin();
+		for (; iter != m_pManageMent->Get_GameObjectList(L"Layer_Ui")->end(); iter++)
+		{
+			static_cast<CToolUI*>(*iter)->Set_Dead();
+		}
+		m_pManageMent->Update_Game();
+	}
+	m_ListUi.clear();
 	m_CloneList.ResetContent();
 	fin.open(strPassFileName);
 
