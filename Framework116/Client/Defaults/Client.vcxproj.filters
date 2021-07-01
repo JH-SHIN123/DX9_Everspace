@@ -61,6 +61,9 @@
     <Filter Include="97.Utilities\00.Stream">
       <UniqueIdentifier>{0b98e40e-ea2c-4187-b358-a0cf4aca9f68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\07.Boss_Monster">
+      <UniqueIdentifier>{88b50869-9c1a-4425-ae6e-f5919ea9d218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -120,6 +123,9 @@
     <ClInclude Include="..\Headers\StreamHandler.h">
       <Filter>97.Utilities\00.Stream</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Boss_Monster.h">
+      <Filter>02.GameObject\07.Boss_Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -166,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="StreamHandler.cpp">
       <Filter>97.Utilities\00.Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Boss_Monster.cpp">
+      <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

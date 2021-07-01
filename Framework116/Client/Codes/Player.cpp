@@ -37,6 +37,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
+	TransformDesc.vPosition = _float3(0.f, 3.f, 0.f);
 	TransformDesc.fSpeedPerSec = 5.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.01f,0.01f,0.01f };
