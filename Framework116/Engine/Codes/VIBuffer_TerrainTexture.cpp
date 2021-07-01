@@ -6,11 +6,13 @@ CVIBuffer_TerrainTexture::CVIBuffer_TerrainTexture(
 	LPDIRECT3DDEVICE9 pDevice, 
 	_uint iVertexCountX, 
 	_uint iVertexCountZ, 
-	_float fVertexInterval/* = 1.f*/)
+	_float fVertexInterval,
+	const wstring& wstrHeightmapPath)
 	: CVIBuffer(pDevice)
 	, m_iVertexCountX(iVertexCountX)
 	, m_iVertexCountZ(iVertexCountZ)
 	, m_fVertexInterval(fVertexInterval)
+	, m_wstrHeightmapPath(wstrHeightmapPath)
 {
 }
 
@@ -33,7 +35,8 @@ HRESULT CVIBuffer_TerrainTexture::Ready_Component_Prototype()
 
 	CVIBuffer::Ready_Component_Prototype();
 
-	_uint* pPixels = Load_Heightmap(L"../Resources/Terrain/Height.bmp");
+	_uint* pPixels = Load_Heightmap(m_wstrHeightmapPath.c_str());
+	//_uint* pPixels = Load_Heightmap(L"../../Resources/Terrain/Height.bmp");
 	if (nullptr == pPixels)
 	{
 		PRINT_LOG(L"Error", L"Failed To Load_Heightmap");
@@ -202,9 +205,10 @@ CVIBuffer_TerrainTexture * CVIBuffer_TerrainTexture::Create(
 	LPDIRECT3DDEVICE9 pDevice,
 	_uint iVertexCountX,
 	_uint iVertexCountZ,
-	_float fVertexInterval/* = 1.f*/)
+	_float fVertexInterval,
+	const wstring& wstrHeightmapPath)
 {
-	CVIBuffer_TerrainTexture* pInstance = new CVIBuffer_TerrainTexture(pDevice, iVertexCountX, iVertexCountZ, fVertexInterval);
+	CVIBuffer_TerrainTexture* pInstance = new CVIBuffer_TerrainTexture(pDevice, iVertexCountX, iVertexCountZ, fVertexInterval, wstrHeightmapPath);
 	if (FAILED(pInstance->Ready_Component_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create VIBuffer TriColor");
