@@ -8,7 +8,8 @@ CCollide::CCollide(LPDIRECT3DDEVICE9 pDevice)
 }
 
 CCollide::CCollide(const CCollide& other)
-	: CComponent(other)
+	: CComponent(other),
+	m_eCollideType(other.m_eCollideType)
 {
 }
 

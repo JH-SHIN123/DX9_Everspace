@@ -53,13 +53,12 @@ HRESULT CStage::Ready_Scene()
 	if(FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
 		return E_FAIL;
 
-	//pSystemDesc;
-	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-	//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-	//pSystemDesc.tResetAttribute.fParticleSpeed = 100.f;
-	//pSystemDesc.tResetAttribute.fLifeTime = 1.f;
-	//if (FAILED(Add_Layer_LaserSystem(L"Layer_LaserSystem", &pSystemDesc)))
-	//	return E_FAIL;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 100.f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+	if (FAILED(Add_Layer_LaserSystem(L"Layer_LaserSystem", &pSystemDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
