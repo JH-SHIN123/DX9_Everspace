@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 
+
+
 USING(Engine)
 
 class CBoss_Monster final : public CGameObject
@@ -13,6 +15,9 @@ public:
 	virtual ~CBoss_Monster() = default;
 
 public:
+	enum AI_DIR { Forward, Back };
+
+public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
 	virtual HRESULT Ready_GameObject(void * pArg = nullptr) override;
 	virtual _uint Update_GameObject(_float fDeltaTime) override;
@@ -21,6 +26,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint Check_Direction();
 
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData);
@@ -28,13 +34,17 @@ public:
 	virtual void Free() override;
 
 private:
-	CMesh*  m_pMesh = nullptr;
+	CVIBuffer_CubeTexture*  m_pCube = nullptr;
+	CTexture*	m_pTexture = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CCollideSphere*	m_pCollide = nullptr;
+	CTransform* m_pTargetTransform = nullptr;
 
 private:
 	PASSDATA_OBJECT* m_pPassData;
 
+private:
+	_float m_fCheckDir = 5.f;
 };
 
 #define __BOSS_MONSTER_H__

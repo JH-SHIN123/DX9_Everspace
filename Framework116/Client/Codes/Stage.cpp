@@ -28,7 +28,7 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_Dummy(L"Layer_Dummy")))
+	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
 
 	//TRANSFORM_DESC uiTransformDesc;
@@ -215,6 +215,20 @@ HRESULT CStage::Add_Layer_Dummy(const wstring & LayerTag)
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Dummy In Layer");
 	}
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
+{
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Boss_Monster",
+		LayerTag)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+	}
+
 
 	return S_OK;
 }

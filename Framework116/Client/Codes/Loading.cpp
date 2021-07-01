@@ -13,6 +13,7 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 
+#include "Boss_Monster.h"
 #pragma endregion
 
 #include "Load_Prototype.h"
@@ -197,6 +198,15 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
 		return E_FAIL;
 	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Boss_Monster",
+		CBoss_Monster::Create(m_pDevice, nullptr))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region Components
@@ -263,6 +273,15 @@ HRESULT CLoading::Ready_StageResources()
 
 	// Test
 	CLoad_Prototype::Load_PassData_Object_Static(L"../../Data/PrototypeData/TestSaveFile.object");
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Boss_Test",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Boss_Texture_Test_%d.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Monster");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
