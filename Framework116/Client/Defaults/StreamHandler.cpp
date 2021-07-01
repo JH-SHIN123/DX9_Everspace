@@ -2,9 +2,11 @@
 #include "StreamHandler.h"
 
 #pragma region GameObject
+#include "Player.h"
 #pragma endregion
 
-HRESULT CStreamHandler::Load_PassData_Object(const wstring& wstrObjectPrototypePath)
+
+HRESULT CStreamHandler::Load_PassData_Object(const wstring & wstrObjectPrototypePath, EResourceType eType /*= EResourceType::NonStatic*/)
 {
 	wifstream fin;
 	fin.open(wstrObjectPrototypePath);
@@ -122,7 +124,12 @@ HRESULT CStreamHandler::Load_PassData_Object(const wstring& wstrObjectPrototypeP
 			pData->vecPrototypeTag_Mesh.emplace_back(szComponentTag);
 		}
 
-		Add_GameObject_Prototype(szObjectClassName, pData);
+		if (FAILED(Add_GameObject_Prototype(szObjectClassName, pData, eType)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_GameObject_Prototype");
+			return E_FAIL;
+		}
+
 	}
 	//
 	fin.close();
@@ -171,19 +178,20 @@ HRESULT CStreamHandler::Load_PassData_Map(const wstring& wstrFilePath)
 	return S_OK;
 }
 
-HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject)
+HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring & wstrClassName, PASSDATA_OBJECT * pPassDataObject, EResourceType eType)
 {
-	//if (wstrClassName == L"DUMMY")
-	//{
-	//	if (FAILED(CManagement::Get_Instance()->Add_GameObject_Prototype(
-	//		EResourceType::NonStatic,
-	//		tPassDataObject->wstrPrototypeTag_Object,
-	//		CDummy_Mon::Create(CManagement::Get_Instance()->Get_Device(), tPassDataObject))))
-	//	{
-	//		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
-	//		return E_FAIL;
-	//	}
-	//}
+	if (wstrClassName == L"Player")
+	{
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_Prototype(
+			eType,
+			pPassDataObject->wstrPrototypeTag_Object,
+			CPlayer::Create(CManagement::Get_Instance()->Get_Device(), pPassDataObject))))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
+			return E_FAIL;
+		}
+		return S_OK;
+	}
 
 	return S_OK;
 }

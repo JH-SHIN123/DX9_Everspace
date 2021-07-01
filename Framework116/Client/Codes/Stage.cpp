@@ -50,7 +50,7 @@ HRESULT CStage::Ready_Scene()
 	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
 	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	if(FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
+	if (FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
 		return E_FAIL;
 
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";

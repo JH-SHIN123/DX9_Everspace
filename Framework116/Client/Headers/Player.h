@@ -7,7 +7,7 @@ USING(Engine)
 class CPlayer final : public CGameObject
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice);
+	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData);
 	explicit CPlayer(const CPlayer& other);
 	virtual ~CPlayer() = default;
 
@@ -22,7 +22,7 @@ private:
 	_uint Movement(_float fDeltaTime);
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 

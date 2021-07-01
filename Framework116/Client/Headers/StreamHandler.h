@@ -11,11 +11,11 @@ private:
 	~CStreamHandler() = default;
 
 public: 
-	static HRESULT Load_PassData_Object(const wstring& wstrObjectPrototypePath);
+	static HRESULT Load_PassData_Object(const wstring& wstrObjectPrototypePath, EResourceType eType = EResourceType::NonStatic);
 	static HRESULT Load_PassData_Map(const wstring& wstrFilePath);
 
 private:
-	static HRESULT Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject);
+	static HRESULT Add_GameObject_Prototype(const wstring& wstrClassName, PASSDATA_OBJECT* pPassDataObject, EResourceType eType);
 	static HRESULT Add_GameObject_Layer(EResourceType eType, const wstring& PrototypeTag, void* pArg);
 
 };

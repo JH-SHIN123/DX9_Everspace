@@ -109,7 +109,8 @@ void CGameObject::Free()
 	}
 	m_Collides.clear();
 
-	Safe_Delete(m_pPassData);
+	if(m_IsClone == false)
+		Safe_Delete(m_pPassData);
 
 	Safe_Release(m_pDevice);
 }

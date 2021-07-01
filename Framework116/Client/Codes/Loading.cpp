@@ -258,6 +258,7 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 #pragma endregion
+
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
 
 	return S_OK;
