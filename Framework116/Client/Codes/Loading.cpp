@@ -211,7 +211,8 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_VIBuffer_TerrainTexture",
-		CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129))))
+		CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129,
+			1.f, L"../../Resources/Textures/Terrain/Height.bmp"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_TerrainTexture");
 		return E_FAIL;
@@ -221,7 +222,11 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Terrain",
+<<<<<<< HEAD
 		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../Resources/Terrain/Terrain%d.png"))))
+=======
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Terrain/Terrain%d.png"))))
+>>>>>>> origin/main
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Terrain");
 		return E_FAIL;
@@ -231,7 +236,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Monster",
-		CTexture::Create(m_pDevice, ETextureType::Cube, L"../Resources/Monster%d.dds", 2))))
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Monster%d.dds", 2))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Monster");
 		return E_FAIL;
@@ -241,7 +246,11 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Grass",
+<<<<<<< HEAD
 		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../Resources/BillboardGrass%d.png"))))
+=======
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/BillboardGrass%d.png"))))
+>>>>>>> origin/main
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Grass");
 		return E_FAIL;
@@ -251,12 +260,17 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Skybox",
+<<<<<<< HEAD
 		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../../Resources/Skybox%d.dds",1))))
+=======
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Skybox%d.dds",1))))
+>>>>>>> origin/main
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;
 	}
 #pragma endregion
+	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
 
 	return S_OK;
 }
