@@ -34,7 +34,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Transform
+	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 45.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
