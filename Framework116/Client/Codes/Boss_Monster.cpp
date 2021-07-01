@@ -62,6 +62,7 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
+	//
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
