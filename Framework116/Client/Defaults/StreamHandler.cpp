@@ -185,7 +185,7 @@ HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, c
 	//	}
 	//}
 
-	//return S_OK;
+	return S_OK;
 }
 
 HRESULT CStreamHandler::Add_GameObject_Layer(EResourceType eType, const wstring& PrototypeTag, void* pArg)
