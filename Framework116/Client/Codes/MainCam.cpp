@@ -138,6 +138,28 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 	{
 		m_fCamAngle += D3DXToRadian(90.f) * -fDeltaTime;
 	}
+	// 일반이동 카메라 연출
+	if (GetAsyncKeyState(L'W') & 0x8000)
+	{
+		if(m_fDistanceFromTarget < 11.f)
+			m_fDistanceFromTarget += 9.f * fDeltaTime;
+	}
+
+	// 부스터 카메라 연출
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+	{
+		_float OriginDis = 10.f;
+
+		if (!(m_fDistanceFromTarget > OriginDis + 2.f))
+			m_fDistanceFromTarget += 8.f * fDeltaTime;	
+	}
+	if (!(GetAsyncKeyState(VK_SPACE) & 0x8000))
+	{
+		_float OriginDis = 10.f;
+		if(!(m_fDistanceFromTarget < 10.f))
+		m_fDistanceFromTarget -= 5.f * fDeltaTime;
+	}
+
 
 	return _uint();
 }
