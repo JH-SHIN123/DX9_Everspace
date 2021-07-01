@@ -53,6 +53,11 @@ protected:
 
 	class CManagement* m_pManagement = nullptr;
 
+protected:
+	/* Get함수 제작 금지! */
+	PASSDATA_OBJECT* m_pPassData = nullptr;
+
+///////////////////////////////////////////////////////////
 // Tool 전용 함수 / 변수들
 public:
 	void Set_ListBoxIndex(const int _iListBoxIndex) { m_iListBoxIndex = _iListBoxIndex; }

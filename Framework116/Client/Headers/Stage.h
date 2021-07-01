@@ -20,7 +20,6 @@ private:
 	HRESULT Add_Layer_Terrain(const wstring& LayerTag);
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
 	HRESULT Add_Layer_Monster(const wstring& LayerTag);
-	HRESULT Add_Layer_Grass(const wstring& LayerTag);
 	HRESULT Add_Layer_Skybox(const wstring& LayerTag);
 	HRESULT Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc);
 	HRESULT Add_Layer_Light(const wstring& LayerTag, const LIGHT_DESC* pLightDesc);

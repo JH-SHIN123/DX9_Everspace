@@ -8,21 +8,28 @@ typedef struct tagPassingData_Object {
 	
 #ifdef _AFX
 	CString wstrPrototypeTag;
-	CString wstrPrototypeTag_Mesh;
+	vector<CString> vecPrototypeTag_Mesh; // vecPrototypeTag_Component
 #else 
 	wstring wstrPrototypeTag_Object;
-	wstring wstrPrototypeTag_Mesh;
-	
+	vector<wstring> vecPrototypeTag_Mesh; // vecPrototypeTag_Component
+#endif // _AFX
+
 	// Material Info
 	D3DMATERIAL9 tMaterial;
-#endif // _AFX
 
 }PASSDATA_OBJECT;
 
 typedef struct tagPassingData_Map {
-	UINT eObjectType;
+#ifdef _AFX
+	CString wstrPrototypeTag;
+#else 
+	wstring wstrPrototypeTag;
+#endif // _AFX
+
 	_float4x4 matWorld;
+	_float3 Rotate;
 	int iNodeOrder;
+	wstring wstrCloneName;
 }PASSDATA_MAP;
 
 typedef struct tagPassingData_Route {

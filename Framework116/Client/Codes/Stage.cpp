@@ -53,7 +53,6 @@ HRESULT CStage::Ready_Scene()
 	if(FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
 		return E_FAIL;
 
-	pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
 	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 100.f;
@@ -150,35 +149,6 @@ HRESULT CStage::Add_Layer_Monster(const wstring & LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
 		return E_FAIL;
 	}
-
-	return S_OK;
-}
-
-HRESULT CStage::Add_Layer_Grass(const wstring & LayerTag)
-{
-	// MT19937 난수 엔진
-	mt19937 engine((unsigned int)time(NULL));                
-
-	// 생성 범위
-	uniform_real_distribution<_float> distribution(0.f, 128.f);
-	auto generator = bind(distribution, engine);
-
-	TRANSFORM_DESC TransformDesc;
-	for (_uint i = 0; i < 500; ++i)
-	{		
-		TransformDesc.vPosition.x = generator();
-		TransformDesc.vPosition.z = generator();
-
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::NonStatic,
-			L"GameObject_Grass",
-			LayerTag, 
-			&TransformDesc)))
-		{
-			PRINT_LOG(L"Error", L"Failed To Add Grass In Layer");
-			return E_FAIL;
-		}
-	}	
 
 	return S_OK;
 }
