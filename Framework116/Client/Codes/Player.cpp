@@ -36,7 +36,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fSpeedPerSec = 45.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.01f,0.01f,0.01f };
 
@@ -111,7 +111,7 @@ _uint CPlayer::Render_GameObject()
 	m_pMesh->Render_Mesh();
 	
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	/*m_pCollide->Render_Collide();*/
 #endif
 
 	return _uint();
@@ -143,24 +143,24 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 	}
 
-	//// Rotate
-	//if (GetAsyncKeyState('Q') & 0x8000)
-	//{
-	//	m_pTransform->RotateY(-fDeltaTime);
-	//}
+	// Rotate
+	if (GetAsyncKeyState('Q') & 0x8000)
+	{
+		m_pTransform->RotateZ(fDeltaTime);
+	}
 
-	//if (GetAsyncKeyState('E') & 0x8000)
-	//{
-	//	m_pTransform->RotateY(fDeltaTime);
-	//}
+	if (GetAsyncKeyState('E') & 0x8000)
+	{
+		m_pTransform->RotateZ(-fDeltaTime);
+	}
 
 	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
-		float fDist_Monster = 0.f;
-		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-			m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
-			PRINT_LOG(L"", L"Pick!");
-		}
+		//float fDist_Monster = 0.f;
+		//if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+		//	m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
+		//	PRINT_LOG(L"", L"Pick!");
+		//}
 	}
 }
 
@@ -170,11 +170,11 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 
-	_float3 vMouse = { (_float)pt.x,(_float)pt.y,0.f };
-	_float3 vScreenCenter = { WINCX / 2.f,WINCY / 2.f,0.f };
+	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
+	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
 	
-	_float fSpeed = D3DXVec3Length(&vGap);
+	_float fSpeed = D3DXVec3Length(&vGap) * 5.f;
 	D3DXVec3Normalize(&vGap, &vGap);
 	_float fNewRotX = vGap.y;
 	_bool bRotYDir = false; // true면 위쪽 회전, false면 밑에 회전

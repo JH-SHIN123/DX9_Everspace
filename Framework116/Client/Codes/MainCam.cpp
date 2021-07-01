@@ -94,7 +94,7 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	//이동이 있을시만 계산
 	if (vPreAim != vCurAim)
 	{
-		D3DXQUATERNION QuatP = { vPreAim.x,vPreAim.y ,vPreAim.z ,0.f }
+		D3DXQUATERNION QuatP = { vPreAim.x,vPreAim.y ,vPreAim.z , 0.f }
 			//w는 스칼라.축이니 0으로 주자
 		, QuatQ = { vCurAim.x,vCurAim.y,vCurAim.z,0.f };
 		D3DXQuaternionSlerp(&QuatQ, &QuatP, &QuatQ, 0.001f/*민감도*/);
@@ -113,8 +113,9 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	D3DXVec3Cross(&vCamDist, &vPlayerLook, &vPlayerRight);
 	m_CameraDesc.vEye += vCamDist * m_fDistanceFromTarget;
 
-	///* 바라볼 위치 */
-	//m_CameraDesc.vAt = vPlayerPos;
+	/* 바라볼 위치 */
+	vPlayerPos.y += 10.f;
+	m_CameraDesc.vAt = vPlayerPos;
 
 	return _uint();
 }
