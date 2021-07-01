@@ -197,6 +197,8 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	ClientToScreen(g_hWnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
 
+	// 범위 정해줘야함. 100 ~ WINCX - 100 , 100 ~ WINCY;
+
 	return _uint();
 }
 

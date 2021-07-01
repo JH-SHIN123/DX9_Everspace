@@ -96,7 +96,7 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	{
 		D3DXQUATERNION QuatP = { vPreAim.x,vPreAim.y ,vPreAim.z , 0.f }
 			//w는 스칼라.축이니 0으로 주자
-		, QuatQ = { vCurAim.x,vCurAim.y,vCurAim.z,0.f };
+		, QuatQ = { vCurAim.x ,vCurAim.y,vCurAim.z,0.f };
 		D3DXQuaternionSlerp(&QuatQ, &QuatP, &QuatQ, 0.001f/*민감도*/);
 		//QuatQ에 두 사원수의 구면 선형보간,민감도가 커지면 카메라 회전이 많이 됨.
 		vCurAim = { QuatQ.x,QuatQ.y,
