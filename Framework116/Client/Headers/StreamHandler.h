@@ -15,7 +15,8 @@ public:
 	static HRESULT Load_PassData_Map(const wstring& wstrFilePath);
 
 private:
-	static void Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject);
+	static HRESULT Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject);
+	static HRESULT Add_GameObject_Layer(EResourceType eType, const wstring& PrototypeTag, void* pArg);
 
 };
 

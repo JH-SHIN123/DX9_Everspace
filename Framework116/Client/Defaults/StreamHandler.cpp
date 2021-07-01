@@ -123,7 +123,6 @@ HRESULT CStreamHandler::Load_PassData_Object(const wstring& wstrObjectPrototypeP
 		}
 
 		Add_GameObject_Prototype(szObjectClassName, pData);
-
 	}
 	//
 	fin.close();
@@ -160,11 +159,11 @@ HRESULT CStreamHandler::Load_PassData_Map(const wstring& wstrFilePath)
 		TRANSFORM_DESC TransformDesc;
 		TransformDesc.vPosition = { tPassDataMap.matWorld._41, tPassDataMap.matWorld._42, tPassDataMap.matWorld._43 };
 		TransformDesc.vRotate = { tPassDataMap.Rotate.x, tPassDataMap.Rotate.y, tPassDataMap.Rotate.z };
-		TransformDesc.vScale = { tPassDataMap.matWorld._11, pMap->matWorld._22, pMap->matWorld._33 };
+		TransformDesc.vScale = { tPassDataMap.matWorld._11, tPassDataMap.matWorld._22, tPassDataMap.matWorld._33 };
 		TransformDesc.matWorld = tPassDataMap.matWorld;
 
-
-		CManagement::Get_Instance()->Add_GameObject_InLayer(EResourceType::NonStatic, pMap->wstrPrototypeTag, L"Layer_Dummy", &TransformDesc);
+		// EResourceType 파싱데이터에서 받아오기
+		Add_GameObject_Layer(EResourceType::NonStatic, tPassDataMap.wstrPrototypeTag, &TransformDesc);
 	}
 
 	CloseHandle(hFile);
@@ -172,7 +171,7 @@ HRESULT CStreamHandler::Load_PassData_Map(const wstring& wstrFilePath)
 	return S_OK;
 }
 
-void CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject)
+HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject)
 {
 	//if (wstrClassName == L"DUMMY")
 	//{
@@ -182,7 +181,24 @@ void CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, cons
 	//		CDummy_Mon::Create(CManagement::Get_Instance()->Get_Device(), tPassDataObject))))
 	//	{
 	//		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
-	//		return;
+	//		return E_FAIL;
 	//	}
 	//}
+
+	//return S_OK;
+}
+
+HRESULT CStreamHandler::Add_GameObject_Layer(EResourceType eType, const wstring& PrototypeTag, void* pArg)
+{
+	if (PrototypeTag == L"") 
+	{
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(eType, PrototypeTag, L"Layer_Dummy", pArg))) {
+			wstring errMsg = L"Failed to Add Layer ";
+			errMsg += PrototypeTag;
+			PRINT_LOG(L"Error", errMsg.c_str());
+			return E_FAIL;
+		}
+	}
+
+	return S_OK;
 }
