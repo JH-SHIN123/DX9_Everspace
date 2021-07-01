@@ -257,3 +257,5 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+Framework116/Framework116.VC.db
+Framework116/Framework116.VC.VC.opendb
