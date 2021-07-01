@@ -28,6 +28,9 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
 
+	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
+		return E_FAIL;
+
 	UI_DESC uiDesc;
 	uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
 	uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
@@ -50,7 +53,7 @@ HRESULT CStage::Ready_Scene()
 	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
 	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	if(FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
+	if (FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
 		return E_FAIL;
 
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
@@ -224,6 +227,19 @@ HRESULT CStage::Add_Layer_LaserSystem(const wstring& LayerTag, const PARTICLESYS
 		return E_FAIL;
 	}
 
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
+{
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Boss_Monster",
+		LayerTag)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Skybox In Layer");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 

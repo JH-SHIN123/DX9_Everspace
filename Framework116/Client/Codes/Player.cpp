@@ -2,9 +2,10 @@
 #include "..\Headers\Player.h"
 #include "Collision.h"
 
-CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
+CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
 	: CGameObject(pDevice)
 {
+	m_pPassData = pPassData;
 }
 
 CPlayer::CPlayer(const CPlayer & other)
@@ -26,7 +27,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Mesh_BigShip",
+		m_pPassData->vecPrototypeTag_Mesh[0],
 		L"Com_Mesh",
 		(CComponent**)&m_pMesh)))
 	{
@@ -36,13 +37,18 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
+<<<<<<< HEAD
 	TransformDesc.fSpeedPerSec = 45.f;
+=======
+	TransformDesc.vPosition = _float3(0.f, 3.f, 0.f);
+	TransformDesc.fSpeedPerSec = 5.f;
+>>>>>>> SJH_Clien
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.01f,0.01f,0.01f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Transform",
+		m_pPassData->vecPrototypeTag_Mesh[1],
 		L"Com_Transform",
 		(CComponent**)&m_pTransform,
 		&TransformDesc)))
@@ -50,14 +56,14 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	
+
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
 	BoundingSphere.fRadius = 5.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_CollideSphere",
+		m_pPassData->vecPrototypeTag_Mesh[2],
 		L"Com_CollideSphere",
 		(CComponent**)&m_pCollide,
 		&BoundingSphere,
@@ -70,7 +76,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Controller
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Controller",
+		m_pPassData->vecPrototypeTag_Mesh[3],
 		L"Com_Controller",
 		(CComponent**)&m_pController)))
 	{
@@ -109,7 +115,7 @@ _uint CPlayer::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pMesh->Render_Mesh();
-	
+
 #ifdef _DEBUG // Render Collide
 	/*m_pCollide->Render_Collide();*/
 #endif
@@ -151,8 +157,14 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	if (GetAsyncKeyState('E') & 0x8000)
 	{
+<<<<<<< HEAD
 		m_pTransform->RotateZ(-fDeltaTime);
 	}
+=======
+		m_pTransform->RotateY(fDeltaTime);
+	}
+
+>>>>>>> SJH_Clien
 
 	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
@@ -226,9 +238,9 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	return _uint();
 }
 
-CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice)
+CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
 {
-	CPlayer* pInstance = new CPlayer(pDevice);
+	CPlayer* pInstance = new CPlayer(pDevice, pPassData);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player");
