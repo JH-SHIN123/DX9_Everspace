@@ -6,7 +6,7 @@
 
 BEGIN(Engine)
 
-class CGeoMesh_Torus final : public CGeoMesh
+class ENGINE_DLL CGeoMesh_Torus final : public CGeoMesh
 {
 private:
 	explicit CGeoMesh_Torus(LPDIRECT3DDEVICE9 pDevice, FLOAT InnerRadius, FLOAT OuterRadius);

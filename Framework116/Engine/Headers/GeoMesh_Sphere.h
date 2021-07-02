@@ -6,7 +6,7 @@
 
 BEGIN(Engine)
 
-class CGeoMesh_Sphere final : public CGeoMesh
+class ENGINE_DLL CGeoMesh_Sphere final : public CGeoMesh
 {
 private:
 	explicit CGeoMesh_Sphere(LPDIRECT3DDEVICE9 pDevice);
