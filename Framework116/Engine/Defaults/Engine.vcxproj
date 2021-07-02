@@ -189,6 +189,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Frame_Manager.h" />
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\GameObject_Manager.h" />
+    <ClInclude Include="..\Headers\GeoMesh.h" />
     <ClInclude Include="..\Headers\Layer.h" />
     <ClInclude Include="..\Headers\Light.h" />
     <ClInclude Include="..\Headers\Management.h" />
@@ -228,6 +229,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Frame_Manager.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GameObject_Manager.cpp" />
+    <ClCompile Include="..\Codes\GeoMesh.cpp" />
     <ClCompile Include="..\Codes\Layer.cpp" />
     <ClCompile Include="..\Codes\Light.cpp" />
     <ClCompile Include="..\Codes\Management.cpp" />

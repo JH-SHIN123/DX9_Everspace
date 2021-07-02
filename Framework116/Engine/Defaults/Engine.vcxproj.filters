@@ -127,6 +127,18 @@
     <Filter Include="01.Utilities\04.Component\03.Mesh\02.CustomMesh">
       <UniqueIdentifier>{128f1b1e-6c0d-4119-87ab-a0986330e54d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\03.Mesh\01.GeoMesh\Cube">
+      <UniqueIdentifier>{786fab78-ac1f-40bc-a68f-a5d7cfe760bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\03.Mesh\01.GeoMesh\Sphere">
+      <UniqueIdentifier>{166b47ec-9282-418d-a6cf-9b46caa3d09c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\03.Mesh\01.GeoMesh\Cylinder">
+      <UniqueIdentifier>{6580d1c2-6e7b-44ec-b615-7b58c176e14c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\04.Component\03.Mesh\01.GeoMesh\Torus">
+      <UniqueIdentifier>{a0274bf2-dbb7-44d2-82e6-1b3941453244}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -249,6 +261,9 @@
     <ClInclude Include="..\Headers\ModelMesh.h">
       <Filter>01.Utilities\04.Component\03.Mesh\00.ModelMesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\GeoMesh.h">
+      <Filter>01.Utilities\04.Component\03.Mesh\01.GeoMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -352,6 +367,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ModelMesh.cpp">
       <Filter>01.Utilities\04.Component\03.Mesh\00.ModelMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GeoMesh.cpp">
+      <Filter>01.Utilities\04.Component\03.Mesh\01.GeoMesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
