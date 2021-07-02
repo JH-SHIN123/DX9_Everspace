@@ -1,12 +1,10 @@
 #include "stdafx.h"
 #include "StreamHandler.h"
-
+#include"Player.h"
 #pragma region GameObject
-#include "Player.h"
 #pragma endregion
 
-
-HRESULT CStreamHandler::Load_PassData_Object(const wstring & wstrObjectPrototypePath, EResourceType eType /*= EResourceType::NonStatic*/)
+HRESULT CStreamHandler::Load_PassData_Object(const wstring& wstrObjectPrototypePath, EResourceType eType)
 {
 	wifstream fin;
 	fin.open(wstrObjectPrototypePath);
@@ -129,7 +127,6 @@ HRESULT CStreamHandler::Load_PassData_Object(const wstring & wstrObjectPrototype
 			PRINT_LOG(L"Error", L"Failed To Add_GameObject_Prototype");
 			return E_FAIL;
 		}
-
 	}
 	//
 	fin.close();
@@ -279,10 +276,10 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 			EResourceType eResourceType = (EResourceType)(!_isStatic);
 			
 			if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
-			eResourceType, wstrTag,
-			CTexture::Create(CManagement::Get_Instance()->Get_Device()
-			, eType, pPathInfo.wstrFilePath.c_str()
-			,pPathInfo.dwTextureCount))))
+				eResourceType, wstrTag,
+				CTexture::Create(CManagement::Get_Instance()->Get_Device()
+				, eType, pPathInfo.wstrFilePath.c_str()
+				,pPathInfo.dwTextureCount))))
 				{
 					wstring Err = L"Failed To Add " + wstrTag;
 					PRINT_LOG(L"Error", Err.c_str());
@@ -296,13 +293,9 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 	return S_OK;
 }
 
-<<<<<<< HEAD
 
 
-HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, const PASSDATA_OBJECT* tPassDataObject)
-=======
-HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring & wstrClassName, PASSDATA_OBJECT * pPassDataObject, EResourceType eType)
->>>>>>> origin/main
+HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, PASSDATA_OBJECT* pPassDataObject, EResourceType eType)
 {
 	if (wstrClassName == L"Player")
 	{
@@ -316,7 +309,6 @@ HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring & wstrClassName, 
 		}
 		return S_OK;
 	}
-
 	return S_OK;
 }
 

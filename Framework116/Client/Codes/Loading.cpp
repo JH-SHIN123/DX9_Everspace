@@ -272,10 +272,10 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;
 	}
-<<<<<<< HEAD
+
 	//For.Component_Stage_Texture
 	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/Stage.txt", FALSE);
-=======
+
 
 	/* For.Component_Texture_TestCube */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
@@ -286,7 +286,7 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_TestCube");
 		return E_FAIL;
 	}
->>>>>>> origin/main
+
 #pragma endregion
 
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
