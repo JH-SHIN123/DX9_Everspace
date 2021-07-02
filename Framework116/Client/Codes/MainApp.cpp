@@ -207,7 +207,7 @@ HRESULT CMainApp::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Texture_Player_Bullet",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/axis_red%d.png", 1))))
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Player_Bullet%d.dds", 1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet");
 		return E_FAIL;

@@ -27,7 +27,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_VIBuffer_RectTexture",
+		L"Component_VIBuffer_CubeTexture",
 		L"Com_VIBuffer",
 		(CComponent**)&m_pVIBuffer)))
 	{
@@ -48,8 +48,8 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 1200.f;
-	TransformDesc.vScale = { 2.f, 2.f, 10.f };
+	TransformDesc.fSpeedPerSec = 2400.f;
+	TransformDesc.vScale = { 0.5f, 0.5f, 10.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -165,8 +165,9 @@ _uint CPlayer_Bullet::Movement(_float fDeltaTime)
 	matWorld._32 = vPlayerLook.y;
 	matWorld._33 = vPlayerLook.z;
 
-	m_pTransform->Set_WorldMatrix(matWorld);
 
+	//RotateY 가 이상해용.
+	m_pTransform->Set_WorldMatrix(matWorld);
 	m_pTransform->Go_Straight(fDeltaTime);
 	
 
