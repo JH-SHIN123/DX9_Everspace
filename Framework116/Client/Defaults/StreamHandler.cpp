@@ -273,11 +273,10 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 
 			wstring wstrTag = L"Component_Texture_";
 			wstrTag += pPathInfo.wstrPrototypeTag;
-
-			if (_isStatic)
-			{
-					if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
-						EResourceType::Static, wstrTag,
+			EResourceType eResourceType = (EResourceType)(!_isStatic);
+			
+				if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
+						eResourceType, wstrTag,
 						CTexture::Create(CManagement::Get_Instance()->Get_Device()
 						, eType, pPathInfo.wstrFilePath.c_str()
 							,pPathInfo.dwTextureCount))))
@@ -286,20 +285,7 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 						PRINT_LOG(L"Error", Err.c_str());
 						return E_FAIL;
 					}
-			}
-			else
-			{
-				if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(
-					EResourceType::NonStatic, wstrTag,
-					CTexture::Create(CManagement::Get_Instance()->Get_Device()
-							, eType, pPathInfo.wstrFilePath.c_str()
-							, pPathInfo.dwTextureCount))))
-				{
-						wstring Err = L"Failed To Add " + wstrTag;
-						PRINT_LOG(L"Error", Err.c_str());
-						return E_FAIL;
-				}
-			}
+		
 		}
 
 	}
