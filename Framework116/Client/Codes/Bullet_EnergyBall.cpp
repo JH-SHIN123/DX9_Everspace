@@ -52,8 +52,9 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;//_float3(10.f, 3.f, 20.f);
-	TransformDesc.fSpeedPerSec = 5.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(20.f);
+	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
+	TransformDesc.fSpeedPerSec = 15.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 
 	if (FAILED(CGameObject::Add_Component(

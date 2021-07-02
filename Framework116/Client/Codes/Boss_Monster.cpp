@@ -203,10 +203,14 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 	{
 		m_fCoolTime = 0.f;
 
+		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+		pArg->vPosition = m_pTransform->Get_State(EState::Position);
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
 			L"GameObject_Bullet_EnergyBall",
-			L"Layer_Bullet_EnergyBall", m_pTransform)))
+			L"Layer_Bullet_EnergyBall", pArg)))
 		{
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
 			return E_FAIL;
