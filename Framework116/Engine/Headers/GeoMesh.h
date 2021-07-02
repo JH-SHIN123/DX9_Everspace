@@ -1,16 +1,24 @@
 #pragma once
-#ifndef __MESH_H__
 
-#include "Component.h"
+#ifndef __GEO_MESH_H__
+
+#include "Mesh.h"
 
 BEGIN(Engine)
 
-class ENGINE_DLL CMesh abstract : public CComponent
+enum class EGeoMeshType {
+	Cube = 0,
+	Sphere,
+	Cylinder,
+	Torus
+};
+
+class ENGINE_DLL CGeoMesh abstract : public CMesh
 {
 protected:
-	explicit CMesh(LPDIRECT3DDEVICE9 pDevice);
-	explicit CMesh(const CMesh& other);
-	virtual ~CMesh() = default;
+	explicit CGeoMesh(LPDIRECT3DDEVICE9 pDevice);
+	explicit CGeoMesh(const CGeoMesh& other);
+	virtual ~CGeoMesh() = default;
 
 public:
 	virtual HRESULT Ready_Component_Prototype() override PURE;
@@ -22,9 +30,10 @@ public:
 	virtual void Free() override PURE;
 
 protected:
-	LPD3DXMESH m_pMesh = nullptr;
+	EGeoMeshType m_eGeoType = EGeoMeshType::Cube;
 };
+
 END
 
-#define __MESH_H__
+#define __GEO_MESH_H__
 #endif
