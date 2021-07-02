@@ -195,60 +195,15 @@ HRESULT CStreamHandler::Load_PassData_UI(const wstring& wstrFilePath, const _boo
 			if (fin.eof())
 				break;
 			UI_DESC UiDesc;
-			//Ui Pos,Scale
 			_float PosX = _ttof(szPosX);
 			_float PosY = _ttof(szPosY);
 			_float ScaleX = _ttof(szScaleX);
 			_float ScaleY = _ttof(szScaleY);
 			UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
 			UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
-			//확장자 구하기
-			//wstring strType = szTexturePrototypeTag;
-			//int  i = 0;
-			//while (true)
-			//{
-			//	if (strType[i] == '.')
-			//		break;
-			//	i++;
-			//}
-			//strType.erase(0, i);
-
-			//Ui Object Index
-			//wstring strObjectIndex = szTexturePrototypeTag;
-			//strObjectIndex.erase(0, 18);
-			
-			//인덱스 번호 구하기
-			//i = 0;
-			//for (; i < strObjectIndex.size(); i++)
-			//{
-			//	if (isdigit(strObjectIndex[i]))
-			//		break;
-			//}
-			//Ui 프로토타입태그
-			//TCHAR szObjectKey[32] = L"";
-			//for (int j = 0; j < i; j++)
-			//{
-			//	szObjectKey[j] = strObjectIndex[j];
-			//}
-			//오브젝트 프로토타입 준비끝
-			//wstring wstrTag = L"Component_Texture_";
-			//wstrTag += szTexturePrototypeTag;
-			//wstrTag += L"%d";
-			//wstrTag += strType;
 			UiDesc.wstrTexturePrototypeTag = szTexturePrototypeTag;
 
-			////파일 이름 제거
-			//strObjectIndex.erase(0, i);
-			////파일 확장자 제거
-			//strObjectIndex.erase(1, 4);
-			////인덱스
-			//DWORD dwIndex = _ttoi(strObjectIndex.c_str());
-			//Ui ObjectPrototypeTag
-			//wstring strProtoTypeTag = L"GameObject_" + wstring(szObjectKey);
-			//strProtoTypeTag += L"%d";
-			//strProtoTypeTag += strType;
-
-			//////////////////////////////////////////////////////////////////////////
+	
 			EResourceType eResourceType = EResourceType::End;
 			if (_isStatic)
 				eResourceType = EResourceType::Static;
@@ -273,23 +228,6 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 {
 	wifstream fin;
 	fin.open(wstrFilePath);
-
-	//wstring strDataType = wstrFilePath;
-	//int i = 0;
-	//for (int  j=0; j < strDataType.size();j++)
-	//{
-	//	if (strDataType[j] == '/')
-	//		i = j;
-	//}
-	//strDataType.erase(0, i+1);
-	//i = 0;
-	//for (; i <strDataType.size();i++ )
-	//{
-	//	if (strDataType[i] == '.')
-	//		break;
-	//}
-	//strDataType.erase(i, strDataType.size());
-
 	if (!fin.fail())
 	{
 		TCHAR szFilePath[MAX_PATH] = L"";
@@ -315,33 +253,27 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 			// Texture Type
 			ETextureType eType;
 			if (!lstrcmp(szType, L"SINGLE"))
+			{
+				eType = ETextureType::Normal;
 				pPathInfo.dwResourceType = (DWORD)ETextureType::Normal;
+			}
 			else if (!lstrcmp(szType, L"MULTI"))
+			{
+				eType = ETextureType::Normal;
 				pPathInfo.dwResourceType = (DWORD)ETextureType::Normal;
+			}
 			else if (!lstrcmp(szType, L"CUBE"))
+			{
+				eType = ETextureType::Cube;
 				pPathInfo.dwResourceType = (DWORD)ETextureType::Cube;
+			}
 
 			// Texture Count
 			pPathInfo.dwTextureCount = _ttoi(szCount);
 
-			//TCHAR szType[32] = L"";
-			//switch (pPathInfo.dwResourceType)
-			//{
-			//case (DWORD)ETextureType::Cube:
-			//	eType = ETextureType::Cube;
-			//	swprintf_s(szType, L".dds");
-			//	break;
-			//case (DWORD)ETextureType::Normal:
-			//	eType = ETextureType::Normal;
-			//	swprintf_s(szType, L".png");
-			//	break;
-			//}
-
-			// 멀티텍스쳐 사용하는 구조 다시보고 오기
 			wstring wstrTag = L"Component_Texture_";
 			wstrTag += pPathInfo.wstrPrototypeTag;
-			//wstrTag += L"%d";
-			//wstrTag += szType;
+
 			if (_isStatic)
 			{
 					if (FAILED(CManagement::Get_Instance()->Add_Component_Prototype(

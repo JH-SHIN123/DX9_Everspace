@@ -258,8 +258,12 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;
 	}
+	//For.Component_Stage_Texture
+	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/Stage.txt", FALSE);
 #pragma endregion
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
-	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/PathInfo.txt");
+
+
+
 	return S_OK;
 }
