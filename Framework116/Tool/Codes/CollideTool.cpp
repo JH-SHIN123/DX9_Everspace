@@ -17,7 +17,6 @@ IMPLEMENT_DYNAMIC(CCollideTool, CDialog)
 CCollideTool::CCollideTool(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_CCollideTool, pParent)
 {
-
 }
 
 CCollideTool::~CCollideTool()

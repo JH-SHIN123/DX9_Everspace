@@ -31,7 +31,7 @@ public:
 	virtual void Free() override;
 
 private:
-	class CGeometryMesh*  m_pMesh = nullptr;
+	class CMesh*  m_pMesh = nullptr;
 	wstring m_wstrMeshPrototypeTag = L"";
 	//class CGeometryMesh* m_pGeoMesh = nullptr;
 	CTransform* m_pTransform = nullptr;

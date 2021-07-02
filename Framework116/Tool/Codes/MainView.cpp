@@ -11,7 +11,6 @@
 #include "Player.h"
 #include "MainCam.h"
 #include "Axis.h"
-#include "GeometryMesh.h"
 #include "Dummy.h"
 #pragma endregion
 
@@ -254,41 +253,41 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_GeoMesh_Cube",
-		CGeometryMesh::Create(m_pDevice,EGeoMeshType::Cube))))
+		CGeoMesh_Cube::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Cube");
 		return E_FAIL;
 	}
 
-	/* For.Component_GeoMesh_Sphere */
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_GeoMesh_Sphere",
-		CGeometryMesh::Create(m_pDevice, EGeoMeshType::Sphere))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Sphere");
-		return E_FAIL;
-	}
+	///* For.Component_GeoMesh_Sphere */
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_GeoMesh_Sphere",
+	//	CGeometryMesh::Create(m_pDevice, EGeoMeshType::Sphere))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Sphere");
+	//	return E_FAIL;
+	//}
 
-	/* For.Component_GeoMesh_Cylinder */
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_GeoMesh_Cylinder",
-		CGeometryMesh::Create(m_pDevice, EGeoMeshType::Cylinder))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Cylinder");
-		return E_FAIL;
-	}
+	///* For.Component_GeoMesh_Cylinder */
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_GeoMesh_Cylinder",
+	//	CGeometryMesh::Create(m_pDevice, EGeoMeshType::Cylinder))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Cylinder");
+	//	return E_FAIL;
+	//}
 
-	/* For.Component_GeoMesh_Torus */
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_GeoMesh_Torus",
-		CGeometryMesh::Create(m_pDevice, EGeoMeshType::Torus))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Torus");
-		return E_FAIL;
-	}
+	///* For.Component_GeoMesh_Torus */
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_GeoMesh_Torus",
+	//	CGeometryMesh::Create(m_pDevice, EGeoMeshType::Torus))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Torus");
+	//	return E_FAIL;
+	//}
 
 	/* For.Component_CollideSphere */
 	if (FAILED(m_pManagement->Add_Component_Prototype(

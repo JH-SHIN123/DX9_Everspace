@@ -58,9 +58,6 @@
     <Filter Include="04.Component\00.CustomMesh">
       <UniqueIdentifier>{13ea04ac-89e4-4aea-96bc-80b0c6da5ae0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Component\01.GeometryMesh">
-      <UniqueIdentifier>{668172cc-919d-490b-8246-1cfcedc875cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameObject\04.Dummy">
       <UniqueIdentifier>{c2c18f51-24c9-49c3-a58d-553588e1d592}</UniqueIdentifier>
     </Filter>
@@ -123,9 +120,6 @@
     <ClInclude Include="..\Headers\CustomMesh.h">
       <Filter>04.Component\00.CustomMesh</Filter>
     </ClInclude>
-    <ClInclude Include="GeometryMesh.h">
-      <Filter>04.Component\01.GeometryMesh</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Dummy.h">
       <Filter>03.GameObject\04.Dummy</Filter>
     </ClInclude>
@@ -175,9 +169,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\CustomMesh.cpp">
       <Filter>04.Component\00.CustomMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\GeometryMesh.cpp">
-      <Filter>04.Component\01.GeometryMesh</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Dummy.cpp">
       <Filter>03.GameObject\04.Dummy</Filter>

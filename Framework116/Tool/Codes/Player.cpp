@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "..\Headers\Player.h"
-#include "GeometryMesh.h"
 #include "MeshTool.h"
+#include "Mesh.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -36,7 +36,7 @@ HRESULT CPlayer::ChangeMesh(const wstring& wstrMeshPrototypeTag)
 		// 원본데이터(m_Components) 포인터지정
 		iter_find->second = pClone;
 
-		m_pMesh = (CGeometryMesh*)pClone;
+		m_pMesh = (CMesh*)pClone;
 		Safe_AddRef(pClone);
 
 		m_wstrMeshPrototypeTag = wstrMeshPrototypeTag;

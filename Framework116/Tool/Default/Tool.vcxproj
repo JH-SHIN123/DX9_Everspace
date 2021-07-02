@@ -212,7 +212,6 @@
     <ClInclude Include="..\Headers\Tool_Define.h" />
     <ClInclude Include="..\Headers\Tool_Enum.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="GeometryMesh.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
@@ -223,7 +222,6 @@
     <ClCompile Include="..\Codes\CollideTool.cpp" />
     <ClCompile Include="..\Codes\CustomMesh.cpp" />
     <ClCompile Include="..\Codes\Dummy.cpp" />
-    <ClCompile Include="..\Codes\GeometryMesh.cpp" />
     <ClCompile Include="..\Codes\MainCam.cpp" />
     <ClCompile Include="..\Codes\MainScene.cpp" />
     <ClCompile Include="..\Codes\MeshTool.cpp" />

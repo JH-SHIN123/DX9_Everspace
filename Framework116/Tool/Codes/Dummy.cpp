@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Dummy.h"
-#include "GeometryMesh.h"
+#include "Mesh.h"
 
 CDummy::CDummy(LPDIRECT3DDEVICE9 pDevice)
     : CGameObject(pDevice)

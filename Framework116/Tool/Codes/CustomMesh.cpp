@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CustomMesh.h"
-#include "GeometryMesh.h"
 
 CCustomMesh::CCustomMesh(LPDIRECT3DDEVICE9 pDevice) :
 	CComponent(pDevice)

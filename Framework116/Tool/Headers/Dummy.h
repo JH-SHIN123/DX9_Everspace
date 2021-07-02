@@ -33,7 +33,7 @@ public:
 	virtual void Free() override;
 
 private:
-	class CGeometryMesh* m_pMesh = nullptr;
+	class CMesh* m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	wstring m_wstrMeshPrototypeTag = L"";
 };
