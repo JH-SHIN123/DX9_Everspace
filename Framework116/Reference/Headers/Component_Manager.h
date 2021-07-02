@@ -10,9 +10,15 @@
 #include "VIBuffer_CubeTexture.h"
 #include "Transform.h"
 #include "Texture.h"
-#include "Mesh.h"
 #include "CollideSphere.h"
 #include "Controller.h"
+#include "Mesh.h"
+#include "ModelMesh.h"
+#include "GeoMesh.h"
+#include "GeoMesh_Cube.h"
+#include "GeoMesh_Cylinder.h"
+#include "GeoMesh_Sphere.h"
+#include "GeoMesh_Torus.h"
 
 BEGIN(Engine)
 class CComponent_Manager : public CBase

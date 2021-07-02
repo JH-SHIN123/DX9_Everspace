@@ -186,7 +186,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_BigShip",
-		CMesh::Create(m_pDevice, L"../../Resources/ship.X", L"../../Resources/"))))
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/ship.X", L"../../Resources/Textures/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 		return E_FAIL;
@@ -196,7 +196,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_Axis",
-		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/axis.X", L"../../Resources/Textures/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
 		return E_FAIL;

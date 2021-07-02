@@ -7,7 +7,6 @@
 #include "Player_Bullet.h"
 #include "Player_Lazer.h"
 
-#include "StreamHandler.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -178,7 +177,7 @@ HRESULT CMainApp::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_BigShip",
-		CMesh::Create(m_pDevice,L"../../Resources/Models/ship.X", L"../../Resources/Textures/"))))
+		CModelMesh::Create(m_pDevice,L"../../Resources/Models/ship.X", L"../../Resources/Textures/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 		return E_FAIL;
@@ -188,7 +187,7 @@ HRESULT CMainApp::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_Axis",
-		CMesh::Create(m_pDevice, L"../../Resources/Models/axis.X", L"../../Resources/Textures/"))))
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/axis.X", L"../../Resources/Textures/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
 		return E_FAIL;
