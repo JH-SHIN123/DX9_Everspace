@@ -2,8 +2,9 @@
 
 USING(Engine)
 
-CGeoMesh_Sphere::CGeoMesh_Sphere(LPDIRECT3DDEVICE9 pDevice) :
-	CGeoMesh(pDevice)
+CGeoMesh_Sphere::CGeoMesh_Sphere(LPDIRECT3DDEVICE9 pDevice, FLOAT Radius) :
+	CGeoMesh(pDevice),
+	m_fRadius(Radius)
 {
 }
 
@@ -18,7 +19,7 @@ HRESULT CGeoMesh_Sphere::Ready_Component_Prototype()
 	m_eGeoType = EGeoMeshType::Sphere;
 
 	// 1Unit = 1m
-	if (FAILED(D3DXCreateSphere(m_pDevice, 100.f, 10, 10, &m_pMesh, nullptr))) {
+	if (FAILED(D3DXCreateSphere(m_pDevice, m_fRadius, 20, 20, &m_pMesh, nullptr))) {
 		PRINT_LOG(L"Error", L"Failed to Create CGeoMesh_Sphere");
 		return E_FAIL;
 	}
@@ -41,9 +42,9 @@ _uint CGeoMesh_Sphere::Render_Mesh()
 	return _uint();
 }
 
-CGeoMesh_Sphere* CGeoMesh_Sphere::Create(LPDIRECT3DDEVICE9 pDevice)
+CGeoMesh_Sphere* CGeoMesh_Sphere::Create(LPDIRECT3DDEVICE9 pDevice, FLOAT Radius)
 {
-	CGeoMesh_Sphere* pInstance = new CGeoMesh_Sphere(pDevice);
+	CGeoMesh_Sphere* pInstance = new CGeoMesh_Sphere(pDevice, Radius);
 	if (FAILED(pInstance->Ready_Component_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create CGeoMesh_Cube");

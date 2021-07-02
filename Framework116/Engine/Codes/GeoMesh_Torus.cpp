@@ -20,7 +20,7 @@ HRESULT CGeoMesh_Torus::Ready_Component_Prototype()
 	m_eGeoType = EGeoMeshType::Torus;
 
 	// 1Unit = 1m
-	if (FAILED(D3DXCreateTorus(m_pDevice, m_fInnerRadius, m_fOuterRadius, 10, 10, &m_pMesh, nullptr))) {
+	if (FAILED(D3DXCreateTorus(m_pDevice, m_fInnerRadius, m_fOuterRadius, 20, 20, &m_pMesh, nullptr))) {
 		PRINT_LOG(L"Error", L"Failed to Create CGeoMesh_Sphere");
 		return E_FAIL;
 	}
