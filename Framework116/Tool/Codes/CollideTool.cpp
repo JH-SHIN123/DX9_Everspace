@@ -43,7 +43,7 @@ void CCollideTool::DoDataExchange(CDataExchange* pDX)
 void CCollideTool::OnShowWindow(BOOL bShow, UINT nStatus)
 {
 	CDialog::OnShowWindow(bShow, nStatus);
-
+	
 	// Dummy Clone 다 삭제
 	if (TRUE == bShow)
 	{
