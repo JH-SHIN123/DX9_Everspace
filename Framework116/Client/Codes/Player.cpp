@@ -180,16 +180,37 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 
 	// TEST //
-	if (m_pController->Key_Down(KEY_LBUTTON))
+	//if (m_pController->Key_Down(KEY_LBUTTON))
+	//{
+	//	float fDist_Monster = 0.f;
+	//	if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+	//		m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
+	//		PRINT_LOG(L"", L"Pick!");
+	//	}
+	//}
+
+	if (m_pController->Key_Pressing(KEY_LBUTTON))
 	{
-		float fDist_Monster = 0.f;
-		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-			m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
-			PRINT_LOG(L"", L"Pick!");
+		m_fMachinegunDelay += fDeltaTime;
+		if (m_fMachinegunDelay > 0.1f)
+		{
+			if (m_IsLeft)
+				m_IsLeft = false;
+			else
+				m_IsLeft = true;
+
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_Player_Bullet",
+				L"Layer_Player_Bullet",
+				(void*)m_IsLeft)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Player_Bullet In Layer");
+				return;
+			}
+			m_fMachinegunDelay = 0.f;
 		}
 	}
-
-
 }
 
 _uint CPlayer::Movement(_float fDeltaTime)

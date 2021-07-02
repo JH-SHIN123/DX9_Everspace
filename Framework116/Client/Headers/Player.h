@@ -27,6 +27,7 @@ public:
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
+	// For.Components
 private:
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
@@ -35,6 +36,13 @@ private:
 
 	//CCamera* m_pCam = nullptr;
 	//_float m_fCameraDist = 5.f;
+
+	// 플레이어가 사용하실 변수님들.
+private:
+	_float m_fMachinegunDelay = 0.f;
+	_bool m_IsLeft = false;
+
+
 };
 
 #define __PLAYER_H__

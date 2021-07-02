@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "MainCam.h"
 #include "UI.h"
+#include "Player_Bullet.h"
 
 #include "StreamHandler.h"
 
@@ -99,6 +100,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
+	/* For.GameObject_Player_Bullet */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Player_Bullet",
+		CPlayer_Bullet::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player_Bullet");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -189,6 +200,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CController::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Controller");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Player_Bullet */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_Player_Bullet",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/axis_red%d.png", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet");
 		return E_FAIL;
 	}
 #pragma endregion

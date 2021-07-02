@@ -115,7 +115,9 @@ _uint CMainCam::Movement(_float fDeltaTime)
 
 	/* 바라볼 위치 */
 	vPlayerPos.y += 10.f;
-	m_CameraDesc.vAt = vPlayerPos;
+	m_CameraDesc.vAt.x = vPlayerPos.x ;
+	m_CameraDesc.vAt.y = vPlayerPos.y;
+	m_CameraDesc.vAt.z = vPlayerPos.z;
 
 	return _uint();
 }

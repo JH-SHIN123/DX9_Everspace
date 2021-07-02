@@ -64,6 +64,18 @@
     <Filter Include="02.GameObject\07.Boss_Monster">
       <UniqueIdentifier>{88b50869-9c1a-4425-ae6e-f5919ea9d218}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\08.Bullet">
+      <UniqueIdentifier>{33b362dd-1047-4984-8b88-18af1153a7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\00.Player_Bullet">
+      <UniqueIdentifier>{7d5cac0b-1660-4c0f-b751-150a20b3d770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\01.Player_Lazer">
+      <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\02.Player_Missile">
+      <UniqueIdentifier>{dff417bd-e330-43c0-b8a0-558cadf4c97a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -126,6 +138,9 @@
     <ClInclude Include="..\Headers\Boss_Monster.h">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Player_Bullet.h">
+      <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -175,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Monster.cpp">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Bullet.cpp">
+      <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
