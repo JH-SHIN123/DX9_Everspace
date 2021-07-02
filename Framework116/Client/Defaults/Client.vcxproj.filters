@@ -70,6 +70,9 @@
     <Filter Include="02.GameObject\08.Bullet\00.EnergyBall">
       <UniqueIdentifier>{9115b9a8-e38a-4a24-b2d9-2e4912cfbb46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\08.Bullet\01.Laser">
+      <UniqueIdentifier>{20ac20a6-4343-4b16-a3bc-f8a01dc5f730}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -135,6 +138,9 @@
     <ClInclude Include="..\Headers\Bullet_EnergyBall.h">
       <Filter>02.GameObject\08.Bullet\00.EnergyBall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Bullet_Laser.h">
+      <Filter>02.GameObject\08.Bullet\01.Laser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -187,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bullet_EnergyBall.cpp">
       <Filter>02.GameObject\08.Bullet\00.EnergyBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Bullet_Laser.cpp">
+      <Filter>02.GameObject\08.Bullet\01.Laser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

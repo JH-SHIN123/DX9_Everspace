@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "..\Headers\Bullet_EnergyBall.h"
+#include "..\Headers\Bullet_Laser.h"
 
-CBullet_EnergyBall::CBullet_EnergyBall(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
+CBullet_Laser::CBullet_Laser(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
 	: CGameObject(pDevice)
 {
 	m_pPassData = pData;
 }
 
-CBullet_EnergyBall::CBullet_EnergyBall(const CBullet_EnergyBall & other)
+CBullet_Laser::CBullet_Laser(const CBullet_Laser & other)
 	: CGameObject(other)
 	, m_fTrackingTime(other.m_fTrackingTime)
 	, m_IsTracking(other.m_IsTracking)
@@ -15,14 +15,14 @@ CBullet_EnergyBall::CBullet_EnergyBall(const CBullet_EnergyBall & other)
 {
 }
 
-HRESULT CBullet_EnergyBall::Ready_GameObject_Prototype()
+HRESULT CBullet_Laser::Ready_GameObject_Prototype()
 {
 	CGameObject::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
+HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
@@ -106,7 +106,7 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 	return S_OK;
 }
 
-_uint CBullet_EnergyBall::Update_GameObject(_float fDeltaTime)
+_uint CBullet_Laser::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 	Movement(fDeltaTime);
@@ -116,7 +116,7 @@ _uint CBullet_EnergyBall::Update_GameObject(_float fDeltaTime)
 	return NO_EVENT;
 }
 
-_uint CBullet_EnergyBall::LateUpdate_GameObject(_float fDeltaTime)
+_uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
@@ -126,7 +126,7 @@ _uint CBullet_EnergyBall::LateUpdate_GameObject(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CBullet_EnergyBall::Render_GameObject()
+_uint CBullet_Laser::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
@@ -141,7 +141,7 @@ _uint CBullet_EnergyBall::Render_GameObject()
 	return _uint();
 }
 
-_uint CBullet_EnergyBall::Movement(_float fDeltaTime)
+_uint CBullet_Laser::Movement(_float fDeltaTime)
 {
 	m_pTransform->Go_Straight(fDeltaTime);
 
@@ -171,7 +171,6 @@ _uint CBullet_EnergyBall::Movement(_float fDeltaTime)
 	_float3 vMyLook = m_pTransform->Get_State(EState::Look);
 	_float3 vMyUp = m_pTransform->Get_State(EState::Up);
 	D3DXVec3Normalize(&vMyLook, &vMyLook);
-	D3DXVec3Normalize(&vMyUp, &vMyUp);
 
 	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
 	_float fRadianMax = D3DXToRadian(95.f);
@@ -197,34 +196,20 @@ _uint CBullet_EnergyBall::Movement(_float fDeltaTime)
 		if (fCeta < fRadianMax)
 			m_pTransform->RotateY(fDeltaTime);
 	}
-
-	_float3 vMyDown;
-	D3DXVec3Cross(&vMyUp, &vMyLook, &vMyRight);
-	D3DXVec3Cross(&vMyDown, &vMyRight, &vMyLook);
-
-	_float fUp = D3DXVec3Dot(&vTargetDir, &vMyUp);
-	_float fDown = D3DXVec3Dot(&vTargetDir, &vMyLeft);
-
-	if (fUp < fDown)
-		m_pTransform->RotateX(fDeltaTime);
-
-	else
-		m_pTransform->RotateX(-fDeltaTime);
-
-
+	
 
 
 	return _uint();
 }
 
-_uint CBullet_EnergyBall::Fire_Triger(_float fDeltaTime)
+_uint CBullet_Laser::Fire_Triger(_float fDeltaTime)
 {
 	return _uint();
 }
 
-CBullet_EnergyBall * CBullet_EnergyBall::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
+CBullet_Laser * CBullet_Laser::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
 {
-	CBullet_EnergyBall* pInstance = new CBullet_EnergyBall(pDevice, pData);
+	CBullet_Laser* pInstance = new CBullet_Laser(pDevice, pData);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Boss_Monster");
@@ -234,9 +219,9 @@ CBullet_EnergyBall * CBullet_EnergyBall::Create(LPDIRECT3DDEVICE9 pDevice, PASSD
 	return pInstance;
 }
 
-CGameObject * CBullet_EnergyBall::Clone(void * pArg/* = nullptr*/)
+CGameObject * CBullet_Laser::Clone(void * pArg/* = nullptr*/)
 {
-	CBullet_EnergyBall* pClone = new CBullet_EnergyBall(*this); /* 복사 생성자 호출 */
+	CBullet_Laser* pClone = new CBullet_Laser(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone Boss_Monster");
@@ -246,7 +231,7 @@ CGameObject * CBullet_EnergyBall::Clone(void * pArg/* = nullptr*/)
 	return pClone;
 }
 
-void CBullet_EnergyBall::Free()
+void CBullet_Laser::Free()
 {
 	Safe_Release(m_pTargetTransform);
 
