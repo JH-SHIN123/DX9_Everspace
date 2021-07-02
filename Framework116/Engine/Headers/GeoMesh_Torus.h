@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef __GEO_MESH_SPHERE_H__
+#ifndef __GEO_MESH_TORUS_H__
 
 #include "GeoMesh.h"
 
@@ -30,5 +30,5 @@ private:
 
 END
 
-#define __GEO_MESH_SPHERE_H__
+#define __GEO_MESH_TORUS_H__
 #endif
