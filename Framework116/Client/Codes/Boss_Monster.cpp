@@ -124,9 +124,6 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	Attack_AI(fDeltaTime);
 
 	//Movement(fDeltaTime);
-	//Fire_Triger(fDeltaTime);
-	//Fire_Laser(fDeltaTime);
-	//Fire_EMP(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -209,16 +206,22 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 {
+	Fire_Triger(fDeltaTime);
+
 	return _uint();
 }
 
 _uint CBoss_Monster::Move_Middle(_float fDeltaTime)
 {
+	Fire_Laser(fDeltaTime);
+
 	return _uint();
 }
 
 _uint CBoss_Monster::Move_Far(_float fDeltaTime)
 {
+	Fire_EMP(fDeltaTime);
+
 	return _uint();
 }
 
@@ -264,17 +267,6 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
 			return E_FAIL;
 		}
-
-		//pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
-
-		//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		//	EResourceType::NonStatic,
-		//	L"GameObject_Bullet_Laser",
-		//	L"Layer_Bullet_Laser", pArg)))
-		//{
-		//	PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
-		//	return E_FAIL;
-		//}
 	}
 
 	return _uint();
@@ -356,7 +348,6 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 
 	else if (BOSSRANGE_NEAR < fDis && fDis < BOSSRANGE_MIDDLE)
 		m_eActionMode = Middle;
-
 
 	else if (BOSSRANGE_MIDDLE < fDis && fDis < BOSSRANGE_FAR)
 		m_eActionMode = Far;
