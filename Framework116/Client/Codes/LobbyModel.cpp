@@ -101,7 +101,7 @@ _uint CLobbyModel::Update_GameObject(_float fDeltaTime)
 	
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
+	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	return NO_EVENT;
 }
 

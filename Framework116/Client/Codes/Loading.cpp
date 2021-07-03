@@ -15,12 +15,9 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 #include "Boss_Monster.h"
-<<<<<<< HEAD
 #include"LobbyCam.h"
 #include"LobbyModel.h"
-=======
 #include "Crosshair.h"
->>>>>>> origin/main
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)

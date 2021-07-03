@@ -22,13 +22,12 @@ public:
 public: /* For.Loading Thread */
 	static unsigned __stdcall ThreadMain(void* pArg);
 	HRESULT Ready_StageResources();
-<<<<<<< HEAD
+
 	HRESULT Ready_LobbyResources();
 
-=======
+
 	HRESULT Ready_HUD_Resources();
 	
->>>>>>> origin/main
 
 private:
 	ESceneType m_eNextSceneID = ESceneType::None;
