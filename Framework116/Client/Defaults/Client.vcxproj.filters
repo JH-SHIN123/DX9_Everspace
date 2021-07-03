@@ -73,6 +73,9 @@
     <Filter Include="01.Scene\02.Lobby\00.LobbyModel">
       <UniqueIdentifier>{ac04ead6-94a1-4433-884c-6ee3eb8a1592}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\02.Lobby\01.LobbyUI">
+      <UniqueIdentifier>{9bfe35a5-cd60-4b10-b13b-0dd9920f1ce2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

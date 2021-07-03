@@ -15,8 +15,12 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 #include "Boss_Monster.h"
+<<<<<<< HEAD
 #include"LobbyCam.h"
 #include"LobbyModel.h"
+=======
+#include "Crosshair.h"
+>>>>>>> origin/main
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -216,6 +220,16 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	/*  HUD Crosshair ÀÔ´Ï´Ù */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Crosshair",
+		CCrosshair::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Crosshair");
+		return E_FAIL;
+	}
+
 
 #pragma endregion
 
@@ -248,6 +262,16 @@ HRESULT CLoading::Ready_StageResources()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Terrain/Terrain%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Terrain");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Crosshair */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair");
 		return E_FAIL;
 	}
 
@@ -291,6 +315,8 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_TestCube");
 		return E_FAIL;
 	}
+
+	Ready_HUD_Resources();
 
 #pragma endregion
 
@@ -341,4 +367,109 @@ HRESULT CLoading::Ready_LobbyResources()
 	return S_OK;
 
 
+}
+
+HRESULT CLoading::Ready_HUD_Resources()
+{
+	/* For.Component_Texture_Machinegun_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Machinegun_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Machinegun%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Machinegun");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Missile_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Missile_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Missile%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Missile");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Laser_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Laser_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Laser%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Laser_HUD");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Overdrive_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Overdrive_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Overdrive%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Overdrive_HUD");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Shield_Battery_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Shield_Battery_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Shield_Battery%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Shield_Battery_HUD");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Boarder */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Boarder",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Boarder%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Boarder");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Shield */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Shield",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Shield.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Shield");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Hp */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Hp",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Hp.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Hp");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Out_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Out_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Out_Bar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Out_Bar");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_In_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_In_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_In_Bar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_In_Bar");
+		return E_FAIL;
+	}
+
+	return S_OK;
 }

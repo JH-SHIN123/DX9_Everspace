@@ -55,5 +55,15 @@ typedef struct tagPassingData_UI {
 	_float4x4 matWorld;
 }PASSDATA_UI;
 
+typedef struct tagPassingData_Collide {
+#ifdef _AFX
+	CString wstrMeshPrototypeTag;
+#else 
+	wstring wstrMeshPrototypeTag;
+#endif // _AFX
+
+	vector<BOUNDING_SPHERE> vecBoundingSphere;
+}PASSDATA_COLLIDE;
+
 #define __PROTOCOL_H__
 #endif
