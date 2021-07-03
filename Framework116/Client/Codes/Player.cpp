@@ -84,8 +84,8 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// 최초 무기(기관총) HUD 생성.
 	UI_DESC MachinegunHUD;
-	MachinegunHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
-	MachinegunHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+	MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+	MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -166,8 +166,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MACHINEGUN;
 		UI_DESC MachinegunHUD;
-		MachinegunHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
-		MachinegunHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,
@@ -185,8 +185,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_LAZER;
 		UI_DESC LaserHUD;
-		LaserHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
-		LaserHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		LaserHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,
@@ -204,8 +204,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MISSILE;
 		UI_DESC MissileHUD;
-		MissileHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
-		MissileHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		MissileHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,
@@ -359,7 +359,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	rc.right = p2.x;
 	rc.bottom = p2.y;
 
-	ClipCursor(&rc);
+	//ClipCursor(&rc);
 
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };

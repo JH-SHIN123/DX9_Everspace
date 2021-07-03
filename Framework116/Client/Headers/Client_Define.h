@@ -4,8 +4,8 @@
 
 extern HWND g_hWnd;
 
-#define WINCX 800
-#define WINCY 600
+#define WINCX 1920
+#define WINCY 1080
 
 #define WEAPON_MACHINEGUN 1
 #define WEAPON_LAZER 2

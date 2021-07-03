@@ -85,7 +85,7 @@ HRESULT CDevice_Manager::Ready_Graphic_Device(HWND hWnd, _uint iWinCX, _uint iWi
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
 	d3dpp.hDeviceWindow = hWnd;
-	d3dpp.Windowed = (_int)eMode;// 전체화면을 하겠다 라면 FALSE, 창모드라면 TRUE
+	d3dpp.Windowed = false;// 전체화면을 하겠다 라면 FALSE, 창모드라면 TRUE
 	// 깊이 버퍼와 스텐실을 사용할 것이냐 라는 것을 묻고 있다. 
 	// 당장은 2D라서 깊이가 필요 없으며 
 	// 2D에서는 그려지는 그려야 할 것이고 나발이고 없이 오로지 그려지는 순서에 의해서 출력이 되는 형식이기 때문에 

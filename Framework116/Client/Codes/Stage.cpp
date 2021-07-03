@@ -293,8 +293,8 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
 
 	UI_DESC HUD_Boarder_Gatling;
-	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
-	HUD_Boarder_Gatling.tTransformDesc.vScale = { 90.f, 55.f, 0.f };
+	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
 		return E_FAIL;
@@ -302,32 +302,30 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	// Skill OverDrive
 
 	UI_DESC OverdriveHUD;
-	OverdriveHUD.tTransformDesc.vPosition = { -10.f, 250.f, 0.f };
-	OverdriveHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+	OverdriveHUD.tTransformDesc.vPosition = { -120.f, 435.f, 0.f };
+	OverdriveHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	OverdriveHUD.wstrTexturePrototypeTag = L"Component_Texture_Overdrive_HUD";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
 		return E_FAIL;
 
 	UI_DESC HUD_Boarder_OverDrive;
-	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -10.f, 250.f, 0.f };
-	HUD_Boarder_OverDrive.tTransformDesc.vScale = { 90.f, 55.f, 0.f };
+	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -120.f, 435.f, 0.f };
+	HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
 		return E_FAIL;
 
-	
-
 	// Skill Shield
 	UI_DESC HUD_Shield_Battery;
-	HUD_Shield_Battery.tTransformDesc.vPosition = { 120.f, 250.f, 0.f };
-	HUD_Shield_Battery.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+	HUD_Shield_Battery.tTransformDesc.vPosition = { 160.f, 435.f, 0.f };
+	HUD_Shield_Battery.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	HUD_Shield_Battery.wstrTexturePrototypeTag = L"Component_Texture_Shield_Battery_HUD";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
 		return E_FAIL;
 
 	UI_DESC HUD_Boarder_Shield;
-	HUD_Boarder_Shield.tTransformDesc.vPosition = { 120.f, 250.f, 0.f };
-	HUD_Boarder_Shield.tTransformDesc.vScale = { 90.f, 55.f, 0.f };
+	HUD_Boarder_Shield.tTransformDesc.vPosition = { 160.f, 435.f, 0.f };
+	HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))
 		return E_FAIL;
@@ -335,14 +333,14 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	// Player Status (Shield, HP)
 
 	UI_DESC HUD_Shield;
-	HUD_Shield.tTransformDesc.vPosition = { -355.f, 263.f, 0.f };
+	HUD_Shield.tTransformDesc.vPosition = { -858.f, 460.f, 0.f };
 	HUD_Shield.tTransformDesc.vScale = { 30.f, 30.f, 0.f };
 	HUD_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Shield";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield)))
 		return E_FAIL;
 
 	UI_DESC HUD_Hp;
-	HUD_Hp.tTransformDesc.vPosition = { -355.f, 237.f, 0.f };
+	HUD_Hp.tTransformDesc.vPosition = { -858.f, 424.f, 0.f };
 	HUD_Hp.tTransformDesc.vScale = { 30.f, 30.f, 0.f };
 	HUD_Hp.wstrTexturePrototypeTag = L"Component_Texture_HUD_Hp";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Hp)))
@@ -357,29 +355,29 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	//	return E_FAIL;
 
 	UI_DESC HUD_Shield_InBar;
-	HUD_Shield_InBar.tTransformDesc.vPosition = { -280.f, 263.f, 0.f };
-	HUD_Shield_InBar.tTransformDesc.vScale = { 110.f, 10.f, 0.f };
+	HUD_Shield_InBar.tTransformDesc.vPosition = { -700.f, 460.f, 0.f };
+	HUD_Shield_InBar.tTransformDesc.vScale = { 260.f, 12.f, 0.f };
 	HUD_Shield_InBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_In_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_InBar)))
 		return E_FAIL;
 
 	UI_DESC HUD_Shield_OutBar;
-	HUD_Shield_OutBar.tTransformDesc.vPosition = { -280.f, 263.f, 0.f };
-	HUD_Shield_OutBar.tTransformDesc.vScale = { 111.f, 11.f, 0.f };
+	HUD_Shield_OutBar.tTransformDesc.vPosition = { -700.f, 460.f, 0.f };
+	HUD_Shield_OutBar.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
 	HUD_Shield_OutBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Out_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_OutBar)))
 		return E_FAIL;
 
 	UI_DESC HUD_HP_InBar;
-	HUD_HP_InBar.tTransformDesc.vPosition = { -280.f, 235.f, 0.f };
-	HUD_HP_InBar.tTransformDesc.vScale = { 110.f, 10.f, 0.f };
+	HUD_HP_InBar.tTransformDesc.vPosition = { -700.f, 424.f, 0.f };
+	HUD_HP_InBar.tTransformDesc.vScale = { 260.f, 12.f, 0.f };
 	HUD_HP_InBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_In_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_InBar)))
 		return E_FAIL;
 
 	UI_DESC HUD_HP_OutBar;
-	HUD_HP_OutBar.tTransformDesc.vPosition = { -280.f, 235.f, 0.f };
-	HUD_HP_OutBar.tTransformDesc.vScale = { 111.f, 11.f, 0.f };
+	HUD_HP_OutBar.tTransformDesc.vPosition = { -700.f, 424.f, 0.f };
+	HUD_HP_OutBar.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
 	HUD_HP_OutBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Out_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
