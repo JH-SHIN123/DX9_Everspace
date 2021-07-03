@@ -22,6 +22,8 @@
 // CMainView
 HWND g_hWnd;
 bool g_IsMainViewInvalidate = true;
+CMainView* CMainView::s_pMainView = nullptr;
+
 
 IMPLEMENT_DYNCREATE(CMainView, CScrollView)
 
@@ -52,6 +54,9 @@ void CMainView::OnInitialUpdate()
 	if (false == m_bStart) return;
 
 	CScrollView::OnInitialUpdate();
+
+	// 자기자신 등록
+	s_pMainView = this;
 
 	CSize sizeTotal;
 	// TODO: 이 뷰의 전체 크기를 계산합니다.

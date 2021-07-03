@@ -47,6 +47,7 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	HRESULT Add_Layer_Dummy(const wstring& LayerTag);
+	HRESULT Add_Layer_Dummy(const PASSDATA_COLLIDE& tPassData);
 
 public:
 

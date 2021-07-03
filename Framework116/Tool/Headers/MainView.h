@@ -32,6 +32,10 @@ private:
 
 	HRESULT Setup_DefaultSetting();
 
+
+public:
+	static CMainView* s_pMainView;
+
 private:
 	bool				m_bStart = true;
 	CManagement*		m_pManagement = nullptr;

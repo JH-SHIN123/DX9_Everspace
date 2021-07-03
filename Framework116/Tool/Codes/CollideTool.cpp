@@ -6,6 +6,7 @@
 #include "../Headers/CollideTool.h"
 #include "afxdialogex.h"
 
+#include "MainView.h"
 #include "Player.h"
 #include "Management.h"
 #include "Dummy.h"
@@ -110,6 +111,35 @@ HRESULT CCollideTool::Add_Layer_Dummy(const wstring& LayerTag)
 	return S_OK;
 }
 
+HRESULT CCollideTool::Add_Layer_Dummy(const PASSDATA_COLLIDE& tPassData)
+{
+
+	DUMMY_DESC tDummyDesc;
+	tDummyDesc.wstrMeshPrototypeTag = tPassData.wstrMeshPrototypeTag;
+
+	for (auto& p : tPassData.vecBoundingSphere) {
+		int installedCount = m_Listbox_Collide.GetCount();
+
+		tDummyDesc.tTransformDesc.vPosition = p.vCenter;
+		tDummyDesc.tTransformDesc.vScale = { p.fRadius,p.fRadius,p.fRadius };
+
+		// Clone 추가
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer_Tool(
+			EResourceType::Static,
+			L"GameObject_Dummy",
+			L"Layer_Dummy", installedCount, &tDummyDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Dummy In Layer");
+			return E_FAIL;
+		}
+
+		// 리스트에 추가
+		m_Listbox_Collide.AddString(to_wstring(installedCount).c_str());
+	}
+
+	return S_OK;
+}
+
 
 void CCollideTool::OnLbnSelchangeList_MeshList()
 {
@@ -166,8 +196,6 @@ void CCollideTool::OnBnClickedButton_Install()
 	}
 
 	wstring objIndex = to_wstring(m_Listbox_Collide.GetCount());
-	wstring meshTag = pPlayer->Get_MeshPrototypeTag();
-	objIndex += meshTag;
 
 	// Add ListBox
 	m_Listbox_Collide.AddString(objIndex.c_str());
@@ -246,48 +274,151 @@ void CCollideTool::OnBnClickedButton_InitTransform()
 
 void CCollideTool::OnBnClickedButton_Save()
 {
-	//CString meshName = L"";
-	//CString meshFullName = L"Component_CustomMesh_";
-	//m_EditMeshName.GetWindowTextW(meshName);
+	// 파싱할 데이터 가공
+	CString meshPrototypeTag = L"";
+	if (m_Listbox_Mesh.GetCurSel() == -1) return;
+	m_Listbox_Mesh.GetText(m_Listbox_Mesh.GetCurSel(), meshPrototypeTag);
+	if (meshPrototypeTag == L"") return;
 
-	//if (meshName == L"") {
-	//	return;
-	//}
-	//meshFullName += meshName;
+	PASSDATA_COLLIDE tPassData;
+	tPassData.wstrMeshPrototypeTag = meshPrototypeTag;
 
-	//g_IsMainViewInvalidate = false;
+	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Dummy");
+	if (nullptr == dummyList) return;
+	tPassData.vecBoundingSphere.reserve(dummyList->size());
+	
+	BOUNDING_SPHERE tBounds;
+	for (auto& p : *dummyList)
+	{
+		if (nullptr == p) continue;
+		CTransform* pTransform = (CTransform*)p->Get_Component(L"Com_Transform");
+		if (nullptr == pTransform) continue;
 
-	//CFileDialog Dlg(FALSE,// 반대로 TRUE라면? 불러오기
-	//	L"mesh", L"*.mesh",
-	//	OFN_OVERWRITEPROMPT, L"Data File(*.mesh) | *.mesh||");
+		tBounds.vCenter = pTransform->Get_TransformDesc().vPosition;
+		tBounds.fRadius = pTransform->Get_TransformDesc().vScale.x;
 
-	//TCHAR szBuf[MAX_PATH] = L"";
-	//GetCurrentDirectory(MAX_PATH, szBuf);
-	//PathRemoveFileSpec(szBuf);
-	//PathRemoveFileSpec(szBuf);
-	//lstrcat(szBuf, L"\\Resources\\Data");
-	//Dlg.m_ofn.lpstrInitialDir = szBuf;
+		tPassData.vecBoundingSphere.emplace_back(tBounds);
+	}
 
-	//if (Dlg.DoModal())
-	//{
-	//	CString strPath = Dlg.GetPathName();
-	//	HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-	//	if (INVALID_HANDLE_VALUE == hFile)
-	//		return;
 
-	//	DWORD dwByte = 0;
-	//	//WriteFile(hFile, pTile, sizeof(TILE), &dwByte, nullptr);
+	// 파싱 시작
+	g_IsMainViewInvalidate = false;
 
-	//	CloseHandle(hFile);
-	//}
+	CFileDialog Dlg(FALSE,// 반대로 TRUE라면? 불러오기
+		L"collide", L"*.collide",
+		OFN_OVERWRITEPROMPT, L"Data File(*.collide) | *.collide||");
 
-	//g_IsMainViewInvalidate = true;
+	TCHAR szBuf[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szBuf);
+	PathRemoveFileSpec(szBuf);
+	PathRemoveFileSpec(szBuf);
+	lstrcat(szBuf, L"\\Resources\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szBuf;
+
+	if (Dlg.DoModal())
+	{
+		CString strPath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+
+		DWORD dwByte = 0;
+		DWORD dwstrByte = 0;
+
+		// 메시프로토타입 태그
+		dwstrByte = sizeof(TCHAR) * (tPassData.wstrMeshPrototypeTag.GetLength() + 1);
+		WriteFile(hFile, &dwstrByte, sizeof(DWORD), &dwByte, nullptr);
+		WriteFile(hFile, tPassData.wstrMeshPrototypeTag.GetString(), dwstrByte, &dwByte, nullptr);
+
+		// Bounding Sphere 정보
+		size_t boundsCnt = tPassData.vecBoundingSphere.size();
+		WriteFile(hFile, &boundsCnt, sizeof(size_t), &dwByte, nullptr);
+		for (auto& p : tPassData.vecBoundingSphere)
+		{
+			WriteFile(hFile, &p, sizeof(BOUNDING_SPHERE), &dwByte, nullptr);
+		}
+
+		CloseHandle(hFile);
+	}
+
+	g_IsMainViewInvalidate = true;
+	CMainView::s_pMainView->Invalidate(FALSE);
 }
 
 
 void CCollideTool::OnBnClickedButton_Load()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	g_IsMainViewInvalidate = false;
+
+	CFileDialog Dlg(TRUE,// 반대로 TRUE라면? 불러오기
+		L"collide", L"*.collide",
+		OFN_OVERWRITEPROMPT, L"Data File(*.collide) | *.collide||");
+
+	TCHAR szBuf[MAX_PATH] = L"";
+	GetCurrentDirectory(MAX_PATH, szBuf);
+	PathRemoveFileSpec(szBuf);
+	PathRemoveFileSpec(szBuf);
+	lstrcat(szBuf, L"\\Resources\\Data");
+	Dlg.m_ofn.lpstrInitialDir = szBuf;
+
+	PASSDATA_COLLIDE tPassData;
+	TCHAR* pMeshPrototypeTag = nullptr;
+
+	if (Dlg.DoModal())
+	{
+		CString strPath = Dlg.GetPathName();
+		HANDLE hFile = CreateFile(strPath.GetString(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (INVALID_HANDLE_VALUE == hFile)
+			return;
+
+		DWORD dwByte = 0;
+		DWORD dwStrByte = 0;
+
+		// 메시 프로토타입 태그 받아오기
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+		pMeshPrototypeTag = new TCHAR[dwStrByte];
+		ReadFile(hFile, pMeshPrototypeTag, dwStrByte, &dwByte, nullptr);
+		tPassData.wstrMeshPrototypeTag = pMeshPrototypeTag;
+
+		// 바운딩스피어 정보 로드
+		size_t boundsCnt = 0;
+		ReadFile(hFile, &boundsCnt, sizeof(size_t), &dwByte, nullptr);
+		tPassData.vecBoundingSphere.reserve(boundsCnt);
+
+		BOUNDING_SPHERE tBounds;
+		for (size_t i =0; i<boundsCnt; ++i)
+		{
+			ReadFile(hFile, &tBounds, sizeof(BOUNDING_SPHERE), &dwByte, nullptr);
+			tPassData.vecBoundingSphere.emplace_back(tBounds);
+		}
+
+		CloseHandle(hFile);
+	}
+
+	// Tool Info 적용
+	// 기존 데이터 초기화
+	m_Listbox_Collide.ResetContent();
+	const list<class CGameObject*>* dummyList = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Dummy");
+	if (nullptr != dummyList) {
+		for (auto& p : *dummyList)
+			p->Set_IsDead(true);
+	}
+
+	Add_Layer_Dummy(tPassData);
+
+	// 로드한 콜라이드 정보의 메시정보 적용
+	int iFind = m_Listbox_Mesh.FindString(0, tPassData.wstrMeshPrototypeTag);
+	m_Listbox_Mesh.SetCurSel(iFind);
+
+	CAxis* pAxis = (CAxis*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Axis");
+	if (pAxis == nullptr) {
+		PRINT_LOG(L"Warning", L"CAxis is nullptr");
+		return;
+	}
+	pAxis->ChangeMesh(tPassData.wstrMeshPrototypeTag.GetString());
+
+	g_IsMainViewInvalidate = true;
+	CMainView::s_pMainView->Invalidate(FALSE);
 }
 
 void CCollideTool::OnEnChangeEdit_ScaleX()
