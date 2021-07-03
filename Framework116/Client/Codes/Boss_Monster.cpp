@@ -350,7 +350,7 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 	_float fDis = fabs(D3DXVec3Length(&m_pTargetTransform->Get_State(EState::Position))
 		- D3DXVec3Length(&m_pTransform->Get_State(EState::Position)));
 
-
+	//
 	if (fDis < BOSSRANGE_NEAR)
 		m_eActionMode = Near;
 
