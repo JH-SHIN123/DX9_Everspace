@@ -114,8 +114,29 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	m_CameraDesc.vEye += vCamDist * m_fDistanceFromTarget;
 
 	/* 바라볼 위치 */
+	POINT pt;
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
+	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
+	_float3 vGap = vMouse - vScreenCenter;
+
+	if (fabs(vGap.x) >= 150.f)
+	{
+		if(m_fDistanceFromTarget >= 4.f)
+			m_fDistanceFromTarget -= 0.02f;
+	}
+	else if (fabs(vGap.x) < 150.f)
+	{
+		if (m_fDistanceFromTarget < 10.f)
+		m_fDistanceFromTarget += 0.02f;
+	}
+
 	vPlayerPos.y += 10.f;
-	m_CameraDesc.vAt = vPlayerPos;
+	m_CameraDesc.vAt = vPlayerPos - (vPlayerLook) * -m_fDistanceFromTarget * 2.f * fDeltaTime;
+	
+
 
 	return _uint();
 }
@@ -159,6 +180,7 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 		if(!(m_fDistanceFromTarget < 10.f))
 		m_fDistanceFromTarget -= 5.f * fDeltaTime;
 	}
+	
 
 
 	return _uint();

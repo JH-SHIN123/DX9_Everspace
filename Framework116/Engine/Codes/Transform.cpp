@@ -154,7 +154,6 @@ void CTransform::Go_Dir(const _float3 & vDir, _float fDeltaTime)
 _uint CTransform::RotateX(_float fDeltaTime)
 {
 	m_TransformDesc.vRotate.x += m_TransformDesc.fRotatePerSec * fDeltaTime;
-
 	return _uint();
 }
 
@@ -168,7 +167,6 @@ _uint CTransform::RotateY(_float fDeltaTime)
 _uint CTransform::RotateZ(_float fDeltaTime)
 {
 	m_TransformDesc.vRotate.z += m_TransformDesc.fRotatePerSec * fDeltaTime;
-
 	return _uint();
 }
 

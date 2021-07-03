@@ -22,7 +22,11 @@ public:
 public: /* For.Loading Thread */
 	static unsigned __stdcall ThreadMain(void* pArg);
 	HRESULT Ready_StageResources();
+<<<<<<< HEAD
 	HRESULT Ready_BossAndOthers();
+=======
+	HRESULT Ready_HUD_Resources();
+>>>>>>> main
 	
 
 private:

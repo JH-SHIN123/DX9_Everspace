@@ -82,6 +82,24 @@
     <Filter Include="02.GameObject\07.Boss_Monster\00.Boss_Addon">
       <UniqueIdentifier>{bfb875ea-b2a7-4d4a-bbed-0a6495b857a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\08.Bullet\00.Player_Bullet">
+      <UniqueIdentifier>{7d5cac0b-1660-4c0f-b751-150a20b3d770}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\01.Player_Lazer">
+      <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\02.Player_Missile">
+      <UniqueIdentifier>{dff417bd-e330-43c0-b8a0-558cadf4c97a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD">
+      <UniqueIdentifier>{b5258aa2-1843-44fe-9cb2-0404d0b7aa33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD\00.Crosshair">
+      <UniqueIdentifier>{ad13f66b-199e-47bb-a198-9eb9f3aec96b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD\01.Weapons">
+      <UniqueIdentifier>{fe21133b-9cea-4b43-a588-c27d7b949fb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -153,6 +171,18 @@
     <ClInclude Include="..\Headers\Bullet_EMP_Bomb.h">
       <Filter>02.GameObject\08.Bullet\02.EMP_Bomb</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Player_Bullet.h">
+      <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player_Lazer.h">
+      <Filter>02.GameObject\08.Bullet\01.Player_Lazer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Crosshair.h">
+      <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Player_Missile.h">
+      <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -211,6 +241,18 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Bullet_EMP_Bomb.cpp">
       <Filter>02.GameObject\08.Bullet\02.EMP_Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Bullet.cpp">
+      <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Lazer.cpp">
+      <Filter>02.GameObject\08.Bullet\01.Player_Lazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Crosshair.cpp">
+      <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Missile.cpp">
+      <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,7 @@ enum class ERenderType
 	NonAlpha,
 	Alpha,
 	Particle,
+	AlphaUI,
 	UI,
 	End
 };
@@ -32,6 +33,7 @@ private:
 	_uint Render_Alpha();
 	_uint Render_Particle();
 	_uint Render_UI();
+	_uint Render_AlphaUI();
 
 public:
 	virtual void Free() override;	

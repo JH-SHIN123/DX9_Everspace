@@ -66,12 +66,15 @@ HRESULT CCollideSphere::Ready_Component(void* pArg)
 	return S_OK;
 }
 
-_uint CCollideSphere::Update_Collide(const _float3& vPos)
+_uint CCollideSphere::Update_Collide(const _float4x4& matParent)
 {
+	// Ω∫ * ¿Ã * ∫Œ(Player)
+	_float4x4 matScale, matTrans;
+	D3DXMatrixScaling(&matScale, m_tBoundingSphere.fRadius, m_tBoundingSphere.fRadius, m_tBoundingSphere.fRadius);
+	D3DXMatrixTranslation(&matTrans, m_tBoundingSphere.vCenter.x, m_tBoundingSphere.vCenter.y, m_tBoundingSphere.vCenter.z);
+
 	// Pos
-	m_tBoundingSphere.matWorld._41 = vPos.x + m_tBoundingSphere.vCenter.x;
-	m_tBoundingSphere.matWorld._42 = vPos.y + m_tBoundingSphere.vCenter.y;
-	m_tBoundingSphere.matWorld._43 = vPos.z + m_tBoundingSphere.vCenter.z;
+	m_tBoundingSphere.matWorld = matScale * matTrans * matParent;
 
 	return _uint();
 }

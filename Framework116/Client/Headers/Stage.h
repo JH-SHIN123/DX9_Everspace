@@ -28,6 +28,10 @@ private:
 
 	HRESULT Add_Layer_Boss_Monster(const wstring& LayerTag);
 
+	// HUD
+	HRESULT Add_Layer_HUD(const wstring& LayerTag);
+
+
 
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
