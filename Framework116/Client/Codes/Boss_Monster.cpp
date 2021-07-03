@@ -10,9 +10,11 @@ CBoss_Monster::CBoss_Monster(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
 
 CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	: CGameObject(other)
-	, m_fCoolTime(other.m_fCoolTime)
+	, m_fEnergyBall_CoolTime(other.m_fEnergyBall_CoolTime)
+	, m_fLaser_CoolTime(other.m_fLaser_CoolTime)
 	, m_IsLeftFire(other.m_IsLeftFire)
 {
+	
 }
 
 HRESULT CBoss_Monster::Ready_GameObject_Prototype()
@@ -55,7 +57,7 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	TransformDesc.vPosition = _float3(10.f, 3.f, 20.f);
 	TransformDesc.fSpeedPerSec = 2.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
-	TransformDesc.vScale = { 5.f,5.f,15.f };
+	TransformDesc.vScale = { 10.f,10.f,30.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -112,8 +114,10 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
-	//Movement(fDeltaTime);
+	Movement(fDeltaTime);
 	Fire_Triger(fDeltaTime);
+	Fire_Laser(fDeltaTime);
+	Fire_EMP(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
@@ -189,7 +193,7 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 		//m_pGunTranform[1]->RotateY(-fDeltaTime);
 
 	}
-	
+
 	m_pTransform->Go_Straight(fDeltaTime);
 
 
@@ -198,11 +202,11 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 
 _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 {
-	m_fCoolTime += fDeltaTime;
+	m_fEnergyBall_CoolTime += fDeltaTime;
 
-	if (m_fCoolTime >= 2.f)
+	if (m_fEnergyBall_CoolTime >= 2.f)
 	{
-		m_fCoolTime = 0.f;
+		m_fEnergyBall_CoolTime = 0.f;
 
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
 		_float3 vPos = m_pTransform->Get_State(EState::Position);
@@ -217,27 +221,59 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 		D3DXVec3Cross(&vRight, &vUp, &vLook);
 		D3DXVec3Normalize(&vRight, &vRight);
 
-		vPos += vLook * 2.f;
+		vPos += vLook * 8.f;
 
 		if (m_IsLeftFire == true)
-			vPos -= vRight * 4.f;
+			vPos -= vRight * 8.f;
 
 		if (m_IsLeftFire == false)
-			vPos += vRight * 4.f;
+			vPos += vRight * 8.f;
 
 		m_IsLeftFire = !m_IsLeftFire;
 
 		pArg->vPosition = vPos;
 		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
 
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Bullet_EnergyBall",
+			L"Layer_Bullet_EnergyBall", pArg)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+			return E_FAIL;
+		}
+
+		//pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
+
 		//if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		//	EResourceType::NonStatic,
-		//	L"GameObject_Bullet_EnergyBall",
-		//	L"Layer_Bullet_EnergyBall", pArg)))
+		//	L"GameObject_Bullet_Laser",
+		//	L"Layer_Bullet_Laser", pArg)))
 		//{
-		//	PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+		//	PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
 		//	return E_FAIL;
 		//}
+	}
+
+	return _uint();
+}
+
+_uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
+{
+	m_fLaser_CoolTime += fDeltaTime;
+
+	// 3초의 사이클
+	if (m_fLaser_CoolTime >= 3.f)
+		m_fLaser_CoolTime = 0.f;
+
+	// 2초가 넘어가면 발사
+	// 2초의 쿨타임으로 1초동안 발사
+	if (m_fLaser_CoolTime >= 2.5f)
+	{
+		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+		_float3 vUp = m_pTransform->Get_State(EState::Up);
+		D3DXVec3Normalize(&vUp, &vUp);
 
 		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
 
@@ -249,24 +285,40 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
 			return E_FAIL;
 		}
+
 	}
 
 	return _uint();
 }
 
-_uint CBoss_Monster::Fier_Laser(_float fDeltaTime)
+_uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 {
+	m_fEmpBomb_CoolTime += fDeltaTime;
 
-	//pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
 
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Boss_Monster",
-	//	L"Layer_Bullet_Laser", pArg)))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
-	//	return E_FAIL;
-	//}
+
+	if (m_fEmpBomb_CoolTime >= 5.f)
+	{
+		m_fEmpBomb_CoolTime = 0.f;
+
+		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+		_float3 vUp = m_pTransform->Get_State(EState::Up);
+		D3DXVec3Normalize(&vUp, &vUp);
+
+		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
+
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Bullet_EMP_Bomb",
+			L"Layer_Bullet_EMP_Bomb", pArg)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Bullet_EMP_Bomb In Layer");
+			return E_FAIL;
+		}
+	}
+	
+
 
 	return _uint();
 }

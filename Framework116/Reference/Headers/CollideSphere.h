@@ -23,6 +23,9 @@ public:
 	virtual _uint	Render_Collide() override;
 
 public:
+	_uint Resize_Shpere(const _float& fRadius);
+
+public:
 	static CCollideSphere* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CComponent* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;

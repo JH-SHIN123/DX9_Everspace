@@ -1,27 +1,26 @@
 #include "stdafx.h"
-#include "..\Headers\Bullet_Laser.h"
+#include "..\Headers\Bullet_EMP_Bomb.h"
 
-CBullet_Laser::CBullet_Laser(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
+CBullet_EMP_Bomb::CBullet_EMP_Bomb(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
 	: CGameObject(pDevice)
 {
 	m_pPassData = pData;
 }
 
-CBullet_Laser::CBullet_Laser(const CBullet_Laser & other)
+CBullet_EMP_Bomb::CBullet_EMP_Bomb(const CBullet_EMP_Bomb & other)
 	: CGameObject(other)
-	, m_fLiveTime(other.m_fLiveTime)
-	, m_IsTracking(other.m_IsTracking)
+	, m_fExplosionTime(other.m_fExplosionTime)
 {
 }
 
-HRESULT CBullet_Laser::Ready_GameObject_Prototype()
+HRESULT CBullet_EMP_Bomb::Ready_GameObject_Prototype()
 {
 	CGameObject::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
+HRESULT CBullet_EMP_Bomb::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
@@ -50,8 +49,9 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
-	TransformDesc.fSpeedPerSec = 220.f;
+	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;//_float3(10.f, 3.f, 20.f);
+	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
+	TransformDesc.fSpeedPerSec = 15.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 
@@ -69,7 +69,7 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	BoundingSphere.fRadius = m_fExplosionRadius;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -100,21 +100,21 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	//}
 
 
+
 	return S_OK;
 }
 
-_uint CBullet_Laser::Update_GameObject(_float fDeltaTime)
+_uint CBullet_EMP_Bomb::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
-
 	return NO_EVENT;
 }
 
-_uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
+_uint CBullet_EMP_Bomb::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
@@ -124,7 +124,7 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CBullet_Laser::Render_GameObject()
+_uint CBullet_EMP_Bomb::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
@@ -139,15 +139,40 @@ _uint CBullet_Laser::Render_GameObject()
 	return _uint();
 }
 
-_uint CBullet_Laser::Movement(_float fDeltaTime)
+_uint CBullet_EMP_Bomb::Movement(_float fDeltaTime)
 {
-	m_fLiveTime -= fDeltaTime;
+	Move_Dir();
 
-	if (m_fLiveTime <= 0.f)
+
+	if (m_fExplosionTime <= 0.f)
 	{
-		return DEAD_OBJECT;
+		if (m_fExplosionRadius <= 1.05f)
+		{
+			m_fExplosionRadius *= 1.001f;
+			m_pCollide->Resize_Shpere(m_fExplosionRadius);
+		}
+
 	}
 
+	else
+	{
+		m_fExplosionTime -= fDeltaTime;
+		m_pTransform->Go_Dir(m_vMoveDir, fDeltaTime);
+	}
+
+
+
+
+	return _uint();
+}
+
+_uint CBullet_EMP_Bomb::Fire_Triger(_float fDeltaTime)
+{
+	return _uint();
+}
+
+_uint CBullet_EMP_Bomb::Move_Dir()
+{
 	if (m_IsTracking == false)
 	{
 		m_pTransform->Update_Transform();
@@ -156,25 +181,15 @@ _uint CBullet_Laser::Movement(_float fDeltaTime)
 		_float3 vMyPos = m_pTransform->Get_State(EState::Position);
 		m_vMoveDir = vTargetPos - vMyPos;
 		D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
-		//m_pTransform->Set_Rotate(m_vMoveDir);
 		m_IsTracking = true;
 	}
 
-	m_pTransform->Go_Dir(m_vMoveDir,fDeltaTime);
-
-
-
 	return _uint();
 }
 
-_uint CBullet_Laser::Fire_Triger(_float fDeltaTime)
+CBullet_EMP_Bomb * CBullet_EMP_Bomb::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
 {
-	return _uint();
-}
-
-CBullet_Laser * CBullet_Laser::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
-{
-	CBullet_Laser* pInstance = new CBullet_Laser(pDevice, pData);
+	CBullet_EMP_Bomb* pInstance = new CBullet_EMP_Bomb(pDevice, pData);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Boss_Monster");
@@ -184,9 +199,9 @@ CBullet_Laser * CBullet_Laser::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT
 	return pInstance;
 }
 
-CGameObject * CBullet_Laser::Clone(void * pArg/* = nullptr*/)
+CGameObject * CBullet_EMP_Bomb::Clone(void * pArg/* = nullptr*/)
 {
-	CBullet_Laser* pClone = new CBullet_Laser(*this); /* 복사 생성자 호출 */
+	CBullet_EMP_Bomb* pClone = new CBullet_EMP_Bomb(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone Boss_Monster");
@@ -196,7 +211,7 @@ CGameObject * CBullet_Laser::Clone(void * pArg/* = nullptr*/)
 	return pClone;
 }
 
-void CBullet_Laser::Free()
+void CBullet_EMP_Bomb::Free()
 {
 	Safe_Release(m_pTargetTransform);
 

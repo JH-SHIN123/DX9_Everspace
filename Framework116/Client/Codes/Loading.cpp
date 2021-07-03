@@ -15,6 +15,7 @@
 #include "Boss_Monster.h"
 #include "Bullet_EnergyBall.h"
 #include "Bullet_Laser.h"
+#include "Bullet_EMP_Bomb.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -321,6 +322,14 @@ HRESULT CLoading::Ready_BossAndOthers()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Bullet_EMP_Bomb",
+		CBullet_EMP_Bomb::Create(m_pDevice, nullptr))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Bullet_EMP_Bomb");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
