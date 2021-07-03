@@ -3,9 +3,9 @@
 
 #include "GameObject.h"
 
-#define BOSSRANGE_NEAR		UNIT * 20.f
-#define BOSSRANGE_MIDDLE	UNIT * 50.f
-#define BOSSRANGE_FAR		UNIT * 100.f
+#define BOSSRANGE_NEAR		20.f
+#define BOSSRANGE_MIDDLE	50.f
+#define BOSSRANGE_FAR		100.f
 
 USING(Engine)
 class CBoss_Monster final : public CGameObject
@@ -62,9 +62,9 @@ private: /* AI */
 	_bool m_IsSpecialAction = false;
 
 	// Å¸°Ù Å½Áö ¹üÀ§
-	//_float m_fDetectionRange_Near = UNIT * 20.f;
-	//_float m_fDetectionRange_Middle = UNIT * 50.f;
-	//_float m_fDetectionRange_Far = UNIT * 100.f;
+	//const _float m_fDetectionRange_Near = UNIT * 20.f;
+	//const _float m_fDetectionRange_Middle = UNIT * 50.f;
+	//const float m_fDetectionRange_Far = UNIT * 100.f;
 	
 
 private: /* Skills */

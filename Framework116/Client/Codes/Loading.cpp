@@ -14,13 +14,10 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 #include "Boss_Monster.h"
-<<<<<<< HEAD
 #include "Bullet_EnergyBall.h"
 #include "Bullet_Laser.h"
 #include "Bullet_EMP_Bomb.h"
-=======
 #include "Crosshair.h"
->>>>>>> main
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -204,20 +201,9 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-<<<<<<< HEAD
 	/* 임시 보스 몬스터 입니다. */
 	Ready_BossAndOthers();
-=======
 
-	/* 임시 Boss_Monster 입니다 */
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_Boss_Monster",
-		CBoss_Monster::Create(m_pDevice, nullptr))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
-		return E_FAIL;
-	}
 
 	/*  HUD Crosshair 입니다 */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
@@ -229,7 +215,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
->>>>>>> main
 
 #pragma endregion
 
@@ -319,7 +304,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-<<<<<<< HEAD
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_EnergyBall",
@@ -328,10 +312,8 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_EnergyBall");
 		return E_FAIL;
 	}
-=======
 	Ready_HUD_Resources();
 
->>>>>>> main
 #pragma endregion
 
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
