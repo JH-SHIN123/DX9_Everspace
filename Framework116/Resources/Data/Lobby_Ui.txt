@@ -1,0 +1,5 @@
+Component_Texture_RepairIcon|900|485|160|160
+Component_Texture_achievement|850|-455|180|180
+Component_Texture_ShopIcon|850|-300|180|180
+Component_Texture_everspace_logo|-750|465|400|120
+Component_Texture_PlaneTemplete|-400|-455|200|200

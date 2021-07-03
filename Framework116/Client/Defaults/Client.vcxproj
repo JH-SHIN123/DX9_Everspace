@@ -171,6 +171,9 @@
     <ClInclude Include="..\Headers\Grass.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
+    <ClInclude Include="..\Headers\Lobby.h" />
+    <ClInclude Include="..\Headers\LobbyCam.h" />
+    <ClInclude Include="..\Headers\LobbyModel.h" />
     <ClInclude Include="..\Headers\Logo.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCam.h" />
@@ -191,6 +194,9 @@
     <ClCompile Include="..\Codes\Grass.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
+    <ClCompile Include="..\Codes\Lobby.cpp" />
+    <ClCompile Include="..\Codes\LobbyCam.cpp" />
+    <ClCompile Include="..\Codes\LobbyModel.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCam.cpp" />

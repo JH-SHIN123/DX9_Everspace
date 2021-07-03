@@ -64,6 +64,15 @@
     <Filter Include="02.GameObject\07.Boss_Monster">
       <UniqueIdentifier>{88b50869-9c1a-4425-ae6e-f5919ea9d218}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\02.Lobby">
+      <UniqueIdentifier>{8a9fe7b0-2dfd-4099-bf5d-dc29ad9f32a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\02.Camera\01.LobbyCam">
+      <UniqueIdentifier>{1eacbcfc-9a2f-4e83-84e4-fd0c20331049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Lobby\00.LobbyModel">
+      <UniqueIdentifier>{ac04ead6-94a1-4433-884c-6ee3eb8a1592}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -126,6 +135,15 @@
     <ClInclude Include="..\Headers\Boss_Monster.h">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Lobby.h">
+      <Filter>01.Scene\02.Lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LobbyCam.h">
+      <Filter>02.GameObject\02.Camera\01.LobbyCam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LobbyModel.h">
+      <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -175,6 +193,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Boss_Monster.cpp">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Lobby.cpp">
+      <Filter>01.Scene\02.Lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LobbyCam.cpp">
+      <Filter>02.GameObject\02.Camera\01.LobbyCam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LobbyModel.cpp">
+      <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

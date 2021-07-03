@@ -4,8 +4,8 @@
 
 extern HWND g_hWnd;
 
-#define WINCX 800
-#define WINCY 600
+#define WINCX 1920
+#define WINCY 1080
 
 #define __CLIENT_DEFINE_H__
 #endif

@@ -4,6 +4,7 @@
 
 #pragma region Scenes
 #include "Stage.h"
+#include"Lobby.h"
 #pragma endregion
 
 #pragma region GameObjects
@@ -14,6 +15,8 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 #include "Boss_Monster.h"
+#include"LobbyCam.h"
+#include"LobbyModel.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -47,12 +50,14 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 	if (m_IsFinished)
 	{
 		//
-
 		CScene* pNextScene = nullptr;
 		switch (m_eNextSceneID)
 		{
 		case ESceneType::Stage:
 			pNextScene = CStage::Create(m_pDevice);
+			break;
+		case ESceneType::Lobby:
+			pNextScene = CLobby::Create(m_pDevice);
 			break;
 		}
 
@@ -115,6 +120,9 @@ unsigned CLoading::ThreadMain(void * pArg)
 	{
 	case ESceneType::Stage:
 		hr = pLoading->Ready_StageResources();
+		break;
+	case ESceneType::Lobby:
+		hr = pLoading->Ready_LobbyResources();
 		break;
 	default:
 		break;
@@ -273,9 +281,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-	//For.Component_Stage_Texture
-	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/Stage.txt", FALSE);
-
 
 	/* For.Component_Texture_TestCube */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
@@ -290,8 +295,50 @@ HRESULT CLoading::Ready_StageResources()
 #pragma endregion
 
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
-
-
-
 	return S_OK;
+}
+
+HRESULT CLoading::Ready_LobbyResources()
+{
+	m_pManagement->Clear_NonStatic_Resources();
+
+
+#pragma region GameObjects
+	
+	
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Lobby_Model",
+		CLobbyModel::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Lobby_Skybox");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Lobby_Skybox",
+		CSkybox::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Lobby_Skybox");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LobbyCam",
+		CLobbyCam::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_MainCam");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region Components
+	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/Lobby.txt", FALSE);
+	
+	
+#pragma endregion
+	return S_OK;
+
+
 }

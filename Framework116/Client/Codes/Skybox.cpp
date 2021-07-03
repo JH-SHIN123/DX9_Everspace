@@ -33,11 +33,18 @@ HRESULT CSkybox::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
 		return E_FAIL;
 	}
-
+	wstring strComponentTexturePrototype = L"Component_Texture_Skybox";
+	if (auto ptr = (wstring*)pArg)
+	{
+		if (dynamic_cast<wstring*>(ptr))
+		{
+			strComponentTexturePrototype = *dynamic_cast<wstring*>(ptr);
+		}
+	}
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_Texture_Skybox",
+		strComponentTexturePrototype,
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
 	{
@@ -134,6 +141,8 @@ CSkybox * CSkybox::Create(LPDIRECT3DDEVICE9 pDevice)
 
 	return pInstance;
 }
+
+
 
 CGameObject * CSkybox::Clone(void * pArg/* = nullptr*/)
 {

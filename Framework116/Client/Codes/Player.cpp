@@ -90,6 +90,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 
 	KeyProcess(fDeltaTime);
 	Movement(fDeltaTime);
+	
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);

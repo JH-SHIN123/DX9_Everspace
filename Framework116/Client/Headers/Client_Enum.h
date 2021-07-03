@@ -7,6 +7,7 @@ enum class ESceneType : unsigned int
 	Loading,
 	Logo,
 	Stage,
+	Lobby,
 	None = 4294967295
 };
 

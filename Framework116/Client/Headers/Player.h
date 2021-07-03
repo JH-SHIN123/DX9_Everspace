@@ -33,6 +33,8 @@ private:
 	CCollideSphere*	m_pCollide = nullptr;
 	CController* m_pController = nullptr;
 
+
+
 	//CCamera* m_pCam = nullptr;
 	//_float m_fCameraDist = 5.f;
 };
