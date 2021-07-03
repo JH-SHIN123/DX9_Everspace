@@ -18,7 +18,7 @@ public:  // Picking & Ray
 
 public: // Intersect Function
 	static bool IntersectRayToSphere(const RAY& pInRay, const BOUNDING_SPHERE& pBounds);
-	//static bool IntersectSphereToSphere(const BOUNDING_SPHERE& pBounds1, const BOUNDING_SPHERE& pBounds2);
+	static bool IntersectSphereToSphere(const BOUNDING_SPHERE& pBounds1, const BOUNDING_SPHERE& pBounds2, const _float vDstScaleRate = 1.f, const _float vSrcScaleRate = 1.f);
 };
 
 END

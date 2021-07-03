@@ -82,6 +82,9 @@
     <Filter Include="02.GameObject\09.HUD\00.Crosshair">
       <UniqueIdentifier>{ad13f66b-199e-47bb-a198-9eb9f3aec96b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.Utilities\01.Collision">
+      <UniqueIdentifier>{ab97317d-a971-4291-8903-d4121dc9d1de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -156,6 +159,9 @@
     <ClInclude Include="..\Headers\Player_Missile.h">
       <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\CollisionHandler.h">
+      <Filter>97.Utilities\01.Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -200,9 +206,6 @@
     <ClCompile Include="..\Codes\LaserSystem.cpp">
       <Filter>02.GameObject\06.Particle\Lazer</Filter>
     </ClCompile>
-    <ClCompile Include="StreamHandler.cpp">
-      <Filter>97.Utilities\00.Stream</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Boss_Monster.cpp">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClCompile>
@@ -217,6 +220,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Player_Missile.cpp">
       <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\CollisionHandler.cpp">
+      <Filter>97.Utilities\01.Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\StreamHandler.cpp">
+      <Filter>97.Utilities\00.Stream</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
