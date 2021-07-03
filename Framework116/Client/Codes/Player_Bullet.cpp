@@ -186,7 +186,6 @@ _uint CPlayer_Bullet::Movement(_float fDeltaTime)
 	_float4x4 matWorld;
 	matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
-
 	matWorld._31 = m_vPlayerLook.x;
 	matWorld._32 = m_vPlayerLook.y;
 	matWorld._33 = m_vPlayerLook.z;

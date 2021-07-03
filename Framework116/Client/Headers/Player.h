@@ -44,8 +44,9 @@ private:
 
 
 	//무기 1번 : 기관총, 2번 : 레이저
-	_int m_iWeapon = 100;
+	_int m_iWeapon = 1;
 	_bool m_IsLazer = false;
+	_bool m_IsMissile = false;
 
 
 };

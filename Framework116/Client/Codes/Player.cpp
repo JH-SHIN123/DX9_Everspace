@@ -147,30 +147,18 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	// Weapon Change
 	if (m_pController->Key_Down(KEY_1))
-	{
 		m_iWeapon = WEAPON_MACHINEGUN;
-	}
 
 	if (m_pController->Key_Down(KEY_2))
-	{
 		m_iWeapon = WEAPON_LAZER;
-	}
+
+	if (m_pController->Key_Down(KEY_3))
+		m_iWeapon = WEAPON_MISSILE;
 
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-	{
 		DestroyWindow(g_hWnd);
-	}
 
-	// TEST //
-	//if (m_pController->Key_Down(KEY_LBUTTON))
-	//{
-	//	float fDist_Monster = 0.f;
-	//	if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-	//		m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
-	//		PRINT_LOG(L"", L"Pick!");
-	//	}
-	//}
 
 	if (m_pController->Key_Pressing(KEY_LBUTTON))
 	{
@@ -220,17 +208,42 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 				}
 			}
 			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Lazer")->size() == 2)
-			{
 				m_IsLazer = true;
-			}
 			else
 				m_IsLazer = false;
 			
 		}
+		else if (m_iWeapon == WEAPON_MISSILE)
+		{
+			if (!m_IsMissile)
+			{
+				if (FAILED(m_pManagement->Add_GameObject_InLayer(
+					EResourceType::Static,
+					L"GameObject_Player_Missile",
+					L"Layer_Player_Missile")))
+				{
+					PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+					return;
+				}
+				
+			}
+			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Missile")->size() == 1)
+				m_IsMissile = true;
+			else
+				m_IsMissile = false;
+		}
 	}
 
 
-
+	// TEST //
+	//if (m_pController->Key_Down(KEY_LBUTTON))
+	//{
+	//	float fDist_Monster = 0.f;
+	//	if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+	//		m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
+	//		PRINT_LOG(L"", L"Pick!");
+	//	}
+	//}
 
 }
 

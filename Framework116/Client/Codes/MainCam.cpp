@@ -133,8 +133,8 @@ _uint CMainCam::Movement(_float fDeltaTime)
 		m_fDistanceFromTarget += 0.02f;
 	}
 
-	//vPlayerPos.y += 10.f;
-	m_CameraDesc.vAt = vPlayerPos - (vPlayerLook) * -m_fDistanceFromTarget * 2.f;
+	vPlayerPos.y += 10.f;
+	m_CameraDesc.vAt = vPlayerPos - (vPlayerLook) * -m_fDistanceFromTarget * 2.f * fDeltaTime;
 	
 
 

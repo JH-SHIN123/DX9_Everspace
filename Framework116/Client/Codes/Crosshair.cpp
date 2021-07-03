@@ -34,8 +34,6 @@ HRESULT CCrosshair::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Texture
-
-
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
 		L"Component_Texture_Crosshair",
@@ -47,8 +45,6 @@ HRESULT CCrosshair::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-
-
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Transform",
@@ -74,7 +70,7 @@ _uint CCrosshair::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
 		return UPDATE_ERROR;
 
 	return _uint();
@@ -92,10 +88,10 @@ _uint CCrosshair::Render_GameObject()
 
 	_float4x4 matView;
 	D3DXMatrixIdentity(&matView);
-	matView._11 = 100.f;
-	matView._22 = 100.f;
+	matView._11 = 30.f;
+	matView._22 = 30.f;
 	matView._41 = (_float)pt.x - (WINCX >> 1);
-	matView._42 = (_float)pt.y * -1.f + (WINCY >> 1);
+	matView._42 = (_float)pt.y * -1.f + (WINCY >> 1) - 10.f;
 
 
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
@@ -109,7 +105,6 @@ _uint CCrosshair::Render_GameObject()
 
 _uint CCrosshair::Movement(_float fDeltaTime)
 {
-
 	return _uint();
 }
 

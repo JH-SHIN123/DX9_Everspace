@@ -39,7 +39,6 @@ public:
 	_float3 Get_State(EState eState) const;
 
 public:
-	void Set_State(const _float3& vec, EState eState);
 	void Set_Position(const _float3& vPos);
 	void Set_Rotate(const _float3& vRotate);
 	void Set_Scale(const _float3& vScale);
@@ -67,15 +66,6 @@ public:
 	_uint RotateZ(_float fDeltaTime);
 
 	_uint Scale(const _float3& _vScale);
-	_uint FollowAim(const _float3& _Look, _float fDeltaTime);
-
-	_uint QuatRotateX(_float fDeltaTime);
-	_uint QuatRotateY(_float fDeltaTime);
-	_uint QuatRotateZ(_float fDeltaTime);
-
-	_uint RotateYaw(_float fDeltaTime);
-	_uint RotatePitch(_float fDeltaTime);
-	_uint RotateRoll(_float fDeltaTime);
 
 public:
 	static CTransform* Create(LPDIRECT3DDEVICE9 pDevice);

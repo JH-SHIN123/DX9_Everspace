@@ -34,12 +34,12 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-	UI_DESC uiDesc;
-	uiDesc.tTransformDesc.vPosition = { 350.f, 250.f, 0.f };
-	uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
-	uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-	if (FAILED(Add_Layer_UI(L"Layer_UI", &uiDesc)))
-		return E_FAIL;
+	//UI_DESC uiDesc;
+	//uiDesc.tTransformDesc.vPosition = { 350.f, 250.f, 0.f };
+	//uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
+	//uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+	//if (FAILED(Add_Layer_UI(L"Layer_UI", &uiDesc)))
+	//	return E_FAIL;
 
 
 	// 우주에서 태양광을 표현하기 위해선
@@ -250,22 +250,7 @@ HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
 
 HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 {
-	// Cursor
-	//POINT	pt = {};
-	//GetCursorPos(&pt);
-	//ScreenToClient(g_hWnd, &pt);
-	//ShowCursor(FALSE);
-
-	//UI_DESC uiCrosshair;
-	//uiCrosshair.tTransformDesc.vPosition = { (float)pt.x / 2.f , (float)pt.y / 2.f , 0.f };
-	//uiCrosshair.tTransformDesc.vScale = { 150.f, 150.f, 0.f };
-	//uiCrosshair.wstrTexturePrototypeTag = L"Component_Texture_Crosshair";
-
-	//if (FAILED(Add_Layer_UI(L"Layer_UI", &uiCrosshair)))
-	//	return E_FAIL;
-	
-	// 크로스헤어는 계속 위치 바껴야 되서 못쓸듯 ㅜㅜ
-
+	// Crosshair
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
 		L"GameObject_Crosshair",
@@ -275,7 +260,29 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 		return E_FAIL;
 	}
 
-	return S_OK;
+	// Weapons
+	UI_DESC MachinegunHUD;
+	MachinegunHUD.tTransformDesc.vPosition = { -160.f, 250.f, 0.f };
+	MachinegunHUD.tTransformDesc.vScale = { 70.f, 70.f,0.f };
+	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &MachinegunHUD)))
+		return E_FAIL;
+
+	UI_DESC MissileHUD;
+	MissileHUD.tTransformDesc.vPosition = { -20.f, 250.f, 0.f };
+	MissileHUD.tTransformDesc.vScale = { 70.f, 70.f,0.f };
+	MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &MissileHUD)))
+		return E_FAIL;
+
+	
+	UI_DESC HUD_Boarder;
+	HUD_Boarder.tTransformDesc.vPosition = { -300.f, 250.f, 0.f };
+	HUD_Boarder.tTransformDesc.vScale = { 150.f, 80.f,0.f };
+	HUD_Boarder.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

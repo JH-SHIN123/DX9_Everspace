@@ -257,7 +257,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Crosshair",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Crosshair%d.png"))))
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair");
 		return E_FAIL;
@@ -300,6 +300,36 @@ HRESULT CLoading::Ready_StageResources()
 		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/XYZ_Test_Cube%d.dds", 1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_TestCube");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Machinegun_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Machinegun_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Machinegun%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Machinegun");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Missile_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Missile_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Missile%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Missile");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Boarder */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Boarder",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Boarder%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Boarder");
 		return E_FAIL;
 	}
 

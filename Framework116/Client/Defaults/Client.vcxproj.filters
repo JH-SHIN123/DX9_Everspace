@@ -153,6 +153,9 @@
     <ClInclude Include="..\Headers\Crosshair.h">
       <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Player_Missile.h">
+      <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -211,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Crosshair.cpp">
       <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Player_Missile.cpp">
+      <Filter>02.GameObject\08.Bullet\02.Player_Missile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
