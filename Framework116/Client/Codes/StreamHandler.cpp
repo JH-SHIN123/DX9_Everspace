@@ -199,10 +199,10 @@ HRESULT CStreamHandler::Load_PassData_UI(const wstring& wstrFilePath, const _boo
 			if (fin.eof())
 				break;
 			UI_DESC UiDesc;
-			_float PosX = _ttof(szPosX);
-			_float PosY = _ttof(szPosY);
-			_float ScaleX = _ttof(szScaleX);
-			_float ScaleY = _ttof(szScaleY);
+			_float PosX = (_float)_ttof(szPosX);
+			_float PosY = (_float)_ttof(szPosY);
+			_float ScaleX = (_float)_ttof(szScaleX);
+			_float ScaleY = (_float)_ttof(szScaleY);
 			UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
 			UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
 			UiDesc.wstrTexturePrototypeTag = szTexturePrototypeTag;
