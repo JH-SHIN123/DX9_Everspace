@@ -50,7 +50,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 100.f;
+	TransformDesc.fSpeedPerSec = 200.f;
 	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 
 	if (FAILED(CGameObject::Add_Component(
@@ -91,7 +91,6 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// TESTÁß!!
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 
@@ -155,7 +154,7 @@ _uint CPlayer_Missile::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();

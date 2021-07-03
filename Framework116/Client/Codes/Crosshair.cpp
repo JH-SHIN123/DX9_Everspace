@@ -91,8 +91,7 @@ _uint CCrosshair::Render_GameObject()
 	matView._11 = 30.f;
 	matView._22 = 30.f;
 	matView._41 = (_float)pt.x - (WINCX >> 1);
-	matView._42 = (_float)pt.y * -1.f + (WINCY >> 1) - 10.f;
-
+	matView._42 = (_float)pt.y * -1.f + (WINCY >> 1) - 15.f;
 
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_VIEW, &matView);

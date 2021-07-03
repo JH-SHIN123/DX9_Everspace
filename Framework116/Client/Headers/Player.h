@@ -40,6 +40,8 @@ private:
 	// 플레이어가 사용하실 변수님들.
 private:
 	_float m_fMachinegunDelay = 0.f;
+	_float m_fLaserDelay = 0.f;
+	_float m_fMissileDelay = 0.f;
 	_bool m_IsLeft = false;
 
 

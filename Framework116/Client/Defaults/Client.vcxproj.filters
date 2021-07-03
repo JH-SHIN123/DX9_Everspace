@@ -82,6 +82,9 @@
     <Filter Include="02.GameObject\09.HUD\00.Crosshair">
       <UniqueIdentifier>{ad13f66b-199e-47bb-a198-9eb9f3aec96b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\01.Weapons">
+      <UniqueIdentifier>{fe21133b-9cea-4b43-a588-c27d7b949fb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

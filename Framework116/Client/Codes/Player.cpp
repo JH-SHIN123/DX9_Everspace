@@ -82,6 +82,21 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	// 최초 무기(기관총) HUD 생성.
+	UI_DESC MachinegunHUD;
+	MachinegunHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
+	MachinegunHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_UI",
+		L"Layer_HUD_Weapon",
+		(void*)&MachinegunHUD)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -147,13 +162,66 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	// Weapon Change
 	if (m_pController->Key_Down(KEY_1))
+	{
+		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MACHINEGUN;
-
+		UI_DESC MachinegunHUD;
+		MachinegunHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
+		MachinegunHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_UI",
+			L"Layer_HUD_Weapon",
+			(void*)&MachinegunHUD)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return;
+		}
+	}
 	if (m_pController->Key_Down(KEY_2))
+	{
+		// 이전 무기 HUD 삭제
+		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_LAZER;
-
+		UI_DESC LaserHUD;
+		LaserHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
+		LaserHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_UI",
+			L"Layer_HUD_Weapon",
+			(void*)&LaserHUD)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return;
+		}
+	}
 	if (m_pController->Key_Down(KEY_3))
+	{
+		// 이전 무기 HUD 삭제
+		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MISSILE;
+		UI_DESC MissileHUD;
+		MissileHUD.tTransformDesc.vPosition = { -140.f, 250.f, 0.f };
+		MissileHUD.tTransformDesc.vScale = { 50.f, 45.f, 0.f };
+		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_UI",
+			L"Layer_HUD_Weapon",
+			(void*)&MissileHUD)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return;
+		}
+	}
+
+	if (m_pController->Key_Down(KEY_F3))
+	{
+
+	}
 
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)

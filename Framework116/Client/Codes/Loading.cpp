@@ -308,6 +308,19 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	Ready_HUD_Resources();
+
+#pragma endregion
+
+	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
+
+
+
+	return S_OK;
+}
+
+HRESULT CLoading::Ready_HUD_Resources()
+{
 	/* For.Component_Texture_Machinegun_HUD */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -328,6 +341,26 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	/* For.Component_Texture_Laser_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Laser_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Laser%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Laser_HUD");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Overdrive_HUD */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Overdrive_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Overdrive%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Overdrive_HUD");
+		return E_FAIL;
+	}
+
 	/* For.Component_Texture_HUD_Boarder */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -338,11 +371,45 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-#pragma endregion
+	/* For.Component_Texture_HUD_Shield */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Shield",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Shield.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Shield");
+		return E_FAIL;
+	}
 
-	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
+	/* For.Component_Texture_HUD_Hp */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Hp",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Hp.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Hp");
+		return E_FAIL;
+	}
 
+	/* For.Component_Texture_HUD_Out_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Out_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Out_Bar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Out_Bar");
+		return E_FAIL;
+	}
 
+	/* For.Component_Texture_HUD_In_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_In_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_In_Bar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_In_Bar");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
