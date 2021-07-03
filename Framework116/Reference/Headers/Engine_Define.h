@@ -1,8 +1,6 @@
 #pragma once
 #ifndef __ENGINE_DEFINE_H__
 
-#define UNIT			100.f
-
 #define NO_EVENT		0
 #define UPDATE_ERROR	1
 #define DEAD_OBJECT		2

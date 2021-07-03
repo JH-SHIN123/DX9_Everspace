@@ -2,8 +2,9 @@
 
 USING(Engine)
 
-CGeoMesh_Cube::CGeoMesh_Cube(LPDIRECT3DDEVICE9 pDevice) :
-	CGeoMesh(pDevice)
+CGeoMesh_Cube::CGeoMesh_Cube(LPDIRECT3DDEVICE9 pDevice, FLOAT Width, FLOAT Height, FLOAT Depth) :
+	CGeoMesh(pDevice),
+	m_fWidth(Width), m_fHeight(Height), m_fDepth(Depth)
 {
 }
 
@@ -18,7 +19,7 @@ HRESULT CGeoMesh_Cube::Ready_Component_Prototype()
 	m_eGeoType = EGeoMeshType::Cube;
 
 	// 1Unit = 1m
-	if (FAILED(D3DXCreateBox(m_pDevice, 100.f, 100.f, 100.f, &m_pMesh, nullptr))) {
+	if (FAILED(D3DXCreateBox(m_pDevice, m_fWidth, m_fHeight, m_fDepth, &m_pMesh, nullptr))) {
 		PRINT_LOG(L"Error", L"Failed to Create CGeoMesh_Cube");
 		return E_FAIL;
 	}
@@ -41,9 +42,9 @@ _uint CGeoMesh_Cube::Render_Mesh()
 	return _uint();
 }
 
-CGeoMesh_Cube* CGeoMesh_Cube::Create(LPDIRECT3DDEVICE9 pDevice)
+CGeoMesh_Cube* CGeoMesh_Cube::Create(LPDIRECT3DDEVICE9 pDevice, FLOAT Width, FLOAT Height, FLOAT Depth)
 {
-	CGeoMesh_Cube* pInstance = new CGeoMesh_Cube(pDevice);
+	CGeoMesh_Cube* pInstance = new CGeoMesh_Cube(pDevice, Width, Height, Depth);
 	if (FAILED(pInstance->Ready_Component_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create CGeoMesh_Cube");

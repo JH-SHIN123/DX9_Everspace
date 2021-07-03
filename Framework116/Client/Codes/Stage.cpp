@@ -186,7 +186,11 @@ HRESULT CStage::Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc)
 		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
 	}
-
+	if (FAILED(CStreamHandler::Load_PassData_UI(L"../../Resources/Data/Ui.txt",TRUE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Load UI In Layer");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
