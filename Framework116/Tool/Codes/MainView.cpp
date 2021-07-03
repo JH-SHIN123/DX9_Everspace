@@ -253,7 +253,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_GeoMesh_Cube",
-		CGeoMesh_Cube::Create(m_pDevice))))
+		CGeoMesh_Cube::Create(m_pDevice,1.f,1.f,1.f))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Cube");
 		return E_FAIL;
@@ -263,7 +263,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_GeoMesh_Sphere",
-		CGeoMesh_Sphere::Create(m_pDevice))))
+		CGeoMesh_Sphere::Create(m_pDevice,1.f))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Sphere");
 		return E_FAIL;
@@ -273,7 +273,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_GeoMesh_Cylinder",
-		CGeoMesh_Cylinder::Create(m_pDevice, 100,100,100))))
+		CGeoMesh_Cylinder::Create(m_pDevice, 1,1,1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Cylinder");
 		return E_FAIL;
@@ -283,7 +283,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_GeoMesh_Torus",
-		CGeoMesh_Torus::Create(m_pDevice, 100,1000))))
+		CGeoMesh_Torus::Create(m_pDevice, 1,10))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Torus");
 		return E_FAIL;

@@ -130,8 +130,10 @@ _uint CPlayer::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 
-	if (m_bRenderWire)
+	if (m_bRenderWire) {
+		m_pDevice->SetTexture(0, nullptr);
 		m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	}
 
 	if(m_pMesh)
 		m_pMesh->Render_Mesh();
@@ -166,15 +168,15 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	}
 
 	// y로 이동하는 코드 작성해야함
-	//if (GetAsyncKeyState('D') & 0x8000)
-	//{
-	//	m_pTransform->Go_Side(fDeltaTime);
-	//}
+	if (GetAsyncKeyState('1') & 0x8000)
+	{
+		m_pTransform->Go_Up(fDeltaTime);
+	}
 
-	//if (GetAsyncKeyState('A') & 0x8000)
-	//{
-	//	m_pTransform->Go_Side(-fDeltaTime);
-	//}
+	if (GetAsyncKeyState('2') & 0x8000)
+	{
+		m_pTransform->Go_Up(-fDeltaTime);
+	}
 
 	// Rotate
 	if (GetAsyncKeyState('Q') & 0x8000)

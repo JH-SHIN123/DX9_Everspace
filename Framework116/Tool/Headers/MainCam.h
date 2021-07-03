@@ -29,7 +29,7 @@ public:
 
 private:
 	CTransform* m_pPlayerTransform = nullptr;
-	_float m_fDistanceFromTarget = 1000.f;
+	_float m_fDistanceFromTarget = 10.f;
 	_float m_fCamAngle = D3DXToRadian(45.f);
 };
 

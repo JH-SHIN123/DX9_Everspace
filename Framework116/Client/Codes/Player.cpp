@@ -111,7 +111,8 @@ _uint CPlayer::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pMesh->Render_Mesh();
+	if(m_pMesh)
+		m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
 	/*m_pCollide->Render_Collide();*/

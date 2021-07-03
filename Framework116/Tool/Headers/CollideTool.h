@@ -30,8 +30,6 @@ public:
 	CEdit m_Edit_RotateY;
 	CEdit m_Edit_RotateZ;
 	CEdit m_Edit_ScaleX;
-	CEdit m_Edit_ScaleY;
-	CEdit m_Edit_ScaleZ;
 	CStatic m_Text_MeshName;
 
 public:
@@ -53,7 +51,5 @@ public:
 public:
 
 	afx_msg void OnEnChangeEdit_ScaleX();
-	afx_msg void OnEnChangeEdit_ScaleY();
-	afx_msg void OnEnChangeEdit_ScaleZ();
 	afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
 };

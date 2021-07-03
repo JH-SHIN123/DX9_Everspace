@@ -35,8 +35,6 @@ void CCollideTool::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT6, m_Edit_RotateY);
 	DDX_Control(pDX, IDC_EDIT7, m_Edit_RotateZ);
 	DDX_Control(pDX, IDC_EDIT8, m_Edit_ScaleX);
-	DDX_Control(pDX, IDC_EDIT9, m_Edit_ScaleY);
-	DDX_Control(pDX, IDC_EDIT10, m_Edit_ScaleZ);
 	DDX_Control(pDX, IDC_TEXT, m_Text_MeshName);
 }
 
@@ -235,41 +233,8 @@ void CCollideTool::OnEnChangeEdit_ScaleX()
 	m_Edit_ScaleX.GetWindowTextW(strScaleX);
 
 	float fScaleX = _ttof(strScaleX);
-	pPlayerTransform->Set_ScaleX(fScaleX);
+	pPlayerTransform->Set_Scale({ fScaleX,fScaleX,fScaleX });
 }
-
-
-void CCollideTool::OnEnChangeEdit_ScaleY()
-{
-	CTransform* pPlayerTransform = (CTransform*)CManagement::Get_Instance()->Get_Component(L"Layer_Player", L"Com_Transform");
-	if (pPlayerTransform == nullptr) {
-		PRINT_LOG(L"Warning", L"pPlayerTransform is nullptr");
-		return;
-	}
-
-	CString strScaleY;
-	m_Edit_ScaleY.GetWindowTextW(strScaleY);
-
-	float fScaleY = _ttof(strScaleY);
-	pPlayerTransform->Set_ScaleY(fScaleY);
-}
-
-
-void CCollideTool::OnEnChangeEdit_ScaleZ()
-{
-	CTransform* pPlayerTransform = (CTransform*)CManagement::Get_Instance()->Get_Component(L"Layer_Player", L"Com_Transform");
-	if (pPlayerTransform == nullptr) {
-		PRINT_LOG(L"Warning", L"pPlayerTransform is nullptr");
-		return;
-	}
-
-	CString strScaleZ;
-	m_Edit_ScaleZ.GetWindowTextW(strScaleZ);
-
-	float fScaleZ = _ttof(strScaleZ);
-	pPlayerTransform->Set_ScaleZ(fScaleZ);
-}
-
 
 BEGIN_MESSAGE_MAP(CCollideTool, CDialog)
 	ON_LBN_SELCHANGE(IDC_LIST2, &CCollideTool::OnLbnSelchangeList_MeshList)
@@ -281,8 +246,6 @@ BEGIN_MESSAGE_MAP(CCollideTool, CDialog)
 	ON_BN_CLICKED(IDC_BUTTON2, &CCollideTool::OnBnClickedButton_Save)
 	ON_BN_CLICKED(IDC_BUTTON1, &CCollideTool::OnBnClickedButton_Load)
 	ON_EN_CHANGE(IDC_EDIT8, &CCollideTool::OnEnChangeEdit_ScaleX)
-	ON_EN_CHANGE(IDC_EDIT9, &CCollideTool::OnEnChangeEdit_ScaleY)
-	ON_EN_CHANGE(IDC_EDIT10, &CCollideTool::OnEnChangeEdit_ScaleZ)
 	ON_WM_SHOWWINDOW()
 END_MESSAGE_MAP()
 
