@@ -148,9 +148,9 @@ _uint CPlayer_Lazer::Movement(_float fDeltaTime)
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 
 	if (m_IsLeft)
-		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 200.f) + m_pPlayerTransform->Get_State(EState::Look) * 20000.f - m_pPlayerTransform->Get_State(EState::Up) * 30.f;
+		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 5.f) + m_pPlayerTransform->Get_State(EState::Look) * 400.f - m_pPlayerTransform->Get_State(EState::Up) * 30.f;
 	else
-		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 200.f) + m_pPlayerTransform->Get_State(EState::Look) * 20000.f - m_pPlayerTransform->Get_State(EState::Up) * 30.f;
+		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 5.f) + m_pPlayerTransform->Get_State(EState::Look) * 400.f - m_pPlayerTransform->Get_State(EState::Up) * 30.f;
 
 	m_pTransform->Set_Position(m_vMuzzlePos);
 

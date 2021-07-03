@@ -308,7 +308,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-<<<<<<< HEAD
 	/* For.Component_Texture_Machinegun_HUD */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -339,8 +338,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-=======
->>>>>>> 32b4685951d20106b720b77fbf4f3a9b373e7476
 #pragma endregion
 
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");

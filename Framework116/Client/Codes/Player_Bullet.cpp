@@ -97,9 +97,9 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	
 	if ((_bool)pArg == true)
-		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 500.f);
+		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 5.f);
 	else
-		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 500.f);
+		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 5.f);
 
 	m_pTransform->Set_Position(m_vMuzzlePos);
 
@@ -175,7 +175,7 @@ _uint CPlayer_Bullet::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
