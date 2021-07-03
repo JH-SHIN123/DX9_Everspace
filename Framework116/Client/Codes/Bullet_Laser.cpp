@@ -50,9 +50,8 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;//_float3(10.f, 3.f, 20.f);
-	//TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
-	TransformDesc.fSpeedPerSec = 15.f;
+	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
+	TransformDesc.fSpeedPerSec = 150.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 
@@ -101,7 +100,6 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	//}
 
 
-
 	return S_OK;
 }
 
@@ -112,6 +110,7 @@ _uint CBullet_Laser::Update_GameObject(_float fDeltaTime)
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
+
 	return NO_EVENT;
 }
 
@@ -142,8 +141,6 @@ _uint CBullet_Laser::Render_GameObject()
 
 _uint CBullet_Laser::Movement(_float fDeltaTime)
 {
-	m_pTransform->Go_Straight(fDeltaTime);
-
 	m_fLiveTime -= fDeltaTime;
 
 	if (m_fLiveTime <= 0.f)
@@ -153,51 +150,18 @@ _uint CBullet_Laser::Movement(_float fDeltaTime)
 
 	if (m_IsTracking == false)
 	{
-		m_vMoveDir = m_pTargetTransform->Get_State(EState::Position) - m_pTransform->Get_State(EState::Position);
+		m_pTransform->Update_Transform();
+
+		_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+		_float3 vMyPos = m_pTransform->Get_State(EState::Position);
+		m_vMoveDir = vTargetPos - vMyPos;
 		D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
-		m_pTransform->Set_Rotate(m_vMoveDir);
+		//m_pTransform->Set_Rotate(m_vMoveDir);
 		m_IsTracking = true;
 	}
 
-	m_pTransform->Go_Straight(fDeltaTime);
+	m_pTransform->Go_Dir(m_vMoveDir,fDeltaTime);
 
-
-	
-	//_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-	//_float3 vMyPos = m_pTransform->Get_State(EState::Position);
-
-	//_float3 vTargetDir = vTargetPos - vMyPos;
-	//D3DXVec3Normalize(&vTargetDir, &vTargetDir);
-
-	//_float3 vMyLook = m_pTransform->Get_State(EState::Look);
-	//_float3 vMyUp = m_pTransform->Get_State(EState::Up);
-	//D3DXVec3Normalize(&vMyLook, &vMyLook);
-
-	//_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
-	//_float fRadianMax = D3DXToRadian(95.f);
-	//_float fRadianMin = D3DXToRadian(85.f);
-
-	//_float3 vMyRight, vMyLeft;
-	//D3DXVec3Cross(&vMyRight, &vMyUp, &vMyLook);
-	//D3DXVec3Cross(&vMyLeft, &vMyLook, &vMyUp);
-
-	//D3DXVec3Normalize(&vMyRight, &vMyRight);
-	//D3DXVec3Normalize(&vMyLeft, &vMyLeft);
-
-	//_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
-	//_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
-
-	//if (fRight < fLeft)
-	//{
-	//	if(fCeta < fRadianMax)
-	//		m_pTransform->RotateY(-fDeltaTime);
-	//}
-	//else
-	//{
-	//	if (fCeta < fRadianMax)
-	//		m_pTransform->RotateY(fDeltaTime);
-	//}
-	
 
 
 	return _uint();

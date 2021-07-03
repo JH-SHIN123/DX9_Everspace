@@ -228,7 +228,7 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 		m_IsLeftFire = !m_IsLeftFire;
 
 		pArg->vPosition = vPos;
-		//pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
 
 		//if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		//	EResourceType::NonStatic,
@@ -243,13 +243,30 @@ _uint CBoss_Monster::Fire_Triger(_float fDeltaTime)
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
-			L"GameObject_Boss_Monster",
+			L"GameObject_Bullet_Laser",
 			L"Layer_Bullet_Laser", pArg)))
 		{
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
 			return E_FAIL;
 		}
 	}
+
+	return _uint();
+}
+
+_uint CBoss_Monster::Fier_Laser(_float fDeltaTime)
+{
+
+	//pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
+
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::NonStatic,
+	//	L"GameObject_Boss_Monster",
+	//	L"Layer_Bullet_Laser", pArg)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
+	//	return E_FAIL;
+	//}
 
 	return _uint();
 }

@@ -21,6 +21,8 @@ public:
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Fire_Triger(_float fDeltaTime);
+	_uint Fier_Laser(_float fDeltaTime);
+
 
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
