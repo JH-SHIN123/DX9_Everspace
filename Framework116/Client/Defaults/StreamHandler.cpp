@@ -293,6 +293,53 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 	return S_OK;
 }
 
+HRESULT CStreamHandler::Load_PassData_Collide(const wstring& wstrFileName, const wstring& wstrMeshPrototypeTag, PASSDATA_COLLIDE& OutPassData)
+{
+	wstring wstrFilePath = L"../../Resources/Data/";
+	wstrFilePath += wstrFileName;
+	wstrFilePath += L".collide";
+
+	HANDLE hFile = CreateFile(wstrFilePath.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (INVALID_HANDLE_VALUE == hFile) {
+		PRINT_LOG(L"Error", L"Failed to CreateFile Collide");
+		return E_FAIL;
+	}
+
+	DWORD dwByte = 0;
+	DWORD dwStrByte = 0;
+
+	TCHAR* pMeshPrototypeTag = nullptr;
+
+	// 메시 프로토타입 태그 받아오기
+	ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+	pMeshPrototypeTag = new TCHAR[dwStrByte];
+	ReadFile(hFile, pMeshPrototypeTag, dwStrByte, &dwByte, nullptr);
+	OutPassData.wstrMeshPrototypeTag = pMeshPrototypeTag;
+
+	if (wstrMeshPrototypeTag != pMeshPrototypeTag) {
+		PRINT_LOG(L"Warning", L"Failed to Matching with Mesh");
+		Safe_Delete_Array(pMeshPrototypeTag);
+		return E_FAIL;
+	}
+	Safe_Delete_Array(pMeshPrototypeTag);
+
+	// 바운딩스피어 정보 로드
+	size_t boundsCnt = 0;
+	ReadFile(hFile, &boundsCnt, sizeof(size_t), &dwByte, nullptr);
+	OutPassData.vecBoundingSphere.reserve(boundsCnt);
+
+	BOUNDING_SPHERE tBounds;
+	for (size_t i = 0; i < boundsCnt; ++i)
+	{
+		ReadFile(hFile, &tBounds, sizeof(BOUNDING_SPHERE), &dwByte, nullptr);
+		OutPassData.vecBoundingSphere.emplace_back(tBounds);
+	}
+
+	CloseHandle(hFile);
+
+	return S_OK;
+}
+
 
 
 HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, PASSDATA_OBJECT* pPassDataObject, EResourceType eType)

@@ -103,7 +103,7 @@ _uint CPlayer_Lazer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 	Movement(fDeltaTime);
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
+	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 	{

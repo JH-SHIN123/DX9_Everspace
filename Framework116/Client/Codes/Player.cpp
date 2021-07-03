@@ -26,9 +26,10 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	CGameObject::Ready_GameObject(pArg);
 
 	// For.Com_VIBuffer
+	wstring meshTag = L"Component_Mesh_BigShip";
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		m_pPassData->vecPrototypeTag_Mesh[0],
+		meshTag,
 		L"Com_Mesh",
 		(CComponent**)&m_pMesh)))
 	{
@@ -46,7 +47,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		m_pPassData->vecPrototypeTag_Mesh[1],
+		L"Component_Transform",
 		L"Com_Transform",
 		(CComponent**)&m_pTransform,
 		&TransformDesc)))
@@ -55,26 +56,10 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Collide
-	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 5.f;
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		m_pPassData->vecPrototypeTag_Mesh[2],
-		L"Com_CollideSphere",
-		(CComponent**)&m_pCollide,
-		&BoundingSphere,
-		true)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
-	}
-
 	// For.Com_Controller
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		m_pPassData->vecPrototypeTag_Mesh[3],
+		L"Component_Controller",
 		L"Com_Controller",
 		(CComponent**)&m_pController)))
 	{
@@ -82,6 +67,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+<<<<<<< HEAD
 	// 최초 무기(기관총) HUD 생성.
 	UI_DESC MachinegunHUD;
 	MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
@@ -95,6 +81,26 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	{
 		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
+=======
+	// For.Com_Collide
+	PASSDATA_COLLIDE tCollide;
+	CStreamHandler::Load_PassData_Collide(L"BigShip", meshTag, tCollide);
+
+	m_Collides.reserve(tCollide.vecBoundingSphere.size());
+	int i = 0;
+	for (auto& bounds : tCollide.vecBoundingSphere) {
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_CollideSphere",
+			L"Com_CollideSphere" + to_wstring(i++),
+			nullptr,
+			&bounds,
+			true)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
+>>>>>>> f541d56e130551ac5774d4b9ec15129aaa163368
 	}
 
 	return S_OK;
@@ -108,7 +114,9 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
+
+	for (auto& collide : m_Collides) 
+		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	return NO_EVENT;
 }
 
@@ -130,7 +138,8 @@ _uint CPlayer::Render_GameObject()
 	m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	for (auto& collide : m_Collides)
+		collide->Render_Collide();
 #endif
 
 	return _uint();
@@ -359,8 +368,8 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	rc.right = p2.x;
 	rc.bottom = p2.y;
 
-	//ClipCursor(&rc);
-
+	ClipCursor(&rc);
+	
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
@@ -417,7 +426,6 @@ void CPlayer::Free()
 {
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pCollide);
 	Safe_Release(m_pController);
 
 	CGameObject::Free();

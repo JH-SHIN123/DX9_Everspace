@@ -20,7 +20,7 @@ public:
 	virtual HRESULT Ready_Component_Prototype() override PURE;
 	virtual HRESULT Ready_Component(void* pArg = nullptr) override PURE;
 
-	virtual _uint	Update_Collide(const _float3 & vPos) PURE;
+	virtual _uint	Update_Collide(const _float4x4& matParent) PURE;
 	virtual _uint	Render_Collide() PURE;
 
 public:
