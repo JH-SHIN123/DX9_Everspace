@@ -171,6 +171,11 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	if (GetAsyncKeyState('A') & 0x8000)
 		m_pTransform->Go_Side(-fDeltaTime);
 
+	if (GetAsyncKeyState('Q') & 0x8000)
+		m_pTransform->RotateY(-fDeltaTime);
+	if (GetAsyncKeyState('E') & 0x8000)
+		m_pTransform->RotateY(fDeltaTime);
+
 	// Weapon Change / Skills (OverDrive, Shield)
 	if (m_pController->Key_Down(KEY_1))
 	{
@@ -375,12 +380,12 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
 
-	// 0.2f : 민감도
-	_float fSpeed = D3DXVec3Length(&vGap) * 0.02f;
+	// 0.05f 플레이어가 얼만큼 더 회전할건지
+	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 
-	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed);
-	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed);
+	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 2.5f);
+	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.5f);
 
 	return _uint();
 }
