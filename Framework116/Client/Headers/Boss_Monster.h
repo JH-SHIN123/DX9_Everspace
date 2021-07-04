@@ -85,6 +85,8 @@ private: /* Skills */
 	// emp bomb
 	_float m_fEmpBomb_CoolTime = 0.f;
 
+	// Spawn Monster
+	_float m_fSpawnCoolTime = 0.f;
 };
 
 #define __BOSS_MONSTER_H__

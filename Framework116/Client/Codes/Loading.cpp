@@ -19,6 +19,7 @@
 #include "Bullet_EMP_Bomb.h"
 #include "Crosshair.h"
 #include "Boss_Warmhole.h"
+#include "Boss_Spawn_Monster.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -484,6 +485,15 @@ HRESULT CLoading::Ready_BossAndOthers()
 		CBoss_Warmhole::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Boss_Warmhole");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Boss_Spawn_Monster",
+		CBoss_Spawn_Monster::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Boss_Spawn_Monster");
 		return E_FAIL;
 	}
 

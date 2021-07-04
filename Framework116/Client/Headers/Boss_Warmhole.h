@@ -22,6 +22,7 @@ private:
 	_uint Movement(_float fDeltaTime);
 	_uint Billboard(_float fDeltaTime);
 	_uint Spin(_float fDeltaTime);
+	_uint Scale(_float fDeltaTime);
 	_uint Spawn_Monster(_float fDeltaTime);
 
 public:
@@ -37,9 +38,12 @@ private:
 	CVIBuffer_RectTexture*  m_pVIBuffer = nullptr;
 
 private:
-	_float m_fOpenTime = 10.f;
+	_float m_fOpenTime = 7.f;
 	_float m_fSpawnTime = 3.f;
-	//_float3 m_vScale = { 5.f,5.f,5.f };
+	_float m_fSpawnTime_Reset = 3.f;
+	_bool m_bSpawn = false;
+	_uint m_iSpawnCount = 10;
+	_float3 m_vScale = { 5.f,5.f,5.f };
 
 };
 

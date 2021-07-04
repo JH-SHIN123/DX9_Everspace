@@ -10,6 +10,9 @@ CBoss_Warmhole::CBoss_Warmhole(const CBoss_Warmhole & other)
 	: CGameObject(other)
 	, m_fOpenTime(other.m_fOpenTime)
 	, m_fSpawnTime(other.m_fSpawnTime)
+	, m_bSpawn(other.m_bSpawn)
+	, m_iSpawnCount(other.m_iSpawnCount)
+	, m_fSpawnTime_Reset(other.m_fSpawnTime_Reset)
 {
 }
 
@@ -48,9 +51,9 @@ HRESULT CBoss_Warmhole::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(0.5f, 5.f, 0.5f);
+	TransformDesc.vPosition = _float3(0.5f, 5.f, 50.f);
 	TransformDesc.fRotatePerSec = D3DXToRadian(-50.f);
-	TransformDesc.vScale = { 5.f,5.f,5.f };
+	TransformDesc.vScale = m_vScale;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -109,7 +112,8 @@ _uint CBoss_Warmhole::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
 
-	Spin(fDeltaTime);
+	Scale(fDeltaTime);
+	Spawn_Monster(fDeltaTime);
 	Billboard(fDeltaTime);
 
 
@@ -168,40 +172,74 @@ _uint CBoss_Warmhole::Billboard(_float fDeltaTime)
 			matView(i, j) *= fScale[i];
 	}
 
-	//m_pDevice->SetTransform(D3DTS_WORLD, &matView);
 	m_pTransform->Set_WorldMatrix(matView);
-
-	//_float4x4 matBill;
-	//D3DXMatrixIdentity(&matBill);
-	//// y
-	//matBill._11 = matView._11;
-	//matBill._13 = matView._13;
-	//matBill._31 = matView._31;
-	//matBill._33 = matView._33;
-
-	////// x
-	//matBill._22 = matView._22;
-	//matBill._23 = matView._33;
-	//matBill._32 = matView._32;
-	////matBill._33 = matView._33;
-
-	//D3DXMatrixInverse(&matBill, 0, &matBill);
-	//_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-
-	//m_pTransform->Set_WorldMatrix(matBill * matWorld);
 
 	return _uint();
 }
 
 _uint CBoss_Warmhole::Spin(_float fDeltaTime)
 {
-	m_pTransform->RotateZ(fDeltaTime);
+	//m_pTransform->RotateZ(-fDeltaTime);
+
+	return _uint();
+}
+
+_uint CBoss_Warmhole::Scale(_float fDeltaTime)
+{
+
+	if (m_fOpenTime >= m_fSpawnTime && m_bSpawn == false)
+	{
+		m_fOpenTime -= fDeltaTime;
+
+		m_vScale *= 1.006f;
+		m_pTransform->Set_Scale(m_vScale);
+	}
+
+	else
+		m_bSpawn = true;
+
 
 	return _uint();
 }
 
 _uint CBoss_Warmhole::Spawn_Monster(_float fDeltaTime)
 {
+	if (m_bSpawn == true)
+	{
+		m_fSpawnTime -= fDeltaTime;
+
+		if (m_fSpawnTime <= 0.f)
+		{
+			if (m_iSpawnCount)
+			{
+				m_fSpawnTime = m_fSpawnTime_Reset;
+				--m_iSpawnCount;
+
+				TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+				_float3 vPos = m_pTransform->Get_State(EState::Position);
+				_float3 vLook = m_pTransform->Get_State(EState::Look);
+
+				D3DXVec3Normalize(&vLook, &vLook);
+				vPos += vLook * 8.f;
+
+				pArg->vPosition = vPos;
+
+				if (FAILED(m_pManagement->Add_GameObject_InLayer(
+					EResourceType::NonStatic,
+					L"GameObject_Bullet_EnergyBall",
+					L"Layer_Bullet_EnergyBall", pArg)))
+				{
+					PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+					return E_FAIL;
+				}
+
+
+			}
+		}
+
+
+	}
+
 	return _uint();
 }
 

@@ -335,7 +335,39 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 
 _uint CBoss_Monster::Spawn_Monster(_float fDeltaTime)
 {
+	m_fSpawnCoolTime += fDeltaTime;
 
+	if (m_fSpawnCoolTime >= 2.f)
+	{
+		m_fSpawnCoolTime = 0.f;
+
+		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+		_float3 vPos = m_pTransform->Get_State(EState::Position);
+		_float3 vUp = m_pTransform->Get_State(EState::Up);
+		_float3 vLook = m_pTransform->Get_State(EState::Look);
+
+		_float3 vRight, vLeft;
+
+		D3DXVec3Normalize(&vLook, &vLook);
+		D3DXVec3Normalize(&vUp, &vUp);
+
+		D3DXVec3Cross(&vRight, &vUp, &vLook);
+		D3DXVec3Normalize(&vRight, &vRight);
+
+		vPos -= vLook * 8.f;
+
+		pArg->vPosition = vPos;
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Boss_Spawn_Monster",
+			L"Layer_Boss_Spawn_Monster", pArg)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Boss_Spawn_Monster In Layer");
+			return E_FAIL;
+		}
+	}
 
 	return _uint();
 }
@@ -403,6 +435,7 @@ _uint CBoss_Monster::Attack_AI(_float fDeltaTime)
 		break;
 	case CBoss_Monster::Middle:
 		Fire_Laser(fDeltaTime);
+		Spawn_Monster(fDeltaTime);
 		break;
 	case CBoss_Monster::Far:
 		Fire_EMP(fDeltaTime);

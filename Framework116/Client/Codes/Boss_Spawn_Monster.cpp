@@ -46,7 +46,11 @@ HRESULT CBoss_Spawn_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
+	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
+	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
+	TransformDesc.fSpeedPerSec = 20.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
+	TransformDesc.vScale = { 2.f, 2.f, 2.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -130,6 +134,10 @@ _uint CBoss_Spawn_Monster::Movement(_float fDeltaTime)
 	//	vOutPos.y += 0.5f;
 	//	m_pTransform->Set_Position(vOutPos);
 	//}	
+
+
+	m_pTransform->Go_Straight(fDeltaTime);
+
 
 	return _uint();
 }
