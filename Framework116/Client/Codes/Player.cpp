@@ -305,22 +305,23 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 				
 			}
 			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Missile")->size() == 1)
-				m_IsMissile = true;
+				m_IsMissile = false;
 			else
 				m_IsMissile = false;
 		}
 	}
 
+	if (m_pController->Key_Pressing(KEY_LBUTTON))
+	{
+		float fDist_Monster = 0.f;
 
-	// TEST //
-	//if (m_pController->Key_Down(KEY_LBUTTON))
-	//{
-	//	float fDist_Monster = 0.f;
-	//	if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-	//		m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
-	//		PRINT_LOG(L"", L"Pick!");
-	//	}
-	//}
+		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+			m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
+		{
+			wstring wstrDist = to_wstring(fDist_Monster);
+			PRINT_LOG(wstrDist.c_str(), L"Pick!");
+		}
+	}
 
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
