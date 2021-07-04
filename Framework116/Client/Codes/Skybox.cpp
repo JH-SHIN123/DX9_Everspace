@@ -118,7 +118,7 @@ _uint CSkybox::Render_GameObject()
 
 _uint CSkybox::Movement(_float fDeltaTime)
 {
-	//m_pTransform->Set_Position(m_pCamera->Get_CameraDesc().vEye);
+	m_pTransform->Set_Position(m_pCamera->Get_CameraDesc().vEye);
 
 	return _uint();
 }
