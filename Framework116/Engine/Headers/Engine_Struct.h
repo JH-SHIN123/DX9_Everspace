@@ -56,7 +56,7 @@ typedef struct tagBoundingSphere : public BASE_DESC
 	}
 
 	const _float3 Get_Position() const {
-		return {matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z};
+		return {matWorld._41, matWorld._42, matWorld._43};
 	};
 
 	// World

@@ -63,6 +63,7 @@ public:
 	_uint Go_Straight(_float fDeltaTime);
 	_uint Go_Side(_float fDeltaTime);
 	_uint Go_Up(_float fDeltaTime);
+	void Go_Dir(const _float3& vDir, _float fDeltaTime); //
 
 	_uint RotateX(_float fDeltaTime);
 	_uint RotateY(_float fDeltaTime);

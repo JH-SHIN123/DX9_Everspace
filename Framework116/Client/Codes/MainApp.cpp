@@ -7,7 +7,7 @@
 #include "Player_Bullet.h"
 #include "Player_Lazer.h"
 #include "Player_Missile.h"
-
+#include "Light.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -91,13 +91,13 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_DirectionalLight */
+	/* For.GameObject_Light */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
-		L"GameObject_DirectionalLight",
+		L"GameObject_Light",
 		CLight::Create(m_pDevice))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_DirectionalLight");
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Light");
 		return E_FAIL;
 	}
 

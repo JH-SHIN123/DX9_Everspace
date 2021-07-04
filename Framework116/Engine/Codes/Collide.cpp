@@ -9,7 +9,8 @@ CCollide::CCollide(LPDIRECT3DDEVICE9 pDevice)
 
 CCollide::CCollide(const CCollide& other)
 	: CComponent(other),
-	m_eCollideType(other.m_eCollideType)
+	m_eCollideType(other.m_eCollideType),
+	m_tBoundingSphere(other.m_tBoundingSphere)
 {
 }
 

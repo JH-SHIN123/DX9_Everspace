@@ -75,3 +75,17 @@ bool CCollision::IntersectRayToSphere(const RAY& pInRay, const BOUNDING_SPHERE& 
 
 	return false;
 }
+
+bool CCollision::IntersectSphereToSphere(const BOUNDING_SPHERE& pBounds1, const BOUNDING_SPHERE& pBounds2, const _float vDstScaleRate, const _float vSrcScaleRate)
+{
+	float fDist = 0.f;
+	_float3 vDiff;
+
+	vDiff = pBounds1.Get_Position() - pBounds2.Get_Position();
+	fDist = D3DXVec3Length(&vDiff);
+
+	if (fDist <= (pBounds1.fRadius * vDstScaleRate + pBounds2.fRadius * vSrcScaleRate))
+		return true;
+
+	return false;
+}

@@ -23,17 +23,17 @@ typedef struct tagLightDesc : public BASE_DESC
 	size_t iLightIndex = 0;
 }LIGHT_DESC;
 
-class ENGINE_DLL CLight final : public CGameObject
+class ENGINE_DLL CLight : public CGameObject
 {
-private:
+protected:
 	explicit CLight(LPDIRECT3DDEVICE9 pDevice);
 	explicit CLight(const CLight& other);
 	virtual ~CLight() = default;
 
 public:
 	const size_t Get_LightIndex() const { return m_iLightIndex; }
-
-private:
+	
+protected:
 	void InitDirectionalLight(_float3* direction, D3DXCOLOR* color);
 	void InitPointLight(_float3* position, D3DXCOLOR* color);
 	void InitSpotLight(_float3* position, _float3* direction, D3DXCOLOR* color);
@@ -50,7 +50,7 @@ public:
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 
-private:
+protected:
 	class CTransform* m_pTransform = nullptr;
 	D3DLIGHT9 m_tLight;
 	ELightType m_eLightType = ELightType::End;

@@ -10,15 +10,9 @@ CCollideSphere::CCollideSphere(LPDIRECT3DDEVICE9 pDevice)
 CCollideSphere::CCollideSphere(const CCollideSphere& other)
 	: CCollide(other),
 	m_pSphere(other.m_pSphere),
-	m_tBoundingSphere(other.m_tBoundingSphere),
 	m_tMaterial(other.m_tMaterial)
 {
 	Safe_AddRef(m_pSphere);
-}
-
-const BOUNDING_SPHERE& CCollideSphere::Get_BoundingSphere() const
-{
-	return m_tBoundingSphere;
 }
 
 HRESULT CCollideSphere::Ready_Component_Prototype()
@@ -27,7 +21,7 @@ HRESULT CCollideSphere::Ready_Component_Prototype()
 	m_eCollideType = ECollideType::Sphere;
 
 	// 바운딩 박스 확인용 메시 생성
-	// Radius 미터 단위로 변경(*100)
+	// Radius 센티미터 단위로 변경(*100)
 	UINT iMeshDetail = 20;
 	if (FAILED(D3DXCreateSphere(m_pDevice, m_tBoundingSphere.fRadius,
 		iMeshDetail, iMeshDetail, &m_pSphere, NULL))) 
@@ -87,6 +81,18 @@ _uint CCollideSphere::Render_Collide()
 	m_pDevice->SetTexture(0,nullptr);
 	m_pSphere->DrawSubset(0);
 	m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	return _uint();
+}
+
+_uint CCollideSphere::Resize_Shpere(const _float& fRadius)
+{
+	m_tBoundingSphere.fRadius += fRadius;
+
+	// Scale
+	m_tBoundingSphere.matWorld._11 = m_tBoundingSphere.fRadius;
+	m_tBoundingSphere.matWorld._22 = m_tBoundingSphere.fRadius;
+	m_tBoundingSphere.matWorld._33 = m_tBoundingSphere.fRadius;
 
 	return _uint();
 }

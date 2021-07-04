@@ -13,14 +13,14 @@ private:
 	virtual ~CCollideSphere() = default;
 
 public:
-	const BOUNDING_SPHERE& Get_BoundingSphere() const;
-
-public:
 	virtual HRESULT Ready_Component_Prototype() override;
 	virtual HRESULT Ready_Component(void* pArg = nullptr) override;
 
 	virtual _uint	Update_Collide(const _float4x4& matParent) override;
 	virtual _uint	Render_Collide() override;
+
+public:
+	_uint Resize_Shpere(const _float& fRadius);
 
 public:
 	static CCollideSphere* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -29,7 +29,6 @@ public:
 
 private:
 	// 바운딩박스 여러개 설치할수 있도록 변경
-	BOUNDING_SPHERE m_tBoundingSphere;
 	LPD3DXMESH		m_pSphere; // 디버깅용
 	D3DMATERIAL9	m_tMaterial;
 };

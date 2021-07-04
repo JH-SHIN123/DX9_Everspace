@@ -165,8 +165,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Boss_Monster.h" />
+    <ClInclude Include="..\Headers\Bullet_EMP_Bomb.h" />
+    <ClInclude Include="..\Headers\Bullet_EnergyBall.h" />
+    <ClInclude Include="..\Headers\Bullet_Laser.h" />
     <ClInclude Include="..\Headers\Client_Define.h" />
     <ClInclude Include="..\Headers\Client_Enum.h" />
+    <ClInclude Include="..\Headers\CollisionHandler.h" />
     <ClInclude Include="..\Headers\Crosshair.h" />
     <ClInclude Include="..\Headers\ExplosionSystem.h" />
     <ClInclude Include="..\Headers\Grass.h" />
@@ -177,6 +181,7 @@
     <ClInclude Include="..\Headers\MainCam.h" />
     <ClInclude Include="..\Headers\Monster.h" />
     <ClInclude Include="..\Headers\Player.h" />
+    <ClInclude Include="..\Headers\PlayerLight.h" />
     <ClInclude Include="..\Headers\Player_Bullet.h" />
     <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
@@ -191,6 +196,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Boss_Monster.cpp" />
+    <ClCompile Include="..\Codes\CollisionHandler.cpp" />
+    <ClCompile Include="..\Codes\Bullet_EMP_Bomb.cpp" />
+    <ClCompile Include="..\Codes\Bullet_EnergyBall.cpp" />
+    <ClCompile Include="..\Codes\Bullet_Laser.cpp" />
     <ClCompile Include="..\Codes\Crosshair.cpp" />
     <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
@@ -201,14 +210,15 @@
     <ClCompile Include="..\Codes\MainCam.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
+    <ClCompile Include="..\Codes\PlayerLight.cpp" />
     <ClCompile Include="..\Codes\Player_Bullet.cpp" />
     <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
+    <ClCompile Include="..\Codes\StreamHandler.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="StreamHandler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

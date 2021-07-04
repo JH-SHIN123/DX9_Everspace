@@ -13,17 +13,36 @@ HRESULT CStage::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Stage");
 
-	if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
-		return E_FAIL;
-
 	if (FAILED(Add_Layer_Player(L"Layer_Player")))
 		return E_FAIL;
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
+	// 전역조명 : Directional Light
+	LIGHT_DESC lightDesc;
+	lightDesc.eLightType = ELightType::Directional;
+	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
+	//lightDesc.tLightColor = D3DCOLOR_XRGB(125, 125, 125);
+	lightDesc.iLightIndex = 0;
+	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
+
+	// 행성조명 : Point Light
+
+	// 플레이어 조명 : Sport Light
+	//lightDesc.eLightType = ELightType::SpotLight;
+	//lightDesc.tLightColor = D3DCOLOR_XRGB(125, 125, 125);
+	//lightDesc.iLightIndex = 0;
+	//if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
+	//	return E_FAIL;
+
+
+	if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
+		return E_FAIL;
+
+	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
+	//	return E_FAIL;
 
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
@@ -42,24 +61,15 @@ HRESULT CStage::Ready_Scene()
 	//	return E_FAIL;
 
 
-	// 우주에서 태양광을 표현하기 위해선
-	// 포인트라이트 혹은 스포트라이트가 더 어울릴듯
-	LIGHT_DESC lightDesc;
-	lightDesc.eLightType = ELightType::Directional;
-	lightDesc.vLightDir = { 1.0f, -0.0f, 0.25f };
-	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
-	lightDesc.iLightIndex = 0;
-	if (FAILED(Add_Layer_Light(L"Layer_DirectionalLight", &lightDesc)))
-		return E_FAIL;
 
-	PARTICLESYSTEM_DESC pSystemDesc;
-	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-	pSystemDesc.iNumParticles = 500;
-	pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
-	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	if (FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
-		return E_FAIL;
+	//PARTICLESYSTEM_DESC pSystemDesc;
+	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
+	//pSystemDesc.iNumParticles = 500;
+	//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
+	//pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
+	//pSystemDesc.tResetAttribute.fLifeTime = 2.f;
+	//if (FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
+	//	return E_FAIL;
 
 	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
 	//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
@@ -75,25 +85,14 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
-	if (GetAsyncKeyState(L'O') & 0x8000)
-	{
-		PARTICLESYSTEM_DESC pSystemDesc;
-		pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-		pSystemDesc.iNumParticles = 500;
-		pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-		pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
-		pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-		if (FAILED(Add_Layer_ExplosionSystem(L"Layer_Particle_Explosion", &pSystemDesc)))
-			return E_FAIL;
-
-	}
-
 	return _uint();
 }
 
 _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
+
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
 
 	return _uint();
 }
@@ -198,11 +197,11 @@ HRESULT CStage::Add_Layer_Light(const wstring& LayerTag, const LIGHT_DESC* pLigh
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
-		L"GameObject_DirectionalLight",
+		L"GameObject_Light",
 		LayerTag,
 		(void*)pLightDesc)))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add Directional Light In Layer");
+		PRINT_LOG(L"Error", L"Failed To Add Light In Layer");
 		return E_FAIL;
 	}
 
@@ -246,9 +245,36 @@ HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
 		L"GameObject_Boss_Monster",
 		LayerTag)))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add Skybox In Layer");
+		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
 		return E_FAIL;
 	}
+
+	//TRANSFORM_DESC* pTransformDesc = new TRANSFORM_DESC;
+	//pTransformDesc
+
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::NonStatic,
+	//	L"GameObject_Bullet_EnergyBall",
+	//	L"Layer_Bullet_EnergyBall")))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::NonStatic,
+	//	L"GameObject_Bullet_EnergyBall",
+	//	L"Layer_Boss_Monster_Has_A_EnergyBall_RIGHT")))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+	//	return E_FAIL;
+	//}
+
+
+
+
+	
+
 	return S_OK;
 }
 

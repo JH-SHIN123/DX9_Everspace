@@ -136,8 +136,8 @@ _uint CPlayer::Render_GameObject()
 	m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
-	for (auto& collide : m_Collides)
-		collide->Render_Collide();
+	//for (auto& collide : m_Collides)
+	//	collide->Render_Collide();
 #endif
 
 	return _uint();

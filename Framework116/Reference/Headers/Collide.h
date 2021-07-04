@@ -15,6 +15,7 @@ protected:
 
 public:
 	const ECollideType Get_CollideType() const { return m_eCollideType; }
+	const BOUNDING_SPHERE& Get_BoundingSphere() const { return m_tBoundingSphere; }
 
 public:
 	virtual HRESULT Ready_Component_Prototype() override PURE;
@@ -29,6 +30,8 @@ public:
 
 protected:
 	ECollideType m_eCollideType = ECollideType::End;
+	BOUNDING_SPHERE m_tBoundingSphere;
+	//BOUNDING_BOX
 };
 END
 

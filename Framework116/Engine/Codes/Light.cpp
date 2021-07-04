@@ -35,7 +35,7 @@ void CLight::InitPointLight(_float3* position, D3DXCOLOR* color)
 	m_tLight.Position = *position;
 	m_tLight.Range = 1000.0f;
 	m_tLight.Falloff = 1.0f;
-	m_tLight.Attenuation0 = 1.0f;
+	m_tLight.Attenuation0 = 1.f;
 	m_tLight.Attenuation1 = 0.0f;
 	m_tLight.Attenuation2 = 0.0f;
 }
@@ -132,12 +132,15 @@ _uint CLight::Update_GameObject(_float fDeltaTime)
 _uint CLight::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
+	m_tLight.Position = m_pTransform->Get_State(EState::Position);
 
 	return _uint();
 }
 
 _uint CLight::Render_GameObject()
 {
+	m_pDevice->SetLight(m_iLightIndex, &m_tLight);
+
 	return _uint();
 }
 
