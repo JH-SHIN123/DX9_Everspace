@@ -15,14 +15,11 @@
 #include "ExplosionSystem.h"
 #include "LaserSystem.h"
 #include "Boss_Monster.h"
-<<<<<<< HEAD
 #include"LobbyCam.h"
 #include"LobbyModel.h"
-=======
 #include "Bullet_EnergyBall.h"
 #include "Bullet_Laser.h"
 #include "Bullet_EMP_Bomb.h"
->>>>>>> origin/main
 #include "Crosshair.h"
 #pragma endregion
 
