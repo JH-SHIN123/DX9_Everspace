@@ -6,12 +6,21 @@
 CRing::CRing(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
+	ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
 }
 
 CRing::CRing(const CRing & other)
 	: CGameObject(other)
 	, m_bHitRing(other.m_bHitRing)
+	, m_tMaterial(other.m_tMaterial)
 {
+
+	m_tMaterial.Diffuse.r = m_tMaterial.Ambient.r = m_tMaterial.Specular.r = m_tMaterial.Emissive.r = 0.9f;
+	m_tMaterial.Diffuse.g = m_tMaterial.Ambient.g = m_tMaterial.Specular.g = m_tMaterial.Emissive.g = 0.2f;
+	m_tMaterial.Diffuse.b = m_tMaterial.Ambient.b = m_tMaterial.Specular.b = m_tMaterial.Emissive.b = 0.5f;
+	m_tMaterial.Diffuse.a = m_tMaterial.Ambient.a = m_tMaterial.Specular.a = m_tMaterial.Emissive.a = 0.f;
+	m_tMaterial.Power = 1000.f;
+
 }
 
 HRESULT CRing::Ready_GameObject_Prototype()
@@ -39,7 +48,7 @@ HRESULT CRing::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_Texture_Monster",
+		L"Component_Texture_Ring",
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
 	{
@@ -51,7 +60,7 @@ HRESULT CRing::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	//TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
 	//TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
-	TransformDesc.vPosition = {0.f,3.f,30.f};
+	TransformDesc.vPosition = { 0.f,3.f,-30.f };
 
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
@@ -115,8 +124,9 @@ _uint CRing::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (CollideCheck())
-		return DEAD_OBJECT;
+	CollideCheck();
+	//if (CollideCheck())
+		//return DEAD_OBJECT;
 
 	return _uint();
 }
@@ -127,6 +137,7 @@ _uint CRing::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pGeoMesh->Render_Mesh();
 	// Test
 
@@ -157,10 +168,11 @@ _bool CRing::CollideCheck()
 {
 	if (m_IsCollide == true)
 	{
-		PRINT_LOG(L"Good", L"CCC");
-		return true;
+		
+		
 	}
 
+	return false;
 }
 
 CRing * CRing::Create(LPDIRECT3DDEVICE9 pDevice)

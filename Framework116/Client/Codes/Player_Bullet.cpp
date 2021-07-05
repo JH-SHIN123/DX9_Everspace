@@ -195,7 +195,7 @@ _uint CPlayer_Bullet::Render_GameObject()
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
-	//m_pDevice->SetMaterial(&m_tMaterial);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 

@@ -35,6 +35,7 @@ private:
 	CCollideSphere* m_pCollide = nullptr;
 
 private:
+	D3DMATERIAL9 m_tMaterial;
 	_bool m_bHitRing = false;
 	//COLLIDES m_TargetCollide;
 	//_float m_fSpawnTime = 2.f;

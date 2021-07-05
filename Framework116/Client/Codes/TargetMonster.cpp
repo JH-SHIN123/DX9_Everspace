@@ -52,7 +52,7 @@ HRESULT CTargetMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
 		TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
 	}
-	TransformDesc.vPosition = { 30.f,0.f,10.f };
+	TransformDesc.vPosition = { 50.f, 0.f, 50.f };
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 	TransformDesc.vScale = { 2.f, 2.f, 2.f };
