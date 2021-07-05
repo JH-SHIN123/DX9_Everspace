@@ -211,7 +211,7 @@ const CComponent * CManagement::Get_Component(const wstring & LayerTag, const ws
 
 HRESULT CManagement::Add_GameObject_Prototype(
 	EResourceType eType, 
-	const wstring PrototypeTag, 
+	const TCHAR* PrototypeTag,
 	CGameObject * pPrototype)
 {
 	if (nullptr == m_pGameObject_Manager)

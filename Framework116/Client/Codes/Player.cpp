@@ -383,7 +383,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 
-	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.8f);
+	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.6f);
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
 
 	return _uint();

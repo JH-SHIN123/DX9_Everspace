@@ -21,7 +21,7 @@ public:
 	const class CComponent* Get_Component(const wstring& LayerTag, const wstring& ComponentTag, _uint iIndex = 0) const;
 
 public:
-	HRESULT Add_GameObject_Prototype(EResourceType eType, const wstring PrototypeTag, class CGameObject* pPrototype);
+	HRESULT Add_GameObject_Prototype(EResourceType eType, const TCHAR* PrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObject_InLayer(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, void* pArg = nullptr, class CGameObject** ppGameObject = nullptr);
 
 	HRESULT Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, const int _iListboxIndex, void* pArg = nullptr);

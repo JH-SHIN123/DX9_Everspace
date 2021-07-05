@@ -43,6 +43,7 @@ private:
 	_float3 m_vMuzzlePos = {};
 	_float3 m_vPlayerLook = {};
 	_bool m_IsFirst = true;
+	CGameObject* m_pBulletParticle = nullptr;
 
 private:
 	_float m_fBeforeHoming = 0.f;

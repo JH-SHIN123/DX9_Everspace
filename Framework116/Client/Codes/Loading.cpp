@@ -343,20 +343,38 @@ HRESULT CLoading::Ready_StageEffect()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Fire",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/fire.png"))))
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/fire.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Fire");
 		return E_FAIL;
 	}
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
+		L"Component_Texture_Plasma",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/plasma.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Plasma");
+		return E_FAIL;
+	}
+	
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
 		L"Component_Texture_Smoke",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/smoke.png"))))
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/smoke.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Smoke");
 		return E_FAIL;
 	}
 
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::NonStatic,
+	//	L"Component_Texture_Glow",
+	//	CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/glow.png"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Glow");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 
 	return S_OK;

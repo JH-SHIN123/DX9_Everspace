@@ -67,7 +67,7 @@ _uint CFollowSystem::Update_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
-	//for (size_t i = 0; i < m_iNumParticles; ++i)
+	for (size_t i = 0; i < m_iNumParticles; ++i)
 		AddParticle_ParticleSystem();
 
 	for (auto& p : m_listParticles)

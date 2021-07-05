@@ -29,7 +29,6 @@ public:
 private:
 	CVIBuffer_CubeTexture*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
 	D3DMATERIAL9	m_tMaterial;
 
@@ -41,8 +40,8 @@ private:
 private:
 	_float m_fLifeTime = 0.f;
 	_bool m_IsLeft = true;
-	_float3 m_vMuzzlePos = {};
-	_float3 m_vPlayerLook = {};
+	_float3 m_vMuzzlePos = {0.f,0.f,0.f};
+	_float3 m_vPlayerLook = { 0.f,0.f,0.f };
 	_bool m_IsFirst = true;
 
 };

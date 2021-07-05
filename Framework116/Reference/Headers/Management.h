@@ -46,7 +46,7 @@ public: /* For.GameObject Manager */
 	const class list<class CGameObject*>* Get_GameObjectList(const wstring & LayerTag) const;
 	const class CGameObject* Get_GameObject(const wstring & LayerTag, _uint iIndex = 0) const;
 	const class CComponent* Get_Component(const wstring& LayerTag, const wstring& ComponentTag, _uint iIndex = 0) const;
-	HRESULT Add_GameObject_Prototype(EResourceType eType, const wstring PrototypeTag, class CGameObject* pPrototype);
+	HRESULT Add_GameObject_Prototype(EResourceType eType, const TCHAR* PrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObject_InLayer(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, void* pArg = nullptr, class CGameObject** ppGameObject = nullptr);
 	HRESULT Add_GameObject_InLayer_Tool(EResourceType eType, const wstring & PrototypeTag, const wstring & LayerTag, const int _iListboxIndex, void* pArg = nullptr);
 	class CGameObject* Clone_GameObject(EResourceType eType, const wstring& PrototypeTag, void* pArg = nullptr);

@@ -38,17 +38,6 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Texture_Player_Bullet",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 800.f;
@@ -133,12 +122,11 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	D3DXVec3Normalize(&m_vPlayerLook, &m_vPlayerLook);
 
 	// Material Setting
-	m_tMaterial.Specular.r = m_tMaterial.Emissive.r = 1.f;
-	m_tMaterial.Diffuse.g = m_tMaterial.Ambient.g = m_tMaterial.Specular.g = m_tMaterial.Emissive.g = 0.f;
-	m_tMaterial.Diffuse.b = m_tMaterial.Ambient.b = m_tMaterial.Specular.b = m_tMaterial.Emissive.b = 0.f;
+	m_tMaterial.Diffuse.r = m_tMaterial.Ambient.r = m_tMaterial.Specular.r = m_tMaterial.Emissive.r = 1.f;
+	m_tMaterial.Diffuse.g = m_tMaterial.Ambient.g = m_tMaterial.Specular.g = m_tMaterial.Emissive.g = 1.f;
+	m_tMaterial.Diffuse.b = m_tMaterial.Ambient.b = m_tMaterial.Specular.b = m_tMaterial.Emissive.b = 1.f;
 	m_tMaterial.Diffuse.a = m_tMaterial.Ambient.a = m_tMaterial.Specular.a = m_tMaterial.Emissive.a = 1.f;
 
-	CEffectHandler::Add_Layer_Effect_Bullet(this, 1.f, &m_pBulletParticle);
 
 	return S_OK;
 }
@@ -190,8 +178,7 @@ _uint CPlayer_Bullet::Render_GameObject()
 
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	//m_pDevice->SetMaterial(&m_tMaterial);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
@@ -255,7 +242,6 @@ void CPlayer_Bullet::Free()
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 	
 	if (m_pBulletParticle)

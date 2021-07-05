@@ -24,7 +24,7 @@ HRESULT CEffectHandler::Add_Layer_Effect_Explosion(const _float3& _vPos, const _
 		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
 	}
 
-	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Plasma";
 	pSystemDesc.iNumParticles = 20;
 	pSystemDesc.tResetAttribute.fParticleSize = 25.f * _fSize;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 15.f;
@@ -50,11 +50,11 @@ HRESULT CEffectHandler::Add_Layer_Effect_Bullet( CGameObject* pTarget, const _fl
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
-	pSystemDesc.iNumParticles = 5;
-	pSystemDesc.tResetAttribute.fParticleSize = 1.5f * _fSize;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 5.f;
+	pSystemDesc.iNumParticles = 2;
+	pSystemDesc.tResetAttribute.fParticleSize = 3.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 15.f;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.04f;
-	pSystemDesc.tResetAttribute.fLifeTime = 1.5f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
 	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
 	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
 	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
