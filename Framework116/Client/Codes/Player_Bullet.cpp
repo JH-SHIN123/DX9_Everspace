@@ -146,23 +146,6 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	if (m_IsCollide) {
-		//PARTICLESYSTEM_DESC pSystemDesc;
-		//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-		//pSystemDesc.iNumParticles = 500;
-		//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-		//pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
-		//pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-
-		//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		//	EResourceType::NonStatic,
-		//	L"GameObject_ExplosionSystem",
-		//	L"Layer_ExplosionSystem",
-		//	(void*)&pSystemDesc)))
-		//{
-		//	PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
-		//	return E_FAIL;
-		//}
-
 		return DEAD_OBJECT;
 	}
 
@@ -256,8 +239,6 @@ CGameObject * CPlayer_Bullet::Clone(void * pArg/* = nullptr*/)
 
 void CPlayer_Bullet::Free()
 {
-	// 
-
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);

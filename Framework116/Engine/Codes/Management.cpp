@@ -227,7 +227,8 @@ HRESULT CManagement::Add_GameObject_InLayer(
 	EResourceType eType, 
 	const wstring & PrototypeTag, 
 	const wstring & LayerTag, 
-	void * pArg)
+	void * pArg,
+	CGameObject** ppGameObject)
 {
 	if (nullptr == m_pGameObject_Manager)
 	{
@@ -235,7 +236,7 @@ HRESULT CManagement::Add_GameObject_InLayer(
 		return E_FAIL;
 	}
 
-	return m_pGameObject_Manager->Add_GameObject_InLayer(eType, PrototypeTag, LayerTag, pArg);
+	return m_pGameObject_Manager->Add_GameObject_InLayer(eType, PrototypeTag, LayerTag, pArg, ppGameObject);
 }
 
 HRESULT CManagement::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, const int _iListboxIndex, void* pArg)

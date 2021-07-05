@@ -23,7 +23,7 @@ public:
 
 private:
 	_uint	Movement(_float fDeltaTime);
-	_uint	Research(_float fDeltaTime);
+	_uint	Researching(_float fDeltaTime);
 
 private:
 	void	StateCheck();

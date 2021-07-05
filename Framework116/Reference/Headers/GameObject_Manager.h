@@ -22,7 +22,8 @@ public:
 
 public:
 	HRESULT Add_GameObject_Prototype(EResourceType eType, const wstring& PrototypeTag, class CGameObject* pPrototype);
-	HRESULT Add_GameObject_InLayer(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, void* pArg = nullptr);
+	HRESULT Add_GameObject_InLayer(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, void* pArg = nullptr, class CGameObject** ppGameObject = nullptr);
+
 	HRESULT Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag, const int _iListboxIndex, void* pArg = nullptr);
 	class CGameObject* Clone_GameObject(EResourceType eType, const wstring& PrototypeTag, void* pArg = nullptr);
 	void Clear_NonStatic_Resources();

@@ -57,7 +57,6 @@ HRESULT CStage::Ready_Scene()
 	//	return E_FAIL;
 
 
-
 	//PARTICLESYSTEM_DESC pSystemDesc;
 	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
 	//pSystemDesc.iNumParticles = 500;
@@ -88,7 +87,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
 
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
 
 	return _uint();
 }

@@ -105,6 +105,11 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	if (m_IsCollide) {
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_IsCollide = false;
+	}
+
 	return _uint();
 }
 
@@ -127,14 +132,14 @@ _uint CMonster::Render_GameObject()
 _uint CMonster::Movement(_float fDeltaTime)
 {
 	if (m_eCurState = State::Research) {
-		Research(fDeltaTime);
+		Researching(fDeltaTime);
 	}
 	
 
 	return _uint();
 }
 
-_uint CMonster::Research(_float fDeltaTime)
+_uint CMonster::Researching(_float fDeltaTime)
 {
 	// if 범위보다 벗어났다. -> Create Pos로 돌아가기
 

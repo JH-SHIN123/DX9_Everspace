@@ -12,6 +12,7 @@ typedef struct tagParticleResetAttribute {
 	float	fEmitRate = 0.f;
 
 	float	fParticleSpeed = 0.f;
+	float	fParticleAlphaFadeSpeed = 0.f;
 	_float2 vColorRed_RandomRange = { 0.f,1.f };
 	_float2 vColorGreen_RandomRange = { 0.f,1.f };
 	_float2 vColorBlue_RandomRange = { 0.f,1.f };

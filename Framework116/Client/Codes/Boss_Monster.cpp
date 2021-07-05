@@ -140,6 +140,11 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	if (m_IsCollide)
+	{
+		m_IsCollide = false;
+	}
+
 	return _uint();
 }
 

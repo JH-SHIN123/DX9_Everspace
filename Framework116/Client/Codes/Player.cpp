@@ -319,17 +319,17 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		}
 	}
 
-	if (m_pController->Key_Pressing(KEY_LBUTTON))
-	{
-		float fDist_Monster = 0.f;
+	//if (m_pController->Key_Pressing(KEY_LBUTTON))
+	//{
+	//	float fDist_Monster = 0.f;
 
-		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-			m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
-		{
-			wstring wstrDist = to_wstring(fDist_Monster);
-			PRINT_LOG(wstrDist.c_str(), L"Pick!");
-		}
-	}
+	//	if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+	//		m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
+	//	{
+	//		wstring wstrDist = to_wstring(fDist_Monster);
+	//		PRINT_LOG(wstrDist.c_str(), L"Pick!");
+	//	}
+	//}
 
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
@@ -373,7 +373,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	rc.right = p2.x;
 	rc.bottom = p2.y;
 
-	ClipCursor(&rc);
+	//ClipCursor(&rc);
 	
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
@@ -383,7 +383,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 
-	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 2.f);
+	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.8f);
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
 
 	return _uint();

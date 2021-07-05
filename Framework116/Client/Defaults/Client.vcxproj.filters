@@ -115,6 +115,9 @@
     <Filter Include="02.GameObject\11.Planet">
       <UniqueIdentifier>{f435df69-1741-4cc0-8f4a-5f13a9c0d719}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.Utilities\02.Effect">
+      <UniqueIdentifier>{f959bdb2-0912-43cb-adf8-ee417c86a864}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="..\Headers\PlayerLight.h">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\EffectHandler.h">
+      <Filter>97.Utilities\02.Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -280,6 +286,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PlayerLight.cpp">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EffectHandler.cpp">
+      <Filter>97.Utilities\02.Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
