@@ -47,6 +47,7 @@ HRESULT CLockOn::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
+	TRANSFORM_DESC Transform;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Transform",
@@ -62,13 +63,23 @@ HRESULT CLockOn::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	wstring* m_pTargetLayerTag = (wstring*)pArg;
 	m_wstrLayerTag = *m_pTargetLayerTag;
-	int i = 0;
+	
+	m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
+	Safe_AddRef(m_pTargetCollide);
+	if (nullptr == m_pTargetCollide)
+	{
+		PRINT_LOG(L"Error", L"m_pTargetCollide is nullptr");
+		return UPDATE_ERROR;
+	}
 	return S_OK;
 }
 
 _uint CLockOn::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+
+	m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
+	
 	Movement(fDeltaTime);	
 	
 
@@ -79,8 +90,8 @@ _uint CLockOn::Update_GameObject(_float fDeltaTime)
 _uint CLockOn::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
-	/*IsBillboarding();*/
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
+	
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
 
 	return _uint();
@@ -88,22 +99,38 @@ _uint CLockOn::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLockOn::Render_GameObject()
 {
-	m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
-	
-	_float4x4 matView;
-	//D3DXMatrixIdentity(&matView);
-	//
-	//matView._11 = 50.f;
-	//matView._22 = 50.f;
-	//matView._41 = 
-	//matView._42 = 
+	//m_pTransform->Get_TransformDesc().matWorld;
+	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
+	/*matWorld = m_pTargetCollide->Get_BoundingSphere().matWorld;*/
+	matWorld._11 = 10.f;
+	matWorld._22 = 10.f;
+	matWorld._33 = 10.f;
 
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
+	matWorld._41 = m_pTargetCollide->Get_BoundingSphere().Get_Position().x;
+	matWorld._42 = m_pTargetCollide->Get_BoundingSphere().Get_Position().y;
+	matWorld._43 = m_pTargetCollide->Get_BoundingSphere().Get_Position().z;
+
+	_float4x4 matView;
+	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+
+	_float4x4 matBill;
+	D3DXMatrixIdentity(&matBill);
+
+	matBill = matView;
+	matBill._41 = 0.f;
+	matBill._42 = 0.f;
+	matBill._43 = 0.f;
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);
+	_float4x4 realmatWorld;
+	realmatWorld = matBill * matWorld;
+	m_pTransform->Set_WorldMatrix(realmatWorld);
+
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
 	m_pVIBuffer->Render_VIBuffer();
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	//////////////////////////////////////////////////////
 
 
@@ -113,28 +140,6 @@ _uint CLockOn::Render_GameObject()
 
 _uint CLockOn::Movement(_float fDeltaTime)
 {
-	return _uint();
-}
-
-_uint CLockOn::IsBillboarding()
-{
-	_float4x4 matView;
-	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
-
-	_float4x4 matBill;
-	D3DXMatrixIdentity(&matBill);
-
-	
-
-	matBill._11 = matView._11;
-	matBill._13 = matView._13;
-	matBill._31 = matView._31;
-	matBill._33 = matView._33;
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-	m_pTransform->Set_WorldMatrix(matBill * matWorld);
-
 	return _uint();
 }
 

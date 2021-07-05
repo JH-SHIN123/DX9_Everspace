@@ -57,9 +57,10 @@ HRESULT CCrosshair::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	m_pMonsterCollide = (CCollideSphere*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_CollideSphere");
-	Safe_AddRef(m_pMonsterCollide);
-	if (nullptr == m_pMonsterCollide)
+	// 老窜 焊胶父 
+	m_pBossMonsterCollide = (CCollideSphere*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_CollideSphere");
+	Safe_AddRef(m_pBossMonsterCollide);
+	if (nullptr == m_pBossMonsterCollide)
 	{
 		PRINT_LOG(L"Error", L"m_pMonsterCollide is nullptr");
 		return E_FAIL;
@@ -144,7 +145,7 @@ CGameObject * CCrosshair::Clone(void * pArg/* = nullptr*/)
 
 void CCrosshair::Free()
 {
-	Safe_Release(m_pMonsterCollide);
+	Safe_Release(m_pBossMonsterCollide);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
@@ -170,20 +171,28 @@ _uint CCrosshair::Searching_Target(_float fDeltaTime)
 	D3DXVec3Normalize(&m_vLockOn, &m_vLockOn);
 
 	// True搁? - LockOn HUD 积己
-	if (CCollision::IntersectRayToSphere(ray, m_pMonsterCollide->Get_BoundingSphere()))
+	if (CCollision::IntersectRayToSphere(ray, m_pBossMonsterCollide->Get_BoundingSphere()))
 	{
-		wstring TargetLayerTag = L"Layer_Boss_Monster";
-		//TRANSFORM_DESC Transform;
-		//Transform.vPosition = m_pMonsterCollide->Get_BoundingSphere().Get_Position();
-		//Transform.vScale = {100.f, 100.f, 10.f};
-		// LockOn
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::NonStatic,
-			L"GameObject_LockOn",
-			L"Layer_LockOn", &TargetLayerTag)))
+		if (!m_IsBossLockOn)
 		{
-			PRINT_LOG(L"Error", L"Failed To Add LockOn In Layer");
-			return E_FAIL;
+			wstring TargetLayerTag = L"Layer_Boss_Monster";
+
+			// LockOn 积己.
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_LockOn",
+				L"Layer_LockOn", &TargetLayerTag)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add LockOn In Layer");
+				return E_FAIL;
+				m_IsBossLockOn = true;
+			}
+		}
+		else if (!m_IsDistOn)
+		{
+			// 芭府 唱鸥郴林绰 HUD积己.
+
+			m_IsDistOn = true;
 		}
 	}
 	return _uint();

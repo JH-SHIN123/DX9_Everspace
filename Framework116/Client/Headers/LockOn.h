@@ -20,7 +20,6 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-	_uint IsBillboarding();
 
 public:
 	static CLockOn* Create(LPDIRECT3DDEVICE9 pDevice);

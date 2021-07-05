@@ -33,7 +33,9 @@ private:
 	CTexture*	m_pTexture = nullptr;
 
 	// Lock On Test
-	CCollideSphere* m_pMonsterCollide = nullptr;
+	CCollideSphere* m_pBossMonsterCollide = nullptr;
+	_bool m_IsBossLockOn = false;
+	_bool m_IsDistOn = false;
 };
 
 #define __CROSSHAIR_H__

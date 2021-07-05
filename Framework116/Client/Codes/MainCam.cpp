@@ -213,7 +213,7 @@ _uint CMainCam::SetCameraFPS(_float fDeltaTime)
 
 _uint CMainCam::CameraShakingStart(_float fDeltaTime)
 {
-	_float3 Shake = { (_float)(rand() % 10), (_float)(rand() % 10), 0.f };
+	_float3 Shake = { (_float)(rand() % 6), (_float)(rand() % 6), 0.f };
 
 	m_CameraDesc.vEye += Shake * fDeltaTime * 5.f;
 

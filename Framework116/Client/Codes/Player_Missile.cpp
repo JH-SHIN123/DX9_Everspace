@@ -102,9 +102,6 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-
-
-
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 	_float3 vPlayerRotate = m_pPlayerTransform->Get_TransformDesc().vRotate;

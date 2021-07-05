@@ -69,7 +69,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// 최초 무기(기관총) HUD 생성.
 	UI_DESC MachinegunHUD;
-	MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+	MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -182,7 +182,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MACHINEGUN;
 		UI_DESC MachinegunHUD;
-		MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -201,7 +201,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_LAZER;
 		UI_DESC LaserHUD;
-		LaserHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -220,7 +220,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MISSILE;
 		UI_DESC MissileHUD;
-		MissileHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -322,14 +322,14 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	if (m_pController->Key_Pressing(KEY_LBUTTON))
 	{
-		float fDist_Monster = 0.f;
+		//float fDist_Monster = 0.f;
 
-		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-			m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
-		{
-			wstring wstrDist = to_wstring(fDist_Monster);
-			PRINT_LOG(wstrDist.c_str(), L"Pick!");
-		}
+		//if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
+		//	m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
+		//{
+		//	wstring wstrDist = to_wstring(fDist_Monster);
+		//	PRINT_LOG(wstrDist.c_str(), L"Pick!");
+		//}
 	}
 
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
@@ -361,9 +361,9 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 900;
+	p1.x = rc.left + 300;
 	p1.y = rc.top + 300;
-	p2.x = rc.right - 900;
+	p2.x = rc.right - 300;
 	p2.y = rc.bottom - 300;
 
 	ClientToScreen(g_hWnd, &p1);
