@@ -172,9 +172,9 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 
 	if (GetAsyncKeyState('Q') & 0x8000)
-		m_pTransform->RotateY(-fDeltaTime);
+		m_pTransform->RotateZ(-fDeltaTime);
 	if (GetAsyncKeyState('E') & 0x8000)
-		m_pTransform->RotateY(fDeltaTime);
+		m_pTransform->RotateZ(fDeltaTime);
 
 	// Weapon Change / Skills (OverDrive, Shield)
 	if (m_pController->Key_Down(KEY_1))
@@ -386,6 +386,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 2.5f);
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.5f);
+	m_pTransform->RotateZ(D3DXToRadian(vGap.x) * -fDeltaTime * fSpeed * 1.f);
 
 	return _uint();
 }
