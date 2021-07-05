@@ -47,7 +47,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
-	TransformDesc.vScale = _float3(5.f, 5.f, 5.f);
+	TransformDesc.vScale = _float3(20.f, 20.f, 20.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
