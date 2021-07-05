@@ -22,6 +22,7 @@
 #include "Bullet_EMP_Bomb.h"
 #include "Crosshair.h"
 #include"LobbyUI.h"
+#include"GatchaBox.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -361,6 +362,14 @@ HRESULT CLoading::Ready_LobbyResources()
 		CLobbyUI::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_MainCam");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_GatchaBox",
+		CGatchaBox::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_GatchaBox");
 		return E_FAIL;
 	}
 #pragma endregion

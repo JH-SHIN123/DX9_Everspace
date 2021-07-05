@@ -2,7 +2,8 @@
 #include "LobbyUI.h"
 #include "Transform.h"
 #include "Management.h"
-
+#include"Loading.h"
+#include"Lobby.h"
 USING(Engine)
 
 CLobbyUI::CLobbyUI(LPDIRECT3DDEVICE9 pDevice)
@@ -31,20 +32,48 @@ HRESULT CLobbyUI::Ready_GameObject(void* pArg)
 
 _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 {
+	if (m_bDead)
+		return DEAD_OBJECT;
+	if (m_bGotoNextScene)
+		return NO_EVENT;
 	CUI::Update_GameObject(fDeltaTime);
 	Update_Bounds();
-	// Picking Check
+	Check_Picking();
+	Key_Check();
 	
 	return NO_EVENT;
 }
 
 _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 {
-	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
+	if (m_bGotoNextScene)
+		return NO_EVENT;
+	
+
+	CGameObject::LateUpdate_GameObject(fDeltaTime);
+	
+	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
 		return UPDATE_ERROR;
-
+	if (Get_IsPicking())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
+		{
+		}
+		else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
+		{
+		}
+		else if (m_wstrTexturePrototypeTag == L"Component_Texture_PlaneTemplete")
+		{
+		}
+		else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
+		{
+			m_dwIdx = 1;
+		}
+	}
+	else
+		m_dwIdx = 0;
 
 
 	return _uint();
@@ -52,8 +81,10 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLobbyUI::Render_GameObject()
 {
-	CGameObject::Render_GameObject();
+	if (m_bGotoNextScene)
+		return 0;
 
+	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 
 	_float4x4 matView;
@@ -69,14 +100,18 @@ _uint CLobbyUI::Render_GameObject()
 	m_pVIBuffer->Render_VIBuffer();
 	/////////////////////////////////////////////////////////////////
 
-	Set_Text();
+
+	if (Get_IsPicking())
+		Set_Text();
+
 
 	return _uint();
 }
 
 void CLobbyUI::Update_Bounds()
 {
-	
+	if (m_pTransform == nullptr)
+		return;
 	
 	_float3 vPos = _float3(0.f,0.f,0.f);
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
@@ -86,40 +121,55 @@ void CLobbyUI::Update_Bounds()
 	
 	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 
-	m_tUIBounds.left = vPos.x - (vSize.x/2.f);
-	m_tUIBounds.top = vPos.y - (vSize.y/2.f);
-	m_tUIBounds.right = vPos.x + (vSize.x/2.f);
-	m_tUIBounds.bottom = vPos.y + (vSize.y/2.f);
-	
+	m_tUIBounds.left = vPos.x - (vSize.x);
+	m_tUIBounds.top = vPos.y - (vSize.y);
+	m_tUIBounds.right = vPos.x + (vSize.x);
+	m_tUIBounds.bottom = vPos.y + (vSize.y);
+}
+
+void CLobbyUI::Check_Picking()
+{
 	POINT pt = {};
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
-
-	m_dwIdx = 0;
+	
 	if (PtInRect(&m_tUIBounds, pt))
+			Set_IsPicking(TRUE);
+	else
+			Set_IsPicking(FALSE);
+}
+
+void CLobbyUI::Key_Check()
+{
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 	{
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
+		if (Get_IsPicking())
 		{
-			int  i = 0;
+			if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
+			{
+			}
+			else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
+			{
+				m_pLobby->Set_IsGatcha(TRUE);
+			}
+			else if (m_wstrTexturePrototypeTag == L"Component_Texture_PlaneTemplete")
+			{
+			}
+			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
+			{
+				m_pLobby->Set_GotoNextScene(TRUE);
+			}
+		
 		}
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
-		{
-			int  i = 0;
-		}
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_PlaneTemplete")
-		{
-			int  i = 0;
-		}
+	}
 
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
+	if (GetAsyncKeyState('P') & 0x8000)
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_GatchaBackGround")
 		{
-			m_dwIdx = 1;
+			m_pLobby->Set_IsGatcha(FALSE);
+			m_bDead = true;
 		}
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_everspace_logo")
-		{
-				int  i = 0;
-		}
-
 	}
 }
 
@@ -167,9 +217,20 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 
 void CLobbyUI::Free()
 {
+	Safe_Release(m_pLobby);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 
 	CGameObject::Free();
 }
+
+void CLobbyUI::Set_Scene(CLobby * _pUI)
+{
+	m_pLobby = _pUI;
+	m_pLobby->AddRef();
+}
+
+
+
+

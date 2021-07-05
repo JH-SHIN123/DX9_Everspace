@@ -173,6 +173,7 @@
     <ClInclude Include="..\Headers\CollisionHandler.h" />
     <ClInclude Include="..\Headers\Crosshair.h" />
     <ClInclude Include="..\Headers\ExplosionSystem.h" />
+    <ClInclude Include="..\Headers\GatchaBox.h" />
     <ClInclude Include="..\Headers\Grass.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="..\Codes\Bullet_Laser.cpp" />
     <ClCompile Include="..\Codes\Crosshair.cpp" />
     <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
+    <ClCompile Include="..\Codes\GatchaBox.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />

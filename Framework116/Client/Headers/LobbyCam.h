@@ -22,10 +22,11 @@ public:
 	void Set_DistanceFromTarget(_float fDist) { m_fDistanceFromTarget = fDist; }
 	void Set_CamAngle(_float fRadian) { m_fCamAngle = fRadian; }
 
+	void Set_GotoNextScene(_bool bSet) { m_bGotoNextScene = bSet; }
+	void Set_Scene(class CLobby* pLobby) { m_pLobby = pLobby; }
 private:
 	_uint OffSet(_float fDeltaTime);
-
-
+	void StartChangeScene(_float fDeltaTime);
 public:
 	static CLobbyCam* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -35,6 +36,9 @@ private:
 	CTransform* m_pPlayerTransform = nullptr;
 	_float m_fDistanceFromTarget = 10.f;
 	_float m_fCamAngle = D3DXToRadian(45.f);
+
+	_bool m_bGotoNextScene = false;
+	class CLobby* m_pLobby;
 };
 
 #define __LOBBYCAM_H__

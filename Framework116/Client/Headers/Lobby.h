@@ -20,16 +20,24 @@ public:
 	HRESULT Add_Layer_Lobby_Model(const wstring& LayerTag);
 	HRESULT Add_Layer_LobbyCam(const wstring& LayerTag);
 	HRESULT Add_Layer_Skybox(const wstring & LayerTag);
-
 	HRESULT Add_Layer_UI(const wstring & LayerTag);
+	HRESULT Add_Layer_GatchaBox(const wstring & LayerTag);
+
+	void Set_GotoNextScene(_bool bSet);
+	void Set_IsGatcha(_bool bSet);
 
 
+	_bool Get_IsGatcha();
 public:
 	static CLobby* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
 
 private:
+
 	class CPlayer* m_pPlayer;
+
+	_bool m_bGotoNextScene = false;
+	_bool m_bIsGatcha = false;
 };
 
 #define __LOBBY_H__

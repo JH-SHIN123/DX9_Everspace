@@ -21,15 +21,22 @@ public:
 private:
 	void	KeyProcess(_float fDeltaTime);
 	_uint	Movement(_float fDeltaTime);
+	void	StartSceneChange(_float fDeltaTime);
 public:
 	static CLobbyModel* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
+public:
+	void Set_GotoNextScene(_bool _bSet) { m_bGotoNextScene = _bSet; }
 private:
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CController* m_pController = nullptr;
+
+
+private:
+	_bool m_bGotoNextScene = false;
 };
 
 #define __LOBBYMODEL_H__

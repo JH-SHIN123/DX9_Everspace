@@ -118,6 +118,9 @@
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI">
       <UniqueIdentifier>{b7681a85-fa55-4dd9-907a-83021c34d3a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox">
+      <UniqueIdentifier>{dcaa591a-4806-43df-92c8-58e4f922a218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -216,6 +219,9 @@
     <ClInclude Include="..\Headers\LobbyUI.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\GatchaBox.h">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -301,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LobbyUI.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\GatchaBox.cpp">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
