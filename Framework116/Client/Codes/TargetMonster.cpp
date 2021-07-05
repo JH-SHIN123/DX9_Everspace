@@ -1,14 +1,23 @@
 #include "stdafx.h"
 #include "..\Headers\TargetMonster.h"
+#include "MaterialHandler.h"
 
 CTargetMonster::CTargetMonster(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
+	ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
+
+	CMaterialHandler::Set_RGBA(1.f, 0.0f, 1.f, 0.f, &m_tMaterial);
+
+	m_tMaterial.Power = 1.f;
 }
 
 CTargetMonster::CTargetMonster(const CTargetMonster & other)
 	: CGameObject(other)
 	, m_fReviveTime(other.m_fReviveTime)
+	, m_fColTime(other.m_fColTime)
+	, m_tMaterial(other.m_tMaterial)
+	, vColorRGBA(other.vColorRGBA) 
 {
 }
 
@@ -24,9 +33,10 @@ HRESULT CTargetMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	CGameObject::Ready_GameObject(pArg);
 
 	// For.Com_VIBuffer
+	wstring wstrMeshTag = L"Component_GeoMesh_Cylinder";
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_GeoMesh_Target",
+		wstrMeshTag,
 		L"Com_GeoMesh",
 		(CComponent**)&m_pGeoMesh)))
 	{
@@ -77,19 +87,23 @@ HRESULT CTargetMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	//}
 
 	// For.Com_Collide
-	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	PASSDATA_COLLIDE tCollide;
+	CStreamHandler::Load_PassData_Collide(L"Target_Cylinder", wstrMeshTag, tCollide);
 
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_CollideSphere",
-		L"Com_CollideSphere",
-		(CComponent**)&m_pCollide,
-		&BoundingSphere,
-		true)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
+	m_Collides.reserve(tCollide.vecBoundingSphere.size());
+	_int i = 0;
+	for (auto& bounds : tCollide.vecBoundingSphere) {
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_CollideSphere",
+			L"Com_CollideSphere" + to_wstring(i++),
+			nullptr,
+			&bounds,
+			true)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
 	}
 
 	return S_OK;
@@ -101,7 +115,9 @@ _uint CTargetMonster::Update_GameObject(_float fDeltaTime)
 	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+
+	for (auto& collide : m_Collides)
+		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	return NO_EVENT;
 }
 
@@ -112,6 +128,8 @@ _uint CTargetMonster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	Collide_Check(fDeltaTime);
+
 	return _uint();
 }
 
@@ -120,12 +138,15 @@ _uint CTargetMonster::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pTexture->Set_Texture(0);
 	m_pGeoMesh->Render_Mesh();
+	//m_pDevice->SetRenderState()
+
 	// Test
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -136,6 +157,28 @@ _uint CTargetMonster::Movement(_float fDeltaTime)
 	// m_pTransform->Go_Straight(fDeltaTime);
 
 	return _uint();
+}
+
+_bool CTargetMonster::Collide_Check(_float fDeltaTime)
+{
+	if (m_IsCollide == true)
+	{
+		if (m_fColTime == 0.f)
+		{
+			vColorRGBA.y += 0.1f;
+			CMaterialHandler::Set_RGBA(vColorRGBA, &m_tMaterial);
+		}
+
+		m_fColTime += fDeltaTime; 
+
+		if (m_fColTime >= 0.5f)
+		{
+			m_fColTime = 0.f;
+			m_IsCollide = false;
+		}
+
+	}
+	return _bool();
 }
 
 CTargetMonster * CTargetMonster::Create(LPDIRECT3DDEVICE9 pDevice)

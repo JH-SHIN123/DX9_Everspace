@@ -20,6 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_bool Collide_Check(_float fDeltaTime);
 
 public:
 	static CTargetMonster* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -34,6 +35,11 @@ private:
 
 private:
 	_float m_fReviveTime = 5.f;
+	_float m_fColTime = 0.f;
+
+
+	D3DMATERIAL9 m_tMaterial;
+	_float4 vColorRGBA = { 0.8f, 0.f, 0.f, 0.f };
 
 };
 

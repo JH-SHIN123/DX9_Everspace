@@ -36,6 +36,11 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;	
 	CCamera* m_pCamera = nullptr;
+
+private:
+	D3DMATERIAL9 m_tMaterial;
+	_float4 vColorRGBA = { 0.8f, 0.f, 0.f, 0.f };
+
 };
 
 #define __SKYBOX_H__

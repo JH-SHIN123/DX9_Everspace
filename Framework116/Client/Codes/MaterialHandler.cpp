@@ -17,21 +17,44 @@ void CMaterialHandler::Set_RGBA(const _float & r, const _float & g, const _float
 	(*pMaterial).Ambient.r	= r;
 	(*pMaterial).Specular.r = r;
 	(*pMaterial).Emissive.r = r;
+	 
+	(*pMaterial).Diffuse.g	= g;
+	(*pMaterial).Ambient.g	= g;
+	(*pMaterial).Specular.g = g;
+	(*pMaterial).Emissive.g = g;
+	 
+	(*pMaterial).Diffuse.b	= b;
+	(*pMaterial).Ambient.b	= b;
+	(*pMaterial).Specular.b = b;
+	(*pMaterial).Emissive.b = b;
+	 
+	(*pMaterial).Diffuse.a	= a;
+	(*pMaterial).Ambient.a	= a;
+	(*pMaterial).Specular.a = a;
+	(*pMaterial).Emissive.a = a;
+}
 
-	(*pMaterial).Diffuse.r	= g;
-	(*pMaterial).Ambient.r	= g;
-	(*pMaterial).Specular.r = g;
-	(*pMaterial).Emissive.r = g;
+void CMaterialHandler::Set_RGBA(const _float4 & RGBA, D3DMATERIAL9 * pMaterial)
+{
+	(*pMaterial).Diffuse.r	= RGBA.x;
+	(*pMaterial).Ambient.r	= RGBA.x;
+	(*pMaterial).Specular.r = RGBA.x;
+	(*pMaterial).Emissive.r = RGBA.x;
 
-	(*pMaterial).Diffuse.r	= b;
-	(*pMaterial).Ambient.r	= b;
-	(*pMaterial).Specular.r = b;
-	(*pMaterial).Emissive.r = b;
+	(*pMaterial).Diffuse.g	= RGBA.y;
+	(*pMaterial).Ambient.g	= RGBA.y;
+	(*pMaterial).Specular.g = RGBA.y;
+	(*pMaterial).Emissive.g = RGBA.y;
 
-	(*pMaterial).Diffuse.r	= a;
-	(*pMaterial).Ambient.r	= a;
-	(*pMaterial).Specular.r = a;
-	(*pMaterial).Emissive.r = a;
+	(*pMaterial).Diffuse.b	= RGBA.z;
+	(*pMaterial).Ambient.b	= RGBA.z;
+	(*pMaterial).Specular.b = RGBA.z;
+	(*pMaterial).Emissive.b = RGBA.z;
+
+	(*pMaterial).Diffuse.a	= RGBA.w;
+	(*pMaterial).Ambient.a	= RGBA.w;
+	(*pMaterial).Specular.a = RGBA.w;
+	(*pMaterial).Emissive.a = RGBA.w;
 }
 
 void CMaterialHandler::Set_Power(const _float & Power, D3DMATERIAL9 * pMaterial)

@@ -41,8 +41,8 @@ HRESULT CStage::Ready_Scene()
 	//if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
 	//	return E_FAIL;
 
-	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
+	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
+		return E_FAIL;
 
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;
@@ -103,6 +103,9 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 
 	// Ring
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Ring");
+
+	// TargetMonster
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_TargetMonster");
 
 	return _uint();
 }

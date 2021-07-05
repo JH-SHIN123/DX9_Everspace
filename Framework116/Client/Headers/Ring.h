@@ -36,7 +36,7 @@ private:
 
 private:
 	D3DMATERIAL9 m_tMaterial;
-	_float4 vColorRGBA = { 0.4f, 0.2f, 0.5f, 0.f };
+	_float4 vColorRGBA = { 0.004f, 0.002f, 0.005f, 0.f };
 	_bool m_bHitRing = false;
 	//COLLIDES m_TargetCollide;
 	//_float m_fSpawnTime = 2.f;

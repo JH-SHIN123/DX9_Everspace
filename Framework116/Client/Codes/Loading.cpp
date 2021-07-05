@@ -447,7 +447,7 @@ HRESULT CLoading::Ready_Stage1()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-		L"Component_GeoMesh_Target",
+		L"Component_GeoMesh_Cylinder",
 		CGeoMesh_Cylinder::Create(m_pDevice, 5.f, 5.f, 0.01f))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Player_Lazer");
