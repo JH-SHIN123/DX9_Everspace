@@ -51,7 +51,7 @@ HRESULT CBoss_Warmhole::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(0.5f, 5.f, 50.f);
+	TransformDesc.vPosition = _float3(0.5f, 5.f, 70.f);
 	TransformDesc.fRotatePerSec = D3DXToRadian(-50.f);
 	TransformDesc.vScale = m_vScale;
 
@@ -191,8 +191,8 @@ _uint CBoss_Warmhole::Scale(_float fDeltaTime)
 	{
 		m_fOpenTime -= fDeltaTime;
 
-		m_vScale *= 1.006f;
-		m_pTransform->Set_Scale(m_vScale);
+		//m_vScale *= 1.006f;
+		//m_pTransform->Set_Scale(m_vScale);
 	}
 
 	else
@@ -222,14 +222,21 @@ _uint CBoss_Warmhole::Spawn_Monster(_float fDeltaTime)
 				D3DXVec3Normalize(&vLook, &vLook);
 				vPos += vLook * 8.f;
 
+				_float4x4 matWorld;
+				_float3 vScale, vTrans;
+				D3DXQUATERNION	qRotate;
+				D3DXMatrixDecompose(&vScale, &qRotate, &vTrans, &m_pTransform->Get_TransformDesc().matWorld);
+
+				//pArg->matWorld = m_pTransform->Get_TransformDesc().matWorld;
+				pArg->vRotate = { qRotate.x, qRotate.y, qRotate.z };
 				pArg->vPosition = vPos;
 
 				if (FAILED(m_pManagement->Add_GameObject_InLayer(
 					EResourceType::NonStatic,
-					L"GameObject_Bullet_EnergyBall",
-					L"Layer_Bullet_EnergyBall", pArg)))
+					L"GameObject_Boss_Spawn_Monster",
+					L"Layer_Boss_Spawn_Monster", pArg)))
 				{
-					PRINT_LOG(L"Error", L"Failed To Add Bullet_EnergyBall In Layer");
+					PRINT_LOG(L"Error", L"Failed To Add Boss_Spawn_Monster In Layer");
 					return E_FAIL;
 				}
 

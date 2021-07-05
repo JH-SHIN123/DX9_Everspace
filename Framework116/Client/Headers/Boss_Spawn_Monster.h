@@ -34,7 +34,7 @@ private:
 	CCollideSphere* m_pCollide = nullptr;
 
 private:
-
+	_float m_fSpawnTime = 2.f;
 
 };
 

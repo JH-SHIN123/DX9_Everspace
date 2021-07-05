@@ -121,7 +121,9 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	Move_AI(fDeltaTime);
-	Attack_AI(fDeltaTime);
+	//Attack_AI(fDeltaTime);
+
+	//Spawn_Monster(fDeltaTime);
 
 	//Movement(fDeltaTime);
 
@@ -195,7 +197,6 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 {
-	//Fire_Triger(fDeltaTime);
 
 
 	return _uint();
@@ -203,7 +204,6 @@ _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Middle(_float fDeltaTime)
 {
-	//Fire_Laser(fDeltaTime);
 
 
 
@@ -358,6 +358,7 @@ _uint CBoss_Monster::Spawn_Monster(_float fDeltaTime)
 
 		pArg->vPosition = vPos;
 		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
