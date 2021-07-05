@@ -72,7 +72,6 @@ _uint CAlertArrow::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	
-
 	Movement(fDeltaTime);	
 	return m_pTransform->Update_Transform();
 }
@@ -104,8 +103,43 @@ _uint CAlertArrow::Movement(_float fDeltaTime)
 	if (nullptr == vTargetPos)
 	{
 		PRINT_LOG(L"Error", L"vTargetPos is nullptr");
+		return _uint();
 	}
 	
+	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
+
+	matWorld._11 = 10.f;
+	matWorld._22 = 10.f;
+	matWorld._33 = 10.f;
+
+	matWorld._41 = 30.f;
+	matWorld._42 = 30.f;
+	matWorld._43 = vTargetPos.z;
+
+	_float4x4 matView;
+	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+
+	_float4x4 matBill;
+	D3DXMatrixIdentity(&matBill);
+
+	matBill = matView;
+	matBill._41 = 0.f;
+	matBill._42 = 0.f;
+	matBill._43 = 0.f;
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);
+	_float4x4 realmatWorld;
+	realmatWorld = matBill * matWorld;
+	m_pTransform->Set_WorldMatrix(realmatWorld);
+
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+	m_pTexture->Set_Texture(0);
+	m_pVIBuffer->Render_VIBuffer();
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//////////////////////////////////////////////////////
+
+
 	return _uint();
 }
 

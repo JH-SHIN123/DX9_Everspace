@@ -126,6 +126,8 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	D3DXVec3Normalize(&m_vPlayerLook, &m_vPlayerLook);
 
 
+	// Add Effect
+	CEffectHandler::Add_Layer_Effect_Bullet(this, 1.f, &m_pBulletParticle);
 
 
 	return S_OK;
@@ -141,7 +143,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Movement(fDeltaTime);
 	else
 	{
-		m_fAddSpeed += 15.f;
+		m_fAddSpeed += 1.f;
 		m_fRotateSpeed += D3DXToRadian(15.f);
 		m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 		m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -151,7 +153,9 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
 	// 아직 충돌하면 사라지게하는거 안했음!!
-
+	m_fLifeTime += fDeltaTime;
+	if (m_fLifeTime > 4.f)
+		return DEAD_OBJECT;
 	return NO_EVENT;
 }
 

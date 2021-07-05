@@ -42,7 +42,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	TransformDesc.fSpeedPerSec = 45.f;
 	TransformDesc.vPosition = _float3(50.f, 0.f, 0.f);
 	TransformDesc.fSpeedPerSec = 25.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
+	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.vScale = { 1.f,1.f,1.f };
 
 	if (FAILED(CGameObject::Add_Component(
@@ -140,6 +140,12 @@ _uint CPlayer::Render_GameObject()
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pMesh->Render_Mesh();
 
+	wstring str = L"궁서";
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str.c_str(), -1
+		, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
 #ifdef _DEBUG // Render Collide
 	//for (auto& collide : m_Collides)
 	//	collide->Render_Collide();
@@ -329,18 +335,6 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		}
 	}
 
-	if (m_pController->Key_Pressing(KEY_LBUTTON))
-	{
-		//float fDist_Monster = 0.f;
-
-		//if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-		//	m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
-		//{
-		//	wstring wstrDist = to_wstring(fDist_Monster);
-		//	PRINT_LOG(wstrDist.c_str(), L"Pick!");
-		//}
-	}
-
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		DestroyWindow(g_hWnd);
@@ -393,9 +387,8 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 
-	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 2.5f);
-	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.5f);
-	m_pTransform->RotateZ(D3DXToRadian(vGap.x) * -fDeltaTime * fSpeed * 1.f);
+	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.6f);
+	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
 
 	return _uint();
 }
@@ -462,9 +455,9 @@ _uint CPlayer::Make_Arrow()
 
 		if (fabs(fDegree) > 80.f)
 		{
-			wstring abc = to_wstring(fDegree);
-			PRINT_LOG(L"", abc.c_str());
-			m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+	/*		wstring abc = to_wstring(fDegree);
+			PRINT_LOG(L"", abc.c_str());*/
+			//m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
 		}
 
 	}

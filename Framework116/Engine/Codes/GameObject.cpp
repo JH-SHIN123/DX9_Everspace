@@ -16,6 +16,7 @@ CGameObject::CGameObject(const CGameObject & other)
 	, m_pManagement(other.m_pManagement)
 	, m_IsClone(true)
 	, m_pPassData(other.m_pPassData)
+	, m_IsCollide(false)
 {
 	Safe_AddRef(m_pDevice);
 }

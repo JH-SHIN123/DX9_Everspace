@@ -12,6 +12,7 @@ typedef struct tagParticleResetAttribute {
 	float	fEmitRate = 0.f;
 
 	float	fParticleSpeed = 0.f;
+	float	fParticleAlphaFadeSpeed = 0.f;
 	_float2 vColorRed_RandomRange = { 0.f,1.f };
 	_float2 vColorGreen_RandomRange = { 0.f,1.f };
 	_float2 vColorBlue_RandomRange = { 0.f,1.f };
@@ -26,6 +27,7 @@ typedef struct tagParticleSystemDesc : public BASE_DESC
 	
 	// 파티클 리셋 어트리뷰트 파라미터
 	PARTICLE_RESETATTRIBUTE tResetAttribute;
+	CGameObject* pTarget = nullptr;
 }PARTICLESYSTEM_DESC;
 
 class ENGINE_DLL CParticleSystem abstract : public CGameObject
@@ -93,6 +95,10 @@ protected:
 
 	wstring m_wstrTexturePrototypeTag = L"";
 	PARTICLE_RESETATTRIBUTE m_tResetAttribute;
+
+protected:
+	CGameObject* m_pTarget = nullptr;
+
 };
 END
 

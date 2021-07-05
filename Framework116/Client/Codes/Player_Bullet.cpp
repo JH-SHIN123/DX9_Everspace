@@ -38,17 +38,6 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Texture_Player_Bullet",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 800.f;
@@ -133,10 +122,11 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	D3DXVec3Normalize(&m_vPlayerLook, &m_vPlayerLook);
 
 	// Material Setting
-	m_tMaterial.Specular.r = m_tMaterial.Emissive.r = 1.f;
-	m_tMaterial.Diffuse.g = m_tMaterial.Ambient.g = m_tMaterial.Specular.g = m_tMaterial.Emissive.g = 0.f;
-	m_tMaterial.Diffuse.b = m_tMaterial.Ambient.b = m_tMaterial.Specular.b = m_tMaterial.Emissive.b = 0.f;
+	m_tMaterial.Diffuse.r = m_tMaterial.Ambient.r = m_tMaterial.Specular.r = m_tMaterial.Emissive.r = 1.f;
+	m_tMaterial.Diffuse.g = m_tMaterial.Ambient.g = m_tMaterial.Specular.g = m_tMaterial.Emissive.g = 1.f;
+	m_tMaterial.Diffuse.b = m_tMaterial.Ambient.b = m_tMaterial.Specular.b = m_tMaterial.Emissive.b = 1.f;
 	m_tMaterial.Diffuse.a = m_tMaterial.Ambient.a = m_tMaterial.Specular.a = m_tMaterial.Emissive.a = 1.f;
+
 
 	return S_OK;
 }
@@ -146,22 +136,10 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	if (m_IsCollide) {
-		//PARTICLESYSTEM_DESC pSystemDesc;
-		//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-		//pSystemDesc.iNumParticles = 500;
-		//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-		//pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
-		//pSystemDesc.tResetAttribute.fLifeTime = 2.f;
+		m_IsDead = true;
 
-		//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		//	EResourceType::NonStatic,
-		//	L"GameObject_ExplosionSystem",
-		//	L"Layer_ExplosionSystem",
-		//	(void*)&pSystemDesc)))
-		//{
-		//	PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
-		//	return E_FAIL;
-		//}
+		if (m_pBulletParticle)
+			m_pBulletParticle->Set_IsDead(true);
 
 		return DEAD_OBJECT;
 	}
@@ -172,8 +150,14 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 
 	m_fLifeTime += fDeltaTime;
 
-	if (m_fLifeTime >= 2.f)
+	if (m_fLifeTime >= 2.f) {
+		m_IsDead = true;
+
+		if (m_pBulletParticle)
+			m_pBulletParticle->Set_IsDead(true);
+
 		return DEAD_OBJECT;
+	}
 	
 	return NO_EVENT;
 }
@@ -194,14 +178,13 @@ _uint CPlayer_Bullet::Render_GameObject()
 
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	//m_pDevice->SetMaterial(&m_tMaterial);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
 	//m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -256,13 +239,13 @@ CGameObject * CPlayer_Bullet::Clone(void * pArg/* = nullptr*/)
 
 void CPlayer_Bullet::Free()
 {
-	// 
-
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+	
+	if (m_pBulletParticle)
+		m_pBulletParticle->Set_IsDead(true);
 
 	CGameObject::Free();
 }

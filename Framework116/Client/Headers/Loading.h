@@ -22,6 +22,7 @@ public:
 public: /* For.Loading Thread */
 	static unsigned __stdcall ThreadMain(void* pArg);
 	HRESULT Ready_StageResources();
+	HRESULT Ready_StageEffect();
 	HRESULT Ready_BossAndOthers();
 	HRESULT Ready_HUD_Resources();
 	HRESULT Ready_Map_Effect_Resources();

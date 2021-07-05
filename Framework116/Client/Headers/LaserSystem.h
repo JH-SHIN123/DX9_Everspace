@@ -1,7 +1,6 @@
 #pragma once
 
 #ifndef __LASER_SYSTEM_H__
-#include "LaserSystem.h"
 
 USING(Engine)
 class CLaserSystem final : public CParticleSystem

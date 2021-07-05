@@ -124,6 +124,12 @@
     <Filter Include="02.GameObject\09.HUD\03.AlertArrow">
       <UniqueIdentifier>{37c54f37-cdab-4b8c-8598-2ec500978762}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.Utilities\02.Effect">
+      <UniqueIdentifier>{f959bdb2-0912-43cb-adf8-ee417c86a864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Particle\Follow">
+      <UniqueIdentifier>{6b4389f6-3af0-4db3-9bb6-db9bdb2c7186}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -213,6 +219,12 @@
     <ClInclude Include="..\Headers\PlayerLight.h">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\EffectHandler.h">
+      <Filter>97.Utilities\02.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FollowSystem.h">
+      <Filter>02.GameObject\06.Particle\Follow</Filter>
+	</ClInclude>
     <ClInclude Include="..\Headers\LockOn.h">
       <Filter>02.GameObject\09.HUD\02.LockOn</Filter>
     </ClInclude>
@@ -295,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\PlayerLight.cpp">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\EffectHandler.cpp">
+      <Filter>97.Utilities\02.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FollowSystem.cpp">
+      <Filter>02.GameObject\06.Particle\Follow</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\LockOn.cpp">
       <Filter>02.GameObject\09.HUD\02.LockOn</Filter>

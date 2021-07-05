@@ -18,6 +18,7 @@
 #include "Bullet_Laser.h"
 #include "Bullet_EMP_Bomb.h"
 #include "Crosshair.h"
+#include "FollowSystem.h"
 #include "LockOn.h"
 #pragma endregion
 
@@ -182,26 +183,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_ExplosionSystem */
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_ExplosionSystem",
-		CExplosionSystem::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_ExplosionSystem");
-		return E_FAIL;
-	}
-
-	/* For.GameObject_Particle_Laser */
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_LaserSystem",
-		CLaserSystem::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
-		return E_FAIL;
-	}
-
 	/* 임시 보스 몬스터 입니다. */
 	Ready_BossAndOthers();
 
@@ -333,13 +314,89 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_EnergyBall");
 		return E_FAIL;
 	}
-	Ready_HUD_Resources();
 
+	Ready_HUD_Resources();
+	Ready_StageEffect();
 #pragma endregion
 
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
 
 
+
+	return S_OK;
+}
+
+HRESULT CLoading::Ready_StageEffect()
+{
+#pragma region GameObjects
+	/* For.GameObject_ExplosionSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		CExplosionSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ExplosionSystem");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_LaserSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LaserSystem",
+		CLaserSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_FollowSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_FollowSystem",
+		CFollowSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FollowSystem");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region Components
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Fire",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/fire.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Fire");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Plasma",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/plasma.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Plasma");
+		return E_FAIL;
+	}
+	
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Smoke",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/smoke.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Smoke");
+		return E_FAIL;
+	}
+
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::NonStatic,
+	//	L"Component_Texture_Glow",
+	//	CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/glow.png"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Glow");
+	//	return E_FAIL;
+	//}
+#pragma endregion
 
 	return S_OK;
 }

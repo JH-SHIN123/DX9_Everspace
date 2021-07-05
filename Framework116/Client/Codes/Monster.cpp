@@ -47,6 +47,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
+	TransformDesc.vScale = _float3(20.f, 20.f, 20.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -56,14 +57,6 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		&TransformDesc)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
-	}
-
-	m_pTerrainBuffer = (CVIBuffer_TerrainTexture*)m_pManagement->Get_Component(L"Layer_Terrain", L"Com_VIBuffer");
-	Safe_AddRef(m_pTerrainBuffer);
-	if (nullptr == m_pTerrainBuffer)
-	{
-		PRINT_LOG(L"Error", L"m_pTerrainBuffer is nullptr");
 		return E_FAIL;
 	}
 
@@ -83,13 +76,20 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	// Init
+	m_eNextState = State::Research;
+	m_vCreatePosition = TransformDesc.vPosition;
+	m_vResearchRange = { 50.f,50.f,50.f };
+
 	return S_OK;
 }
 
 _uint CMonster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+	
 	Movement(fDeltaTime);
+	StateCheck();
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -102,6 +102,11 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
+
+	if (m_IsCollide) {
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_IsCollide = false;
+	}
 
 	return _uint();
 }
@@ -124,14 +129,38 @@ _uint CMonster::Render_GameObject()
 
 _uint CMonster::Movement(_float fDeltaTime)
 {
-	_float3 vOutPos = m_pTransform->Get_State(EState::Position);
-	if (true == m_pTerrainBuffer->Is_OnTerrain(&vOutPos))
-	{
-		vOutPos.y += 0.5f;
-		m_pTransform->Set_Position(vOutPos);
-	}	
+	if (m_eCurState = State::Research) {
+		Researching(fDeltaTime);
+	}
+	
 
 	return _uint();
+}
+
+_uint CMonster::Researching(_float fDeltaTime)
+{
+	// if 범위보다 벗어났다. -> Create Pos로 돌아가기
+
+
+	return _uint();
+}
+
+void CMonster::StateCheck()
+{
+	if (m_eCurState != m_eNextState) {
+		switch (m_eNextState)
+		{
+		case State::Research:
+			break;
+		case State::Warning:
+			break;
+		case State::Attack:
+			break;
+		case State::Die:
+			break;
+		}
+		m_eCurState = m_eNextState;
+	}
 }
 
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pDevice)

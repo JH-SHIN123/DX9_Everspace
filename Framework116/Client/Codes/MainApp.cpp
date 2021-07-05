@@ -71,7 +71,6 @@ HRESULT CMainApp::Ready_StaticResources()
 		L"../../Resources/PrototypeData/StaticPlayer.object"
 		, EResourceType::Static);
 
-
 	/* For.GameObject_MainCam */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
