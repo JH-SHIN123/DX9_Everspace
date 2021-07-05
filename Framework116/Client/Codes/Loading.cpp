@@ -18,6 +18,7 @@
 #include "Bullet_Laser.h"
 #include "Bullet_EMP_Bomb.h"
 #include "Crosshair.h"
+#include "LockOn.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -215,6 +216,16 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	/*  HUD LockOn ÀÔ´Ï´Ù */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LockOn",
+		CLockOn::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LockOn");
+		return E_FAIL;
+	}
+
 
 #pragma endregion
 
@@ -257,6 +268,16 @@ HRESULT CLoading::Ready_StageResources()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_LockOn */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_LockOn",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/LockOn%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_LockOn");
 		return E_FAIL;
 	}
 

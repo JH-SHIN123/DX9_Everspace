@@ -21,6 +21,7 @@ public:
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Homing(_float fDeltaTime);
+	_uint Searching_Target(_float fDeltaTime);
 
 public:
 	static CPlayer_Missile* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);

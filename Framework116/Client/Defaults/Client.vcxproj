@@ -176,6 +176,7 @@
     <ClInclude Include="..\Headers\Grass.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
+    <ClInclude Include="..\Headers\LockOn.h" />
     <ClInclude Include="..\Headers\Logo.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCam.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="..\Codes\Grass.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
+    <ClCompile Include="..\Codes\LockOn.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCam.cpp" />

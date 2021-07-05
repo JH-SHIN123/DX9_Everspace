@@ -36,6 +36,9 @@ private:
 	//CCamera* m_pCam = nullptr;
 	//_float m_fCameraDist = 5.f;
 
+	// Lock On Test
+	CCollideSphere* m_pMonsterCollide = nullptr;
+
 	// 플레이어가 사용하실 변수님들.
 private:
 	// 발사속도

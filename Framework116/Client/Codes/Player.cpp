@@ -172,9 +172,9 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 
 	if (GetAsyncKeyState('Q') & 0x8000)
-		m_pTransform->RotateZ(-fDeltaTime);
-	if (GetAsyncKeyState('E') & 0x8000)
 		m_pTransform->RotateZ(fDeltaTime);
+	if (GetAsyncKeyState('E') & 0x8000)
+		m_pTransform->RotateZ(-fDeltaTime);
 
 	// Weapon Change / Skills (OverDrive, Shield)
 	if (m_pController->Key_Down(KEY_1))
@@ -195,7 +195,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			return;
 		}
 	}
-	if (m_pController->Key_Down(KEY_2))
+	else if (m_pController->Key_Down(KEY_2))
 	{
 		// 이전 무기 HUD 삭제
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
@@ -214,7 +214,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			return;
 		}
 	}
-	if (m_pController->Key_Down(KEY_3))
+	else if (m_pController->Key_Down(KEY_3))
 	{
 		// 이전 무기 HUD 삭제
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);

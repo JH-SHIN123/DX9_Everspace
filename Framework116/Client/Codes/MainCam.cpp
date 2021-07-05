@@ -108,63 +108,63 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 
 	if (!m_IsFPS)
 	{
-		//if (GetAsyncKeyState(VK_ADD) & 0x8000)
-		//{
-		//	m_fDistanceFromTarget -= 10.f * fDeltaTime;
-		//}
-		//if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000)
-		//{
-		//	m_fDistanceFromTarget += 10.f * fDeltaTime;
-		//}
-		//if (GetAsyncKeyState(VK_NUMPAD8) & 0x8000)
-		//{
-		//	m_fCamAngle += D3DXToRadian(90.f) * fDeltaTime;
-		//}
-		//if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
-		//{
-		//	m_fCamAngle += D3DXToRadian(90.f) * -fDeltaTime;
-		//}
+		if (GetAsyncKeyState(VK_ADD) & 0x8000)
+		{
+			m_fDistanceFromTarget -= 10.f * fDeltaTime;
+		}
+		if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000)
+		{
+			m_fDistanceFromTarget += 10.f * fDeltaTime;
+		}
+		if (GetAsyncKeyState(VK_NUMPAD8) & 0x8000)
+		{
+			m_fCamAngle += D3DXToRadian(90.f) * fDeltaTime;
+		}
+		if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000)
+		{
+			m_fCamAngle += D3DXToRadian(90.f) * -fDeltaTime;
+		}
 
 		// 일반이동 카메라 연출
-		//if (GetAsyncKeyState(L'W') & 0x8000)
-		//{
-		//	if (m_fDistanceFromTarget < 11.f)
-		//		m_fDistanceFromTarget += 9.f * fDeltaTime;
-		//}
+		if (GetAsyncKeyState(L'W') & 0x8000)
+		{
+			if (m_fDistanceFromTarget < 22.f)
+				m_fDistanceFromTarget += 18.f * fDeltaTime;
+		}
 
-		//// 부스터 카메라 연출
-		//if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-		//{
-		//	_float OriginDis = 10.f;
+		// 부스터 카메라 연출
+		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+		{
+			_float OriginDis = 20.f;
 
-		//	if (!(m_fDistanceFromTarget > OriginDis + 2.f))
-		//		m_fDistanceFromTarget += 8.f * fDeltaTime;
-		//}
-		//if (!(GetAsyncKeyState(VK_SPACE) & 0x8000))
-		//{
-		//	_float OriginDis = 10.f;
-		//	if (!(m_fDistanceFromTarget < 10.f))
-		//		m_fDistanceFromTarget -= 5.f * fDeltaTime;
-		//}
+			if (!(m_fDistanceFromTarget > OriginDis + 4.f))
+				m_fDistanceFromTarget += 8.f * fDeltaTime;
+		}
+		if (!(GetAsyncKeyState(VK_SPACE) & 0x8000))
+		{
+			_float OriginDis = 20.f;
+			if (!(m_fDistanceFromTarget < 20.f))
+				m_fDistanceFromTarget -= 5.f * fDeltaTime;
+		}
 	}
 
-	//// 시점 변경 
-	//if (GetAsyncKeyState(L'V') & 0x8000)
-	//{
-	//	if (!m_IsFPS)
-	//		m_IsFPS = true;
-	//}
-	//if (GetAsyncKeyState(L'B') & 0x8000)
-	//{
-	//	if (m_IsFPS)
-	//		m_IsFPS = false;
-	//}
-	//
-	//// 카메라 쉐이킹
-	//if (GetAsyncKeyState(L'T') & 0x8000)
-	//{
-	//	CameraShakingStart(fDeltaTime);
-	//}
+	// 시점 변경 
+	if (GetAsyncKeyState(L'V') & 0x8000)
+	{
+		if (!m_IsFPS)
+			m_IsFPS = true;
+	}
+	if (GetAsyncKeyState(L'B') & 0x8000)
+	{
+		if (m_IsFPS)
+			m_IsFPS = false;
+	}
+	
+	// 카메라 쉐이킹
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	{
+		CameraShakingStart(fDeltaTime);
+	}
 
 
 	return _uint();
