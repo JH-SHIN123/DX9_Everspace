@@ -20,6 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint IsBillboarding();
 
 public:
 	static CLockOn* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -30,6 +31,15 @@ private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
+
+private:
+	_bool m_IsLockOn = false;
+	_float4x4 m_Matview;
+
+	// Lock On Target
+	CCollideSphere* m_pTargetCollide = nullptr;
+	wstring* m_pTargetLayerTag = {};
+	wstring m_wstrLayerTag = {};
 };
 
 #define __LOCKON_H__

@@ -172,15 +172,15 @@ _uint CCrosshair::Searching_Target(_float fDeltaTime)
 	// True¸é? - LockOn HUD »ý¼º
 	if (CCollision::IntersectRayToSphere(ray, m_pMonsterCollide->Get_BoundingSphere()))
 	{
-		TRANSFORM_DESC Trans;
-		Trans.fRotatePerSec = D3DXToRadian(90.f);
-		Trans.vScale = { 100.f, 100.f, 0.f };
-		Trans.vPosition = m_pMonsterCollide->Get_BoundingSphere().Get_Position();
+		wstring TargetLayerTag = L"Layer_Boss_Monster";
+		//TRANSFORM_DESC Transform;
+		//Transform.vPosition = m_pMonsterCollide->Get_BoundingSphere().Get_Position();
+		//Transform.vScale = {100.f, 100.f, 10.f};
 		// LockOn
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
 			L"GameObject_LockOn",
-			L"Layer_LockOn", &Trans)))
+			L"Layer_LockOn", &TargetLayerTag)))
 		{
 			PRINT_LOG(L"Error", L"Failed To Add LockOn In Layer");
 			return E_FAIL;

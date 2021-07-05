@@ -53,7 +53,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 50.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
-	TransformDesc.vScale = { 0.1f, 0.1f, 0.3f };
+	TransformDesc.vScale = { 0.3f, 0.3f, 0.2f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -153,7 +153,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
-	
+	// 아직 충돌하면 사라지게하는거 안했음!!
 
 	return NO_EVENT;
 }

@@ -361,9 +361,9 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 600;
+	p1.x = rc.left + 900;
 	p1.y = rc.top + 300;
-	p2.x = rc.right - 600;
+	p2.x = rc.right - 900;
 	p2.y = rc.bottom - 300;
 
 	ClientToScreen(g_hWnd, &p1);
