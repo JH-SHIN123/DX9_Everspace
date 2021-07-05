@@ -12,6 +12,9 @@ public:
 	virtual ~CMonster() = default;
 
 public:
+	enum State { Idle, Warning, Attack, End };
+
+public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
 	virtual HRESULT Ready_GameObject(void * pArg = nullptr) override;
 	virtual _uint Update_GameObject(_float fDeltaTime) override;
@@ -27,10 +30,13 @@ public:
 	virtual void Free() override;
 
 private:
+	State m_eCurState = State::End;
+	State m_eNextState = State::End;
+
+private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
-	CVIBuffer_TerrainTexture* m_pTerrainBuffer = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
 };
 

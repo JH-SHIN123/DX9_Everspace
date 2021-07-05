@@ -38,11 +38,8 @@ HRESULT CStage::Ready_Scene()
 	//	return E_FAIL;
 
 
-	if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
+	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
-
-	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
 
 	if (FAILED(Add_Layer_Skybox(L"Layer_Skybox")))
 		return E_FAIL;

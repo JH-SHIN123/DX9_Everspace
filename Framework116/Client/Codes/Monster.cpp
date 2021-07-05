@@ -47,6 +47,9 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
+	TransformDesc.fSpeedPerSec = 2.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
+	TransformDesc.vScale = { 20.f,20.f,20.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -59,13 +62,6 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	m_pTerrainBuffer = (CVIBuffer_TerrainTexture*)m_pManagement->Get_Component(L"Layer_Terrain", L"Com_VIBuffer");
-	Safe_AddRef(m_pTerrainBuffer);
-	if (nullptr == m_pTerrainBuffer)
-	{
-		PRINT_LOG(L"Error", L"m_pTerrainBuffer is nullptr");
-		return E_FAIL;
-	}
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -124,12 +120,6 @@ _uint CMonster::Render_GameObject()
 
 _uint CMonster::Movement(_float fDeltaTime)
 {
-	_float3 vOutPos = m_pTransform->Get_State(EState::Position);
-	if (true == m_pTerrainBuffer->Is_OnTerrain(&vOutPos))
-	{
-		vOutPos.y += 0.5f;
-		m_pTransform->Set_Position(vOutPos);
-	}	
 
 	return _uint();
 }
@@ -160,7 +150,6 @@ CGameObject * CMonster::Clone(void * pArg/* = nullptr*/)
 
 void CMonster::Free()
 {
-	Safe_Release(m_pTerrainBuffer);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

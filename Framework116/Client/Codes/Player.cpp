@@ -39,10 +39,9 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 45.f;
 	TransformDesc.vPosition = _float3(50.f, 0.f, 0.f);
 	TransformDesc.fSpeedPerSec = 25.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
+	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.vScale = { 1.f,1.f,1.f };
 
 	if (FAILED(CGameObject::Add_Component(
@@ -172,7 +171,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 
 	if (GetAsyncKeyState('Q') & 0x8000)
-		m_pTransform->RotateY(-fDeltaTime);
+		m_pTransform->RotateY(-fDeltaTime );
 	if (GetAsyncKeyState('E') & 0x8000)
 		m_pTransform->RotateY(fDeltaTime);
 
@@ -380,7 +379,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
 
-	// 0.05f 플레이어가 얼만큼 더 회전할건지
+	// 0.15f 플레이어가 얼만큼 더 회전할건지
 	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 

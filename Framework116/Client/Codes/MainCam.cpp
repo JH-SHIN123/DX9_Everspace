@@ -74,7 +74,7 @@ _uint CMainCam::Movement(_float fDeltaTime)
 	_float3 vCameraDir = { 0.f,0.f, -1.f };
 
 	// 0.05f ¹Î°¨µµ
-	D3DXQuaternionSlerp(&m_qCameraRot, &m_qCameraRot, &m_pPlayerTransform->Get_TransformDesc().qRot, 0.05f);
+	D3DXQuaternionSlerp(&m_qCameraRot, &m_qCameraRot, &m_pPlayerTransform->Get_TransformDesc().qRot, m_fMouseSensitive);
 
 	_float4x4 matCameraRot;
 	D3DXMatrixRotationQuaternion(&matCameraRot, &m_qCameraRot);
