@@ -176,17 +176,26 @@ void CLobby::Set_GotoNextScene(_bool bSet)
 
 void CLobby::Set_IsGatcha(_bool bSet)
 {
+	m_bIsSetPlayerModel = !bSet;
 	m_bIsGatcha = bSet;
+}
+
+void CLobby::Set_IsSetPlayerModel(_bool bSet) 
+{
+	m_bIsGatcha = !bSet;
+	m_bIsSetPlayerModel = bSet;
 }
 
 
 
-
-
-
-_bool CLobby::Get_IsGatcha()
+_bool CLobby::Get_IsGatcha() const
 {
 	return m_bIsGatcha;
+}
+
+_bool CLobby::Get_IsSetPlayerModel() const
+{
+	return m_bIsSetPlayerModel;
 }
 
 CLobby * CLobby::Create(LPDIRECT3DDEVICE9 pDevice)

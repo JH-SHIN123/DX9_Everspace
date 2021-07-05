@@ -46,6 +46,11 @@ _uint CLobbyCam::Update_GameObject(_float fDeltaTime)
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_GatchaBox")
 				->Get_Component(L"Com_Transform");
 		}
+		else if (m_pLobby->Get_IsSetPlayerModel())
+		{
+			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
+				, L"Com_Transform");
+		}
 	}
 	if (!m_bGotoNextScene)
 		OffSet(fDeltaTime);
@@ -73,37 +78,34 @@ _uint CLobbyCam::Render_GameObject()
 
 _uint CLobbyCam::OffSet(_float fDeltaTime)
 {
-	
+	if (!m_pPlayerTransform)
+		return 0;
+
 	static _bool bStart = false;
 	if (!bStart)
 	{
 		m_CameraDesc.vAt = m_pPlayerTransform->Get_State(EState::Position);
-		
-		
 		m_CameraDesc.vEye.y += m_fDistanceFromTarget / 2.f;
 		bStart = true;
 		return 0;
 	}
-	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
-	
-	_float4x4 matWorld;
-	D3DXMatrixIdentity(&matWorld);
-	_float3 vGoalDir = vPlayerPos - m_CameraDesc.vEye;
-	_float3 vDir = m_CameraDesc.vAt- m_CameraDesc.vEye;
-	
-	D3DXVec3Normalize(&vGoalDir, &vGoalDir);
-	D3DXVec3Normalize(&vDir, &vDir);
+	_float3 vTargetPos = m_pPlayerTransform->Get_TransformDesc().vPosition;
+	_float3 vAt = m_CameraDesc.vAt;
+	if (vTargetPos != vAt)
+	{
+		D3DXVec3Normalize(&vTargetPos, &vTargetPos);
+		D3DXVec3Normalize(&vAt, &vAt);
+		_float fAngle = acosf(D3DXVec3Dot(&vTargetPos, &vAt));
+		fAngle *= fDeltaTime;
+		vAt = m_CameraDesc.vAt;
+		_float3 vNextAim;
+		vNextAim.y = 0.f;
+		vNextAim.x = vAt.x* cosf(fAngle) - vAt.z *sinf(fAngle);
+		vNextAim.z = vAt.x *sinf(fAngle) + vAt.z*cosf(fAngle);
 
-	_float3 vAxis;
-	D3DXVec3Cross(&vAxis, &vGoalDir,&vDir);
-
-	_float fAngle = D3DXVec3Dot(&vGoalDir,&vDir);
-	D3DXMatrixRotationAxis(&matWorld, &vAxis, acosf(fAngle)*fDeltaTime);
-	_float3 vTemp = { 1.f,1.f,1.f };
-	_float4x4 matTrans, matRot;
-	D3DXMatrixTranslation(&matTrans, vPlayerPos.x, vPlayerPos.y, vPlayerPos.z);
-	matWorld = matWorld* matTrans;
-	D3DXVec3TransformCoord(&m_CameraDesc.vAt, &vTemp, &matWorld);
+		m_CameraDesc.vAt = vNextAim;
+	}
+	
 	return 0;
 }
 

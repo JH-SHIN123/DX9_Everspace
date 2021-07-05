@@ -23,10 +23,9 @@ public:
 
 public:
 	virtual _uint Set_Texture(_uint iIndex = 0);
-	
+
 public:
-	static CTexture* Create(LPDIRECT3DDEVICE9 pDevice, ETextureType eType, 
-		const TCHAR* pFilePath, _uint iCount = 1);
+	static CTexture* Create(LPDIRECT3DDEVICE9 pDevice, ETextureType eType, const TCHAR* pFilePath, _uint iCount = 1);
 	virtual CComponent * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
