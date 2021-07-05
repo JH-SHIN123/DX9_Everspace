@@ -53,7 +53,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 50.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
-	TransformDesc.vScale = { 0.1f, 0.1f, 0.3f };
+	TransformDesc.vScale = { 0.3f, 0.3f, 0.2f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -126,6 +126,8 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	D3DXVec3Normalize(&m_vPlayerLook, &m_vPlayerLook);
 
 
+	// Add Effect
+	CEffectHandler::Add_Layer_Effect_Bullet(this, 1.f, &m_pBulletParticle);
 
 
 	return S_OK;
@@ -141,7 +143,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Movement(fDeltaTime);
 	else
 	{
-		m_fAddSpeed += 15.f;
+		m_fAddSpeed += 1.f;
 		m_fRotateSpeed += D3DXToRadian(15.f);
 		m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 		m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -150,8 +152,8 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
-	
-
+	// 아직 충돌하면 사라지게하는거 안했음!!
+	//
 	return NO_EVENT;
 }
 
@@ -176,7 +178,7 @@ _uint CPlayer_Missile::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -222,25 +224,22 @@ _uint CPlayer_Missile::Homing(_float fDeltaTime)
 
 
 	if (fRight < fLeft)
-	{
 		m_pTransform->RotateY(-fDeltaTime);
-
-		if (fUp < fDown)
-			m_pTransform->RotateX(-fDeltaTime);
-		else
-			m_pTransform->RotateX(fDeltaTime);
-	}
 	else
-	{
 		m_pTransform->RotateY(fDeltaTime);
 
-		if (fUp < fDown)
-			m_pTransform->RotateX(-fDeltaTime);
-		else
-			m_pTransform->RotateX(fDeltaTime);
-	}
+	if (fUp < fDown)
+		m_pTransform->RotateX(-fDeltaTime);
+	else
+		m_pTransform->RotateX(fDeltaTime);
 
 	m_pTransform->Go_Straight(fDeltaTime);
+	return _uint();
+}
+
+_uint CPlayer_Missile::Searching_Target(_float fDeltaTime)
+{
+
 	return _uint();
 }
 

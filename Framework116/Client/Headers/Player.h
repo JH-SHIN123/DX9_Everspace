@@ -33,8 +33,14 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CController* m_pController = nullptr;
 
-	
-private: // 플레이어가 사용하실 변수님들.
+	//CCamera* m_pCam = nullptr;
+	//_float m_fCameraDist = 5.f;
+
+	// Lock On Test
+	CCollideSphere* m_pMonsterCollide = nullptr;
+
+	// 플레이어가 사용하실 변수님들.
+private:
 	// 발사속도
 	_float m_fMachinegunFireDelay = 0.f;
 	//총열돌리는 시간
@@ -48,11 +54,13 @@ private: // 플레이어가 사용하실 변수님들.
 
 	_bool m_IsLeft = false;
 
+
 	// enum 사용 권장
 	//무기 1번 : 기관총, 2번 : 레이저
 	_int m_iWeapon = 1;
 	_bool m_IsLazer = false;
 	_bool m_IsMissile = false;
+
 
 };
 

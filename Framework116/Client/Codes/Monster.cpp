@@ -47,9 +47,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
-	TransformDesc.fSpeedPerSec = 2.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
-	TransformDesc.vScale = { 20.f,20.f,20.f };
+	TransformDesc.vScale = _float3(5.f, 5.f, 5.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -61,7 +59,6 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -79,13 +76,20 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	// Init
+	m_eNextState = State::Research;
+	m_vCreatePosition = TransformDesc.vPosition;
+	m_vResearchRange = { 50.f,50.f,50.f };
+
 	return S_OK;
 }
 
 _uint CMonster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+	
 	Movement(fDeltaTime);
+	StateCheck();
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -98,6 +102,11 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
+
+	if (m_IsCollide) {
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_IsCollide = false;
+	}
 
 	return _uint();
 }
@@ -120,8 +129,38 @@ _uint CMonster::Render_GameObject()
 
 _uint CMonster::Movement(_float fDeltaTime)
 {
+	if (m_eCurState = State::Research) {
+		Researching(fDeltaTime);
+	}
+	
 
 	return _uint();
+}
+
+_uint CMonster::Researching(_float fDeltaTime)
+{
+	// if 범위보다 벗어났다. -> Create Pos로 돌아가기
+
+
+	return _uint();
+}
+
+void CMonster::StateCheck()
+{
+	if (m_eCurState != m_eNextState) {
+		switch (m_eNextState)
+		{
+		case State::Research:
+			break;
+		case State::Warning:
+			break;
+		case State::Attack:
+			break;
+		case State::Die:
+			break;
+		}
+		m_eCurState = m_eNextState;
+	}
 }
 
 CMonster * CMonster::Create(LPDIRECT3DDEVICE9 pDevice)
@@ -150,6 +189,7 @@ CGameObject * CMonster::Clone(void * pArg/* = nullptr*/)
 
 void CMonster::Free()
 {
+	Safe_Release(m_pTerrainBuffer);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

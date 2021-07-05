@@ -40,10 +40,13 @@ HRESULT CStage::Ready_Scene()
 	//if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 	//	return E_FAIL;
 
+<<<<<<< HEAD
 
 	//if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
 	//	return E_FAIL;
 
+=======
+>>>>>>> main
 	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
 
@@ -56,6 +59,7 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
+<<<<<<< HEAD
 	if (FAILED(Add_Layer_Ring(L"Layer_Ring")))
 		return E_FAIL;
 
@@ -71,17 +75,12 @@ HRESULT CStage::Ready_Scene()
 	//	return E_FAIL;
 
 
+=======
+>>>>>>> main
 
 	//PARTICLESYSTEM_DESC pSystemDesc;
 	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
 	//pSystemDesc.iNumParticles = 500;
-	//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
-	//pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
-	//pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	//if (FAILED(Add_Layer_ExplosionSystem(L"Layer_ExplosionSystem", &pSystemDesc)))
-	//	return E_FAIL;
-
-	//pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
 	//pSystemDesc.tResetAttribute.fParticleSize = 0.9f;
 	//pSystemDesc.tResetAttribute.fParticleSpeed = 100.f;
 	//pSystemDesc.tResetAttribute.fLifeTime = 1.f;
@@ -102,7 +101,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
 
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
 
 	// Ring
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Ring");
@@ -370,7 +369,7 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
 
 	UI_DESC HUD_Boarder_Gatling;
-	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
@@ -379,14 +378,14 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	// Skill OverDrive
 
 	UI_DESC OverdriveHUD;
-	OverdriveHUD.tTransformDesc.vPosition = { -120.f, 435.f, 0.f };
+	OverdriveHUD.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
 	OverdriveHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	OverdriveHUD.wstrTexturePrototypeTag = L"Component_Texture_Overdrive_HUD";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
 		return E_FAIL;
 
 	UI_DESC HUD_Boarder_OverDrive;
-	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -120.f, 435.f, 0.f };
+	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
 	HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
@@ -394,14 +393,14 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 
 	// Skill Shield
 	UI_DESC HUD_Shield_Battery;
-	HUD_Shield_Battery.tTransformDesc.vPosition = { 160.f, 435.f, 0.f };
+	HUD_Shield_Battery.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
 	HUD_Shield_Battery.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	HUD_Shield_Battery.wstrTexturePrototypeTag = L"Component_Texture_Shield_Battery_HUD";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
 		return E_FAIL;
 
 	UI_DESC HUD_Boarder_Shield;
-	HUD_Boarder_Shield.tTransformDesc.vPosition = { 160.f, 435.f, 0.f };
+	HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
 	HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
 	HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))

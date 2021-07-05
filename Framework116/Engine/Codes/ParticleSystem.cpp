@@ -12,12 +12,10 @@ CParticleSystem::CParticleSystem(LPDIRECT3DDEVICE9 pDevice)
 
 CParticleSystem::CParticleSystem(const CParticleSystem& other)
 	: CGameObject(other)
-	, m_pVB(other.m_pVB)
 	, m_vbSize(other.m_vbSize)
 	, m_vbOffset(other.m_vbOffset)
 	, m_vbBatchSize(other.m_vbBatchSize)
 {
-	m_pVB->AddRef();
 }
 
 bool CParticleSystem::IsEmpty_ParticleSystem()
@@ -71,6 +69,13 @@ HRESULT CParticleSystem::Ready_GameObject_Prototype()
 {
 	CGameObject::Ready_GameObject_Prototype();
 
+	return S_OK;
+}
+
+HRESULT CParticleSystem::Ready_GameObject(void* pArg)
+{
+	CGameObject::Ready_GameObject(pArg);
+
 	// Particle 정점을 담을 버텍스버퍼 생성
 	m_vbSize = 2048;
 	m_vbOffset = 0;
@@ -83,18 +88,11 @@ HRESULT CParticleSystem::Ready_GameObject_Prototype()
 		D3DPOOL_DEFAULT,
 		&m_pVB,
 		0
-	))) 
+	)))
 	{
 		PRINT_LOG(L"Error", L"Falied to CreateVertexBuffer");
 		return E_FAIL;
 	}
-
-	return S_OK;
-}
-
-HRESULT CParticleSystem::Ready_GameObject(void* pArg)
-{
-	CGameObject::Ready_GameObject(pArg);
 
 	PARTICLESYSTEM_DESC* psDescPtr = nullptr;
 
@@ -107,6 +105,12 @@ HRESULT CParticleSystem::Ready_GameObject(void* pArg)
 			m_wstrTexturePrototypeTag = psDescPtr->wstrTexturePrototypeTag;
 			m_iNumParticles = psDescPtr->iNumParticles;
 			m_tResetAttribute = psDescPtr->tResetAttribute;
+
+			if (psDescPtr->pTarget)
+			{
+				m_pTarget = psDescPtr->pTarget;
+				Safe_AddRef(m_pTarget);
+			}
 		}
 	}
 
@@ -156,7 +160,6 @@ _uint CParticleSystem::Render_GameObject()
 	{
 		//PreRender_ParticleSystem();
 		m_pDevice->SetRenderState(D3DRS_POINTSIZE, CPipeline::FtoDw(m_tResetAttribute.fParticleSize));
-		
 		m_pTexture->Set_Texture(0);
 		m_pDevice->SetFVF(FVF_VTX_COLOR);
 		m_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(VTX_COLOR));
@@ -263,6 +266,7 @@ void CParticleSystem::Free()
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	//Safe_Release(m_pCollide);
+	Safe_Release(m_pTarget);
 
 	m_listParticles.clear();
 

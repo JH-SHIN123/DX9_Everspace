@@ -21,6 +21,7 @@ public:
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Homing(_float fDeltaTime);
+	_uint Searching_Target(_float fDeltaTime);
 
 public:
 	static CPlayer_Missile* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
@@ -43,6 +44,7 @@ private:
 	_float3 m_vMuzzlePos = {};
 	_float3 m_vPlayerLook = {};
 	_bool m_IsFirst = true;
+	CGameObject* m_pBulletParticle = nullptr;
 
 private:
 	_float m_fBeforeHoming = 0.f;

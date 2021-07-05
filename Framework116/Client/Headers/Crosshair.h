@@ -20,6 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint Searching_Target(_float fDeltaTime);
 
 public:
 	static CCrosshair* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -30,6 +31,11 @@ private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
+
+	// Lock On Test
+	CCollideSphere* m_pBossMonsterCollide = nullptr;
+	_bool m_IsBossLockOn = false;
+	_bool m_IsDistOn = false;
 };
 
 #define __CROSSHAIR_H__

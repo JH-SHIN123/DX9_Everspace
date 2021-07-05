@@ -42,7 +42,6 @@ private:
 	CTransform* m_pPlayerTransform = nullptr;
 	_float m_fDistanceFromTarget = 20.f;
 	_float m_fCamAngle = 15.f;
-	_float m_fMouseSensitive = 0.05f;
 
 private:
 	D3DXQUATERNION m_qCameraRot;

@@ -348,7 +348,7 @@ HRESULT CStreamHandler::Add_GameObject_Prototype(const wstring& wstrClassName, P
 	{
 		if (FAILED(CManagement::Get_Instance()->Add_GameObject_Prototype(
 			eType,
-			pPassDataObject->wstrPrototypeTag_Object,
+			pPassDataObject->wstrPrototypeTag_Object.c_str(),
 			CPlayer::Create(CManagement::Get_Instance()->Get_Device(), pPassDataObject))))
 		{
 			PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");

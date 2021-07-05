@@ -17,7 +17,7 @@ void CExplosionSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribut
 	if (nullptr == m_pTransform) return;
 
 	attribute.isAlive = true;
-	attribute.vPos = m_pTransform->Get_State(EState::Position);
+	attribute.vPos = m_pTransform->Get_TransformDesc().vPosition;
 
 	_float3 min = _float3(-1.0f, -1.0f, -1.0f);
 	_float3 max = _float3(1.0f, 1.0f, 1.0f);
@@ -62,9 +62,6 @@ _uint CExplosionSystem::Update_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
-	if (IsDead_ParticleSystem())
-		return DEAD_OBJECT;
-
 	for (auto& p : m_listParticles)
 	{
 		if (p.isAlive)
@@ -72,8 +69,15 @@ _uint CExplosionSystem::Update_GameObject(_float fDeltaTime)
 			p.vPos += p.vVel * fDeltaTime;
 			p.fAge += fDeltaTime;
 
+			p.tColor.r -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+			p.tColor.g -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+			p.tColor.b -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+
+			if (p.tColor.r <= 0.f) p.tColor.r = 0.f;
+			if (p.tColor.g <= 0.f) p.tColor.g = 0.f;
+			if (p.tColor.b <= 0.f) p.tColor.b = 0.f;
+
 			if (p.fAge > p.fLifeTime) {
-				//ResetParticle_ParticleSystem(p);
 				p.isAlive = false;
 			}
 		}
@@ -84,6 +88,11 @@ _uint CExplosionSystem::Update_GameObject(_float fDeltaTime)
 
 _uint CExplosionSystem::LateUpdate_GameObject(_float fDeltaTime)
 {
+	if (IsDead_ParticleSystem()) {
+		m_IsDead = true;
+		return DEAD_OBJECT;
+	}
+
 	CParticleSystem::LateUpdate_GameObject(fDeltaTime);
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Particle, this)))
@@ -100,6 +109,7 @@ _uint CExplosionSystem::Render_GameObject()
 	// read, but don't write particles to z-buffer
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
 
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	CParticleSystem::Render_GameObject();
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);

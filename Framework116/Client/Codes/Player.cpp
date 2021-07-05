@@ -39,6 +39,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
+	TransformDesc.fSpeedPerSec = 45.f;
 	TransformDesc.vPosition = _float3(50.f, 0.f, 0.f);
 	TransformDesc.fSpeedPerSec = 25.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
@@ -68,7 +69,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// 최초 무기(기관총) HUD 생성.
 	UI_DESC MachinegunHUD;
-	MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+	MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -138,6 +139,12 @@ _uint CPlayer::Render_GameObject()
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pMesh->Render_Mesh();
 
+	wstring str = L"궁서";
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str.c_str(), -1
+		, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
 #ifdef _DEBUG // Render Collide
 	//for (auto& collide : m_Collides)
 	//	collide->Render_Collide();
@@ -171,7 +178,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 
 	if (GetAsyncKeyState('Q') & 0x8000)
-		m_pTransform->RotateZ(-fDeltaTime );
+		m_pTransform->RotateZ(-fDeltaTime);
 	if (GetAsyncKeyState('E') & 0x8000)
 		m_pTransform->RotateZ(fDeltaTime);
 
@@ -181,7 +188,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MACHINEGUN;
 		UI_DESC MachinegunHUD;
-		MachinegunHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -200,7 +207,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_LAZER;
 		UI_DESC LaserHUD;
-		LaserHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -219,7 +226,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_MISSILE;
 		UI_DESC MissileHUD;
-		MissileHUD.tTransformDesc.vPosition = { -400.f, 435.f, 0.f };
+		MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -319,18 +326,6 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		}
 	}
 
-	if (m_pController->Key_Pressing(KEY_LBUTTON))
-	{
-		float fDist_Monster = 0.f;
-
-		if (CCollision::PickingObject(fDist_Monster, g_hWnd, WINCX, WINCY, m_pDevice,
-			m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")))
-		{
-			wstring wstrDist = to_wstring(fDist_Monster);
-			PRINT_LOG(wstrDist.c_str(), L"Pick!");
-		}
-	}
-
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		DestroyWindow(g_hWnd);
@@ -360,9 +355,9 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 600;
+	p1.x = rc.left + 300;
 	p1.y = rc.top + 300;
-	p2.x = rc.right - 600;
+	p2.x = rc.right - 300;
 	p2.y = rc.bottom - 300;
 
 	ClientToScreen(g_hWnd, &p1);
@@ -373,17 +368,17 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	rc.right = p2.x;
 	rc.bottom = p2.y;
 
-	ClipCursor(&rc);
+	//ClipCursor(&rc);
 	
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
 	_float3 vGap = vMouse - vScreenCenter;
 
-	// 0.15f 플레이어가 얼만큼 더 회전할건지
+	// 0.05f 플레이어가 얼만큼 더 회전할건지
 	_float fSpeed = D3DXVec3Length(&vGap) * 0.15f;
 	D3DXVec3Normalize(&vGap, &vGap);
 
-	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 2.f);
+	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.6f);
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
 
 	return _uint();

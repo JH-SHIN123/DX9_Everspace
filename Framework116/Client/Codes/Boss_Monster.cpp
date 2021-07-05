@@ -139,6 +139,11 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	if (m_IsCollide)
+	{
+		m_IsCollide = false;
+	}
+
 	return _uint();
 }
 
@@ -151,7 +156,7 @@ _uint CBoss_Monster::Render_GameObject()
 	m_pCube->Render_VIBuffer();
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();

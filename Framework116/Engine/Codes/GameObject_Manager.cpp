@@ -38,7 +38,7 @@ const CComponent * CGameObject_Manager::Get_Component(const wstring & LayerTag, 
 
 HRESULT CGameObject_Manager::Add_GameObject_Prototype(
 	EResourceType eType, 
-	const wstring & PrototypeTag, 
+	const TCHAR* PrototypeTag,
 	CGameObject * pPrototype)
 {
 	_uint iTypeIndex = (_uint)eType;
@@ -71,7 +71,7 @@ HRESULT CGameObject_Manager::Add_GameObject_Prototype(
 HRESULT CGameObject_Manager::Add_GameObject_InLayer(
 	EResourceType eType, 
 	const wstring & PrototypeTag, 
-	const wstring & LayerTag, void * pArg)
+	const wstring & LayerTag, void * pArg, CGameObject** ppGameObject)
 {
 	CGameObject* pClone = Clone_GameObject(eType, PrototypeTag, pArg);
 	if (nullptr == pClone)
@@ -87,8 +87,15 @@ HRESULT CGameObject_Manager::Add_GameObject_InLayer(
 		m_Layers.insert(make_pair(LayerTag, pLayer));
 	}	
 
+	if (ppGameObject)
+	{
+		*ppGameObject = pClone;
+		Safe_AddRef(pClone);
+	}
+
 	return m_Layers[LayerTag]->Add_GameObject_InLayer(pClone);
 }
+
 
 HRESULT CGameObject_Manager::Add_GameObject_InLayer_Tool(EResourceType eType, const wstring& PrototypeTag, const wstring& LayerTag,
 	const int _iListboxIndex, void* pArg)
