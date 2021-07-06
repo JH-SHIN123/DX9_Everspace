@@ -474,15 +474,6 @@ HRESULT CLoading::Ready_StageEffect()
 		return E_FAIL;
 	}
 
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::NonStatic,
-	//	L"Component_Texture_Wind",
-	//	CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/wind.png"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Wind");
-	//	return E_FAIL;
-	//}
-
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Spark",
