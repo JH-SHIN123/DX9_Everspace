@@ -121,12 +121,6 @@
     <Filter Include="02.GameObject\09.HUD\02.LockOn">
       <UniqueIdentifier>{84e70570-19d0-4df2-9eda-52d39675beef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\00.Player\00.Player_Effect">
-      <UniqueIdentifier>{a3c4e740-b362-43b7-9514-e172b532eab9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\00.Player\00.Player_Effect\00.Booster_Effect">
-      <UniqueIdentifier>{961f04d2-7824-414d-9761-e6c8edff8e70}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\09.HUD\03.AlertArrow">
       <UniqueIdentifier>{37c54f37-cdab-4b8c-8598-2ec500978762}</UniqueIdentifier>
     </Filter>

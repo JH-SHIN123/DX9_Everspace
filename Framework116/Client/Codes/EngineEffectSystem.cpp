@@ -63,6 +63,28 @@ _uint CEngineEffectSystem::Update_GameObject(_float fDeltaTime)
 {
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
+	// 부스트시, 파티클 길이(알파) 변경
+	if (m_bBoost) {
+		m_iNumParticles = 3;
+
+		m_tResetAttribute.vColorRed_RandomRange = { 0.2f,0.2f };
+		m_tResetAttribute.vColorGreen_RandomRange = { 0.2f,0.2f };
+		m_tResetAttribute.vColorBlue_RandomRange = { 0.2f,0.2f };
+		m_tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+		m_tResetAttribute.fParticleSize = 0.6f;
+		m_tResetAttribute.fLifeTime = 2.5f;
+	}
+	else {
+		m_iNumParticles = 1;
+
+		m_tResetAttribute.vColorRed_RandomRange = { 0.08f,0.08f };
+		m_tResetAttribute.vColorGreen_RandomRange = { 0.08f,0.08f };
+		m_tResetAttribute.vColorBlue_RandomRange = { 0.08f,0.08f };
+		m_tResetAttribute.fParticleAlphaFadeSpeed = 0.2f;
+		m_tResetAttribute.fParticleSize = 0.7f;
+		m_tResetAttribute.fLifeTime = 0.5f;
+	}
+
 	for (size_t i = 0; i < m_iNumParticles; ++i)
 		AddParticle_ParticleSystem();
 

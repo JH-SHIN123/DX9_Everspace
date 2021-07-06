@@ -119,9 +119,10 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	KeyProcess(fDeltaTime);
-	// 
+	
 	Movement(fDeltaTime);
-	//
+	TimeOperation(fDeltaTime);
+	
 	Make_Arrow();
 
 	// 월드행렬 업데이트
@@ -137,6 +138,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
 		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z;
 		m_pLeftEngineEffect->Set_EngineEffect(vEnginePos);
+		m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
 	}
 	if (m_pRightEngineEffect) {
 		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
@@ -144,6 +146,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
 		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z;
 		m_pRightEngineEffect->Set_EngineEffect(vEnginePos);
+		m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
 	}
 
 	return NO_EVENT;
@@ -188,21 +191,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
-	{
 		m_pTransform->Go_Straight(fDeltaTime);
-
-		// Booster
-		if (m_pController->Key_Pressing(KEY_SPACE))
-		{
-			m_pTransform->Go_Straight(fDeltaTime * 0.8f);
-			if (m_IsBoost == false)
-			{
-				// 바람 가르는 듯 한.. Effect 생성
-
-				m_IsBoost = true;
-			}
-		}
-	}
 
 	if (GetAsyncKeyState('S') & 0x8000)
 		m_pTransform->Go_Straight(-fDeltaTime);
@@ -213,6 +202,16 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	if (GetAsyncKeyState('A') & 0x8000)
 		m_pTransform->Go_Side(-fDeltaTime);
 
+	// Booster
+	if (m_pController->Key_Pressing(KEY_SPACE)) {
+		m_IsBoost = true;
+		m_pTransform->Go_Straight(fDeltaTime * 1.5f);
+	}
+	if (m_pController->Key_Up(KEY_SPACE))
+		m_IsBoost = false;
+
+
+	// Rotate
 	if (GetAsyncKeyState('Q') & 0x8000)
 		m_pTransform->RotateZ(fDeltaTime);
 	if (GetAsyncKeyState('E') & 0x8000)
@@ -365,18 +364,6 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// 마우스 고정시켜서 끄기 불편해서.. ESC키 쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
 		DestroyWindow(g_hWnd);
-
-	//오버드라이브 타이머
-	if (m_bOverDrive)
-	{
-		m_fOverDriveTime -= fDeltaTime;
-		// 타이머가 0초가 되면 오버드라이브 꺼지고 연사속도 다시 정상으로.
-		if (m_fOverDriveTime <= 0)
-		{
-			m_bOverDrive = false;
-			m_fOverDrive = 1.f;
-		}
-	}
 }
 
 _uint CPlayer::Movement(_float fDeltaTime)
@@ -418,6 +405,21 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
 
 	return _uint();
+}
+
+void CPlayer::TimeOperation(const _float fDeltaTime)
+{
+	//오버드라이브 타이머
+	if (m_bOverDrive)
+	{
+		m_fOverDriveTime -= fDeltaTime;
+		// 타이머가 0초가 되면 오버드라이브 꺼지고 연사속도 다시 정상으로.
+		if (m_fOverDriveTime <= 0)
+		{
+			m_bOverDrive = false;
+			m_fOverDrive = 1.f;
+		}
+	}
 }
 
 CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)

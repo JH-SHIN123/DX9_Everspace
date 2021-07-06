@@ -12,6 +12,7 @@ private:
 	virtual ~CEngineEffectSystem() = default;
 
 public:
+	void Set_IsBoost(const _bool _bSwitch) { m_bBoost = _bSwitch; }
 	void Set_EngineEffect(const _float3& _vOffset) { m_vEngineOffset = _vOffset; }
 
 public:
@@ -30,6 +31,7 @@ public:
 	virtual void Free() override;
 
 private:
+	_bool	m_bBoost = false;
 	_float3 m_vEngineOffset = { 0.f,0.f,0.f };
 };
 
