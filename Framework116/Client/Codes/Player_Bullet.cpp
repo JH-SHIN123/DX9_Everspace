@@ -243,7 +243,8 @@ CGameObject * CPlayer_Bullet::Clone(void * pArg/* = nullptr*/)
 
 void CPlayer_Bullet::Free()
 {
-	CEffectHandler::Add_Layer_Effect_Bullet_Explosion(m_pTransform->Get_State(EState::Position));
+	if(m_IsClone)
+		CEffectHandler::Add_Layer_Effect_Bullet_Explosion(m_pTransform->Get_State(EState::Position));
 
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);

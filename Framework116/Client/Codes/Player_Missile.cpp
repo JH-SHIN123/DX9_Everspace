@@ -303,7 +303,8 @@ CGameObject * CPlayer_Missile::Clone(void * pArg/* = nullptr*/)
 
 void CPlayer_Missile::Free()
 {
-	CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
+	if (m_IsClone)
+		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
 
 	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pPlayerTransform);

@@ -27,7 +27,7 @@ HRESULT CStage::Ready_Scene()
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	//lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
-	lightDesc.tLightColor = D3DCOLOR_XRGB(85, 85, 85);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(100, 100, 100);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -40,10 +40,8 @@ HRESULT CStage::Ready_Scene()
 	//if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 	//	return E_FAIL;
 
-
 	//if (FAILED(Add_Layer_Terrain(L"Layer_Terrain")))
 	//	return E_FAIL;
-
 
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
@@ -68,23 +66,6 @@ HRESULT CStage::Ready_Scene()
 
 	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
 		return E_FAIL;
-
-	//UI_DESC uiDesc;
-	//uiDesc.tTransformDesc.vPosition = { 350.f, 250.f, 0.f };
-	//uiDesc.tTransformDesc.vScale = { 150.f, 150.f,0.f };
-	//uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Grass";
-	//if (FAILED(Add_Layer_UI(L"Layer_UI", &uiDesc)))
-	//	return E_FAIL;
-
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Planet",
-		L"Layer_Planet")))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Planet In Layer");
-		return E_FAIL;
-	}
-
 
 	return S_OK;
 }

@@ -84,9 +84,10 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
+	// Point Light Ãß°¡
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::PointLight;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(180, 180, 180);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
 	lightDesc.tTransformDesc.vPosition = TransformDesc.vPosition;
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,

@@ -154,6 +154,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pRightWingBoost);
 	m_vRightWingOffset = { 8.2f, -1.5f, -2.f };
 
+
 	return S_OK;
 }
 
