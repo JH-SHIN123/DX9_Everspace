@@ -63,38 +63,36 @@ _uint CWingBoost_System::Update_GameObject(_float fDeltaTime)
 	{
 		for (size_t i = 0; i < m_iNumParticles; ++i)
 			AddParticle_ParticleSystem();
+	}
 
-		for (auto& p : m_listParticles)
+	for (auto& p : m_listParticles)
+	{
+		if (p.isAlive)
 		{
-			if (p.isAlive)
-			{
-				p.vPos += p.vVel * fDeltaTime;
-				p.fAge += fDeltaTime;
+			p.vPos += p.vVel * fDeltaTime;
+			p.fAge += fDeltaTime;
 
-				p.tColor.r -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
-				p.tColor.g -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
-				p.tColor.b -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+			p.tColor.r -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+			p.tColor.g -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
+			p.tColor.b -= (p.fAge / p.fLifeTime) * m_tResetAttribute.fParticleAlphaFadeSpeed;
 
-				if (p.tColor.r <= 0.f) p.tColor.r = 0.f;
-				if (p.tColor.g <= 0.f) p.tColor.g = 0.f;
-				if (p.tColor.b <= 0.f) p.tColor.b = 0.f;
+			if (p.tColor.r <= 0.f) p.tColor.r = 0.f;
+			if (p.tColor.g <= 0.f) p.tColor.g = 0.f;
+			if (p.tColor.b <= 0.f) p.tColor.b = 0.f;
 
-				if (p.fAge > p.fLifeTime) {
-					p.isAlive = false;
-				}
+			if (p.fAge > p.fLifeTime) {
+				p.isAlive = false;
 			}
 		}
-
-		RemoveDeadParticle_ParticleSystem();
 	}
+	RemoveDeadParticle_ParticleSystem();
 
 	return m_pTransform->Update_Transform();
 }
 
 _uint CWingBoost_System::LateUpdate_GameObject(_float fDeltaTime)
 {
-	if (IsDead_ParticleSystem()) {
-		m_IsDead = true;
+	if (m_IsDead) {
 		return DEAD_OBJECT;
 	}
 

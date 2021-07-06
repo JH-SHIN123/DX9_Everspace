@@ -112,8 +112,7 @@ _uint CEngineEffectSystem::Update_GameObject(_float fDeltaTime)
 
 _uint CEngineEffectSystem::LateUpdate_GameObject(_float fDeltaTime)
 {
-	if (IsDead_ParticleSystem()) {
-		m_IsDead = true;
+	if (m_IsDead) {
 		return DEAD_OBJECT;
 	}
 

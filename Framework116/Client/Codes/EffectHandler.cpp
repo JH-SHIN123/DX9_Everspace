@@ -118,13 +118,13 @@ HRESULT CEffectHandler::Add_Layer_Effect_WingBoost(CGameObject** ppGameObject)
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
 	pSystemDesc.iNumParticles = 2;
-	pSystemDesc.tResetAttribute.fParticleSize = 1.f;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 1.f;
-	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.01f;
-	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
-	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 0.5f,0.5f };
-	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 0.5f,0.5f };
-	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 0.5f,0.5f };
+	pSystemDesc.tResetAttribute.fParticleSize = 0.6f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 0.01f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.003f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 0.25f,0.25f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 0.25f,0.25f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 0.25f,0.25f };
 
 	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
