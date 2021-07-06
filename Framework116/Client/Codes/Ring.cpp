@@ -153,16 +153,6 @@ _uint CRing::Render_GameObject()
 
 _uint CRing::Movement(_float fDeltaTime)
 {
-	//_float3 vOutPos = m_pTransform->Get_State(EState::Position);
-	//if (true == m_pTerrainBuffer->Is_OnTerrain(&vOutPos))
-	//{
-	//	vOutPos.y += 0.5f;
-	//	m_pTransform->Set_Position(vOutPos);
-	//}	
-
-
-	m_pTransform->Go_Straight(fDeltaTime);
-
 
 	return _uint();
 }
