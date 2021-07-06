@@ -445,7 +445,7 @@ _uint CPlayer::Make_Arrow()
 		_float3 v1 = vPlayerLook; // ¾ê´Â ¹æÇâº¤ÅÏµ¥?
 		_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // À§Ä¡º¤ÅÍ³×?
 		_float fCeta;
-		
+		D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 		_float v1v2 = D3DXVec3Dot(&v1, &v2);
 		_float v1Length = D3DXVec3Length(&v1);
 		_float v2Length = D3DXVec3Length(&v2);
@@ -453,13 +453,13 @@ _uint CPlayer::Make_Arrow()
 
 		_float fDegree = D3DXToDegree(fCeta);
 
-		if (fabs(fDegree) > 80.f)
+		if (fabs(fDegree) > 90.f)
 		{
-	/*		wstring abc = to_wstring(fDegree);
-			PRINT_LOG(L"", abc.c_str());*/
-			//m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+			//wstring abc = to_wstring(fDegree);
+			//PRINT_LOG(L"", abc.c_str());
+			m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+			++m_iCount;
 		}
-
 	}
 
 	

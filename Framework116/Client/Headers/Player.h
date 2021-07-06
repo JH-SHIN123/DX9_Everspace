@@ -64,6 +64,7 @@ private:
 private:
 	_uint Make_Arrow();
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
+	_int m_iCount;
 };
 
 #define __PLAYER_H__

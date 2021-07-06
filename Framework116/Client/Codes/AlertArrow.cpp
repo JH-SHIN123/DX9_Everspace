@@ -114,7 +114,7 @@ _uint CAlertArrow::Movement(_float fDeltaTime)
 
 	matWorld._41 = 30.f;
 	matWorld._42 = 30.f;
-	matWorld._43 = vTargetPos.z;
+	matWorld._43 = 0.f;
 
 	_float4x4 matView;
 	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
