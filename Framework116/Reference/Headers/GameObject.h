@@ -17,6 +17,7 @@ public:
 	const _bool Get_IsEmptyCollides() const;
 	const _bool Get_IsPicking() const { return m_IsPicking; }
 	const _bool Get_IsDead() const { return m_IsDead; }
+	const _bool Get_IsCollide() const { return m_IsCollide; }
 
 public:
 	void Set_IsPicking(const _bool _isPicking) { m_IsPicking = _isPicking; };

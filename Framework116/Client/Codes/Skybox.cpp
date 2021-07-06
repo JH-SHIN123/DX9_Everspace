@@ -1,14 +1,22 @@
 #include "stdafx.h"
 #include "..\Headers\Skybox.h"
 #include "Camera.h"
+#include "MaterialHandler.h"
 
 CSkybox::CSkybox(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
+	ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
+
+	CMaterialHandler::Set_RGBA(1.f, 1.f, 1.f, 1.f, &m_tMaterial);
+
+	m_tMaterial.Power = 1.f;
 }
 
 CSkybox::CSkybox(const CSkybox & other)
 	: CGameObject(other)
+	, m_tMaterial(other.m_tMaterial)
+	, vColorRGBA(other.vColorRGBA)
 {
 }
 
@@ -108,6 +116,7 @@ _uint CSkybox::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);

@@ -106,6 +106,10 @@ _uint CMainCam::Movement(_float fDeltaTime)
 _uint CMainCam::KeyInput(_float fDeltaTime)
 {
 
+
+	//if (!(GetAsyncKeyState(VK_SPACE) & 0x8000))
+
+
 	if (!m_IsFPS)
 	{
 		if (GetAsyncKeyState(VK_ADD) & 0x8000)

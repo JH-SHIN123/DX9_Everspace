@@ -81,10 +81,10 @@ _uint CTerrain::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 
-	//m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pTexture->Set_Texture();
 	m_pVIBuffer->Render_VIBuffer();
-	//m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
 	return _uint();
 }

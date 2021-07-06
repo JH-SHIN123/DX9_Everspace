@@ -2,6 +2,8 @@
 
 USING(Engine)
 
+int CLight::s_iLightIndex = -1;
+
 CLight::CLight(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -33,8 +35,8 @@ void CLight::InitPointLight(_float3* position, D3DXCOLOR* color)
 	m_tLight.Diffuse = *color;
 	m_tLight.Specular = *color * 0.6f;
 	m_tLight.Position = *position;
-	m_tLight.Range = 1000.0f;
-	m_tLight.Falloff = 1.0f;
+	m_tLight.Range = 150.f;
+	m_tLight.Falloff = 1.f;
 	m_tLight.Attenuation0 = 1.f;
 	m_tLight.Attenuation1 = 0.0f;
 	m_tLight.Attenuation2 = 0.0f;
@@ -50,7 +52,7 @@ void CLight::InitSpotLight(_float3* position, _float3* direction, D3DXCOLOR* col
 	m_tLight.Specular = *color * 0.6f;
 	m_tLight.Position = *position;
 	m_tLight.Direction = *direction;
-	m_tLight.Range = 1000.0f;
+	m_tLight.Range = 50.0f;
 	m_tLight.Falloff = 1.0f;
 	m_tLight.Attenuation0 = 1.0f;
 	m_tLight.Attenuation1 = 0.0f;
@@ -69,6 +71,8 @@ HRESULT CLight::Ready_GameObject_Prototype()
 HRESULT CLight::Ready_GameObject(void* pArg)
 {
 	CGameObject::Ready_GameObject(pArg);
+	// 전역 light 인덱스 증가
+	++s_iLightIndex;
 
 	LIGHT_DESC* lightDescPtr = nullptr;
 
@@ -84,7 +88,6 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 			m_eLightType = lightDescPtr->eLightType;
 			vLightDir = lightDescPtr->vLightDir;
 			tLightColor = lightDescPtr->tLightColor;
-			m_iLightIndex = lightDescPtr->iLightIndex;
 		}
 	}
 
@@ -114,8 +117,8 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 	}
 
 	// 일단 조명 한개만 설치할거임
-	m_pDevice->SetLight(m_iLightIndex, &m_tLight);
-	m_pDevice->LightEnable(m_iLightIndex, true);
+	m_pDevice->SetLight(s_iLightIndex, &m_tLight);
+	m_pDevice->LightEnable(s_iLightIndex, true);
 	//m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	//m_pDevice->SetRenderState(D3DRS_DIF, 0x00202020);
 
@@ -139,7 +142,7 @@ _uint CLight::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLight::Render_GameObject()
 {
-	m_pDevice->SetLight(m_iLightIndex, &m_tLight);
+	m_pDevice->SetLight(s_iLightIndex, &m_tLight);
 
 	return _uint();
 }
@@ -170,6 +173,7 @@ CGameObject* CLight::Clone(void* pArg)
 
 void CLight::Free()
 {
+	--s_iLightIndex;
 	Safe_Release(m_pTransform);
 	CGameObject::Free();
 }

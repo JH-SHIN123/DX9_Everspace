@@ -121,6 +121,10 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	m_fLiveTime -= fDeltaTime;
+	if (m_fLiveTime <= 0.f)
+		return DEAD_OBJECT;
+
 	return _uint();
 }
 

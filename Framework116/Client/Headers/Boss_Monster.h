@@ -3,9 +3,9 @@
 
 #include "GameObject.h"
 
-#define BOSSRANGE_NEAR		20.f
-#define BOSSRANGE_MIDDLE	50.f
-#define BOSSRANGE_FAR		100.f
+#define BOSSRANGE_NEAR		30.f
+#define BOSSRANGE_MIDDLE	80.f
+#define BOSSRANGE_FAR		200.f
 
 USING(Engine)
 class CBoss_Monster final : public CGameObject
@@ -29,16 +29,23 @@ private: // Update 함수에 쓸 최상위 함수
 	_uint Move_AI(_float fDeltaTime);
 	_uint Attack_AI(_float fDeltaTime);
 
-private:
+private: // Move_AI
 	_uint Movement(_float fDeltaTime);
 	_uint Move_Near(_float fDeltaTime);
 	_uint Move_Middle(_float fDeltaTime);
 	_uint Move_Far(_float fDeltaTime);
-
+	
+private: // Attack_AI
 	_uint Fire_Triger(_float fDeltaTime);
 	_uint Fire_Laser(_float fDeltaTime);
 	_uint Fire_EMP(_float fDeltaTime);
+	_uint Spawn_Monster(_float fDeltaTime);
+	_uint Spawn_Wormhole(_float fDeltaTime);
 
+private: // Move_Mode
+	void RotateMy_X(_float fDeltaTime);
+	void RotateMy_Y(_float fDeltaTime);
+	void RotateMy_Z(_float fDeltaTime);
 
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
@@ -78,6 +85,8 @@ private: /* Skills */
 	// emp bomb
 	_float m_fEmpBomb_CoolTime = 0.f;
 
+	// Spawn Monster
+	_float m_fSpawnCoolTime = 0.f;
 };
 
 #define __BOSS_MONSTER_H__

@@ -127,8 +127,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 
 	// Add Effect
-	CEffectHandler::Add_Layer_Effect_Bullet(this, 1.f, &m_pBulletParticle);
-
+	CEffectHandler::Add_Layer_Effect_Missile_Smoke(this, &m_pBulletParticle);
 
 	return S_OK;
 }
@@ -143,7 +142,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Movement(fDeltaTime);
 	else
 	{
-		m_fAddSpeed += 1.f;
+		m_fAddSpeed += 0.01f;
 		m_fRotateSpeed += D3DXToRadian(15.f);
 		m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 		m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -161,6 +160,24 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 
 _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 {
+	if (m_IsCollide) {
+		m_IsDead = true;
+
+		if (m_pBulletParticle)
+			m_pBulletParticle->Set_IsDead(true);
+
+		return DEAD_OBJECT;
+	}
+
+	if (m_fLifeTime >= 2.f) {
+		m_IsDead = true;
+
+		if (m_pBulletParticle)
+			m_pBulletParticle->Set_IsDead(true);
+
+		return DEAD_OBJECT;
+	}
+
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
@@ -277,6 +294,9 @@ void CPlayer_Missile::Free()
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+
+	if (m_pBulletParticle)
+		m_pBulletParticle->Set_IsDead(true);
 
 	CGameObject::Free();
 }

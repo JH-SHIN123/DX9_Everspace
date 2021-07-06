@@ -39,6 +39,7 @@ private:
 
 	//_float m_fTrackingTime = 1.f;
 	//_bool m_IsTracking = false;
+	_float m_fLiveTime = 5.25f;
 	_float m_fExplosionTime = 4.f;
 	_float m_fExplosionRadius = 1.f;
 	_float3 m_vMoveDir = {};

@@ -35,10 +35,6 @@ void CFollowSystem::ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE& attribute)
 
 	// Speed Àû¿ë
 	attribute.vVel *= m_tResetAttribute.fParticleSpeed;
-	//_float3 vDir = pTransform->Get_State(EState::Look);
-	//D3DXVec3Normalize(&vDir, &vDir);
-	//attribute.vVel = vDir * m_tResetAttribute.fParticleSpeed;
-
 	attribute.tColor = D3DXCOLOR(
 		CPipeline::GetRandomFloat(m_tResetAttribute.vColorRed_RandomRange),
 		CPipeline::GetRandomFloat(m_tResetAttribute.vColorGreen_RandomRange),

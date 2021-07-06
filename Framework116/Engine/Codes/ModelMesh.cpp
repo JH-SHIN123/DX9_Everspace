@@ -136,8 +136,9 @@ _uint CModelMesh::Render_Mesh()
 		//mat.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
 		//mat.Power = 5.f;
 		//m_pDevice->SetMaterial(&mat);
-
-		m_pDevice->SetTexture(0, m_vecTextures[i]);
+		
+		if(nullptr != m_vecTextures[i])
+			m_pDevice->SetTexture(0, m_vecTextures[i]);
 		m_pMesh->DrawSubset(i);
 	}
 

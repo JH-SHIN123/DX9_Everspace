@@ -13,6 +13,7 @@ CBullet_EMP_Bomb::CBullet_EMP_Bomb(const CBullet_EMP_Bomb & other)
 	, m_fExplosionRadius(other.m_fExplosionRadius)
 	, m_IsExplosion(other.m_IsExplosion)
 	, m_IsTracking(other.m_IsTracking)
+	, m_fLiveTime(other.m_fLiveTime)
 {
 }
 
@@ -123,6 +124,12 @@ _uint CBullet_EMP_Bomb::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
+
+
+	m_fLiveTime -= fDeltaTime;
+	if (m_fLiveTime <= 0.f)
+		return DEAD_OBJECT;
+
 
 	return _uint();
 }
