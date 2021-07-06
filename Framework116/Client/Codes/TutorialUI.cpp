@@ -11,6 +11,7 @@ CTutorialUI::CTutorialUI(LPDIRECT3DDEVICE9 pDevice)
 
 CTutorialUI::CTutorialUI(const CTutorialUI & other)
 	: CGameObject(other)
+	, m_bAllTargetCollide(other.m_bAllTargetCollide)
 {
 }
 
@@ -49,11 +50,15 @@ HRESULT CTutorialUI::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC Transform;
+	Transform.fSpeedPerSec = 50.f;
+	Transform.vScale = { 5.f,5.f,5.f };
+
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Transform",
 		L"Com_Transform",
-		(CComponent**)&m_pTransform)))
+		(CComponent**)&m_pTransform,
+		&Transform)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
@@ -116,7 +121,10 @@ _uint CTutorialUI::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
 
+	BillBorad(fDeltaTime); 
 
+	if (m_bAllTargetCollide == true)
+		return DEAD_OBJECT;
 
 	return _uint();
 }
@@ -124,31 +132,6 @@ _uint CTutorialUI::LateUpdate_GameObject(_float fDeltaTime)
 _uint CTutorialUI::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
-
-	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-	matWorld._11 = 10.f;
-	matWorld._22 = 10.f;
-	matWorld._33 = 10.f;
-
-	matWorld._41 = m_vSearchTagetDis[0].x;
-	matWorld._42 = m_vSearchTagetDis[0].y;
-	matWorld._43 = m_vSearchTagetDis[0].z;
-
-	_float4x4 matView;
-	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
-
-	_float4x4 matBill;
-	D3DXMatrixIdentity(&matBill);
-
-	matBill = matView;
-	matBill._41 = 0.f;
-	matBill._42 = 0.f;
-	matBill._43 = 0.f;
-
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-	_float4x4 realmatWorld;
-	realmatWorld = matBill * matWorld;
-	m_pTransform->Set_WorldMatrix(realmatWorld);
 
 	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
@@ -161,7 +144,82 @@ _uint CTutorialUI::Render_GameObject()
 
 _uint CTutorialUI::Movement(_float fDeltaTime)
 {
-	//m_pTransform->
+	if (m_bAllTargetCollide == true)
+		return _uint();
+
+	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
+	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
+	_float3 vTargetPos = { m_vSearchTagetDis[0].x, m_vSearchTagetDis[0].y,  m_vSearchTagetDis[0].z };
+	_float vLength = fabs(D3DXVec3Length(&(vTargetPos - vPlayerPos)));
+	_float vMyLength = fabs(D3DXVec3Length(&(vTargetPos - vMyPos)));
+	
+	if (m_fSearchDisMax >= vLength)
+	{
+		m_IsMoving = true;
+		m_IsLockOn = false;
+	}
+
+	if (m_fSearchDisMax <= vLength)
+	{
+		m_IsMoving = false;
+		m_IsLockOn = false;
+	}
+
+	if (m_fSearchDisMin >= vMyLength)
+	{
+		m_IsMoving = false;
+		m_IsLockOn = true;
+	}
+	
+
+	if (m_IsMoving == true)
+	{
+		m_IsLockOn = false;
+
+		_float3 vDir = vTargetPos - vMyPos;
+		D3DXVec3Normalize(&vDir, &vDir);
+		m_pTransform->Go_Dir(vDir, fDeltaTime);
+	}
+
+	if (m_IsLockOn == true)
+	{
+		m_IsMoving = false;
+
+		_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
+		matWorld._11 = 10.f;
+		matWorld._22 = 10.f;
+		matWorld._33 = 10.f;
+
+		matWorld._41 = m_vSearchTagetDis[0].x;
+		matWorld._42 = m_vSearchTagetDis[0].y;
+		matWorld._43 = m_vSearchTagetDis[0].z;
+
+		_float4x4 matView;
+		m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+
+		_float4x4 matBill;
+		D3DXMatrixIdentity(&matBill);
+
+		matBill = matView;
+		matBill._41 = 0.f;
+		matBill._42 = 0.f;
+		matBill._43 = 0.f;
+
+		D3DXMatrixInverse(&matBill, 0, &matBill);
+		_float4x4 realmatWorld;
+		realmatWorld = matBill * matWorld;
+		m_pTransform->Set_WorldMatrix(realmatWorld);
+
+	}
+
+	if (m_IsMoving == false && m_IsLockOn == false)
+	{
+		_float3 vPlayerUp = m_pPlayerTransform->Get_State(EState::Up);
+		D3DXVec3Normalize(&vPlayerUp, &vPlayerUp);
+		vPlayerPos += vPlayerUp * 10.f;
+
+		m_pTransform->Set_Position(vPlayerPos);
+	}
 
 	return _uint();
 }
@@ -174,12 +232,14 @@ _uint CTutorialUI::Search_Target(_float fDeltaTime)
 	//	//v = ((CTransform*)(iter.Get_Component(L"Com_Transform"))).Get_State(EState::Position);
 	//}
 
+	m_bAllTargetCollide = true;
 	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_uint i = 0;
 	for (auto& iter : m_listTargetObject)
 	{
 		if (iter->Get_IsCollide() == false)
 		{
+			m_bAllTargetCollide = false;
 			_float3 vPos;
 			vPos = ((CTransform*)(iter->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
 
@@ -205,10 +265,33 @@ _uint CTutorialUI::Search_Target(_float fDeltaTime)
 		}
 	}
 
+	return _uint();
+}
 
+_uint CTutorialUI::BillBorad(_float fDeltaTime)
+{
+	_float4x4 matView;
+	D3DXMatrixIdentity(&matView);
+	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+	ZeroMemory(&matView._41, sizeof(_float3));
+	D3DXMatrixInverse(&matView, 0, &matView);
 
-	_float3 v;
+	_float3 vBillPos = m_pTransform->Get_State(EState::Position);
 
+	_float fScale[3];
+	fScale[0] = m_pTransform->Get_State(EState::Right).x;
+	fScale[1] = m_pTransform->Get_State(EState::Up).y;
+	fScale[2] = m_pTransform->Get_State(EState::Look).z;
+
+	memcpy(&matView._41, &vBillPos, sizeof(_float3));
+
+	for (_uint i = 0; i < 3; ++i)
+	{
+		for (_uint j = 0; j < 4; ++j)
+			matView(i, j) *= fScale[i];
+	}
+
+	m_pTransform->Set_WorldMatrix(matView);
 
 	return _uint();
 }

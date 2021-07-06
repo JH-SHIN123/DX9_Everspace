@@ -21,6 +21,7 @@ public:
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Search_Target(_float fDeltaTime);
+	_uint BillBorad(_float fDeltaTime);
 
 public:
 	static CTutorialUI* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -34,18 +35,18 @@ private:
 
 private:
 	_bool m_IsLockOn = false;
+	_bool m_IsMoving = false;
 	_float4x4 m_Matview;
 
-	// Lock On Target
-	//CTransform* m_pTarget = nullptr;
 	wstring* m_pTargetLayerTag = {};
 	wstring m_wstrLayerTag = {};
-	_float m_fTargetDis = 0.f;
-	_float4x4 m_matDisWorld;
 
 	list<class CGameObject*> m_listTargetObject;
 	CTransform* m_pPlayerTransform = nullptr;
-	_float4 m_vSearchTagetDis[50];
+	_float4 m_vSearchTagetDis[20];
+	_bool m_bAllTargetCollide = false;
+	_float m_fSearchDisMax = 50.f;
+	_float m_fSearchDisMin = 1.f;
 };
 
 #define __TUTORIALUI_H__
