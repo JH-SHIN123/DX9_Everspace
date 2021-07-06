@@ -26,17 +26,20 @@ public:
 	static CLobbyModel* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
-
 public:
 	void Set_GotoNextScene(_bool _bSet) { m_bGotoNextScene = _bSet; }
+	void Set_Scene(class CLobby* _pLobby) { m_pLobby = _pLobby; }
 private:
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CController* m_pController = nullptr;
-
+	
 
 private:
 	_bool m_bGotoNextScene = false;
+	_bool m_bGo_Straight = false;
+	_float m_fDelaySceneChange = 0.f;
+	class CLobby* m_pLobby;
 };
 
 #define __LOBBYMODEL_H__

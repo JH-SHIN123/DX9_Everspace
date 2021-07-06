@@ -39,8 +39,9 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	CUI::Update_GameObject(fDeltaTime);
 	Update_Bounds();
 	Check_Picking();
+	OnMouseButton();
 	Key_Check(fDeltaTime);
-	
+	ChangeModelIcon();
 	return NO_EVENT;
 }
 
@@ -59,25 +60,7 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
 		return UPDATE_ERROR;
-	if (Get_IsPicking())
-	{
-		if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
-		{
-		}
-		else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
-		{
-		}
-		else if (m_wstrTexturePrototypeTag == L"Component_Texture_PlaneTemplete")
-		{
-
-		}
-		else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
-		{
-			m_dwIdx = 1;
-		}
-	}
-	else
-		m_dwIdx = 0;
+	
 
 
 	return _uint();
@@ -106,15 +89,19 @@ _uint CLobbyUI::Render_GameObject()
 	{
 		if(m_fDeltaTime < 1.f)
 		m_fDeltaTime += m_pManagement->Get_DeltaTime();
-		for (int i = 0; i < 4; i++)
-		{
+		int iIndex = m_dwIdx;
+		for (int i = 0; i <4; i++)
+		{	
+			if (iIndex >= 4)
+				iIndex = 0;
 			matView._11 = transformDesc.vScale.x;
 			matView._22 = transformDesc.vScale.y;
-			matView._41 = transformDesc.vPosition.x +i*transformDesc.vScale.x*m_fDeltaTime;
+			matView._41 = transformDesc.vPosition.x +i*transformDesc.vScale.x;
 			matView._42 = transformDesc.vPosition.y;
 			m_pDevice->SetTransform(D3DTS_VIEW, &matView);
-			m_pTexture->Set_Texture(i);
+			m_pTexture->Set_Texture(iIndex);
 			m_pVIBuffer->Render_VIBuffer();
+			iIndex++;
 		}
 	}
 
@@ -143,6 +130,7 @@ void CLobbyUI::Update_Bounds()
 	m_tUIBounds.top = vPos.y - (vSize.y);
 	m_tUIBounds.right = vPos.x + (vSize.x);
 	m_tUIBounds.bottom = vPos.y + (vSize.y);
+
 }
 
 void CLobbyUI::Check_Picking()
@@ -161,9 +149,14 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 {
 	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 	{
+		m_fDelayCheck += fDeltaTime;
+		if (m_bShowModelIcon && m_fDelayCheck >= 0.1f)
+		{
+			m_fDelayCheck = 0.f;
+			m_bChangeModelIcon = TRUE;
+		}
 		if (Get_IsPicking())
 		{
-			m_fDelayCheck += fDeltaTime;
 			if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
 			{
 			}
@@ -175,11 +168,12 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 			{
 				if (!m_pLobby->Get_IsSetPlayerModel())
 					m_pLobby->Set_IsSetPlayerModel(TRUE);
-				if (m_fDelayCheck >= 0.1f)
+				if (m_fDelayCheck >= 0.1f && !m_bShowModelIcon)
 				{
 					m_bShowModelIcon = TRUE;
 					m_fDelayCheck = 0.f;
 				}
+				
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 			{
@@ -233,6 +227,65 @@ void CLobbyUI::Set_Text()
 		m_pManagement->Get_Font()->DrawText(NULL
 			, str.c_str(), -1
 			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	}
+}
+
+void CLobbyUI::OnMouseButton()
+{
+	if (Get_IsPicking())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
+		{
+		}
+		else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
+		{
+		}
+		else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
+		{
+			m_dwIdx = 1;
+		}
+	}
+	else if(m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
+		m_dwIdx = 0;
+}
+
+void CLobbyUI::ChangeModelIcon()
+{
+	if (!m_bChangeModelIcon)
+		return;
+	RECT rc[4] = {};
+	POINT pt = {};
+	GetCursorPos(&pt);
+	ScreenToClient(g_hWnd, &pt);
+
+	for (int i = 0; i < 4; i++)
+	{
+	_float3 vPos = _float3(0.f, 0.f, 0.f);
+	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
+
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+
+	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
+
+	rc[i].left = vPos.x - (vSize.x)+(vSize.x*(i));
+	rc[i].top = vPos.y - (vSize.y);
+	rc[i].right = vPos.x + (vSize.x)+(vSize.x*(i));
+	rc[i].bottom = vPos.y + (vSize.y);
+
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		{
+			if (PtInRect(&rc[i], pt))
+			{
+				m_dwIdx += i;
+				if (m_dwIdx >= 4)
+					m_dwIdx -= 4;
+			
+				m_bShowModelIcon = FALSE;
+				m_bChangeModelIcon = FALSE;
+				break;
+			}
+		}
 	}
 }
 

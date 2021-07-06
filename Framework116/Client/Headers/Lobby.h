@@ -26,9 +26,10 @@ public:
 	void Set_GotoNextScene(_bool bSet);
 	void Set_IsGatcha(_bool bSet);
 	void Set_IsSetPlayerModel(_bool bSet);
-
+	void Set_SceneChange(_bool bSet);
 	_bool Get_IsGatcha()const;
 	_bool Get_IsSetPlayerModel()const;
+	_bool Get_GotoNextScene()const;
 public:
 	static CLobby* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
@@ -40,6 +41,7 @@ private:
 	_bool m_bGotoNextScene = false;
 	_bool m_bIsGatcha = false;
 	_bool m_bIsSetPlayerModel = false;
+	_bool m_bSceneChange = false;
 };
 
 #define __LOBBY_H__

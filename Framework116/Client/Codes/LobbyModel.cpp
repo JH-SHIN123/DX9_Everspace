@@ -2,6 +2,7 @@
 #include "..\Headers\LobbyModel.h"
 #include "Collision.h"
 #include"Player.h"
+#include"Lobby.h"
 CLobbyModel::CLobbyModel(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -78,8 +79,9 @@ _uint CLobbyModel::Update_GameObject(_float fDeltaTime)
 	else
 	{
 		StartSceneChange(fDeltaTime);
+
 	}
-	return NO_EVENT;
+	return m_pTransform->Update_Transform();;
 }
 
 _uint CLobbyModel::LateUpdate_GameObject(_float fDeltaTime)
@@ -88,7 +90,12 @@ _uint CLobbyModel::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
-
+	if (m_bGo_Straight)
+	{
+		m_fDelaySceneChange += fDeltaTime;
+		if (m_fDelaySceneChange >= 5.f)
+			m_pLobby->Set_SceneChange(TRUE);
+	}
 	return _uint();
 }
 
@@ -134,43 +141,40 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 {
 	static _float fTime = 0;
 	fTime += fDeltaTime;
-
-	if (fTime < 3.f)
+	if (m_bGo_Straight)
+	{
+		m_pTransform->Go_Straight(fDeltaTime* 10.f);
+		return;
+	}
+	if (fTime < 5.f)
 	{
 		m_pTransform->Go_Up(0.01*fDeltaTime);
-		m_pTransform->Update_Transform();
 	}
-	else if (fTime < 5.f)
+	else
 	{
-		_float4x4 matWorld,matTrans,matRot,matScale;
-		D3DXMatrixIdentity(&matWorld);
-		D3DXMatrixIdentity(&matTrans);
-		D3DXMatrixIdentity(&matRot);
-		D3DXMatrixIdentity(&matScale);
-		_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
-		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
-		
-		D3DXMatrixScaling(&matScale, vScale.x, vScale.y, vScale.z);
-		D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
-
+		_float3 vPlayerPos = m_pTransform->Get_State(EState::Position);
+		_float3 vTargetDir = _float3( -1.f,0.f,1.f );
 		_float3 vDir = m_pTransform->Get_State(EState::Look);
-		_float3 vGoalDir = { 1.f,-1.f,1.f };
+		vDir.y = 0.f;
 		D3DXVec3Normalize(&vDir, &vDir);
-		D3DXVec3Normalize(&vGoalDir, &vGoalDir);
-		_float3 vNextDir = (vDir - vGoalDir);
-
-		D3DXQUATERNION QuatQ = { vNextDir.x,vNextDir.y,vNextDir.z,0}
-		, QuatP = { vDir.x,vDir.y,vDir.z,0 };
-		D3DXQuaternionNormalize(&QuatP, &QuatP);
-		D3DXQuaternionNormalize(&QuatQ, &QuatQ);
-
-		D3DXQuaternionSlerp(&QuatQ, &QuatQ, &QuatP,0.0001f);
-
-		D3DXMatrixRotationQuaternion(&matRot,&QuatQ);
-
-		matWorld = matScale* matRot * matTrans;
-
-		m_pTransform->Set_WorldMatrix(matWorld);
+		D3DXVec3Normalize(&vTargetDir,&vTargetDir);
+		_float fAngle = acosf(D3DXVec3Dot(&vTargetDir, &vDir));
+		m_pTransform->RotateY(fDeltaTime*D3DXToRadian(fAngle)*20.f);
+		
+		if (0.01>= fAngle)
+		{
+			vTargetDir = _float3(0.f, 1.f, 1.f);
+			vDir = m_pTransform->Get_State(EState::Look);
+			vDir.x = 0.f;
+			D3DXVec3Normalize(&vTargetDir, &vTargetDir);
+			
+			fAngle = D3DXVec3Dot(&vDir, &vTargetDir);
+			m_pTransform->RotateX(fDeltaTime*fAngle);
+			if (0.001 >= fAngle)
+			{
+				m_bGo_Straight = TRUE;
+			}
+		}
 	}
 }
 
@@ -201,6 +205,7 @@ CGameObject * CLobbyModel::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyModel::Free()
 {
+	Safe_Release(m_pLobby);
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

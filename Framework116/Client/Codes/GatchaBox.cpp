@@ -47,7 +47,7 @@ HRESULT CGatchaBox::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fRotatePerSec = 1.f;
-	TransformDesc.vPosition = _float3(-15.f, 0.f, 0.f);	
+	TransformDesc.vPosition = _float3(-15.f, 0.f, -15.f);	
 	TransformDesc.vScale = { 10.f,10.f,10.f };
 	TransformDesc.vRotate = { 0.f,0.f,0.f };
 	if (FAILED(CGameObject::Add_Component(
@@ -68,7 +68,8 @@ _uint CGatchaBox::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	Movement(fDeltaTime);
-
+	
+	
 	m_pTransform->Update_Transform();
 	return NO_EVENT;
 }
@@ -130,6 +131,7 @@ CGameObject * CGatchaBox::Clone(void * pArg/* = nullptr*/)
 
 void CGatchaBox::Free()
 {
+	
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

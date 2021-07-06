@@ -41,21 +41,31 @@ _uint CLobbyCam::Update_GameObject(_float fDeltaTime)
 	CCamera::Update_GameObject(fDeltaTime);
 	if (m_pLobby)
 	{
+		if (m_pLobby->Get_GotoNextScene())
+		{
+			Safe_Release(m_pPlayerTransform);
+			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
+				, L"Com_Transform");
+			Safe_AddRef(m_pPlayerTransform);
+		}
 		if (m_pLobby->Get_IsGatcha())
 		{
+			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_GatchaBox")
 				->Get_Component(L"Com_Transform");
+			Safe_AddRef(m_pPlayerTransform);
 		}
 		else if (m_pLobby->Get_IsSetPlayerModel())
 		{
+			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
+			Safe_AddRef(m_pPlayerTransform);
 		}
 	}
-	if (!m_bGotoNextScene)
-		OffSet(fDeltaTime);
-	else
-		StartChangeScene(fDeltaTime);
+	OffSet(fDeltaTime);
+	StartChangeScene(fDeltaTime);
+	
 	return NO_EVENT;
 }
 
@@ -90,12 +100,17 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 		return 0;
 	}
 	_float3 vTargetPos = m_pPlayerTransform->Get_TransformDesc().vPosition;
+	vTargetPos.y = 0.f;
 	_float3 vAt = m_CameraDesc.vAt;
+	vAt.y = 0.f;
 	if (vTargetPos != vAt)
 	{
+
 		D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 		D3DXVec3Normalize(&vAt, &vAt);
 		_float fAngle = acosf(D3DXVec3Dot(&vTargetPos, &vAt));
+		if (fAngle <= D3DXToRadian(1.f))
+			return 0;
 		fAngle *= fDeltaTime;
 		vAt = m_CameraDesc.vAt;
 		_float3 vNextAim;
@@ -111,6 +126,13 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 
 void CLobbyCam::StartChangeScene(_float fDeltaTime)
 {
+	if (m_pLobby)
+	{
+		if (m_pLobby->Get_GotoNextScene())
+		{
+
+		}
+	}
 }
 
 

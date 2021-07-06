@@ -21,6 +21,9 @@ private:
 	void Check_Picking();
 	void Key_Check(_float fDeltaTime);
 	void Set_Text();
+	void OnMouseButton();
+
+	void ChangeModelIcon();
 public:
 	void Set_GotoNextScene(_bool bSet) { m_bGotoNextScene = bSet; }
 
@@ -30,7 +33,7 @@ public:
 	virtual void Free() override;
 public:
 	void Set_Scene(class CLobby* _pUI);
-
+	
 private:
 	_float m_fDelayCheck = 0;
 	_float m_fDeltaTime = 0;
@@ -39,6 +42,6 @@ private:
 	_bool m_bGotoNextScene = false;
 	_bool m_bDead = false;
 	_bool m_bShowModelIcon = false;
-
+	_bool m_bChangeModelIcon = false;
 };
 

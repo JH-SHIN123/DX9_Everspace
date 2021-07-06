@@ -20,7 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-
+	void CheckPicking();
 public:
 	static CGatchaBox* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;

@@ -38,7 +38,9 @@ private:
 	_float m_fCamAngle = D3DXToRadian(45.f);
 
 	_bool m_bGotoNextScene = false;
-	class CLobby* m_pLobby;
+	class CLobby* m_pLobby = nullptr;
+
+	_float m_fSceneChangeDeltaTime = 0.f;
 };
 
 #define __LOBBYCAM_H__

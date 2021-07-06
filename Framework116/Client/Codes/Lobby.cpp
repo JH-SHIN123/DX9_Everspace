@@ -27,6 +27,7 @@ HRESULT CLobby::Ready_Scene()
 
 	if (FAILED(Add_Layer_UI(L"Layer_Ui")))
 		return E_FAIL;
+
 	if (FAILED(Add_Layer_GatchaBox(L"Layer_GatchaBox")))
 		return E_FAIL;
 
@@ -43,6 +44,17 @@ HRESULT CLobby::Ready_Scene()
 
 _uint CLobby::Update_Scene(_float fDeltaTime)
 {
+	if (m_bSceneChange)
+	{
+		m_pManagement->Clear_NonStatic_Resources();
+		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+			CLoading::Create(m_pDevice, ESceneType::Stage))))
+		{
+			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+			return E_FAIL;
+		}
+		return CHANGE_SCENE;
+	}
 	CScene::Update_Scene(fDeltaTime);
 
 	
@@ -67,6 +79,7 @@ _uint CLobby::LateUpdate_Scene(_float fDeltaTime)
 			static_cast<CLobbyCam*>(pCam)->Set_GotoNextScene(TRUE);
 		}
 	}
+	
 	return _uint();
 }
 
@@ -96,6 +109,9 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Model In Layer");
 		return E_FAIL;
 	}
+	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
+	pModel->Set_Scene(this);
+	AddRef();
 }
 
 HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
@@ -151,6 +167,7 @@ HRESULT CLobby::Add_Layer_UI(const wstring& LayerTag)
 	for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
 	{
 		static_cast<CLobbyUI*>(pDst)->Set_Scene(this);
+		AddRef();
 	}
 	return S_OK;
 }
@@ -171,6 +188,8 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 
 void CLobby::Set_GotoNextScene(_bool bSet)
 {
+	m_bIsGatcha = !bSet;
+	m_bIsSetPlayerModel = !bSet;
 	m_bGotoNextScene = bSet;
 }
 
@@ -186,6 +205,11 @@ void CLobby::Set_IsSetPlayerModel(_bool bSet)
 	m_bIsSetPlayerModel = bSet;
 }
 
+void CLobby::Set_SceneChange(_bool bSet)
+{
+	m_bSceneChange = bSet;
+}
+
 
 
 _bool CLobby::Get_IsGatcha() const
@@ -196,6 +220,11 @@ _bool CLobby::Get_IsGatcha() const
 _bool CLobby::Get_IsSetPlayerModel() const
 {
 	return m_bIsSetPlayerModel;
+}
+
+_bool CLobby::Get_GotoNextScene() const
+{
+	return m_bGotoNextScene;
 }
 
 CLobby * CLobby::Create(LPDIRECT3DDEVICE9 pDevice)
