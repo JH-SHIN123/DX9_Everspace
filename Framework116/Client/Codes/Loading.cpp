@@ -512,6 +512,7 @@ HRESULT CLoading::Ready_HUD_Resources()
 	return S_OK;
 }
 
+<<<<<<< HEAD
 HRESULT CLoading::Ready_Stage1()
 {
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
@@ -561,6 +562,10 @@ HRESULT CLoading::Ready_Stage1()
 		return E_FAIL;
 	}
 
+=======
+HRESULT CLoading::Ready_Map_Effect_Resources()
+{
+>>>>>>> main
 
 	return S_OK;
 }

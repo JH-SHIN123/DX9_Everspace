@@ -187,6 +187,7 @@ _uint CCrosshair::Searching_Target(_float fDeltaTime)
 				return E_FAIL;
 				m_IsBossLockOn = true;
 			}
+
 		}
 		else if (!m_IsDistOn)
 		{

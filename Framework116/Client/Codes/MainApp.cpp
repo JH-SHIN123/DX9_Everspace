@@ -8,6 +8,7 @@
 #include "Player_Lazer.h"
 #include "Player_Missile.h"
 #include "Light.h"
+#include "AlertArrow.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -127,6 +128,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CPlayer_Missile::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player_Missile");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_AlertArrow */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_AlertArrow",
+		CAlertArrow::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_AlertArrow");
 		return E_FAIL;
 	}
 
@@ -252,6 +263,17 @@ HRESULT CMainApp::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Player_Lazer");
 		return E_FAIL;
 	}
+
+	/* For.Component_Texture_AlertArrow */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_AlertArrow",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/AlertArrow%d.png", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AlertArrow");
+		return E_FAIL;
+	}
+
 	//if (FAILED(m_pManagement->Add_Component_Prototype(
 	//	EResourceType::Static,
 	//	L"Component_Texture_Player_Lazer",

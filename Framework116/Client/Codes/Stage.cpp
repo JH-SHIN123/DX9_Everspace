@@ -22,6 +22,7 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
 
+	//
 	// 전역조명 : Directional Light
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;

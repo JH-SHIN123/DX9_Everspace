@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Headers\AlertArrow.h" />
     <ClInclude Include="..\Headers\Boss_Monster.h" />
     <ClInclude Include="..\Headers\Boss_Spawn_Monster.h" />
     <ClInclude Include="..\Headers\Boss_Warmhole.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\AlertArrow.cpp" />
     <ClCompile Include="..\Codes\Boss_Monster.cpp" />
     <ClCompile Include="..\Codes\Boss_Spawn_Monster.cpp" />
     <ClCompile Include="..\Codes\Boss_Warmhole.cpp" />

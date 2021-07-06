@@ -46,18 +46,23 @@ HRESULT CEffectHandler::Add_Layer_Effect_Explosion(const _float3& _vPos, const _
 	return S_OK;
 }
 
-HRESULT CEffectHandler::Add_Layer_Effect_Bullet( CGameObject* pTarget, const _float _fSize, CGameObject** ppGameObject)
+HRESULT CEffectHandler::Add_Layer_Effect_Missile_Head(CGameObject* pTarget, CGameObject** ppGameObject)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CEffectHandler::Add_Layer_Effect_Missile_Smoke( CGameObject* pTarget, CGameObject** ppGameObject)
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
 	pSystemDesc.iNumParticles = 2;
-	pSystemDesc.tResetAttribute.fParticleSize = 3.f * _fSize;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 15.f;
-	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.04f;
-	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
-	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
-	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
-	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.fParticleSize = 1.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 1.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.01f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 0.5f,0.5f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 0.5f,0.5f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 0.5f,0.5f };
 	pSystemDesc.pTarget = pTarget;
 
 	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(

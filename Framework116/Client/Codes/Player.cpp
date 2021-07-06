@@ -109,9 +109,10 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	KeyProcess(fDeltaTime);
-
 	// 
 	Movement(fDeltaTime);
+	//
+	Make_Arrow();
 
 	// 월드행렬 업데이트
 	m_pTransform->Update_Transform_Quaternion();
@@ -165,7 +166,15 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 		// Booster
 		if (m_pController->Key_Pressing(KEY_SPACE))
+		{
 			m_pTransform->Go_Straight(fDeltaTime * 0.8f);
+			if (m_IsBoost == false)
+			{
+				// 바람 가르는 듯 한.. Effect 생성
+
+				m_IsBoost = true;
+			}
+		}
 	}
 
 	if (GetAsyncKeyState('S') & 0x8000)
@@ -178,9 +187,9 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->Go_Side(-fDeltaTime);
 
 	if (GetAsyncKeyState('Q') & 0x8000)
-		m_pTransform->RotateZ(-fDeltaTime);
-	if (GetAsyncKeyState('E') & 0x8000)
 		m_pTransform->RotateZ(fDeltaTime);
+	if (GetAsyncKeyState('E') & 0x8000)
+		m_pTransform->RotateZ(-fDeltaTime);
 
 	// Weapon Change / Skills (OverDrive, Shield)
 	if (m_pController->Key_Down(KEY_1))
@@ -415,4 +424,46 @@ void CPlayer::Free()
 	Safe_Release(m_pController);
 
 	CGameObject::Free();
+}
+
+_uint CPlayer::Make_Arrow()
+{
+	// 나중에는 모든 몬스터 순회하면서 검사해야함.
+	// 몬스터 pos - 플레이어 pos. => 
+	// 각도로 비교하자~
+
+	//Test
+	m_pTransform->Get_TransformDesc().matWorld;
+	_float3 vPlayerLook = m_pTransform->Get_State(EState::Look);
+
+
+	m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
+	auto& iter = m_listCheckMonsters->begin();
+
+	for (; iter != m_listCheckMonsters->end(); ++iter)
+	{
+		_float3 v1 = vPlayerLook; // 얘는 방향벡턴데?
+		_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // 위치벡터네?
+		_float fCeta;
+		
+		_float v1v2 = D3DXVec3Dot(&v1, &v2);
+		_float v1Length = D3DXVec3Length(&v1);
+		_float v2Length = D3DXVec3Length(&v2);
+		fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+		_float fDegree = D3DXToDegree(fCeta);
+
+		if (fabs(fDegree) > 80.f)
+		{
+	/*		wstring abc = to_wstring(fDegree);
+			PRINT_LOG(L"", abc.c_str());*/
+			//m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+		}
+
+	}
+
+	
+
+
+	return _uint();
 }

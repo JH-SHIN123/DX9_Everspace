@@ -40,6 +40,10 @@ HRESULT CTexture::Ready_Component_Prototype()
 	/*
 	m_pFilePath = L"../Resources/Player%d.png";
 	*/
+	D3DCOLOR transparencycolor;
+	transparencycolor = D3DCOLOR_ARGB(0xff, 0x00, 0x00, 0x00); //투명색 사용
+
+
 	for (_uint i = 0; i < m_iCount; ++i)
 	{
 		swprintf_s(szFullPath, m_pFilePath, i);
@@ -47,7 +51,14 @@ HRESULT CTexture::Ready_Component_Prototype()
 		switch (m_eType)
 		{
 		case Engine::ETextureType::Normal:
-			hr = D3DXCreateTextureFromFile(m_pDevice, szFullPath, (LPDIRECT3DTEXTURE9*)&pTexture);
+			hr = D3DXCreateTextureFromFileEx(m_pDevice, szFullPath,
+				D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN,
+				D3DPOOL_MANAGED, D3DX_FILTER_TRIANGLE | D3DX_FILTER_MIRROR,
+				D3DX_FILTER_TRIANGLE | D3DX_FILTER_MIRROR,
+				transparencycolor,
+				NULL, NULL,
+				(LPDIRECT3DTEXTURE9*)&pTexture);
+
 			break;
 		case Engine::ETextureType::Cube:
 			hr = D3DXCreateCubeTextureFromFile(m_pDevice, szFullPath, (LPDIRECT3DCUBETEXTURE9*)&pTexture);

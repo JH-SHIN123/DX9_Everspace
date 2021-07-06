@@ -138,8 +138,8 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 	if (m_IsCollide) {
 		m_IsDead = true;
 
-		if (m_pBulletParticle)
-			m_pBulletParticle->Set_IsDead(true);
+		//if (m_pBulletParticle)
+		//	m_pBulletParticle->Set_IsDead(true);
 
 		return DEAD_OBJECT;
 	}
@@ -153,8 +153,8 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 	if (m_fLifeTime >= 2.f) {
 		m_IsDead = true;
 
-		if (m_pBulletParticle)
-			m_pBulletParticle->Set_IsDead(true);
+		//if (m_pBulletParticle)
+		//	m_pBulletParticle->Set_IsDead(true);
 
 		return DEAD_OBJECT;
 	}
@@ -185,7 +185,7 @@ _uint CPlayer_Bullet::Render_GameObject()
 
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -244,9 +244,9 @@ void CPlayer_Bullet::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pCollide);
-	
-	if (m_pBulletParticle)
-		m_pBulletParticle->Set_IsDead(true);
+	//
+	//if (m_pBulletParticle)
+	//	m_pBulletParticle->Set_IsDead(true);
 
 	CGameObject::Free();
 }

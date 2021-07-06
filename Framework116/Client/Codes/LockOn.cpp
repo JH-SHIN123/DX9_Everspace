@@ -99,9 +99,9 @@ _uint CLockOn::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLockOn::Render_GameObject()
 {
-	//m_pTransform->Get_TransformDesc().matWorld;
+	CGameObject::Render_GameObject();
+
 	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-	/*matWorld = m_pTargetCollide->Get_BoundingSphere().matWorld;*/
 	matWorld._11 = 10.f;
 	matWorld._22 = 10.f;
 	matWorld._33 = 10.f;
