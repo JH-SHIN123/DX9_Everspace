@@ -48,6 +48,8 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
+	TransformDesc.vPosition = _float3(200.f, 0.f, 200.f);
+	TransformDesc.vScale = _float3(1.f, 1.f, 1.f);
 	if (pArg != nullptr)
 	{
 		TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
@@ -55,8 +57,6 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 	}
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
-	TransformDesc.vPosition = _float3(200.f, 0.f, 200.f);
-	TransformDesc.vScale = _float3(1.f, 1.f, 1.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,

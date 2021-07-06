@@ -59,6 +59,8 @@ HRESULT CRing::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 	TransformDesc.vPosition = { 50.f,10.f,100.f };
+	TransformDesc.fSpeedPerSec = 20.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 
 	if (pArg != nullptr)
 	{
@@ -66,8 +68,6 @@ HRESULT CRing::Ready_GameObject(void * pArg/* = nullptr*/)
 		TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
 	}
 
-	TransformDesc.fSpeedPerSec = 20.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
