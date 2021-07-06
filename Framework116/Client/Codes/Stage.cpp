@@ -285,8 +285,6 @@ HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
 
 HRESULT CStage::Add_Layer_Ring(const wstring & LayerTag)
 {
-
-
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
 		L"GameObject_Ring",

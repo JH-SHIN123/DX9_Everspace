@@ -102,15 +102,11 @@ HRESULT CTutorialUI::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CTutorialUI::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
-
-	//m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_Transform");
 	
 	Search_Target(fDeltaTime);
 
 	Movement(fDeltaTime);	
 	
-
-
 	return m_pTransform->Update_Transform();
 }
 
@@ -246,8 +242,9 @@ _uint CTutorialUI::Search_Target(_float fDeltaTime)
 			_float fDis = fabs(D3DXVec3Length(&(vPos - fPlayerPos)));
 
 			m_vSearchTagetDis[i] = { vPos.x, vPos.y, vPos.z, fDis };
+
+			++i;
 		}
-		++i;
 	}
 
 	_uint iSize = m_listTargetObject.size();
