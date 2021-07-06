@@ -38,7 +38,7 @@ private:
 
 	//_float m_fTrackingTime = 1.f;
 	_bool m_IsTracking = false;
-	_float m_fLiveTime = 10.f;
+	_float m_fLiveTime = 5.f;
 	_float3 m_vMoveDir = {};
 
 

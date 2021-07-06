@@ -37,13 +37,15 @@ private:
 	_float4x4 m_Matview;
 
 	// Lock On Target
-	CTransform* m_pTargetTransform = nullptr;
+	//CTransform* m_pTarget = nullptr;
 	wstring* m_pTargetLayerTag = {};
 	wstring m_wstrLayerTag = {};
 	_float m_fTargetDis = 0.f;
 	_float4x4 m_matDisWorld;
 
-	list<CTransform*> m_listTargetTransforms;
+	list<class CGameObject*> m_listTargetObject;
+	CTransform* m_pPlayerTransform = nullptr;
+	_float4 m_vSearchTagetDis[50];
 };
 
 #define __TUTORIALUI_H__

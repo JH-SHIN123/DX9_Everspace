@@ -2,6 +2,7 @@
 #include "..\Headers\TutorialUI.h"
 #include "Collision.h"
 #include "Pipeline.h"
+#include "Ring.h"
 
 CTutorialUI::CTutorialUI(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -64,9 +65,9 @@ HRESULT CTutorialUI::Ready_GameObject(void * pArg/* = nullptr*/)
 	wstring* m_pTargetLayerTag = (wstring*)pArg;
 	m_wstrLayerTag = *m_pTargetLayerTag;
 	
-	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_Transform");
-	Safe_AddRef(m_pTargetTransform);
-	if (nullptr == m_pTargetTransform)
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	Safe_AddRef(m_pPlayerTransform);
+	if (nullptr == m_pPlayerTransform)
 	{
 		PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
 		return UPDATE_ERROR;
@@ -78,7 +79,17 @@ HRESULT CTutorialUI::Ready_GameObject(void * pArg/* = nullptr*/)
 	2. 순회하면서 그 타겟의 트랜스폼 컴포넌트를 내 리스트에 넣는다.
 	3. 넣어 주면서 Add_Ref
 	*/
-	//((CGameObject*)m_pManagement->Get_GameObjectList(L"Layer_Ring"))->Get_Component(L"Com_Transform");
+	m_listTargetObject = *(m_pManagement->Get_GameObjectList(L"Layer_Ring"));
+	if (m_listTargetObject.empty())
+	{
+		PRINT_LOG(L"Error", L"m_listTargetObject is empty");
+		return E_FAIL;
+	}
+	else
+	{
+		for(auto& iter : m_listTargetObject)
+			Safe_AddRef(iter);
+	}
 
 	return S_OK;
 }
@@ -87,7 +98,7 @@ _uint CTutorialUI::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 
-	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_Transform");
+	//m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_Transform");
 	
 	Search_Target(fDeltaTime);
 
@@ -119,9 +130,9 @@ _uint CTutorialUI::Render_GameObject()
 	matWorld._22 = 10.f;
 	matWorld._33 = 10.f;
 
-	matWorld._41 = m_pTargetTransform->Get_State(EState::Position).x;
-	matWorld._42 = m_pTargetTransform->Get_State(EState::Position).y;
-	matWorld._43 = m_pTargetTransform->Get_State(EState::Position).z;
+	matWorld._41 = m_vSearchTagetDis[0].x;
+	matWorld._42 = m_vSearchTagetDis[0].y;
+	matWorld._43 = m_vSearchTagetDis[0].z;
 
 	_float4x4 matView;
 	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
@@ -157,7 +168,47 @@ _uint CTutorialUI::Movement(_float fDeltaTime)
 
 _uint CTutorialUI::Search_Target(_float fDeltaTime)
 {
-	
+	//auto iter = (m_pManagement->Get_GameObjectList(L"Layer_Ring"))->begin();
+	//for (auto& iter : *m_pManagement->Get_GameObjectList(L"Layer_Ring"))
+	//{
+	//	//v = ((CTransform*)(iter.Get_Component(L"Com_Transform"))).Get_State(EState::Position);
+	//}
+
+	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
+	_uint i = 0;
+	for (auto& iter : m_listTargetObject)
+	{
+		if (iter->Get_IsCollide() == false)
+		{
+			_float3 vPos;
+			vPos = ((CTransform*)(iter->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
+
+			_float fDis = fabs(D3DXVec3Length(&(vPos - fPlayerPos)));
+
+			m_vSearchTagetDis[i] = { vPos.x, vPos.y, vPos.z, fDis };
+		}
+		++i;
+	}
+
+	_uint iSize = m_listTargetObject.size();
+
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		for (_uint j = 0; j < iSize; ++j)
+		{
+			if (m_vSearchTagetDis[j].w > m_vSearchTagetDis[j + 1].w)
+			{
+				_float4 vTemp = m_vSearchTagetDis[j];
+				m_vSearchTagetDis[j] = m_vSearchTagetDis[j + 1];
+				m_vSearchTagetDis[j + 1] = vTemp;
+			}
+		}
+	}
+
+
+
+	_float3 v;
+
 
 	return _uint();
 }
@@ -188,7 +239,13 @@ CGameObject * CTutorialUI::Clone(void * pArg/* = nullptr*/)
 
 void CTutorialUI::Free()
 {
-	Safe_Release(m_pTargetTransform);
+	for (auto& pObject : m_listTargetObject)
+	{
+		Safe_Release(pObject);
+	}
+	m_listTargetObject.clear();
+
+	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

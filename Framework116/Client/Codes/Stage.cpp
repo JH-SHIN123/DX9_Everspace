@@ -326,6 +326,19 @@ HRESULT CStage::Add_Layer_Ring(const wstring & LayerTag)
 		return E_FAIL;
 	}
 
+
+	pData->vPosition = { 130.f, 0.f, 90.f };
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Ring",
+		LayerTag, pData)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Ring In Layer");
+		return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 
