@@ -93,6 +93,7 @@ public:
 	_uint RotateZ_Quaternion();
 
 	_uint Scale(const _float3& _vScale);
+	_uint Move(const _float3& _vOffset);
 
 public:
 	static CTransform* Create(LPDIRECT3DDEVICE9 pDevice);

@@ -2,6 +2,7 @@
 #include "..\Headers\Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
+#include "Asteroid.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -27,7 +28,7 @@ HRESULT CStage::Ready_Scene()
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	//lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
-	lightDesc.tLightColor = D3DCOLOR_XRGB(100, 100, 100);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(160, 160, 160);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -66,6 +67,22 @@ HRESULT CStage::Ready_Scene()
 
 	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
 		return E_FAIL;
+
+
+	// TEST Component_Mesh_Rock_Generic_001
+	ASTEROID_DESC pDesc;
+	pDesc.pMeshTag = L"Component_Mesh_Rock_Generic_001";
+	pDesc.tTransformDesc.vPosition = { 0.f + i * 60.f,0.f,0.f + j * 60.f };
+	pDesc.tTransformDesc.vScale = { 5.f,5.f,5.f };
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Asteroid",
+		L"Layer_Asteroid",
+		(void*)&pDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid In Layer");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

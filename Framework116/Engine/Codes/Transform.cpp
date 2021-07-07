@@ -272,6 +272,13 @@ _uint CTransform::Scale(const _float3& _vScale)
 	return _uint();
 }
 
+_uint CTransform::Move(const _float3& _vOffset)
+{
+	m_TransformDesc.vPosition += _vOffset;
+
+	return _uint();
+}
+
 CTransform * CTransform::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	CTransform* pInstance = new CTransform(pDevice);

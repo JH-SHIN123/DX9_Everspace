@@ -154,6 +154,9 @@
     <Filter Include="02.GameObject\10.HUD_Effect">
       <UniqueIdentifier>{2f511fc6-a5f3-45e3-83a9-dffebade5ee9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\15.Asteroid">
+      <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -276,14 +279,15 @@
     <ClInclude Include="..\Headers\EngineEffectSystem.h">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h">
-      <Filter>02.GameObject\11.Planet</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\WingBoost_System.h">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h" />
+    <ClInclude Include="..\Headers\Asteroid.h">
+      <Filter>02.GameObject\15.Asteroid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -395,14 +399,15 @@
     <ClCompile Include="..\Codes\EngineEffectSystem.cpp">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp">
-      <Filter>02.GameObject\11.Planet</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\WingBoost_System.cpp">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp" />
+    <ClCompile Include="..\Codes\Asteroid.cpp">
+      <Filter>02.GameObject\15.Asteroid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
