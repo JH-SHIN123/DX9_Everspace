@@ -22,21 +22,21 @@ HRESULT CMeteor::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
-	// For.Com_VIBuffer
+	// For.Com_Geo_Sphere
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_VIBuffer_CubeTexture",
-		L"Com_VIBuffer",
-		(CComponent**)&m_pMesh)))
+		L"Component_Mesh_Planet",
+		L"Com_GeoMesh",
+		(CComponent**)&m_pModelMesh)))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
+		PRINT_LOG(L"Error", L"Failed To Add_Component Component_GeoMesh_Sphere");
 		return E_FAIL;
 	}
 
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_Texture_Monster",
+		L"Component_Texture_Earth",
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
 	{
@@ -46,11 +46,10 @@ HRESULT CMeteor::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = {100.f, -50.f, -100.f};
+	TransformDesc.vPosition = {-100.f, -50.f, 50.f};
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
-	TransformDesc.vScale = { 2.f, 2.f, 2.f };
-	//TransformDesc.vRotate = ;
+	TransformDesc.vScale = { 0.2f, 0.2f, 0.2f };
 
 	if (pArg != nullptr)
 	{
@@ -69,14 +68,6 @@ HRESULT CMeteor::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-
-	//m_pTerrainBuffer = (CVIBuffer_TerrainTexture*)m_pManagement->Get_Component(L"Layer_Terrain", L"Com_VIBuffer");
-	//Safe_AddRef(m_pTerrainBuffer);
-	//if (nullptr == m_pTerrainBuffer)
-	//{
-	//	PRINT_LOG(L"Error", L"m_pTerrainBuffer is nullptr");
-	//	return E_FAIL;
-	//}
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -100,7 +91,7 @@ HRESULT CMeteor::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CMeteor::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
-	Movement(fDeltaTime);
+	//Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -123,9 +114,9 @@ _uint CMeteor::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
-	m_pMesh->Render_Mesh();
-	// Test
+	m_pModelMesh->Render_Mesh();
 
+	// Test
 #ifdef _DEBUG // Render Collide
 	m_pCollide->Render_Collide();
 #endif
@@ -135,16 +126,7 @@ _uint CMeteor::Render_GameObject()
 
 _uint CMeteor::Movement(_float fDeltaTime)
 {
-	//_float3 vOutPos = m_pTransform->Get_State(EState::Position);
-	//if (true == m_pTerrainBuffer->Is_OnTerrain(&vOutPos))
-	//{
-	//	vOutPos.y += 0.5f;
-	//	m_pTransform->Set_Position(vOutPos);
-	//}	
-
-
 	m_pTransform->Go_Straight(fDeltaTime);
-
 
 	return _uint();
 }
@@ -175,8 +157,7 @@ CGameObject * CMeteor::Clone(void * pArg/* = nullptr*/)
 
 void CMeteor::Free()
 {
-	//Safe_Release(m_pTerrainBuffer);
-	Safe_Release(m_pMesh);
+	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);

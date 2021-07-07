@@ -30,6 +30,7 @@ private:
 	HRESULT Add_Layer_Ring(const wstring& LayerTag);
 	HRESULT Add_Layer_TargetMonster(const wstring& LayerTag);
 	HRESULT Add_Layer_Planet(const wstring& LayerTag);
+	HRESULT Add_Layer_Meteor(const wstring& LayerTag);
 
 
 

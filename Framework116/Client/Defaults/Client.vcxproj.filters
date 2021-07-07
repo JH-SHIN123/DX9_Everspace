@@ -157,6 +157,9 @@
     <Filter Include="02.GameObject\06.Particle\WingBoost">
       <UniqueIdentifier>{6840ecc0-5224-47b6-968b-27169f738624}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\06.ScriptUI">
+      <UniqueIdentifier>{c7f25113-b245-4948-850d-0ad03c90ce48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -291,6 +294,12 @@
     <ClInclude Include="..\Headers\WingBoost_System.h">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\MissionUI.h">
+      <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScriptUI.h">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -412,6 +421,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\WingBoost_System.cpp">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\MissionUI.cpp">
+      <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScriptUI.cpp">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

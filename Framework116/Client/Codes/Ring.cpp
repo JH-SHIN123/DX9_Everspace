@@ -145,7 +145,7 @@ _uint CRing::Render_GameObject()
 	// Test
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();

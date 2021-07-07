@@ -29,6 +29,7 @@
 #include "Meteor.h"
 #include "TutorialUI.h"
 #include "WingBoost_System.h"
+#include "Meteor.h"
 #pragma endregion
 
 
@@ -664,6 +665,16 @@ HRESULT CLoading::Ready_Stage1()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Planet_Jupiter");
 		return E_FAIL;
 	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Meteor",
+		CMeteor::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Meteor");
+		return E_FAIL;
+	}
+
 
 	return S_OK;
 }

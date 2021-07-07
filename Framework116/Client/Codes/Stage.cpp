@@ -66,6 +66,8 @@ HRESULT CStage::Ready_Scene()
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/MapInfo/TestSave.mapInfo");
 
+	if (FAILED(Add_Layer_Planet(L"Layer_Meteor")))
+		return E_FAIL;
 
 	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
 		return E_FAIL;
@@ -325,16 +327,21 @@ HRESULT CStage::Add_Layer_TargetMonster(const wstring & LayerTag)
 
 HRESULT CStage::Add_Layer_Planet(const wstring & LayerTag)
 {
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Planet",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_TargetMonster In Layer");
-		return E_FAIL;
-	}
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::NonStatic,
+	//	L"GameObject_Planet",
+	//	LayerTag)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add GameObject_TargetMonster In Layer");
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_Meteor(const wstring & LayerTag)
+{
+	return E_NOTIMPL;
 }
 
 CStage * CStage::Create(LPDIRECT3DDEVICE9 pDevice)
@@ -466,6 +473,15 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	HUD_HP_OutBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Out_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
+
+	// Mission HUD
+	UI_DESC HUD_Mission;
+	HUD_Mission.tTransformDesc.vPosition = { 860.f, 500.f, 0.f };
+	HUD_Mission.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
+	HUD_Mission.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Mission)))
+		return E_FAIL;
+
 
 	return S_OK;
 }

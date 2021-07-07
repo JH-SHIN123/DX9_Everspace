@@ -1,15 +1,21 @@
 #pragma once
-#ifndef __METEOR_H__
+#ifndef __SCRIPTUI_H__
 
 #include "GameObject.h"
 
 USING(Engine)
-class CMeteor final : public CGameObject
+
+enum Script {
+	Tutorial
+	, End
+};
+
+class CScruptUI final : public CGameObject
 {
 public:
-	explicit CMeteor(LPDIRECT3DDEVICE9 pDevice);
-	explicit CMeteor(const CMeteor& other);
-	virtual ~CMeteor() = default;
+	explicit CScruptUI(LPDIRECT3DDEVICE9 pDevice);
+	explicit CScruptUI(const CScruptUI& other);
+	virtual ~CScruptUI() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -20,22 +26,23 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint Search_Target(_float fDeltaTime);
+	_uint BillBorad(_float fDeltaTime);
 
 public:
-	static CMeteor* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CScruptUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
-	CModelMesh*			m_pModelMesh = nullptr;
-	CTransform*			m_pTransform = nullptr;
-	CTexture*			m_pTexture = nullptr;
-	CCollideSphere*		m_pCollide = nullptr;
+	CVIBuffer*  m_pVIBuffer = nullptr;
+	CTransform* m_pTransform = nullptr;
+	CTexture*	m_pTexture = nullptr;
 
 private:
-	_float m_fSpawnTime = 2.f;
+	Script m_eScriptMode = End;
 
 };
 
-#define __METEOR_H__ 
+#define __SCRIPTUI_H__
 #endif

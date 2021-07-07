@@ -188,6 +188,7 @@
     <ClInclude Include="..\Headers\MainCam.h" />
     <ClInclude Include="..\Headers\MaterialHandler.h" />
     <ClInclude Include="..\Headers\Meteor.h" />
+    <ClInclude Include="..\Headers\MissionUI.h" />
     <ClInclude Include="..\Headers\Monster.h" />
     <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\Player.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
     <ClInclude Include="..\Headers\Ring.h" />
+    <ClInclude Include="..\Headers\ScriptUI.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
     <ClInclude Include="..\Headers\Stage.h" />
     <ClInclude Include="..\Headers\StreamHandler.h" />
@@ -231,6 +233,7 @@
     <ClCompile Include="..\Codes\MainCam.cpp" />
     <ClCompile Include="..\Codes\MaterialHandler.cpp" />
     <ClCompile Include="..\Codes\Meteor.cpp" />
+    <ClCompile Include="..\Codes\MissionUI.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
@@ -239,6 +242,7 @@
     <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
     <ClCompile Include="..\Codes\Ring.cpp" />
+    <ClCompile Include="..\Codes\ScriptUI.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\StreamHandler.cpp" />
