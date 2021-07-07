@@ -646,35 +646,6 @@ HRESULT CLoading::Ready_Stage1()
 		return E_FAIL;
 	}
 
-	// 행성
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_Planet",
-		CPlanet::Create(m_pDevice)))) 
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Planet");
-		return E_FAIL;
-	}
-	// 행성 매쉬
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::NonStatic,
-		L"Component_GeoMesh_Planet",
-		CGeoMesh_Sphere::Create(m_pDevice, 50.f)))) 
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Planet");
-		return E_FAIL;
-	}
-	// 행성 이미지
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::NonStatic,
-		L"Component_Texture_Planet_Jupiter",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Planet/jupitermap.jpg"))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Planet_Jupiter");
-		return E_FAIL;
-	}
-
-
 	// 고리 내비게이션
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
