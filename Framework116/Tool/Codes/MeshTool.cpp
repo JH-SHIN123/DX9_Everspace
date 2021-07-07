@@ -61,10 +61,13 @@ BOOL CMeshTool::OnInitDialog()
 	//// 설치할수 있는 기하도형 메시 리스트 채우기
 	m_listbox_InstallableMesh.ResetContent();
 
-	m_listbox_InstallableMesh.AddString(L"플레이어");
+	m_listbox_InstallableMesh.AddString(L"GameObject_Player");
 	m_listbox_InstallableMesh.AddString(L"운석1");
 	m_listbox_InstallableMesh.AddString(L"운석2");
 	m_listbox_InstallableMesh.AddString(L"링");
+
+	m_umapGameObjectInfo.emplace(L"GameObject_Player",L"Component_Mesh_BigShip");
+	m_umapGameObjectInfo.emplace(L"GameObject_Player", L"Component_Mesh_BigShip");
 
 	s_pInstance = this;
 

@@ -29,6 +29,7 @@ HRESULT CDummy::Ready_GameObject(void* pArg)
     {
         if (pDummyDesc = dynamic_cast<DUMMY_DESC*>(ptr))
         {
+            m_wstrObjectPrototypeTag = pDummyDesc->wstrObjectPrototypeTag;
             m_wstrMeshPrototypeTag = pDummyDesc->wstrMeshPrototypeTag;
             tTransformDesc = pDummyDesc->tTransformDesc;
         }

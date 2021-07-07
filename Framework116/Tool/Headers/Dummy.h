@@ -5,7 +5,8 @@
 #include "GameObject.h"
 
 typedef struct tagDummyDesc : public BASE_DESC{
-	wstring wstrMeshPrototypeTag;
+	wstring wstrObjectPrototypeTag = L"";
+	wstring wstrMeshPrototypeTag = L"";
 	TRANSFORM_DESC tTransformDesc;
 }DUMMY_DESC;
 
@@ -35,6 +36,8 @@ public:
 private:
 	class CMesh* m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
+
+	wstring m_wstrObjectPrototypeTag = L"";
 	wstring m_wstrMeshPrototypeTag = L"";
 };
 

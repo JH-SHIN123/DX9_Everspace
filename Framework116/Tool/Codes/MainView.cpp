@@ -121,16 +121,15 @@ void CMainView::OnInitialUpdate()
 HRESULT CMainView::Ready_StaticResources()
 {
 #pragma region GameObjects
-	/* For.GameObject_Player */
+	/* For.GameObject_Skybox */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
-		L"GameObject_Player",
-		CPlayer::Create(m_pDevice))))
+		L"GameObject_Skybox",
+		CSkybox::Create(m_pDevice))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Skybox");
 		return E_FAIL;
 	}
-
 	/* For.GameObject_Axis */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
@@ -301,16 +300,24 @@ HRESULT CMainView::Ready_StaticResources()
 HRESULT CMainView::Ready_StageResources()
 {
 #pragma region GameObjects
-	/* For.GameObject_Skybox */
+	/* For.GameObject_Player */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_Skybox",
-		CSkybox::Create(m_pDevice))))
+		EResourceType::Static,
+		L"GameObject_Player",
+		CPlayer::Create(m_pDevice))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Skybox");
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player");
 		return E_FAIL;
 	}
-
+	/* For.GameObject_Planet */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Planet",
+		CPlanet::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Planet");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region Components

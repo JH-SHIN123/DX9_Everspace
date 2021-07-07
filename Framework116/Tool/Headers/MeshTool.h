@@ -37,6 +37,10 @@ public:
 	static CMeshTool* s_pInstance;
 
 public:
+	// PrototypeTag / MeshName
+	unordered_map<wstring, wstring> m_umapGameObjectInfo;
+
+public:
 	CEdit m_Edit_PosX;
 	CEdit m_Edit_PosY;
 	CEdit m_Edit_PosZ;
