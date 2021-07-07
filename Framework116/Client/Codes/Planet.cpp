@@ -71,7 +71,7 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 100.f;
+	BoundingSphere.fRadius = 10000.f;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_CollideSphere",

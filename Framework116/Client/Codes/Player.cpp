@@ -6,6 +6,7 @@
 #include "WingBoost_System.h"
 #include "HP_Bar.h"
 #include "Stamina_Bar.h"
+#include "CollisionHandler.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
 	: CGameObject(pDevice)
@@ -538,6 +539,21 @@ void CPlayer::Increase_Stamina(const _float fDeltaTime)
 	{
 		m_fStaminaIncreaseDelay = 0.f;
 	}
+}
+
+_uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
+{
+	// 1.Planet
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Planet");
+
+	if (m_IsAstroidCollide == true)
+	{
+		// 부딪힌 만큼 밀어내는데.. 어디로 밀어낼까
+		m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), -fDeltaTime);
+		m_IsAstroidCollide = false;
+	}
+
+	return _uint();
 }
 
 CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)

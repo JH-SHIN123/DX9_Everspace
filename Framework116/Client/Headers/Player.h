@@ -26,6 +26,8 @@ private:
 	_uint	Movement(_float fDeltaTime);
 	void	TimeOperation(const _float fDeltaTime);
 	void	Increase_Stamina(const _float fDeltaTime);
+	
+	_uint	Collide_Planet_Or_Astroid(const _float fDeltaTime);
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData);

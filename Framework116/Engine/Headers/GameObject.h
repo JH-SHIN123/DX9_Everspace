@@ -19,6 +19,7 @@ public:
 	const _bool Get_IsDead() const { return m_IsDead; }
 	const _bool Get_IsCollide() const { return m_IsCollide; }
 	const _float Get_HP() const { return m_fHp;}
+	const _bool Get_IsAstroidCollide() { return m_IsAstroidCollide; }
 	
 
 public:
@@ -28,6 +29,7 @@ public:
 	void Set_Damage(const _float _fDamage) { m_fHp -= _fDamage; }
 	void Set_FullHp(const _float _fFullHp) { m_fFullHp = _fFullHp; }
 	void Set_Hp(const _float _fHp) { m_fHp = _fHp; }
+	void Set_IsAstroidCollide(const _bool _IsAstroidCollide) { m_IsAstroidCollide = _IsAstroidCollide;}
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() = 0;	/* 프로토타입 초기화 */
@@ -47,6 +49,7 @@ public:
 protected:
 	_bool m_IsDead = false;
 	_bool m_IsCollide = false;
+	_bool m_IsAstroidCollide = false;
 	_float m_fHp = 0.f;
 	_float m_fFullHp = 0.f;
 
