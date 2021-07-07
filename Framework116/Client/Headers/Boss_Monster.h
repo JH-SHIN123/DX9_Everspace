@@ -94,6 +94,7 @@ private: /* Skills */
 	// HP Bar Ãß°¡
 	_bool m_IsHPBar = false;
 	class CHP_Bar* m_pHp_Bar = nullptr;
+	_float m_fHpLength = 64.f;
 };
 
 #define __BOSS_MONSTER_H__

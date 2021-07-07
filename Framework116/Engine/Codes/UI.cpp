@@ -34,17 +34,31 @@ HRESULT CUI::Ready_GameObject(void* pArg)
 		}
 	}
 
-	// For.Com_VIBuffer
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_VIBuffer_RectTexture",
-		L"Com_VIBuffer",
-		(CComponent**)&m_pVIBuffer)))
+	if (m_wstrTexturePrototypeTag == L"Component_Texture_HP_Bar")
 	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
-		return E_FAIL;
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_VIBuffer_RectTexture_HP_Bar",
+			L"Com_VIBuffer",
+			(CComponent**)&m_pVIBuffer)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
+			return E_FAIL;
+		}
 	}
-
+	else
+	{
+		// For.Com_VIBuffer
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_VIBuffer_RectTexture",
+			L"Com_VIBuffer",
+			(CComponent**)&m_pVIBuffer)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
+			return E_FAIL;
+		}
+	}
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,

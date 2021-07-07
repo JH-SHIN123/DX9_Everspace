@@ -154,9 +154,8 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {
-		//CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
-		// 여기 데미지 넣어야함.
- 		m_pHp_Bar->Set_ScaleX(-100.f / 10);
+		// Bullet 데미지 만큼.
+ 		m_pHp_Bar->Set_ScaleX(m_fFullHp / -100.f);
 		m_fHp -= 100.f;
 		m_IsCollide = false;
 	}
@@ -579,11 +578,9 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			// 감지범위에 들어오게 되면 HP_Bar 생성!
 			
 			CGameObject* pGameObject = nullptr;
-
-
 			UI_DESC HUD_Hp_Bar;
-			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x, ptBoss.y - 40.f, 0.f };
-       		HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (100.f / m_fFullHp), 10.f, 0.f };
+			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
+       		HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
 			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
  			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
@@ -596,6 +593,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			}
 			m_IsHPBar = true;
 			m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
+			m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_BOSS_MONSTER);
 		}
 
 	}

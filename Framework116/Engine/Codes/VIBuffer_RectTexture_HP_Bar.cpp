@@ -27,16 +27,16 @@ HRESULT CVIBuffer_RectTexture_HP_Bar::Ready_Component_Prototype()
 
 	m_pVB->Lock(0, 0, (void**)&pVertices, 0);
 
-	pVertices[0].vPosition = _float3(0.f, 0.05f, 0.f);
+	pVertices[0].vPosition = _float3(0.f, 1.f, 0.f);
 	pVertices[0].vUV = _float2(0.f, 0.f);
 
-	pVertices[1].vPosition = _float3(1.f, 0.05f, 0.f);
+	pVertices[1].vPosition = _float3(1.f, 1.f, 0.f);
 	pVertices[1].vUV = _float2(1.f, 0.f);
 
-	pVertices[2].vPosition = _float3(1.f, -0.05f, 0.f);
+	pVertices[2].vPosition = _float3(1.f, 0.f, 0.f);
 	pVertices[2].vUV = _float2(1.f, 1.f);
 
-	pVertices[3].vPosition = _float3(0.f, -0.05f, 0.f);
+	pVertices[3].vPosition = _float3(0.f, 0.f, 0.f);
 	pVertices[3].vUV = _float2(0.f, 1.f);
 
 	m_pVB->Unlock();

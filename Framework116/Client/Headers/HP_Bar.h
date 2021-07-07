@@ -7,6 +7,9 @@ USING(Engine)
 class CHP_Bar final : public CUI
 {
 public:
+	enum MAKERID {MAKER_PLAYER, MAKER_BOSS_MONSTER, MAKER_MONSTER, MAKER_END};
+
+public:
 	explicit CHP_Bar(LPDIRECT3DDEVICE9 pDevice);
 	explicit CHP_Bar(const CHP_Bar& other);
 	virtual ~CHP_Bar() = default;
@@ -21,6 +24,7 @@ public:
 public:
 	// ÇÇ±ð´Â¿ëµµ!
 	void Set_ScaleX(_float _fDamage);
+	_uint Who_Make_Me(MAKERID _iMakerName);
 
 private:
 	_uint Movement(_float fDeltaTime);
@@ -34,7 +38,7 @@ public:
 private:
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
 	_float3 vTargetPos = {};
-
+	MAKERID m_eMakerID = MAKER_END;
 	
 };
 

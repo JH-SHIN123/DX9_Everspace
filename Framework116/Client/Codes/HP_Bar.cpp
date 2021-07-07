@@ -74,35 +74,50 @@ _uint CHP_Bar::Movement(_float fDeltaTime)
 
 _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 {
-
-	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+	if (m_eMakerID == MAKER_BOSS_MONSTER)
 	{
-		m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
-		vTargetPos = m_listCheckMonsters->front()->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
-	}
-	//////////////////3dÁÂÇ¥¸¦ 2dÁÂÇ¥·Î////////////////////////////
-	D3DVIEWPORT9 vp2;
-	m_pDevice->GetViewport(&vp2);
-	_float4x4 TestView2, TestProj2;
-	m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
-	m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
-	_float4x4 matCombine2 = TestView2 * TestProj2;
-	D3DXVec3TransformCoord(&vTargetPos, &vTargetPos, &matCombine2);
-	vTargetPos.x += 1.f;
-	vTargetPos.y += 1.f;
+		if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+		{
+			m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
+			vTargetPos = m_listCheckMonsters->front()->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
+		}
+		//////////////////3dÁÂÇ¥¸¦ 2dÁÂÇ¥·Î////////////////////////////
+		D3DVIEWPORT9 vp2;
+		m_pDevice->GetViewport(&vp2);
+		_float4x4 TestView2, TestProj2;
+		m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+		m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+		_float4x4 matCombine2 = TestView2 * TestProj2;
+		D3DXVec3TransformCoord(&vTargetPos, &vTargetPos, &matCombine2);
+		vTargetPos.x += 1.f;
+		vTargetPos.y += 1.f;
 
-	vTargetPos.x = (vp2.Width * (vTargetPos.x)) / 2.f + vp2.X;
-	vTargetPos.y = (vp2.Height * (2.f - vTargetPos.y) / 2.f + vp2.Y);
+		vTargetPos.x = (vp2.Width * (vTargetPos.x)) / 2.f + vp2.X;
+		vTargetPos.y = (vp2.Height * (2.f - vTargetPos.y) / 2.f + vp2.Y);
 
-	_float3 ptBoss;
-	ptBoss.x = vTargetPos.x;
-	ptBoss.y = vTargetPos.y;
-	ptBoss.z = 0.f;
-	//////////////////////////////////////////////////////////////////
-	if (m_pTransform) {
-		m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f), -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f));
-		m_pTransform->Update_Transform();
+		_float3 ptBoss;
+		ptBoss.x = vTargetPos.x;
+		ptBoss.y = vTargetPos.y;
+		ptBoss.z = 0.f;
+		//////////////////////////////////////////////////////////////////
+		if (m_pTransform) {
+			m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) - 30.f, -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f));
+			m_pTransform->Update_Transform();
+		}
 	}
+	else if (m_eMakerID == MAKER_PLAYER)
+	{
+		if (m_pTransform) {
+			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 132.5f, WINCY / 2.f - 84.f , 0.f));
+			m_pTransform->Update_Transform();
+		}
+	}
+	return _uint();
+}
+
+_uint CHP_Bar::Who_Make_Me(MAKERID _iMakerName)
+{
+	m_eMakerID = _iMakerName;
 	return _uint();
 }
 

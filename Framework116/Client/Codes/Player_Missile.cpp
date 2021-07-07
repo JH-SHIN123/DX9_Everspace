@@ -94,13 +94,17 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// À¯µµÇÒ Å¸°Ù.
-	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
-	Safe_AddRef(m_pTargetTransform);
-	if (nullptr == m_pTargetTransform)
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
 	{
-		PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
-		return E_FAIL;
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+		if (nullptr == m_pTargetTransform)
+		{
+			PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
+			return E_FAIL;
+		}
 	}
+
 
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
@@ -143,11 +147,14 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Movement(fDeltaTime);
 	else
 	{
-		m_fAddSpeed += 0.05f;
-		m_fRotateSpeed += D3DXToRadian(15.f);
-		m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
-		m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
-		Homing(fDeltaTime);
+		if (m_pTargetTransform != nullptr)
+		{
+			m_fAddSpeed += 0.05f;
+			m_fRotateSpeed += D3DXToRadian(15.f);
+			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
+			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
+			Homing(fDeltaTime);
+		}
 	}
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);

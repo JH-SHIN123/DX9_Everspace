@@ -4,6 +4,7 @@
 #include "Pipeline.h"
 #include "EngineEffectSystem.h"
 #include "WingBoost_System.h"
+#include "HP_Bar.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
 	: CGameObject(pDevice)
@@ -122,6 +123,27 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
 	}
+
+	// HP ¹Ù.
+	m_fHp = 100.f;
+	m_fFullHp = m_fHp;
+	CGameObject* pGameObject = nullptr;
+	UI_DESC HUD_Hp_Bar;
+	HUD_Hp_Bar.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (256.f / m_fFullHp), 8.f, 0.f };
+	HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_HP_Bar",
+		L"Layer_HP_Bar",
+		&HUD_Hp_Bar, &pGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+		return E_FAIL;
+	}
+	m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
+	m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_PLAYER);
+
 	// For.Com_Collide
 	PASSDATA_COLLIDE tCollide;
 	CStreamHandler::Load_PassData_Collide(L"BigShip", meshTag, tCollide);
@@ -496,6 +518,7 @@ void CPlayer::Free()
 		m_pLeftWingBoost = nullptr;
 	}
 
+	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);
