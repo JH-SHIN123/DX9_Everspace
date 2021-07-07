@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Boss_Monster.h"
 #include "Bullet_EnergyBall.h"
+#include "HP_Bar.h"
 
 CBoss_Monster::CBoss_Monster(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
 	: CGameObject(pDevice)
@@ -110,7 +111,10 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	//	PRINT_LOG(L"Error", L"m_pGunTranform is nullptr");
 	//	return E_FAIL;
 	//}
-	
+
+	// HP 세팅
+	m_fHp = 900.f;
+	m_fFullHp = m_fHp;
 
 
 	return S_OK;
@@ -127,7 +131,8 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 
 	//Movement(fDeltaTime);
 
-	Add_Hp_Bar(fDeltaTime);
+	if(!m_IsHPBar)
+		Add_Hp_Bar(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -141,8 +146,9 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_IsCollide)
-	{
+	if (m_IsCollide) {
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		//m_pHP_Bar->Set_FullHp(m_fFullHp);
 		m_IsCollide = false;
 	}
 
@@ -158,7 +164,7 @@ _uint CBoss_Monster::Render_GameObject()
 	m_pCube->Render_VIBuffer();
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -562,12 +568,12 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			ptBoss.z = 0.f;
 			//////////////////////////////////////////////////////////////////
 			// 감지범위에 들어오게 되면 HP_Bar 생성
-
+			
 			UI_DESC HUD_Hp_Bar;
 			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x, ptBoss.y - 40.f, 0.f };
-       		HUD_Hp_Bar.tTransformDesc.vScale = { 230.f, 230.f, 0.f };
+       		HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (100.f / m_fFullHp), 10.f, 0.f };
 			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+ 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
 				L"GameObject_HP_Bar",
 				L"Layer_HP_Bar",

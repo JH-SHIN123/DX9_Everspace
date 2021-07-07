@@ -91,7 +91,7 @@ private: /* Skills */
 	// Spawn Monster
 	_float m_fSpawnCoolTime = 0.f;
 
-	// HP Bar.. 추가할건데 추가해도 되나용?
+	// HP Bar 추가
 	_bool m_IsHPBar = false;
 };
 

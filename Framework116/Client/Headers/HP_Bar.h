@@ -20,7 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-	_uint IsBillboarding();
+	_uint Adjust_Pos(_float fDeltaTime);
 
 public:
 	static CHP_Bar* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -28,15 +28,9 @@ public:
 	virtual void Free() override;
 
 private:
-	CVIBuffer*  m_pVIBuffer = nullptr;
-	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
+	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
 
-private:
-	CGameObject* m_pTargetObject = nullptr;
-	CCollide* m_pTargetCollide = nullptr;
-
-	_float m_fHp = 30.f;
+	
 };
 
 #define __HP_BAR_H__
