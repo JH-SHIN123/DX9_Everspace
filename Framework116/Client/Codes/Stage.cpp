@@ -2,6 +2,7 @@
 #include "..\Headers\Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
+#include "ScriptUI.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -55,6 +56,10 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
+	if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI")))
+		return E_FAIL;
+
+
 	//if (FAILED(Add_Layer_Ring(L"Layer_Ring")))
 	//	return E_FAIL;
 	//
@@ -69,8 +74,8 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Planet(L"Layer_Meteor")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
-		return E_FAIL;
+	//if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
 	//	EResourceType::NonStatic,
@@ -89,6 +94,8 @@ HRESULT CStage::Ready_Scene()
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
+
+
 
 	return _uint();
 }
@@ -474,14 +481,6 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
 
-	// Mission HUD
-	UI_DESC HUD_Mission;
-	HUD_Mission.tTransformDesc.vPosition = { 860.f, 500.f, 0.f };
-	HUD_Mission.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
-	HUD_Mission.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Mission)))
-		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -499,6 +498,14 @@ HRESULT CStage::Add_Layer_TutorialUI(const wstring & LayerTag)
 		return E_FAIL;
 	}
 
+	//// Mission HUD
+	//UI_DESC HUD_Mission;
+	//HUD_Mission.tTransformDesc.vPosition = { 860.f, 500.f, 0.f };
+	//HUD_Mission.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
+	//HUD_Mission.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Mission)))
+	//	return E_FAIL;
+
 	/*
 	#define WINCX 1920
 	#define WINCY 1080
@@ -513,6 +520,29 @@ HRESULT CStage::Add_Layer_TutorialUI(const wstring & LayerTag)
 
 
 
+
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_ScriptUI(const wstring & LayerTag)
+{
+	UI_DESC Desc;
+	Desc.tTransformDesc.vPosition = { 0.f,0.f ,0.f };
+	Desc.wstrTexturePrototypeTag = L"Component_Texture_HUD_In_Bar";
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ScriptUI",
+		LayerTag, &Desc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add ScriptUI In Layer");
+		return E_FAIL;
+	}
+
+	((CScriptUI*)m_pManagement->Get_GameObject(LayerTag))->Set_Script(eScript::Tutorial);
+
+	//if (FAILED(Add_Layer_UI(LayerTag, &Desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

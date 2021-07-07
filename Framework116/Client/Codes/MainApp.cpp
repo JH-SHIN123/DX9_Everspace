@@ -9,6 +9,7 @@
 #include "Player_Missile.h"
 #include "Light.h"
 #include "AlertArrow.h"
+#include "ScriptUI.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -140,6 +141,7 @@ HRESULT CMainApp::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_AlertArrow");
 		return E_FAIL;
 	}
+
 
 #pragma endregion
 

@@ -196,6 +196,7 @@
     <ClInclude Include="..\Headers\Player_Bullet.h" />
     <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
+    <ClInclude Include="..\Headers\QuestHandler.h" />
     <ClInclude Include="..\Headers\Ring.h" />
     <ClInclude Include="..\Headers\ScriptUI.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="..\Codes\Player_Bullet.cpp" />
     <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
+    <ClCompile Include="..\Codes\QuestHandler.cpp" />
     <ClCompile Include="..\Codes\Ring.cpp" />
     <ClCompile Include="..\Codes\ScriptUI.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />

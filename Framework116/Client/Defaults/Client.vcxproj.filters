@@ -130,9 +130,6 @@
     <Filter Include="02.GameObject\06.Particle\Follow">
       <UniqueIdentifier>{6b4389f6-3af0-4db3-9bb6-db9bdb2c7186}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97.Utilities\02.Material">
-      <UniqueIdentifier>{30c21b7f-470d-46f1-83f3-a507c17cce1b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\11.Ring">
       <UniqueIdentifier>{8ad1be28-6814-4d28-a03d-cf98acfa6bb5}</UniqueIdentifier>
     </Filter>
@@ -159,6 +156,12 @@
     </Filter>
     <Filter Include="02.GameObject\09.HUD\06.ScriptUI">
       <UniqueIdentifier>{c7f25113-b245-4948-850d-0ad03c90ce48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities\03.Material">
+      <UniqueIdentifier>{30c21b7f-470d-46f1-83f3-a507c17cce1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities\04.Quest">
+      <UniqueIdentifier>{9c679705-a2d3-47b7-9741-3cc39a0e0ce4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +265,7 @@
       <Filter>02.GameObject\12.TargetMonster</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MaterialHandler.h">
-      <Filter>97.Utilities\02.Material</Filter>
+      <Filter>97.Utilities\03.Material</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\EffectHandler.h">
       <Filter>97.Utilities\02.Effect</Filter>
@@ -299,6 +302,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\ScriptUI.h">
       <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\QuestHandler.h">
+      <Filter>97.Utilities\04.Quest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,7 +396,7 @@
       <Filter>02.GameObject\12.TargetMonster</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MaterialHandler.cpp">
-      <Filter>97.Utilities\02.Material</Filter>
+      <Filter>97.Utilities\03.Material</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\EffectHandler.cpp">
       <Filter>97.Utilities\02.Effect</Filter>
@@ -427,6 +433,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\ScriptUI.cpp">
       <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\QuestHandler.cpp">
+      <Filter>97.Utilities\04.Quest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

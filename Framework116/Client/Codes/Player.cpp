@@ -4,6 +4,7 @@
 #include "Pipeline.h"
 #include "EngineEffectSystem.h"
 #include "WingBoost_System.h"
+#include "ScriptUI.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
 	: CGameObject(pDevice)
@@ -213,11 +214,34 @@ _uint CPlayer::Render_GameObject()
 	return _uint();
 }
 
+_uint CPlayer::Set_IsScript(_bool IsScript)
+{
+	m_IsScript = IsScript;
+	return _uint();
+}
+
 void CPlayer::KeyProcess(_float fDeltaTime)
 {
 	if (nullptr == m_pController) return;
 	m_pController->Update_Controller();
 
+	// ´ëÈ­
+	if (m_IsScript == true)
+	{
+		//if (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->front() != nullptr)
+		//{
+			if (m_pController->Key_Down(KEY_F))
+			{
+				static_cast<CScriptUI*>(m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")
+					->front())->Set_NextScript();
+			}
+		//}
+		//else
+//			m_IsScript = false;
+
+		return;
+	}
+		
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
 		m_pTransform->Go_Straight(fDeltaTime);

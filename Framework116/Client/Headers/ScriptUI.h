@@ -2,20 +2,21 @@
 #ifndef __SCRIPTUI_H__
 
 #include "GameObject.h"
+#include "UI.h"
 
 USING(Engine)
 
-enum Script {
+enum eScript {
 	Tutorial
 	, End
 };
 
-class CScruptUI final : public CGameObject
+class CScriptUI final : public CUI
 {
 public:
-	explicit CScruptUI(LPDIRECT3DDEVICE9 pDevice);
-	explicit CScruptUI(const CScruptUI& other);
-	virtual ~CScruptUI() = default;
+	explicit CScriptUI(LPDIRECT3DDEVICE9 pDevice);
+	explicit CScriptUI(const CScriptUI& other);
+	virtual ~CScriptUI() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -24,23 +25,38 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	_uint Set_NextScript();
+	_uint Set_Script(eScript eScript);
+
 private:
-	_uint Movement(_float fDeltaTime);
-	_uint Search_Target(_float fDeltaTime);
-	_uint BillBorad(_float fDeltaTime);
+	_uint Script_Check();
+	void Script_Tutorial();
+
 
 public:
-	static CScruptUI* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CScriptUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
-	CVIBuffer*  m_pVIBuffer = nullptr;
-	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
+	eScript m_eScriptMode = End;
+	wstring m_wstrName = L"";
+	wstring m_wstrScript = L"";
+	RECT m_tPortrait;
+	DWORD m_dwScriptNext;	// 다음 대화
+	DWORD m_dwScriptCount;	// 한글자씩 끊어서 출력
+	DWORD m_dwScriptCountMax;// 최대치
+	_float m_fScriptTime;	// 끊어서 출력 시간
+	_bool m_IsPlayerPortrait = false;
+	_bool m_IsEndScript = false;
+	
 
-private:
-	Script m_eScriptMode = End;
+private:	// m_pTransform = 대화 창
+	CTransform* m_pTransfrom_Portrait = nullptr;
+	CTransform* m_pTransfrom_Name = nullptr;
+	CTransform* m_pTransfrom_BlackBar_Up = nullptr;
+	CTransform* m_pTransfrom_BlackBar_Down = nullptr;
 
 };
 

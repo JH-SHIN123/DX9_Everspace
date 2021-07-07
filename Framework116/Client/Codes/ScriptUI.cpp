@@ -3,131 +3,61 @@
 #include "Collision.h"
 #include "Pipeline.h"
 #include "Ring.h"
+#include "Player.h"
 
-CScruptUI::CScruptUI(LPDIRECT3DDEVICE9 pDevice)
-	: CGameObject(pDevice)
+CScriptUI::CScriptUI(LPDIRECT3DDEVICE9 pDevice)
+	: CUI(pDevice)
 {
 }
 
-CScruptUI::CScruptUI(const CScruptUI & other)
-	: CGameObject(other)
-	, m_bAllTargetCollide(other.m_bAllTargetCollide)
+CScriptUI::CScriptUI(const CScriptUI & other)
+	: CUI(other)
 {
 }
 
-HRESULT CScruptUI::Ready_GameObject_Prototype()
+HRESULT CScriptUI::Ready_GameObject_Prototype()
 {
-	CGameObject::Ready_GameObject_Prototype();
+	CUI::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CScruptUI::Ready_GameObject(void * pArg/* = nullptr*/)
+HRESULT CScriptUI::Ready_GameObject(void * pArg/* = nullptr*/)
 {
-	CGameObject::Ready_GameObject(pArg);
-
-	// For.Com_VIBuffer
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_VIBuffer_RectTexture",
-		L"Com_VIBuffer",
-		(CComponent**)&m_pVIBuffer)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
-		return E_FAIL;
-	}
-
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_Tutorial_Nevi",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-
-	// For.Com_Transform
-	TRANSFORM_DESC Transform;
-	Transform.fSpeedPerSec = 50.f;
-	Transform.vScale = { 5.f,5.f,5.f };
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Transform",
-		L"Com_Transform",
-		(CComponent**)&m_pTransform,
-		&Transform)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
-	}
-
-	/*m_pTargetCollide = (CCollideSphere*)pArg;*/
-	/*m_ray = (RAY*)pArg;*/
-
-	wstring* m_pTargetLayerTag = (wstring*)pArg;
-	m_wstrLayerTag = *m_pTargetLayerTag;
-	
-	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
-	Safe_AddRef(m_pPlayerTransform);
-	if (nullptr == m_pPlayerTransform)
-	{
-		PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
-		return UPDATE_ERROR;
-	}
-
-	//m_listTargetTransforms =
-	/*
-	1. 타겟의 리스트를 받는다
-	2. 순회하면서 그 타겟의 트랜스폼 컴포넌트를 내 리스트에 넣는다.
-	3. 넣어 주면서 Add_Ref
-	*/
-	m_listTargetObject = *(m_pManagement->Get_GameObjectList(L"Layer_Ring"));
-	if (m_listTargetObject.empty())
-	{
-		PRINT_LOG(L"Error", L"m_listTargetObject is empty");
-		return E_FAIL;
-	}
-	else
-	{
-		for(auto& iter : m_listTargetObject)
-			Safe_AddRef(iter);
-	}
+	CUI::Ready_GameObject(pArg);
 
 	return S_OK;
 }
 
-_uint CScruptUI::Update_GameObject(_float fDeltaTime)
+_uint CScriptUI::Update_GameObject(_float fDeltaTime)
 {
-	CGameObject::Update_GameObject(fDeltaTime);	
-	
-	Search_Target(fDeltaTime);
+	CUI::Update_GameObject(fDeltaTime);
 
-	Movement(fDeltaTime);	
+	Script_Check();
 	
 	return m_pTransform->Update_Transform();
 }
 
-_uint CScruptUI::LateUpdate_GameObject(_float fDeltaTime)
+_uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 {
-	CGameObject::LateUpdate_GameObject(fDeltaTime);
+	CUI::LateUpdate_GameObject(fDeltaTime);
 	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
 
-	BillBorad(fDeltaTime); 
+	if (m_IsEndScript == true)
+	{
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsScript(false);
 
-	if (m_bAllTargetCollide == true)
 		return DEAD_OBJECT;
+	}
 
 	return _uint();
 }
 
-_uint CScruptUI::Render_GameObject()
+_uint CScriptUI::Render_GameObject()
 {
-	CGameObject::Render_GameObject();
+	CUI::Render_GameObject();
 
 	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
@@ -135,167 +65,91 @@ _uint CScruptUI::Render_GameObject()
 	m_pVIBuffer->Render_VIBuffer();
 	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
-	return _uint();
-}
+	m_fScriptTime += m_pManagement->Get_DeltaTime();
 
-_uint CScruptUI::Movement(_float fDeltaTime)
-{
-	if (m_bAllTargetCollide == true)
-		return _uint();
-
-	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
-	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
-	_float3 vTargetPos = { m_vSearchTagetDis[0].x, m_vSearchTagetDis[0].y,  m_vSearchTagetDis[0].z };
-	_float vLength = fabs(D3DXVec3Length(&(vTargetPos - vPlayerPos)));
-	_float vMyLength = fabs(D3DXVec3Length(&(vTargetPos - vMyPos)));
-	
-	if (m_fSearchDisMax >= vLength)
+	if (m_fScriptTime >= 0.02f)
 	{
-		m_IsMoving = true;
-		m_IsLockOn = false;
+		m_fScriptTime = 0.f;
+		++m_dwScriptCount;
 	}
 
-	if (m_fSearchDisMax <= vLength)
-	{
-		m_IsMoving = false;
-		m_IsLockOn = false;
-	}
+	if (m_dwScriptCount >= m_dwScriptCountMax)
+		m_dwScriptCount = m_dwScriptCountMax;
 
-	if (m_fSearchDisMin >= vMyLength)
-	{
-		m_IsMoving = false;
-		m_IsLockOn = true;
-	}
-	
+	GetClientRect(g_hWnd, &m_tUIBounds);
+	m_tUIBounds.top += 850;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, m_wstrScript.c_str(), _int(m_dwScriptCount)
+		, &m_tUIBounds, DT_CENTER, D3DXCOLOR(200, 200, 200, 255));
 
-	if (m_IsMoving == true)
-	{
-		m_IsLockOn = false;
 
-		_float3 vDir = vTargetPos - vMyPos;
-		D3DXVec3Normalize(&vDir, &vDir);
-		m_pTransform->Go_Dir(vDir, fDeltaTime);
-	}
-
-	if (m_IsLockOn == true)
-	{
-		m_IsMoving = false;
-
-		_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-		matWorld._11 = 10.f;
-		matWorld._22 = 10.f;
-		matWorld._33 = 10.f;
-
-		matWorld._41 = m_vSearchTagetDis[0].x;
-		matWorld._42 = m_vSearchTagetDis[0].y;
-		matWorld._43 = m_vSearchTagetDis[0].z;
-
-		_float4x4 matView;
-		m_pDevice->GetTransform(D3DTS_VIEW, &matView);
-
-		_float4x4 matBill;
-		D3DXMatrixIdentity(&matBill);
-
-		matBill = matView;
-		matBill._41 = 0.f;
-		matBill._42 = 0.f;
-		matBill._43 = 0.f;
-
-		D3DXMatrixInverse(&matBill, 0, &matBill);
-		_float4x4 realmatWorld;
-		realmatWorld = matBill * matWorld;
-		m_pTransform->Set_WorldMatrix(realmatWorld);
-
-	}
-
-	if (m_IsMoving == false && m_IsLockOn == false)
-	{
-		_float3 vPlayerUp = m_pPlayerTransform->Get_State(EState::Up);
-		D3DXVec3Normalize(&vPlayerUp, &vPlayerUp);
-		vPlayerPos += vPlayerUp * 10.f;
-
-		m_pTransform->Set_Position(vPlayerPos);
-	}
 
 	return _uint();
 }
 
-_uint CScruptUI::Search_Target(_float fDeltaTime)
+_uint CScriptUI::Script_Check()
 {
-	//auto iter = (m_pManagement->Get_GameObjectList(L"Layer_Ring"))->begin();
-	//for (auto& iter : *m_pManagement->Get_GameObjectList(L"Layer_Ring"))
-	//{
-	//	//v = ((CTransform*)(iter.Get_Component(L"Com_Transform"))).Get_State(EState::Position);
-	//}
-
-	m_bAllTargetCollide = true;
-	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
-	_uint i = 0;
-	for (auto& iter : m_listTargetObject)
+	switch (m_eScriptMode)
 	{
-		if (iter->Get_IsCollide() == false)
-		{
-			m_bAllTargetCollide = false;
-			_float3 vPos;
-			vPos = ((CTransform*)(iter->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
-
-			_float fDis = fabs(D3DXVec3Length(&(vPos - fPlayerPos)));
-
-			m_vSearchTagetDis[i] = { vPos.x, vPos.y, vPos.z, fDis };
-
-			++i;
-		}
+	case Tutorial:
+		Script_Tutorial();
+		break;
 	}
 
-	_uint iSize = m_listTargetObject.size();
 
-	for (_uint i = 0; i < iSize; ++i)
-	{
-		for (_uint j = 0; j < iSize; ++j)
-		{
-			if (m_vSearchTagetDis[j].w > m_vSearchTagetDis[j + 1].w)
-			{
-				_float4 vTemp = m_vSearchTagetDis[j];
-				m_vSearchTagetDis[j] = m_vSearchTagetDis[j + 1];
-				m_vSearchTagetDis[j + 1] = vTemp;
-			}
-		}
-	}
 
 	return _uint();
 }
 
-_uint CScruptUI::BillBorad(_float fDeltaTime)
+void CScriptUI::Script_Tutorial()
 {
-	_float4x4 matView;
-	D3DXMatrixIdentity(&matView);
-	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
-	ZeroMemory(&matView._41, sizeof(_float3));
-	D3DXMatrixInverse(&matView, 0, &matView);
-
-	_float3 vBillPos = m_pTransform->Get_State(EState::Position);
-
-	_float fScale[3];
-	fScale[0] = m_pTransform->Get_State(EState::Right).x;
-	fScale[1] = m_pTransform->Get_State(EState::Up).y;
-	fScale[2] = m_pTransform->Get_State(EState::Look).z;
-
-	memcpy(&matView._41, &vBillPos, sizeof(_float3));
-
-	for (_uint i = 0; i < 3; ++i)
+	switch (m_dwScriptNext)
 	{
-		for (_uint j = 0; j < 4; ++j)
-			matView(i, j) *= fScale[i];
+	case 0:
+		m_IsPlayerPortrait = true;
+		m_wstrName = L"김쥬신";
+		m_wstrScript = L"가나다라마바사아자차카타파하";
+		break;
+	case 1:
+		m_IsPlayerPortrait = false;
+		m_wstrName = L"사령관";
+		m_wstrScript = L"으하하 메롱";
+		break;
+
+	default:
+		m_IsEndScript = true;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+_uint CScriptUI::Set_NextScript()
+{
+	if (m_dwScriptCount >= m_dwScriptCountMax)
+	{
+		++m_dwScriptNext;
+		m_fScriptTime = 0.f;
+		m_dwScriptCount = 0;
 	}
 
-	m_pTransform->Set_WorldMatrix(matView);
+	else if (m_dwScriptCount < m_dwScriptCountMax)
+		m_dwScriptCount = m_dwScriptCountMax;
 
 	return _uint();
 }
 
-CScruptUI * CScruptUI::Create(LPDIRECT3DDEVICE9 pDevice)
+_uint CScriptUI::Set_Script(eScript eScript)
 {
-	CScruptUI* pInstance = new CScruptUI(pDevice);
+	m_eScriptMode = eScript;
+
+	((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsScript(true);
+
+	return _uint();
+}
+
+CScriptUI * CScriptUI::Create(LPDIRECT3DDEVICE9 pDevice)
+{
+	CScriptUI* pInstance = new CScriptUI(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create TutorialUI");
@@ -305,9 +159,9 @@ CScruptUI * CScruptUI::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject * CScruptUI::Clone(void * pArg/* = nullptr*/)
+CGameObject * CScriptUI::Clone(void * pArg/* = nullptr*/)
 {
-	CScruptUI* pClone = new CScruptUI(*this); /* 복사 생성자 호출 */
+	CScriptUI* pClone = new CScriptUI(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone TutorialUI");
@@ -317,18 +171,10 @@ CGameObject * CScruptUI::Clone(void * pArg/* = nullptr*/)
 	return pClone;
 }
 
-void CScruptUI::Free()
+void CScriptUI::Free()
 {
-	for (auto& pObject : m_listTargetObject)
-	{
-		Safe_Release(pObject);
-	}
-	m_listTargetObject.clear();
 
-	Safe_Release(m_pPlayerTransform);
-	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 
-	CGameObject::Free();
+
+	CUI::Free();
 }

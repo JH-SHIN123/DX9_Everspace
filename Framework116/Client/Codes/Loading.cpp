@@ -30,6 +30,7 @@
 #include "TutorialUI.h"
 #include "WingBoost_System.h"
 #include "Meteor.h"
+#include "ScriptUI.h"
 #pragma endregion
 
 
@@ -672,6 +673,16 @@ HRESULT CLoading::Ready_Stage1()
 		CMeteor::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Meteor");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_ScriptUI*/
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ScriptUI",
+		CScriptUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
 		return E_FAIL;
 	}
 

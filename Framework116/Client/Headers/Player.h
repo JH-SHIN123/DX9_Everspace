@@ -21,6 +21,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	_uint Set_IsScript(_bool IsScript);
+
 private:
 	void	KeyProcess(_float fDeltaTime);
 	_uint	Movement(_float fDeltaTime);
@@ -75,6 +78,9 @@ private: // Wing Effect
 private: // AlertArrow ฐüทร
 	_uint Make_Arrow();
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
+
+private:
+	_bool m_IsScript = false;
 };
 
 #define __PLAYER_H__
