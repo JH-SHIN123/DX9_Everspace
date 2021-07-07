@@ -218,15 +218,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-	/*  HUD HP_Bar 입니다 */
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_HP_Bar",
-		CHP_Bar::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_HP_Bar");
-		return E_FAIL;
-	}
 
 	/* For.GameObject_Planet */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
@@ -235,6 +226,16 @@ HRESULT CLoading::Ready_StageResources()
 		CPlanet::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Planet");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_HP_Bar */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_HP_Bar",
+		CHP_Bar::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_HP_Bar");
 		return E_FAIL;
 	}
 
@@ -572,11 +573,11 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
-	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!!
+	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!! 있는데 뭐지
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_HP_Bar",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar.png"))))
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Bar");
 		return E_FAIL;

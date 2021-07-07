@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 USING(Engine)
-class CHP_Bar final : public CGameObject
+class CHP_Bar final : public CUI
 {
 public:
 	explicit CHP_Bar(LPDIRECT3DDEVICE9 pDevice);

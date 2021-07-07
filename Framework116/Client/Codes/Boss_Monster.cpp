@@ -565,13 +565,13 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 
 			UI_DESC HUD_Hp_Bar;
 			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x, ptBoss.y - 40.f, 0.f };
-			HUD_Hp_Bar.tTransformDesc.vScale = { 230.f, 230.f, 0.f };
-			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Hp";
+       		HUD_Hp_Bar.tTransformDesc.vScale = { 230.f, 230.f, 0.f };
+			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
 				L"GameObject_HP_Bar",
 				L"Layer_HP_Bar",
-				(void*)this)))
+				&HUD_Hp_Bar)))
 			{
 				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 				return E_FAIL;

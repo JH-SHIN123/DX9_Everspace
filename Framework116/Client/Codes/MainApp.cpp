@@ -9,6 +9,7 @@
 #include "Player_Missile.h"
 #include "Light.h"
 #include "AlertArrow.h"
+#include "HP_Bar.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
