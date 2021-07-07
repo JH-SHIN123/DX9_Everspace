@@ -230,16 +230,7 @@ HRESULT CLoading::Ready_StageResources()
 
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
-		L"GameObject_Asteroid_A",
-		CAsteroid::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid");
-		return E_FAIL;
-	}
-
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_Asteroid_B",
+		L"GameObject_Asteroid",
 		CAsteroid::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid");

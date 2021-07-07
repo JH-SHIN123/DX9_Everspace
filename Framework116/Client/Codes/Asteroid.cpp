@@ -20,10 +20,10 @@ HRESULT CAsteroid::Ready_GameObject_Prototype()
 
 HRESULT CAsteroid::Ready_GameObject(void* pArg)
 {
-	ASTEROID_DESC* pDesc = nullptr;
+	GAMEOBJECT_DESC* pDesc = nullptr;
 	if (auto ptr = (BASE_DESC*)pArg)
 	{
-		if (pDesc = dynamic_cast<ASTEROID_DESC*>(ptr))
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
 		{
 		}
 		else 
@@ -36,7 +36,7 @@ HRESULT CAsteroid::Ready_GameObject(void* pArg)
 	// For.Com_Mesh Component_Mesh_Rock_Generic_001
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		pDesc->pMeshTag,
+		pDesc->wstrMeshName,
 		L"Com_Mesh",
 		(CComponent**)&m_pMesh)))
 	{
@@ -46,9 +46,14 @@ HRESULT CAsteroid::Ready_GameObject(void* pArg)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
-	float randRotateSpeed = rand() % 10 + 20.f;
+	float randRotateSpeed = rand() % 5 + 10.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(randRotateSpeed);
-	TransformDesc.fSpeedPerSec = 2.f;
+	TransformDesc.fSpeedPerSec = 4.f;
+
+	// 행성 움직임 AI 안하는 메시목록
+	if (pDesc->wstrMeshName == L"Component_Mesh_Rock_Cloud") {
+		m_bDontMove = true;
+	}
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -128,6 +133,8 @@ _uint CAsteroid::Render_GameObject()
 
 _uint CAsteroid::Movement(_float fDeltaTime)
 {
+	if (m_bDontMove) return NO_EVENT;
+
 	if (m_vRandomRotateDir.x) {
 		m_pTransform->RotateX(fDeltaTime);
 	}

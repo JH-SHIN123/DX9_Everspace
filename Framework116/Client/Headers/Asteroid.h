@@ -5,11 +5,6 @@
 
 USING(Engine)
 
-typedef struct tagAsteroidDesc : public BASE_DESC {
-	const TCHAR* pMeshTag = nullptr;
-	TRANSFORM_DESC tTransformDesc;
-}ASTEROID_DESC;
-
 class CAsteroid final : public CGameObject
 {
 public:
@@ -38,6 +33,7 @@ private:
 	CCollideSphere* m_pCollide = nullptr;
 
 private:
+	_bool m_bDontMove = false;
 	_float3 m_vRandomRotateDir = { 0.f,0.f,0.f };
 	_float m_fMoveUpDeltaT = 0.f;
 };

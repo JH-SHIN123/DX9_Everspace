@@ -15,7 +15,7 @@ HRESULT CStage::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Stage");
 
-	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/test.map");
+	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/stage1.map");
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
@@ -24,15 +24,15 @@ HRESULT CStage::Ready_Scene()
 		return E_FAIL;
 
 	// 전역조명 : Directional Light
+	// 행성조명 : Point Light
+	// 플레이어 조명 : Sport Light
+
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	//lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
 	lightDesc.tLightColor = D3DCOLOR_XRGB(160, 160, 160);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
-
-	// 행성조명 : Point Light
-	// 플레이어 조명 : Sport Light
 
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
@@ -43,31 +43,11 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-
 	if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
-		return E_FAIL;
-
-	if (FAILED(Add_Layer_Planet(L"Layer_Planet")))
 		return E_FAIL;
 
 	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
 		return E_FAIL;
-
-
-	// TEST Component_Mesh_Rock_Generic_001
-	ASTEROID_DESC pDesc;
-	pDesc.pMeshTag = L"Component_Mesh_Rock_Generic_001";
-	pDesc.tTransformDesc.vPosition = { 0.f,0.f,0.f };
-	pDesc.tTransformDesc.vScale = { 5.f,5.f,5.f };
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Asteroid_A",
-		L"Layer_Asteroid",
-		(void*)&pDesc)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid In Layer");
-		return E_FAIL;
-	}
 
 	return S_OK;
 }

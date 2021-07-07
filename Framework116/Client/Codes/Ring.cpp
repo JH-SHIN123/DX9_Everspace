@@ -70,10 +70,6 @@ HRESULT CRing::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
-	//TransformDesc.matWorld = pDesc->tTransformDesc.matWorld;
-	//TransformDesc.vPosition = pDesc->tTransformDesc.vPosition;
-	//TransformDesc.vRotate = pDesc->tTransformDesc.vRotate;
-	//TransformDesc.vScale = pDesc->tTransformDesc.vScale;
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 
@@ -162,7 +158,6 @@ _bool CRing::CollideCheck()
 	if (m_IsCollide == true)
 	{
 		CMaterialHandler::Set_RGBA(vColorRGBA.x, vColorRGBA.y, vColorRGBA.z, vColorRGBA.w, &m_tMaterial);
-		
 	}
 
 	return false;

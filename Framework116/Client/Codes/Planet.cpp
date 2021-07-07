@@ -24,6 +24,19 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 {
 	CGameObject::Ready_GameObject(pArg);
 
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{
+		}
+		else
+		{
+			PRINT_LOG(L"Error", L"ASEROID_DESC is nullptr");
+			return E_FAIL;
+		}
+	}
+
 	// For.Com_Geo_Sphere
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -47,14 +60,7 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(200.f, 0.f, 200.f);
-	TransformDesc.vScale = _float3(1.f, 1.f, 1.f);
-	if (pArg != nullptr)
-	{
-		TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
-		TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
-	}
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
 	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 
