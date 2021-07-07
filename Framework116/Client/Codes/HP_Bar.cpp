@@ -73,7 +73,7 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
 
 	return _uint();
@@ -84,46 +84,56 @@ _uint CHP_Bar::Render_GameObject()
    	CGameObject::Render_GameObject();	
 
 	m_pTargetCollide = m_pTargetObject->Get_Collides()->front();
-	
-	_float3 TargetCollidePos = m_pTargetCollide->Get_BoundingSphere().Get_Position();
 
-	D3DVIEWPORT9 vp2;
-	m_pDevice->GetViewport(&vp2);
-	_float4x4 TestView2, TestProj2;
-	m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
-	m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
-	_float4x4 matCombine2 = TestView2 * TestProj2;
-	D3DXVec3TransformCoord(&TargetCollidePos, &TargetCollidePos, &matCombine2);
-	TargetCollidePos.x += 1.f;
-	TargetCollidePos.y += 1.f;
+	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
 
-	TargetCollidePos.x = (vp2.Width * (TargetCollidePos.x)) / 2.f + vp2.X;
-	TargetCollidePos.y = (vp2.Height * (2.f - TargetCollidePos.y) / 2.f + vp2.Y);
+	if (GetAsyncKeyState(L'O') & 0x8000)
+		m_fHp -= 1;
 
-	_float3 ptTargetPos;
-	ptTargetPos.x = -1.f * (WINCX / 2) + TargetCollidePos.x;
-	ptTargetPos.y = 1.f * (WINCY / 2) + TargetCollidePos.y;
-	ptTargetPos.z = 0.f;
-	
-	m_pTransform->Set_Position(ptTargetPos);
-	//_float4x4 matView;
-	//D3DXMatrixIdentity(&matView);
-	//matView._11 = 350.f;
-	//matView._22 = 350.f;
-	//matView._41 = (_float)ptTargetPos.x;
-	//matView._42 = (_float)ptTargetPos.y;
+	matWorld._11 = 10.f;
+	matWorld._22 = 10.f;
+	matWorld._33 = 10.f;
 
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	//m_pDevice->SetTransform(D3DTS_WORLD, &matView);
+	matWorld._41 = m_pTargetCollide->Get_BoundingSphere().Get_Position().x;
+	matWorld._42 = m_pTargetCollide->Get_BoundingSphere().Get_Position().y;
+	matWorld._43 = m_pTargetCollide->Get_BoundingSphere().Get_Position().z;
+
+	_float4x4 matView;
+	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+
+	_float4x4 matBill;
+	D3DXMatrixIdentity(&matBill);
+	matBill = matView;
+	matBill._41 = 0.f;
+	matBill._42 = -1.5f; 
+	matBill._43 = 0.f;
+
+	D3DXMatrixInverse(&matBill, 0, &matBill);
+	_float4x4 realmatWorld;
+	realmatWorld = matBill * matWorld;
+
+	m_pTransform->Set_WorldMatrix(realmatWorld);
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pTexture->Set_Texture(0);
 	m_pVIBuffer->Render_VIBuffer();
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	return _uint();
 }
 
 _uint CHP_Bar::Movement(_float fDeltaTime)
 {
+	return _uint();
+}
+
+_uint CHP_Bar::IsBillboarding()
+{
+
+
 	return _uint();
 }
 

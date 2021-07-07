@@ -227,11 +227,13 @@ _uint CAlertArrow::Render_GameObject()
 	//wstring a = to_wstring(testdegree);
 	//PRINT_LOG(L"a", a.c_str());
 
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_VIEW, &Test);
 	m_pTexture->Set_Texture(0);
 	m_pVIBuffer->Render_VIBuffer();
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	//////////////////////////////////////////////////////
 
 	return _uint();

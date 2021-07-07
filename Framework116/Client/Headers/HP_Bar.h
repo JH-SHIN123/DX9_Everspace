@@ -20,6 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
+	_uint IsBillboarding();
 
 public:
 	static CHP_Bar* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -34,6 +35,8 @@ private:
 private:
 	CGameObject* m_pTargetObject = nullptr;
 	CCollide* m_pTargetCollide = nullptr;
+
+	_float m_fHp = 30.f;
 };
 
 #define __HP_BAR_H__
