@@ -8,6 +8,7 @@
 #include "VIBuffer_TerrainColor.h"
 #include "VIBuffer_TerrainTexture.h"
 #include "VIBuffer_CubeTexture.h"
+#include "VIBuffer_RectTexture_HP_Bar.h"
 #include "Transform.h"
 #include "Texture.h"
 #include "CollideSphere.h"

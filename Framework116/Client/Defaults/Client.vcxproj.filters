@@ -136,6 +136,9 @@
     <Filter Include="02.GameObject\06.Particle\WingBoost">
       <UniqueIdentifier>{6840ecc0-5224-47b6-968b-27169f738624}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\06.HP_Bar">
+      <UniqueIdentifier>{6948385c-e68c-422e-8994-985f535d4a7b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\08.Bullet\03.Boss">
       <UniqueIdentifier>{8ac5797a-a195-456d-a81a-0db08aed7682}</UniqueIdentifier>
     </Filter>
@@ -282,7 +285,12 @@
     <ClInclude Include="..\Headers\WingBoost_System.h">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h" />
+    <ClInclude Include="..\Headers\HP_Bar.h">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\Asteroid.h">
       <Filter>02.GameObject\15.Asteroid</Filter>
     </ClInclude>
@@ -402,7 +410,12 @@
     <ClCompile Include="..\Codes\WingBoost_System.cpp">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp" />
+    <ClCompile Include="..\Codes\HP_Bar.cpp">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp">
+      <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\Asteroid.cpp">
       <Filter>02.GameObject\15.Asteroid</Filter>
     </ClCompile>

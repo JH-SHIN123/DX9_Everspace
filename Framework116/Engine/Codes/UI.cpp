@@ -93,7 +93,7 @@ _uint CUI::LateUpdate_GameObject(_float fDeltaTime)
 	//GetCursorPos(&pt);
 	//ScreenToClient(g_hWnd, &pt);
 
-	//// 데카르트 좌표계 -> 화면좌표계로 변경해야함
+	// 데카르트 좌표계 -> 화면좌표계로 변경해야함
 	//if (PtInRect(&m_tUIBounds, pt))
 	//{
 

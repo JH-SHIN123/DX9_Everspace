@@ -47,6 +47,9 @@ private: // Move_Mode
 	void RotateMy_Y(_float fDeltaTime);
 	void RotateMy_Z(_float fDeltaTime);
 
+private: // Add_HP_Bar
+	_uint Add_Hp_Bar(_float fDeltaTime);
+
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -87,6 +90,10 @@ private: /* Skills */
 
 	// Spawn Monster
 	_float m_fSpawnCoolTime = 0.f;
+
+	// HP Bar Ãß°¡
+	_bool m_IsHPBar = false;
+	class CHP_Bar* m_pHp_Bar = nullptr;
 };
 
 #define __BOSS_MONSTER_H__

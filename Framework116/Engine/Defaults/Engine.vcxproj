@@ -227,6 +227,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\VIBuffer_CubeTexture.h" />
     <ClInclude Include="..\Headers\VIBuffer_RectColor.h" />
     <ClInclude Include="..\Headers\VIBuffer_RectTexture.h" />
+    <ClInclude Include="..\Headers\VIBuffer_RectTexture_HP_Bar.h" />
     <ClInclude Include="..\Headers\VIBuffer_TerrainColor.h" />
     <ClInclude Include="..\Headers\VIBuffer_TerrainTexture.h" />
     <ClInclude Include="..\Headers\VIBuffer_TriColor.h" />
@@ -271,6 +272,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\VIBuffer_CubeTexture.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_RectColor.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_RectTexture.cpp" />
+    <ClCompile Include="..\Codes\VIBuffer_RectTexture_HP_Bar.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_TerrainColor.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_TerrainTexture.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_TriColor.cpp" />

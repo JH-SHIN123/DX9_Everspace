@@ -180,6 +180,7 @@
     <ClInclude Include="..\Headers\ExplosionSystem.h" />
     <ClInclude Include="..\Headers\FollowSystem.h" />
     <ClInclude Include="..\Headers\Grass.h" />
+    <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\LockOn.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\FollowSystem.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
+    <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\LockOn.cpp" />

@@ -9,6 +9,7 @@
 #include "Player_Missile.h"
 #include "Light.h"
 #include "AlertArrow.h"
+#include "HP_Bar.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -176,6 +177,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CVIBuffer_RectTexture::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_RectTexture");
+		return E_FAIL;
+	}
+
+	/* For.Component_VIBuffer_RectTexture_HP_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_VIBuffer_RectTexture_HP_Bar",
+		CVIBuffer_RectTexture_HP_Bar::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_RectTexture_HP_Bar");
 		return E_FAIL;
 	}
 
