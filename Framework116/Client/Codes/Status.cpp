@@ -124,6 +124,8 @@ _uint CStatus::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CStatus::Render_GameObject()
 {
+	if (m_pLobby->Get_GotoNextScene())
+		return 0;
 	CGatchaBox* pBox = (CGatchaBox*)m_pManagement->Get_GameObject(L"Layer_GatchaBox");
 	if (pBox)
 	{

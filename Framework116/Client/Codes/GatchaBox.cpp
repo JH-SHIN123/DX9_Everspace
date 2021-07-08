@@ -160,7 +160,7 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 		return false;
 	m_pLobby->Set_StartUnPacking(TRUE);
 	m_fUnPackingTime += fDeltaTime;
-	_float fTime = (int)m_fUnPackingTime;
+	_int fTime = (_int)m_fUnPackingTime;
 	if (m_fUnPackingTime - fTime <= 0.5f)
 		m_pTransform->Go_Side(fDeltaTime*5.f);
 	else

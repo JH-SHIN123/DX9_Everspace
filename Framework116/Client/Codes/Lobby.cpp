@@ -5,7 +5,7 @@
 #include"Loading.h"
 #include"LobbyUI.h"
 #include"LobbyModel.h"
-#include"LobbyCam.h""
+#include"LobbyCam.h"
 #include"GatchaBox.h"
 #include"StatusBoard.h"
 #include"Status.h"
@@ -62,7 +62,7 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 		}
 		return CHANGE_SCENE;
 	}
-	UpdateMoney();
+
 	CScene::Update_Scene(fDeltaTime);
 
 	
@@ -138,6 +138,7 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
 	pModel->Set_Scene(this);
 	AddRef();
+	return S_OK;
 }
 
 HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
@@ -212,6 +213,7 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(LayerTag));
 	pBox->Set_Scene(this);
 	AddRef();
+	return S_OK;
 }
 
 HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)
@@ -249,16 +251,7 @@ HRESULT CLobby::Add_Layer_Status(const wstring & LayerTag)
 }
 
 
-void CLobby::UpdateMoney()
-{
-	if (m_iMoney != m_iNextMoney)
-	{
-		if (m_iMoney < m_iNextMoney)
-			m_iMoney++;
-		else if (m_iMoney > m_iNextMoney)
-			m_iMoney--;
-	}
-}
+
 
 void CLobby::Set_GotoNextScene(_bool bSet)
 {
@@ -333,7 +326,7 @@ void CLobby::Set_UnitInfo(UNIT_INFO _tUnitInfo)
 
 void CLobby::Set_Money(_uint _iMoney)
 {
-	m_iNextMoney = _iMoney;
+	m_iMoney += _iMoney;
 }
 
 

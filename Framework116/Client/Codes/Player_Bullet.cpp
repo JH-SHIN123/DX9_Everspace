@@ -82,7 +82,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 	_float3 vPlayerUp = m_pPlayerTransform->Get_State(EState::Up);
 	
-	if ((_bool)pArg == true)
+	if (pArg)
 		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 8.2f);
 	else
 		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 8.2f);
