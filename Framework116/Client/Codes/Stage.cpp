@@ -2,11 +2,9 @@
 #include "..\Headers\Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
-#include "ScriptUI.h"
 #include "Asteroid.h"
 #include "MissionUI.h"
 #include "MainCam.h"
-#include "QuestHandler.h"
 #include "Ring.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)

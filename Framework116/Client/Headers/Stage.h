@@ -2,6 +2,8 @@
 #ifndef __STAGE_H__
 
 #include "Scene.h"
+#include "QuestHandler.h"
+#include "ScriptUI.h"
 
 USING(Engine)
 class CStage final : public CScene
