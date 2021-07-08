@@ -89,7 +89,9 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	_uint iProduct = CPipeline::GetRandomFloat(0,5);
+
+	_uint iProduct =(_uint)CPipeline::GetRandomFloat(0,5);
+
 	m_eProduct = (EProduct)iProduct;
 
 	
@@ -233,7 +235,9 @@ void CProduct::Get_Product()
 			tCurUnitInfo.iMaxShield += 20;
 		break;
 	case EProduct::MONEY:
+
 		m_pLobby->Set_Money(3000);
+
 		break;
 	}
 	m_pLobby->Set_UnitInfo(tCurUnitInfo);

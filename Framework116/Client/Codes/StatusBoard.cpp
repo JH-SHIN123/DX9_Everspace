@@ -98,6 +98,10 @@ _uint CStatusBoard::Render_GameObject()
 		if (pBox->Get_StartUnpacking())
 			return 0;
 	}
+
+	if (m_pLobby->Get_GotoNextScene())
+		return 0;
+
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 
@@ -134,8 +138,9 @@ void CStatusBoard::Render_AxisMean()
 	_float3 vPos = {0,0,0};
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x;
-	rc.top = vPos.y - (vScale.y/2.f);
+	rc.left = (LONG)vPos.x;
+	rc.top = (LONG)(vPos.y - (vScale.y/2.f));
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
@@ -143,8 +148,10 @@ void CStatusBoard::Render_AxisMean()
 	str = L"DEF";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x + (vScale.x/2.f);
-	rc.top = vPos.y - vScale.y /4.f;
+
+	rc.left = (LONG)(vPos.x + (vScale.x/2.f));
+	rc.top = (LONG)(vPos.y - vScale.y /4.f);
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
@@ -153,8 +160,10 @@ void CStatusBoard::Render_AxisMean()
 	str = L"HP";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x + vScale.x/2.f;
-	rc.top = vPos.y + vScale.y /4.f;
+
+	rc.left = (LONG)(vPos.x + vScale.x/2.f);
+	rc.top = (LONG)(vPos.y + vScale.y /4.f);
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
@@ -162,8 +171,10 @@ void CStatusBoard::Render_AxisMean()
 	str = L"SHIELD";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x - 20.f;
-	rc.top = vPos.y + vScale.y /2.f;
+
+	rc.left = (LONG)(vPos.x - 20.f);
+	rc.top = (LONG)(vPos.y + vScale.y /2.f);
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
@@ -171,8 +182,10 @@ void CStatusBoard::Render_AxisMean()
 	str = L"ENERGY";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x - vScale.x/2.f;
-	rc.top = vPos.y + vScale.y / 4.f;
+
+	rc.left = (LONG)(vPos.x - vScale.x/2.f);
+	rc.top = (LONG)(vPos.y + vScale.y / 4.f);
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
@@ -181,8 +194,10 @@ void CStatusBoard::Render_AxisMean()
 	str = L"FIRE RATE";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = vPos.x - vScale.x /2.f - 30.f;
-	rc.top = vPos.y - vScale.y /4.f;
+
+	rc.left = (LONG)(vPos.x - vScale.x /2.f - 30.f);
+	rc.top = (LONG)(vPos.y - vScale.y /4.f);
+
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
 		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));

@@ -89,7 +89,7 @@ HRESULT CPlayer_Lazer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 	
-	if ((_bool)pArg == true)
+	if (pArg)
 		m_IsLeft = true;
 	else
 		m_IsLeft = false;
