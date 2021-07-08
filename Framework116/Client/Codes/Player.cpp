@@ -234,7 +234,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
-
+	Collide_Planet_Or_Astroid(fDeltaTime);
 	if (m_fHp <= 0.f && !m_IsDead)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
