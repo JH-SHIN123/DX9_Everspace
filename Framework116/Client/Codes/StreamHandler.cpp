@@ -330,7 +330,7 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			return E_FAIL;
 		}
 	}
-	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B" || wstrPrototypeTag == L"GameObject_Rock_Cloud")
+	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B")
 	{
 		GAMEOBJECT_DESC tDesc;
 		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
@@ -343,6 +343,27 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			EResourceType::NonStatic,
 			L"GameObject_Asteroid",
 			L"Layer_Asteroid",
+			&tDesc)))
+		{
+			wstring errMsg = L"Failed to Add Layer ";
+			errMsg += wstrPrototypeTag;
+			PRINT_LOG(L"Error", errMsg.c_str());
+			return E_FAIL;
+		}
+	}
+	else if (wstrPrototypeTag == L"GameObject_Rock_Cloud")
+	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
+
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Asteroid",
+			L"Layer_Asteroid_Deco",
 			&tDesc)))
 		{
 			wstring errMsg = L"Failed to Add Layer ";

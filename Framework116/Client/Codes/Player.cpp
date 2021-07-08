@@ -620,7 +620,8 @@ void CPlayer::Increase_Stamina(const _float fDeltaTime)
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
 	// 1.Planet
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Planet");
+	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
+	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
 
 	// 일반이동 충돌
 	if (m_IsBoost == false && m_IsAstroidCollide == true)
