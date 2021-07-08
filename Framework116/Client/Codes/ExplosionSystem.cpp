@@ -109,7 +109,9 @@ _uint CExplosionSystem::Render_GameObject()
 	// read, but don't write particles to z-buffer
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
 
-	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+	_float4x4 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	m_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
 	CParticleSystem::Render_GameObject();
 
 	m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);

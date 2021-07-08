@@ -7,7 +7,7 @@ USING(Engine)
 class CPlayer_Bullet final : public CGameObject
 {
 public:
-	explicit CPlayer_Bullet(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData);
+	explicit CPlayer_Bullet(LPDIRECT3DDEVICE9 pDevice);
 	explicit CPlayer_Bullet(const CPlayer_Bullet& other);
 	virtual ~CPlayer_Bullet() = default;
 
@@ -22,7 +22,7 @@ private:
 	_uint Movement(_float fDeltaTime);
 
 public:
-	static CPlayer_Bullet* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
+	static CPlayer_Bullet* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -35,7 +35,7 @@ private:
 private:
 	//CTransform* m_pTargetTransform = nullptr;
 	CTransform* m_pPlayerTransform = nullptr;
-	//CGameObject* m_pBulletParticle = nullptr;
+	CGameObject* m_pBulletParticle = nullptr;
 
 private:
 	_float m_fLifeTime = 0.f;

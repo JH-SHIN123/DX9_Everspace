@@ -15,7 +15,6 @@ CGameObject::CGameObject(const CGameObject & other)
 	: m_pDevice(other.m_pDevice)
 	, m_pManagement(other.m_pManagement)
 	, m_IsClone(true)
-	, m_pPassData(other.m_pPassData)
 	, m_IsCollide(false)
 {
 	Safe_AddRef(m_pDevice);
@@ -109,9 +108,6 @@ void CGameObject::Free()
 		Safe_Release(Collide);
 	}
 	m_Collides.clear();
-
-	if(m_IsClone == false)
-		Safe_Delete(m_pPassData);
 
 	Safe_Release(m_pDevice);
 }

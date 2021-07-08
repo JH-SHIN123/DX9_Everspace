@@ -2,10 +2,9 @@
 #include "..\Headers\Player_Lazer.h"
 #include "Player.h"
 
-CPlayer_Lazer::CPlayer_Lazer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
+CPlayer_Lazer::CPlayer_Lazer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	m_pPassData = pData;
 }
 
 CPlayer_Lazer::CPlayer_Lazer(const CPlayer_Lazer & other)
@@ -174,9 +173,9 @@ _uint CPlayer_Lazer::Movement(_float fDeltaTime)
 	return _uint();
 }
 
-CPlayer_Lazer * CPlayer_Lazer::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
+CPlayer_Lazer * CPlayer_Lazer::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CPlayer_Lazer* pInstance = new CPlayer_Lazer(pDevice, pData);
+	CPlayer_Lazer* pInstance = new CPlayer_Lazer(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player_Bullet");

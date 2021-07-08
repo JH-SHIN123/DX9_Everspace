@@ -139,6 +139,9 @@
     <Filter Include="01.Utilities\04.Component\03.Mesh\01.GeoMesh\Torus">
       <UniqueIdentifier>{a0274bf2-dbb7-44d2-82e6-1b3941453244}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\00.VIBuffer\07.VIBuffer_RectTexture_HP_Bar">
+      <UniqueIdentifier>{f7c22424-2a66-4293-8224-0e46d3248e9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -276,6 +279,9 @@
     <ClInclude Include="..\Headers\GeoMesh_Torus.h">
       <Filter>01.Utilities\04.Component\03.Mesh\01.GeoMesh\Torus</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\VIBuffer_RectTexture_HP_Bar.h">
+      <Filter>01.Utilities\04.Component\00.VIBuffer\07.VIBuffer_RectTexture_HP_Bar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -394,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\GeoMesh_Torus.cpp">
       <Filter>01.Utilities\04.Component\03.Mesh\01.GeoMesh\Torus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\VIBuffer_RectTexture_HP_Bar.cpp">
+      <Filter>01.Utilities\04.Component\00.VIBuffer\07.VIBuffer_RectTexture_HP_Bar</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

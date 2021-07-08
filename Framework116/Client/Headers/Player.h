@@ -7,7 +7,7 @@ USING(Engine)
 class CPlayer final : public CGameObject
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData);
+	explicit CPlayer(LPDIRECT3DDEVICE9 pDevice);
 	explicit CPlayer(const CPlayer& other);
 	virtual ~CPlayer() = default;
 
@@ -21,13 +21,17 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	_uint Set_IsScript(_bool IsScript);
+	_uint Set_IsCameraMove(_bool IsCameraMove);
+
 private:
 	void	KeyProcess(_float fDeltaTime);
 	_uint	Movement(_float fDeltaTime);
 	void	TimeOperation(const _float fDeltaTime);
 
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -81,6 +85,12 @@ private: // Wing Effect
 private: // AlertArrow 관련
 	_uint Make_Arrow();
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
+	_bool IsArrow = false;
+
+private: //연출 관련
+	_bool m_IsScript = false; //대화
+	_bool m_IsCameraMove = false; // 카메라 연출
+
 };
 
 #define __PLAYER_H__

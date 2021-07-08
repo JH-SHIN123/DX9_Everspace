@@ -25,29 +25,18 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_VIBuffer_CubeTexture",
-		L"Com_VIBuffer",
-		(CComponent**)&m_pVIBuffer)))
+		L"Component_Mesh_Monster",
+		L"Com_Mesh",
+		(CComponent**)&m_pModelMesh)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_VIBuffer");
-		return E_FAIL;
-	}
-
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_Monster",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
 		return E_FAIL;
 	}
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = _float3(0.5f, 0.f, 0.5f);	
-	TransformDesc.vScale = _float3(20.f, 20.f, 20.f);
+	TransformDesc.vScale = _float3(2.f, 2.f, 2.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -116,8 +105,7 @@ _uint CMonster::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(1);
-	m_pVIBuffer->Render_VIBuffer(); 
+	m_pModelMesh->Render_Mesh(); 
 	// Test
 
 #ifdef _DEBUG // Render Collide
@@ -190,9 +178,8 @@ CGameObject * CMonster::Clone(void * pArg/* = nullptr*/)
 void CMonster::Free()
 {
 	Safe_Release(m_pTerrainBuffer);
-	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 
 	CGameObject::Free();

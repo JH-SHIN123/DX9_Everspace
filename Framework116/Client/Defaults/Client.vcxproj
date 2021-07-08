@@ -165,8 +165,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\AlertArrow.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\StatusBoard.h" />
+=======
+    <ClInclude Include="..\Headers\Asteroid.h" />
+>>>>>>> main
     <ClInclude Include="..\Headers\Boss_Monster.h" />
     <ClInclude Include="..\Headers\Boss_Spawn_Monster.h" />
     <ClInclude Include="..\Headers\Boss_Warmhole.h" />
@@ -189,6 +193,7 @@
     <ClInclude Include="..\Headers\LobbyUI.h" />
     <ClInclude Include="..\Headers\FollowSystem.h" />
     <ClInclude Include="..\Headers\Grass.h" />
+    <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\LockOn.h" />
@@ -197,21 +202,31 @@
     <ClInclude Include="..\Headers\MainApp.h" />
     <ClInclude Include="..\Headers\MainCam.h" />
     <ClInclude Include="..\Headers\MaterialHandler.h" />
+    <ClInclude Include="..\Headers\Meteor.h" />
+    <ClInclude Include="..\Headers\MissionUI.h" />
     <ClInclude Include="..\Headers\Monster.h" />
     <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\Player.h" />
-    <ClInclude Include="..\Headers\PlayerLight.h" />
     <ClInclude Include="..\Headers\Player_Bullet.h" />
     <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\Product.h" />
+=======
+    <ClInclude Include="..\Headers\QuestHandler.h" />
+>>>>>>> main
     <ClInclude Include="..\Headers\Ring.h" />
+    <ClInclude Include="..\Headers\ScriptUI.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
     <ClInclude Include="..\Headers\Stage.h" />
     <ClInclude Include="..\Headers\StreamHandler.h" />
     <ClInclude Include="..\Headers\TargetMonster.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\VIBuffer_HexagonTex.h" />
+=======
+    <ClInclude Include="..\Headers\TutorialUI.h" />
+>>>>>>> main
     <ClInclude Include="..\Headers\WingBoost_System.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -220,8 +235,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\StatusBoard.cpp" />
+=======
+    <ClCompile Include="..\Codes\Asteroid.cpp" />
+>>>>>>> main
     <ClCompile Include="..\Codes\Boss_Monster.cpp" />
     <ClCompile Include="..\Codes\Boss_Spawn_Monster.cpp" />
     <ClCompile Include="..\Codes\Boss_Warmhole.cpp" />
@@ -242,6 +261,7 @@
     <ClCompile Include="..\Codes\LobbyUI.cpp" />
     <ClCompile Include="..\Codes\FollowSystem.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
+    <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\LockOn.cpp" />
@@ -250,21 +270,31 @@
     <ClCompile Include="..\Codes\MainApp.cpp" />
     <ClCompile Include="..\Codes\MainCam.cpp" />
     <ClCompile Include="..\Codes\MaterialHandler.cpp" />
+    <ClCompile Include="..\Codes\Meteor.cpp" />
+    <ClCompile Include="..\Codes\MissionUI.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
     <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
-    <ClCompile Include="..\Codes\PlayerLight.cpp" />
     <ClCompile Include="..\Codes\Player_Bullet.cpp" />
     <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\Product.cpp" />
+=======
+    <ClCompile Include="..\Codes\QuestHandler.cpp" />
+>>>>>>> main
     <ClCompile Include="..\Codes\Ring.cpp" />
+    <ClCompile Include="..\Codes\ScriptUI.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\StreamHandler.cpp" />
     <ClCompile Include="..\Codes\TargetMonster.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\VIBuffer_HexagonTex.cpp" />
+=======
+    <ClCompile Include="..\Codes\TutorialUI.cpp" />
+>>>>>>> main
     <ClCompile Include="..\Codes\WingBoost_System.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

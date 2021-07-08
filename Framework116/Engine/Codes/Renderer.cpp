@@ -288,6 +288,8 @@ _uint CRenderer::Render_AlphaUI()
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);

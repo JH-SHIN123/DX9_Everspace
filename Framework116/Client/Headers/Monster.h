@@ -42,9 +42,8 @@ private:
 	_float3 m_vResearchRange = {0.f,0.f,0.f};
 
 private:
-	CVIBuffer*  m_pVIBuffer = nullptr;
+	CModelMesh*  m_pModelMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
 	CVIBuffer_TerrainTexture* m_pTerrainBuffer = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
 };

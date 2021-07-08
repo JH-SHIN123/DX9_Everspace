@@ -25,6 +25,11 @@ void CLight::InitDirectionalLight(_float3* direction, D3DXCOLOR* color)
 	m_tLight.Direction = *direction;
 }
 
+void CLight::Set_LightDir(const _float3& _vDir)
+{
+	m_tLight.Direction = _vDir;
+}
+
 void CLight::InitPointLight(_float3* position, D3DXCOLOR* color)
 {
 	::ZeroMemory(&m_tLight, sizeof(m_tLight));
@@ -52,7 +57,7 @@ void CLight::InitSpotLight(_float3* position, _float3* direction, D3DXCOLOR* col
 	m_tLight.Specular = *color * 0.6f;
 	m_tLight.Position = *position;
 	m_tLight.Direction = *direction;
-	m_tLight.Range = 50.0f;
+	m_tLight.Range = 25.f;
 	m_tLight.Falloff = 1.0f;
 	m_tLight.Attenuation0 = 1.0f;
 	m_tLight.Attenuation1 = 0.0f;
@@ -119,7 +124,7 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 	// 일단 조명 한개만 설치할거임
 	m_pDevice->SetLight(s_iLightIndex, &m_tLight);
 	m_pDevice->LightEnable(s_iLightIndex, true);
-	//m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//m_pDevice->SetRenderState(D3DRS_SPECULARENABLE, true);
 	//m_pDevice->SetRenderState(D3DRS_DIF, 0x00202020);
 
 	return S_OK;

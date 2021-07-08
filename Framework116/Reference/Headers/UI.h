@@ -27,6 +27,10 @@ public:
 	virtual _uint Render_GameObject() override;
 
 public:
+	const TRANSFORM_DESC Get_UI_TransformDesc();
+	HRESULT Change_Texture(const wstring& wstrTexturePrototypeTag);
+
+public:
 	static CUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
@@ -38,6 +42,7 @@ protected:
 
 protected:
 	wstring m_wstrTexturePrototypeTag = L"";
+	TRANSFORM_DESC m_tTransformDesc;
 	RECT m_tUIBounds;
 };
 END

@@ -7,7 +7,7 @@ USING(Engine)
 class CPlayer_Lazer final : public CGameObject
 {
 public:
-	explicit CPlayer_Lazer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData);
+	explicit CPlayer_Lazer(LPDIRECT3DDEVICE9 pDevice);
 	explicit CPlayer_Lazer(const CPlayer_Lazer& other);
 	virtual ~CPlayer_Lazer() = default;
 
@@ -22,7 +22,7 @@ private:
 	_uint Movement(_float fDeltaTime);
 
 public:
-	static CPlayer_Lazer* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
+	static CPlayer_Lazer* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 

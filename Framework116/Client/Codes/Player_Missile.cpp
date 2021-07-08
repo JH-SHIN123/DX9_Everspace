@@ -5,10 +5,9 @@
 #include "MainCam.h"
 #include "Collision.h"
 
-CPlayer_Missile::CPlayer_Missile(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
+CPlayer_Missile::CPlayer_Missile(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	m_pPassData = pData;
 }
 
 CPlayer_Missile::CPlayer_Missile(const CPlayer_Missile & other)
@@ -53,7 +52,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 50.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
-	TransformDesc.vScale = { 0.3f, 0.3f, 0.2f };
+	TransformDesc.vScale = { 0.1f, 0.1f, 0.1f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -127,6 +126,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 
 	// Add Effect
+	CEffectHandler::Add_Layer_Effect_Missile_Head(this, &m_pHeadParticle);
 	CEffectHandler::Add_Layer_Effect_Missile_Smoke(this, &m_pBulletParticle);
 
 	return S_OK;
@@ -142,7 +142,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Movement(fDeltaTime);
 	else
 	{
-		m_fAddSpeed += 0.01f;
+		m_fAddSpeed += 0.05f;
 		m_fRotateSpeed += D3DXToRadian(15.f);
 		m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 		m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -163,17 +163,31 @@ _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_IsCollide) {
 		m_IsDead = true;
 
-		if (m_pBulletParticle)
+		if (m_pBulletParticle) {
 			m_pBulletParticle->Set_IsDead(true);
+			m_pBulletParticle = nullptr;
+		}
 
+		if (m_pHeadParticle) {
+			m_pHeadParticle->Set_IsDead(true);
+			m_pHeadParticle = nullptr;
+		}
+		
 		return DEAD_OBJECT;
 	}
 
 	if (m_fLifeTime >= 2.f) {
 		m_IsDead = true;
 
-		if (m_pBulletParticle)
+		if (m_pBulletParticle) {
 			m_pBulletParticle->Set_IsDead(true);
+			m_pBulletParticle = nullptr;
+		}
+
+		if (m_pHeadParticle) {
+			m_pHeadParticle->Set_IsDead(true);
+			m_pHeadParticle = nullptr;
+		}
 
 		return DEAD_OBJECT;
 	}
@@ -262,9 +276,9 @@ _uint CPlayer_Missile::Searching_Target(_float fDeltaTime)
 	return _uint();
 }
 
-CPlayer_Missile * CPlayer_Missile::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData /*= nullptr*/)
+CPlayer_Missile * CPlayer_Missile::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CPlayer_Missile* pInstance = new CPlayer_Missile(pDevice, pData);
+	CPlayer_Missile* pInstance = new CPlayer_Missile(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player_Bullet");
@@ -288,6 +302,9 @@ CGameObject * CPlayer_Missile::Clone(void * pArg/* = nullptr*/)
 
 void CPlayer_Missile::Free()
 {
+	if (m_IsClone)
+		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
+
 	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
@@ -295,8 +312,16 @@ void CPlayer_Missile::Free()
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 
-	if (m_pBulletParticle)
+	if (m_pBulletParticle) {
 		m_pBulletParticle->Set_IsDead(true);
+		m_pBulletParticle = nullptr;
+	}
+
+	if (m_pHeadParticle) {
+		m_pHeadParticle->Set_IsDead(true);
+		m_pHeadParticle = nullptr;
+	}
+
 
 	CGameObject::Free();
 }

@@ -22,14 +22,18 @@ typedef struct tagPassingData_Object {
 typedef struct tagPassingData_Map {
 #ifdef _AFX
 	CString wstrPrototypeTag;
+	CString wstrMeshName;
 #else 
 	wstring wstrPrototypeTag;
+	wstring wstrMeshName;
 #endif // _AFX
 
 	_float4x4 matWorld;
+	_float3 Pos;
 	_float3 Rotate;
+	_float3 Scale;
+
 	int iNodeOrder;
-	wstring wstrCloneName;
 }PASSDATA_MAP;
 
 typedef struct tagPassingData_Route {

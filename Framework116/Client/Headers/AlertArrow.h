@@ -32,6 +32,7 @@ private:
 	CTexture*	m_pTexture = nullptr;
 
 	CGameObject* m_pTargetMonster = nullptr;
+	CTransform* m_pPlayerTransform = nullptr;
 };
 
 #define __ALERTARROW_H__

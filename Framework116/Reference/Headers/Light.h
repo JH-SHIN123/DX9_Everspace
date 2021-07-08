@@ -31,6 +31,9 @@ protected:
 	explicit CLight(const CLight& other);
 	virtual ~CLight() = default;
 
+public:
+	void Set_LightDir(const _float3& _vDir);
+
 protected:
 	void InitDirectionalLight(_float3* direction, D3DXCOLOR* color);
 	void InitPointLight(_float3* position, D3DXCOLOR* color);

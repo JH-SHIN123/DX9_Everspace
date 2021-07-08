@@ -91,6 +91,7 @@
     <Filter Include="02.GameObject\09.HUD\01.Weapons">
       <UniqueIdentifier>{fe21133b-9cea-4b43-a588-c27d7b949fb0}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
     <Filter Include="02.GameObject\08.Bullet\02.Boss">
       <UniqueIdentifier>{8ac5797a-a195-456d-a81a-0db08aed7682}</UniqueIdentifier>
     </Filter>
@@ -121,17 +122,13 @@
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox">
       <UniqueIdentifier>{dcaa591a-4806-43df-92c8-58e4f922a218}</UniqueIdentifier>
     </Filter>
+=======
+>>>>>>> main
     <Filter Include="02.GameObject\07.Boss_Monster\01.Boss_Spawn_Monster">
       <UniqueIdentifier>{e78bf798-cc12-47ff-a895-e53d09a29172}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\07.Boss_Monster\02.Boss_Warmhole">
       <UniqueIdentifier>{23952399-75ac-4693-abdf-417bc1b3013f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\10.Light">
-      <UniqueIdentifier>{f91d63e9-2824-4c32-b284-5bf6f7ffb353}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\10.Light\PlayerLight">
-      <UniqueIdentifier>{25aab534-0650-46a2-8fc4-c6d5c5d2ac42}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\09.HUD\02.LockOn">
       <UniqueIdentifier>{84e70570-19d0-4df2-9eda-52d39675beef}</UniqueIdentifier>
@@ -145,14 +142,20 @@
     <Filter Include="02.GameObject\06.Particle\Follow">
       <UniqueIdentifier>{6b4389f6-3af0-4db3-9bb6-db9bdb2c7186}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\11.Planet">
-      <UniqueIdentifier>{a1e0a8f8-7504-484a-b609-b432df6b753f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\13.Ring">
+    <Filter Include="02.GameObject\11.Ring">
       <UniqueIdentifier>{8ad1be28-6814-4d28-a03d-cf98acfa6bb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="97.Utilities\02.Material">
-      <UniqueIdentifier>{30c21b7f-470d-46f1-83f3-a507c17cce1b}</UniqueIdentifier>
+    <Filter Include="02.GameObject\13.Meteor">
+      <UniqueIdentifier>{a1e7d7a9-e5bd-4814-b91c-66f719d0066f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\14.Planet">
+      <UniqueIdentifier>{1889675a-4ff8-49d4-885a-09ebe36839b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD\04.TutorialUI">
+      <UniqueIdentifier>{5c3ac12f-e17d-41c7-8771-302f615e6d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD\05.MissionUI">
+      <UniqueIdentifier>{078845c1-2258-4768-9ea8-37c058281276}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\12.TargetMonster">
       <UniqueIdentifier>{ec3f8199-67e4-4bae-bdc8-a8e07ff027cc}</UniqueIdentifier>
@@ -163,6 +166,7 @@
     <Filter Include="02.GameObject\06.Particle\WingBoost">
       <UniqueIdentifier>{6840ecc0-5224-47b6-968b-27169f738624}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\01.Product">
       <UniqueIdentifier>{cca5d187-96ff-4e2b-9b19-c1449b85890a}</UniqueIdentifier>
     </Filter>
@@ -174,6 +178,40 @@
     </Filter>
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\02.Board\00.Status">
       <UniqueIdentifier>{17f0422e-b673-4d3f-98b4-8a8e2fc56cb3}</UniqueIdentifier>
+=======
+    <Filter Include="02.GameObject\09.HUD\06.ScriptUI">
+      <UniqueIdentifier>{c7f25113-b245-4948-850d-0ad03c90ce48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities\03.Material">
+      <UniqueIdentifier>{30c21b7f-470d-46f1-83f3-a507c17cce1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities\04.Quest">
+      <UniqueIdentifier>{9c679705-a2d3-47b7-9741-3cc39a0e0ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\09.HUD\06.HP_Bar">
+      <UniqueIdentifier>{6948385c-e68c-422e-8994-985f535d4a7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\03.Boss">
+      <UniqueIdentifier>{8ac5797a-a195-456d-a81a-0db08aed7682}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\03.Boss\02.EMP_Bomb">
+      <UniqueIdentifier>{478d85d1-2c7c-48a4-9e74-aa8aae3cb2c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\03.Boss\02.EMP_Bomb\Bullet_EMP_Bomb_Explotion">
+      <UniqueIdentifier>{eea6f620-9d2d-4616-ba21-63ddd79ec6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\03.Boss\01.Laser">
+      <UniqueIdentifier>{20ac20a6-4343-4b16-a3bc-f8a01dc5f730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\03.Boss\00.EnergyBall">
+      <UniqueIdentifier>{9115b9a8-e38a-4a24-b2d9-2e4912cfbb46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\10.HUD_Effect">
+      <UniqueIdentifier>{2f511fc6-a5f3-45e3-83a9-dffebade5ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\15.Asteroid">
+      <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
+>>>>>>> main
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -235,16 +273,16 @@
       <Filter>97.Utilities\00.Stream</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bullet_EnergyBall.h">
-      <Filter>02.GameObject\08.Bullet\02.Boss\00.EnergyBall</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\00.EnergyBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bullet_Laser.h">
-      <Filter>02.GameObject\08.Bullet\02.Boss\01.Laser</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\01.Laser</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Boss_Monster.h">
       <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Bullet_EMP_Bomb.h">
-      <Filter>02.GameObject\08.Bullet\02.Boss\02.EMP_Bomb</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\02.EMP_Bomb</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Player_Bullet.h">
       <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
@@ -267,6 +305,7 @@
     <ClInclude Include="..\Headers\CollisionHandler.h">
       <Filter>97.Utilities\01.Collision</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\LobbyModel.h">
       <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
     </ClInclude>
@@ -285,14 +324,16 @@
     <ClInclude Include="..\Headers\PlayerLight.h">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClInclude>
+=======
+>>>>>>> main
     <ClInclude Include="..\Headers\Ring.h">
-      <Filter>02.GameObject\13.Ring</Filter>
+      <Filter>02.GameObject\11.Ring</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\TargetMonster.h">
       <Filter>02.GameObject\12.TargetMonster</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\MaterialHandler.h">
-      <Filter>97.Utilities\02.Material</Filter>
+      <Filter>97.Utilities\03.Material</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\EffectHandler.h">
       <Filter>97.Utilities\02.Effect</Filter>
@@ -306,15 +347,19 @@
     <ClInclude Include="..\Headers\AlertArrow.h">
       <Filter>02.GameObject\09.HUD\03.AlertArrow</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Meteor.h">
+      <Filter>02.GameObject\13.Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\TutorialUI.h">
+      <Filter>02.GameObject\09.HUD\04.TutorialUI</Filter>
+    </ClInclude>
     <ClInclude Include="..\Headers\EngineEffectSystem.h">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h">
-      <Filter>02.GameObject\11.Planet</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\WingBoost_System.h">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\Grass.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
@@ -329,6 +374,28 @@
     </ClInclude>
     <ClInclude Include="..\Headers\VIBuffer_HexagonTex.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\03.VIBuffer_HexagonColor</Filter>
+=======
+    <ClInclude Include="..\Headers\MissionUI.h">
+      <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\ScriptUI.h">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\QuestHandler.h">
+      <Filter>97.Utilities\04.Quest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HP_Bar.h">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Asteroid.h">
+      <Filter>02.GameObject\15.Asteroid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
+>>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -378,13 +445,13 @@
       <Filter>02.GameObject\07.Boss_Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bullet_EnergyBall.cpp">
-      <Filter>02.GameObject\08.Bullet\02.Boss\00.EnergyBall</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\00.EnergyBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bullet_Laser.cpp">
-      <Filter>02.GameObject\08.Bullet\02.Boss\01.Laser</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\01.Laser</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Bullet_EMP_Bomb.cpp">
-      <Filter>02.GameObject\08.Bullet\02.Boss\02.EMP_Bomb</Filter>
+      <Filter>02.GameObject\08.Bullet\03.Boss\02.EMP_Bomb</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Player_Bullet.cpp">
       <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
@@ -410,6 +477,7 @@
     <ClCompile Include="..\Codes\StreamHandler.cpp">
       <Filter>97.Utilities\00.Stream</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\LobbyModel.cpp">
       <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
     </ClCompile>
@@ -428,14 +496,16 @@
     <ClCompile Include="..\Codes\PlayerLight.cpp">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClCompile>
+=======
+>>>>>>> main
     <ClCompile Include="..\Codes\Ring.cpp">
-      <Filter>02.GameObject\13.Ring</Filter>
+      <Filter>02.GameObject\11.Ring</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\TargetMonster.cpp">
       <Filter>02.GameObject\12.TargetMonster</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\MaterialHandler.cpp">
-      <Filter>97.Utilities\02.Material</Filter>
+      <Filter>97.Utilities\03.Material</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\EffectHandler.cpp">
       <Filter>97.Utilities\02.Effect</Filter>
@@ -449,15 +519,19 @@
     <ClCompile Include="..\Codes\AlertArrow.cpp">
       <Filter>02.GameObject\09.HUD\03.AlertArrow</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Meteor.cpp">
+      <Filter>02.GameObject\13.Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\TutorialUI.cpp">
+      <Filter>02.GameObject\09.HUD\04.TutorialUI</Filter>
+    </ClCompile>
     <ClCompile Include="..\Codes\EngineEffectSystem.cpp">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp">
-      <Filter>02.GameObject\11.Planet</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\WingBoost_System.cpp">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\Grass.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
@@ -472,6 +546,28 @@
     </ClCompile>
     <ClCompile Include="..\Codes\VIBuffer_HexagonTex.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\03.VIBuffer_HexagonColor</Filter>
+=======
+    <ClCompile Include="..\Codes\MissionUI.cpp">
+      <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ScriptUI.cpp">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\QuestHandler.cpp">
+      <Filter>97.Utilities\04.Quest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HP_Bar.cpp">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp">
+      <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Asteroid.cpp">
+      <Filter>02.GameObject\15.Asteroid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp">
+      <Filter>02.GameObject\14.Planet</Filter>
+>>>>>>> main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

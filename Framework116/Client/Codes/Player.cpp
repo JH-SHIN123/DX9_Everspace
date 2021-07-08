@@ -4,11 +4,11 @@
 #include "Pipeline.h"
 #include "EngineEffectSystem.h"
 #include "WingBoost_System.h"
+#include "ScriptUI.h"
 
-CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
+CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	m_pPassData = pPassData;
 }
 
 CPlayer::CPlayer(const CPlayer & other)
@@ -66,8 +66,20 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{}
+		else
+		{
+			PRINT_LOG(L"Error", L"GAMEOBJECT_DESC is nullptr");
+			return E_FAIL;
+		}
+	}
+
 	// For.Com_VIBuffer
-	wstring meshTag = L"Component_Mesh_BigShip";
+	wstring meshTag = pDesc->wstrMeshName;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		meshTag,
@@ -79,12 +91,9 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform Test
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 45.f;
-	TransformDesc.vPosition = _float3(50.f, 0.f, 0.f);
-	TransformDesc.fSpeedPerSec = 25.f;
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	TransformDesc.fSpeedPerSec = 35.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
-	TransformDesc.vScale = { 1.f,1.f,1.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -150,9 +159,10 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	
 	// Add Wing-Boost Effect
 	CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pLeftWingBoost);
-	m_vLeftWingOffset = { 0.f, 0.f, 0.f };
+	m_vLeftWingOffset = { -8.2f, -1.5f, -2.f };
 	CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pRightWingBoost);
-	m_vRightWingOffset = { 0.f, 0.f, 0.f };
+	m_vRightWingOffset = { 8.2f, -1.5f, -2.f };
+
 
 	return S_OK;
 }
@@ -216,11 +226,35 @@ _uint CPlayer::Render_GameObject()
 	return _uint();
 }
 
+_uint CPlayer::Set_IsScript(_bool IsScript)
+{
+	m_IsScript = IsScript;
+	return _uint();
+}
+
+_uint CPlayer::Set_IsCameraMove(_bool IsCameraMove)
+{
+	m_IsCameraMove = IsCameraMove;
+
+	return _uint();
+}
+
 void CPlayer::KeyProcess(_float fDeltaTime)
 {
 	if (nullptr == m_pController) return;
 	m_pController->Update_Controller();
 
+	// 대화
+	if (m_IsScript == true)
+	{
+		if (m_pController->Key_Down(KEY_F))
+		{
+			static_cast<CScriptUI*>(m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")
+				->front())->Set_NextScript();
+		}
+		return;
+	}
+		
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
 		m_pTransform->Go_Straight(fDeltaTime);
@@ -324,7 +358,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		if (m_iWeapon == WEAPON_MACHINEGUN)
 		{
 			m_fMachinegunFireDelay += fDeltaTime * m_fOverDrive;
-			if (m_fMachinegunFireDelay > 0.1f)
+			if (m_fMachinegunFireDelay > 0.15f)
 			{
 				if (m_IsLeft)
 					m_IsLeft = false;
@@ -400,6 +434,9 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 _uint CPlayer::Movement(_float fDeltaTime)
 {
+	if (m_IsScript == true) // 대화중
+		return 0;
+
 	// 화면 가둬줄 가상의 네모
 	POINT pt;
 	GetCursorPos(&pt);
@@ -434,7 +471,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	D3DXVec3Normalize(&vGap, &vGap);
 
 	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.6f);
-	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
+	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.3f);
 
 	return _uint();
 }
@@ -454,9 +491,9 @@ void CPlayer::TimeOperation(const _float fDeltaTime)
 	}
 }
 
-CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pPassData)
+CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CPlayer* pInstance = new CPlayer(pDevice, pPassData);
+	CPlayer* pInstance = new CPlayer(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player");
@@ -524,21 +561,32 @@ _uint CPlayer::Make_Arrow()
 		_float3 v1 = vPlayerLook; // 얘는 방향벡턴데?
 		_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // 위치벡터네?
 		_float fCeta;
-		
+		D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 		_float v1v2 = D3DXVec3Dot(&v1, &v2);
 		_float v1Length = D3DXVec3Length(&v1);
 		_float v2Length = D3DXVec3Length(&v2);
 		fCeta = acosf(v1v2 / (v1Length * v2Length));
-
+		
 		_float fDegree = D3DXToDegree(fCeta);
 
-		if (fabs(fDegree) > 80.f)
+		if (fabs(fDegree) > 90.f)
 		{
-	/*		wstring abc = to_wstring(fDegree);
-			PRINT_LOG(L"", abc.c_str());*/
-			//m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+			if (IsArrow == false)
+			{
+				//wstring abc = to_wstring(fDegree);
+				//PRINT_LOG(L"", abc.c_str());
+				m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter));
+				IsArrow = true;
+			}
 		}
-
+		else if (fabs(fDegree) < 70.f)
+		{
+			if (IsArrow && m_pManagement->Get_GameObjectList(L"Layer_AlertArrow")->size() != 0)
+			{
+				m_pManagement->Get_GameObjectList(L"Layer_AlertArrow")->front()->Set_IsDead(TRUE);
+				IsArrow = false;
+			}
+		}
 	}
 
 	

@@ -7,7 +7,7 @@ USING(Engine)
 class CPlayer_Missile final : public CGameObject
 {
 public:
-	explicit CPlayer_Missile(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData);
+	explicit CPlayer_Missile(LPDIRECT3DDEVICE9 pDevice);
 	explicit CPlayer_Missile(const CPlayer_Missile& other);
 	virtual ~CPlayer_Missile() = default;
 
@@ -24,7 +24,7 @@ private:
 	_uint Searching_Target(_float fDeltaTime);
 
 public:
-	static CPlayer_Missile* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
+	static CPlayer_Missile* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -44,6 +44,9 @@ private:
 	_float3 m_vMuzzlePos = {};
 	_float3 m_vPlayerLook = {};
 	_bool m_IsFirst = true;
+
+private:
+	CGameObject* m_pHeadParticle = nullptr;
 	CGameObject* m_pBulletParticle = nullptr;
 
 private:
