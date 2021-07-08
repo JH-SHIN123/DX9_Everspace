@@ -160,6 +160,9 @@
     <Filter Include="02.GameObject\15.Asteroid">
       <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\16.NaviArrow">
+      <UniqueIdentifier>{39a5666c-bfbc-4048-9492-51b50235537c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -297,6 +300,9 @@
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\NaviArrow.h">
+      <Filter>02.GameObject\16.NaviArrow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -421,6 +427,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NaviArrow.cpp">
+      <Filter>02.GameObject\16.NaviArrow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

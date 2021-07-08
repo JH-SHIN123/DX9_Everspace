@@ -31,6 +31,7 @@
 #include "WingBoost_System.h"
 #include "HP_Bar.h"
 #include "Asteroid.h"
+#include "NaviArrow.h"
 #pragma endregion
 
 
@@ -249,6 +250,15 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_NaviArrow",
+		CNaviArrow::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_NaviArrow");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -399,6 +409,15 @@ HRESULT CLoading::Ready_StageResources()
 		CModelMesh::Create(m_pDevice, L"../../Resources/Models/Asteroid/cloud.X", L"../../Resources/Textures/Asteroid/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_NaviArrow",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/naviArrow.X", L"../../Resources/Textures/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_NaviArrow");
 		return E_FAIL;
 	}
 

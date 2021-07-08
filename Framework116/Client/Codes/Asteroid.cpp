@@ -20,6 +20,8 @@ HRESULT CAsteroid::Ready_GameObject_Prototype()
 
 HRESULT CAsteroid::Ready_GameObject(void* pArg)
 {
+	CGameObject::Ready_GameObject(pArg);
+
 	GAMEOBJECT_DESC* pDesc = nullptr;
 	if (auto ptr = (BASE_DESC*)pArg)
 	{

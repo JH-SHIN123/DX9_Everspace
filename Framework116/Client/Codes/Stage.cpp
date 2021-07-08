@@ -16,6 +16,7 @@ HRESULT CStage::Ready_Scene()
 	::SetWindowText(g_hWnd, L"Stage");
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/stage1.map");
+	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/guide.navi");
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;

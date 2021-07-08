@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "StreamHandler.h"
-#include"Player.h"
+
 #pragma region GameObject
+#include"Player.h"
+#include "NaviArrow.h"
 #pragma endregion
 
 HRESULT CStreamHandler::Load_PassData_Map(const TCHAR* wstrFilePath)
@@ -51,7 +53,7 @@ HRESULT CStreamHandler::Load_PassData_Map(const TCHAR* wstrFilePath)
 
 	for (auto& p : vecPassData) 
 	{
-		Add_GameObject_Layer(&p);
+		Add_GameObject_Layer_Map(&p);
 	}
 
 	return S_OK;
@@ -102,6 +104,7 @@ HRESULT CStreamHandler::Load_PassData_UI(const wstring& wstrFilePath, const _boo
 		}
 	}
 
+	fin.close();
 
 	return S_OK;
 }
@@ -222,7 +225,39 @@ HRESULT CStreamHandler::Load_PassData_Collide(const wstring& wstrFileName, const
 	return S_OK;
 }
 
-HRESULT CStreamHandler::Add_GameObject_Layer(const PASSDATA_MAP* pPassData)
+HRESULT CStreamHandler::Load_PassData_Navi(const TCHAR* wstrFilePath)
+{
+	HANDLE hFile = CreateFile(wstrFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (INVALID_HANDLE_VALUE == hFile) {
+		PRINT_LOG(L"Error", L"Failed to Load Map");
+		return E_FAIL;
+	}
+
+	DWORD dwByte = 0;
+
+	vector<PASSDATA_ROUTE> vecRoutes;
+	PASSDATA_ROUTE tRoute;
+
+	while (true)
+	{
+		// Mesh Transform
+		ReadFile(hFile, &tRoute, sizeof(tRoute), &dwByte, nullptr);
+
+		if (0 == dwByte)
+			break;
+
+		vecRoutes.emplace_back(tRoute);
+	}
+
+	CloseHandle(hFile);
+
+	for (auto& p : vecRoutes)
+		Add_GameObject_Layer_Route(&p);
+
+	return S_OK;
+}
+
+HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 {
 	if (nullptr == pPassData) {
 		PRINT_LOG(L"Error", L"(Load Map) Failed To Add Layer");
@@ -317,6 +352,28 @@ HRESULT CStreamHandler::Add_GameObject_Layer(const PASSDATA_MAP* pPassData)
 		}
 	}
 #pragma endregion
+
+	return S_OK;
+}
+
+HRESULT CStreamHandler::Add_GameObject_Layer_Route(const PASSDATA_ROUTE* pPassData)
+{
+	if (nullptr == pPassData)
+		return E_FAIL;
+
+	NAVI_ARROW_DESC tDesc;
+	tDesc.vPos = pPassData->vNodePos;
+	tDesc.vDir = pPassData->vNodeDir;
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_NaviArrow",
+		L"Layer_NaviArrow",
+		(void*)&tDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_NaviArrow In Layer");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
