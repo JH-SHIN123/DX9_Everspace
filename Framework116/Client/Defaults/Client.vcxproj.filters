@@ -321,9 +321,6 @@
     <ClInclude Include="..\Headers\GatchaBox.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\PlayerLight.h">
-      <Filter>02.GameObject\10.Light\PlayerLight</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Ring.h">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClInclude>
@@ -396,6 +393,7 @@
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\HP_Bar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -491,9 +489,6 @@
     <ClCompile Include="..\Codes\GatchaBox.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PlayerLight.cpp">
-      <Filter>02.GameObject\10.Light\PlayerLight</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Ring.cpp">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClCompile>
@@ -566,6 +561,7 @@
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\HP_Bar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

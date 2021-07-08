@@ -26,15 +26,13 @@ HRESULT CLobbyUI::Ready_GameObject_Prototype()
 HRESULT CLobbyUI::Ready_GameObject(void* pArg)
 {
 	CUI::Ready_GameObject(pArg);
-<<<<<<< HEAD
 
 	 m_vNodeScale = { 50.f,50.f,0.f };
 	 m_vCursorPos = { -400.f,-100.f,0.f };
 	 m_vFirstNode = { -400.f,-100.f,0.f };
 	 m_vSecondNode = { 100.f,100.f,0.f };
 	 m_vThirdNode = { 300.f,200.f,0.f };
-=======
->>>>>>> main
+
 	
 	return S_OK;
 }
@@ -52,10 +50,9 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	}
 	CUI::Update_GameObject(fDeltaTime);
 	Update_Bounds();
-<<<<<<< HEAD
+
 	Update_SceneSelect(fDeltaTime);
-=======
->>>>>>> main
+
 	Check_Picking();
 	OnMouseButton();
 	Key_Check(fDeltaTime);
@@ -104,15 +101,13 @@ _uint CLobbyUI::Render_GameObject()
 	m_pTexture->Set_Texture(m_dwIdx);
 	m_pVIBuffer->Render_VIBuffer();
 	/////////////////////////////////////////////////////////////////
-<<<<<<< HEAD
+
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
 		Render_Cursor();
 		Render_Nodes();
 	}
-=======
-	
->>>>>>> main
+
 	if (m_bShowModelIcon)
 	{
 		if(m_fDeltaTime < 1.f)
@@ -156,17 +151,12 @@ void CLobbyUI::Update_Bounds()
 	
 	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 
-<<<<<<< HEAD
+
 	m_tUIBounds.left = (LONG)(vPos.x - (vSize.x));
 	m_tUIBounds.top = (LONG)(vPos.y - (vSize.y));
 	m_tUIBounds.right = (LONG)(vPos.x + (vSize.x));
 	m_tUIBounds.bottom = (LONG)(vPos.y + (vSize.y));
-=======
-	m_tUIBounds.left = vPos.x - (vSize.x);
-	m_tUIBounds.top = vPos.y - (vSize.y);
-	m_tUIBounds.right = vPos.x + (vSize.x);
-	m_tUIBounds.bottom = vPos.y + (vSize.y);
->>>>>>> main
+
 
 }
 
@@ -214,7 +204,6 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 			{
-<<<<<<< HEAD
 				//m_pLobby->Set_GotoNextScene(TRUE);
 				UI_DESC UiDesc;
 				_float PosX = 0.f;
@@ -241,36 +230,6 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 				}
 				m_pLobby->Set_SceneSelect(TRUE);
 			}
-=======
-				m_pLobby->Set_GotoNextScene(TRUE);
-				//UI_DESC UiDesc;
-				//_float PosX = 0.f;
-				//_float PosY = 0.f;
-				//_float ScaleX = 1000;
-				//_float ScaleY = 600;
-				//UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
-				//UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
-				//UiDesc.wstrTexturePrototypeTag = L"Component_Texture_SceneSelect";
-				//if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
-				//	EResourceType::NonStatic, L"GameObject_LobbyUI"
-				//	, L"Layer_UI", &UiDesc)))
-				//{
-				//	PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
-				//	return;
-				//}
-				//for (auto& pUI : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
-				//{
-				//	if (static_cast<CLobbyUI*>(pUI)->m_pLobby == nullptr)
-				//	{
-				//		static_cast<CLobbyUI*>(pUI)->Set_Scene(m_pLobby);
-				//		Safe_AddRef(m_pLobby);
-				//	}
-				//}
-				//m_pLobby->Set_SceneSelect(TRUE);
-			}
-			
-		
->>>>>>> main
 		}
 	}
 
@@ -371,17 +330,12 @@ void CLobbyUI::ChangeModelIcon()
 
 	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 
-<<<<<<< HEAD
+
 	rc[i].left = (LONG)(vPos.x - (vSize.x)+(vSize.x*(i)));
 	rc[i].top = (LONG)(vPos.y - (vSize.y));
 	rc[i].right = (LONG)(vPos.x + (vSize.x)+(vSize.x*(i)));
 	rc[i].bottom = (LONG)(vPos.y + (vSize.y));
-=======
-	rc[i].left = vPos.x - (vSize.x)+(vSize.x*(i));
-	rc[i].top = vPos.y - (vSize.y);
-	rc[i].right = vPos.x + (vSize.x)+(vSize.x*(i));
-	rc[i].bottom = vPos.y + (vSize.y);
->>>>>>> main
+
 
 		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
 		{
@@ -399,7 +353,6 @@ void CLobbyUI::ChangeModelIcon()
 	}
 }
 
-<<<<<<< HEAD
 void CLobbyUI::Render_Cursor()
 {
 	_float4x4 matView;
@@ -481,8 +434,7 @@ void CLobbyUI::Update_SceneSelect(_float fDeltaTime)
 	}
 }
 
-=======
->>>>>>> main
+
 CLobbyUI* CLobbyUI::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	CLobbyUI* pInstance = new CLobbyUI(pDevice);

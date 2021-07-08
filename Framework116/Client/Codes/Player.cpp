@@ -219,7 +219,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	KeyProcess(fDeltaTime);
-<<<<<<< HEAD
+
 	
 	Movement(fDeltaTime);
 
@@ -230,7 +230,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 
 	// 월드행렬 업데이트
 	m_pTransform->Update_Transform_Quaternion();
-=======
+
 	if (!m_IsDead)
 	{
 		Movement(fDeltaTime);
@@ -238,7 +238,6 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 		TimeOperation(fDeltaTime);
 
 		Make_Arrow();
->>>>>>> main
 
 		// 월드행렬 업데이트
 		m_pTransform->Update_Transform_Quaternion();

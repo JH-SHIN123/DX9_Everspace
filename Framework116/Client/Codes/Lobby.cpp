@@ -5,11 +5,7 @@
 #include"Loading.h"
 #include"LobbyUI.h"
 #include"LobbyModel.h"
-<<<<<<< HEAD
 #include"LobbyCam.h"
-=======
-#include"LobbyCam.h""
->>>>>>> main
 #include"GatchaBox.h"
 #include"StatusBoard.h"
 #include"Status.h"
@@ -66,10 +62,7 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 		}
 		return CHANGE_SCENE;
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 	CScene::Update_Scene(fDeltaTime);
 
 	
@@ -145,10 +138,9 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
 	pModel->Set_Scene(this);
 	AddRef();
-<<<<<<< HEAD
+
 	return S_OK;
-=======
->>>>>>> main
+
 }
 
 HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
@@ -223,10 +215,9 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(LayerTag));
 	pBox->Set_Scene(this);
 	AddRef();
-<<<<<<< HEAD
+
 	return S_OK;
-=======
->>>>>>> main
+
 }
 
 HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)
