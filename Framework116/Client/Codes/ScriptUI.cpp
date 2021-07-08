@@ -99,7 +99,6 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_eScriptFlow == EScriptFlow::Flow_End)
 	{
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsScript(false);
-		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage1_Ring);
 
 		return DEAD_OBJECT;

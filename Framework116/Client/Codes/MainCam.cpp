@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\MainCam.h"
 #include "Pipeline.h"
+#include "Player.h"
 
 CMainCam::CMainCam(LPDIRECT3DDEVICE9 pDevice)
 	: CCamera(pDevice)
@@ -405,6 +406,8 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 	default:
 		Safe_Release(m_pTargetTransform);
 		m_IsMoveCountCheck = false;
+		// 플레이어 무빙 허용
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		m_eSoloMoveMode = ESoloMoveMode::End;
 		break;
 	}
