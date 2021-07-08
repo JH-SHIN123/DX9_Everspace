@@ -34,17 +34,14 @@
 #include "Meteor.h"
 #include "TutorialUI.h"
 #include "WingBoost_System.h"
-<<<<<<< HEAD
 #include"Product.h"
 #include"StatusBoard.h"
 #include"Status.h"
 #include"VIBuffer_HexagonTex.h"
-=======
 #include "Meteor.h"
 #include "ScriptUI.h"
 #include "HP_Bar.h"
 #include "Asteroid.h"
->>>>>>> main
 #pragma endregion
 
 
@@ -335,9 +332,8 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 		return E_FAIL;
 	}
-<<<<<<< HEAD
+
 	Ready_Stage1();
-=======
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
@@ -375,17 +371,13 @@ HRESULT CLoading::Ready_StageResources()
 	//	return E_FAIL;
 	//}
 
->>>>>>> main
 	Ready_HUD_Resources();
 	Ready_StageEffect();
 #pragma endregion
 
-<<<<<<< HEAD
 	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
 	return S_OK;
 }
-=======
->>>>>>> main
 
 HRESULT CLoading::Ready_LobbyResources()
 {
@@ -825,14 +817,8 @@ HRESULT CLoading::Ready_Stage1()
 	// UI ÀÌ¹ÌÁö
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-<<<<<<< HEAD
-		L"Component_Texture_Ring",
-		CTexture::Create(m_pDevice, ETextureType::Normal,
-			L"../../Tool_Executable/Resources/Textures/Player/Player1.png"))))
-=======
 		L"Component_Texture_Tutorial_Nevi",
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/IMG_HUD_Marker_Turret_Peripheral.png"))))
->>>>>>> main
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Planet_Jupiter");
 		return E_FAIL;

@@ -91,7 +91,6 @@
     <Filter Include="02.GameObject\09.HUD\01.Weapons">
       <UniqueIdentifier>{fe21133b-9cea-4b43-a588-c27d7b949fb0}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="02.GameObject\08.Bullet\02.Boss">
       <UniqueIdentifier>{8ac5797a-a195-456d-a81a-0db08aed7682}</UniqueIdentifier>
     </Filter>
@@ -122,8 +121,6 @@
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox">
       <UniqueIdentifier>{dcaa591a-4806-43df-92c8-58e4f922a218}</UniqueIdentifier>
     </Filter>
-=======
->>>>>>> main
     <Filter Include="02.GameObject\07.Boss_Monster\01.Boss_Spawn_Monster">
       <UniqueIdentifier>{e78bf798-cc12-47ff-a895-e53d09a29172}</UniqueIdentifier>
     </Filter>
@@ -166,7 +163,6 @@
     <Filter Include="02.GameObject\06.Particle\WingBoost">
       <UniqueIdentifier>{6840ecc0-5224-47b6-968b-27169f738624}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\01.Product">
       <UniqueIdentifier>{cca5d187-96ff-4e2b-9b19-c1449b85890a}</UniqueIdentifier>
     </Filter>
@@ -178,7 +174,7 @@
     </Filter>
     <Filter Include="01.Scene\02.Lobby\01.LobbyUI\02.Board\00.Status">
       <UniqueIdentifier>{17f0422e-b673-4d3f-98b4-8a8e2fc56cb3}</UniqueIdentifier>
-=======
+    </Filter>
     <Filter Include="02.GameObject\09.HUD\06.ScriptUI">
       <UniqueIdentifier>{c7f25113-b245-4948-850d-0ad03c90ce48}</UniqueIdentifier>
     </Filter>
@@ -211,7 +207,6 @@
     </Filter>
     <Filter Include="02.GameObject\15.Asteroid">
       <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
->>>>>>> main
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -305,7 +300,6 @@
     <ClInclude Include="..\Headers\CollisionHandler.h">
       <Filter>97.Utilities\01.Collision</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\Headers\LobbyModel.h">
       <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
     </ClInclude>
@@ -324,8 +318,6 @@
     <ClInclude Include="..\Headers\PlayerLight.h">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClInclude>
-=======
->>>>>>> main
     <ClInclude Include="..\Headers\Ring.h">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClInclude>
@@ -359,10 +351,6 @@
     <ClInclude Include="..\Headers\WingBoost_System.h">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="..\Headers\Grass.h" />
-    <ClInclude Include="..\Headers\LaserSystem.h" />
-    <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\Product.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\01.Product</Filter>
     </ClInclude>
@@ -374,7 +362,7 @@
     </ClInclude>
     <ClInclude Include="..\Headers\VIBuffer_HexagonTex.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\03.VIBuffer_HexagonColor</Filter>
-=======
+    </ClInclude>
     <ClInclude Include="..\Headers\MissionUI.h">
       <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
     </ClInclude>
@@ -395,7 +383,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
->>>>>>> main
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -477,7 +464,6 @@
     <ClCompile Include="..\Codes\StreamHandler.cpp">
       <Filter>97.Utilities\00.Stream</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\Codes\LobbyModel.cpp">
       <Filter>01.Scene\02.Lobby\00.LobbyModel</Filter>
     </ClCompile>
@@ -496,8 +482,6 @@
     <ClCompile Include="..\Codes\PlayerLight.cpp">
       <Filter>02.GameObject\10.Light\PlayerLight</Filter>
     </ClCompile>
-=======
->>>>>>> main
     <ClCompile Include="..\Codes\Ring.cpp">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClCompile>
@@ -531,10 +515,6 @@
     <ClCompile Include="..\Codes\WingBoost_System.cpp">
       <Filter>02.GameObject\06.Particle\WingBoost</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="..\Codes\Grass.cpp" />
-    <ClCompile Include="..\Codes\LaserSystem.cpp" />
-    <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\Product.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\01.Product</Filter>
     </ClCompile>
@@ -546,7 +526,7 @@
     </ClCompile>
     <ClCompile Include="..\Codes\VIBuffer_HexagonTex.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\03.VIBuffer_HexagonColor</Filter>
-=======
+    </ClCompile>
     <ClCompile Include="..\Codes\MissionUI.cpp">
       <Filter>02.GameObject\09.HUD\05.MissionUI</Filter>
     </ClCompile>
@@ -567,7 +547,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
->>>>>>> main
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

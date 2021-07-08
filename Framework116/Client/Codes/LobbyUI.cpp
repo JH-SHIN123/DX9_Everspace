@@ -186,30 +186,31 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 			{
-				UI_DESC UiDesc;
-				_float PosX = 0.f;
-				_float PosY = 0.f;
-				_float ScaleX = 1000;
-				_float ScaleY = 600;
-				UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
-				UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
-				UiDesc.wstrTexturePrototypeTag = L"Component_Texture_SceneSelect";
-				if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
-					EResourceType::NonStatic, L"GameObject_LobbyUI"
-					, L"Layer_UI", &UiDesc)))
-				{
-					PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
-					return;
-				}
-				for (auto& pUI : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
-				{
-					if (static_cast<CLobbyUI*>(pUI)->m_pLobby == nullptr)
-					{
-						static_cast<CLobbyUI*>(pUI)->Set_Scene(m_pLobby);
-						Safe_AddRef(m_pLobby);
-					}
-				}
-				m_pLobby->Set_SceneSelect(TRUE);
+				m_pLobby->Set_GotoNextScene(TRUE);
+				//UI_DESC UiDesc;
+				//_float PosX = 0.f;
+				//_float PosY = 0.f;
+				//_float ScaleX = 1000;
+				//_float ScaleY = 600;
+				//UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
+				//UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
+				//UiDesc.wstrTexturePrototypeTag = L"Component_Texture_SceneSelect";
+				//if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+				//	EResourceType::NonStatic, L"GameObject_LobbyUI"
+				//	, L"Layer_UI", &UiDesc)))
+				//{
+				//	PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+				//	return;
+				//}
+				//for (auto& pUI : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
+				//{
+				//	if (static_cast<CLobbyUI*>(pUI)->m_pLobby == nullptr)
+				//	{
+				//		static_cast<CLobbyUI*>(pUI)->Set_Scene(m_pLobby);
+				//		Safe_AddRef(m_pLobby);
+				//	}
+				//}
+				//m_pLobby->Set_SceneSelect(TRUE);
 			}
 			
 		

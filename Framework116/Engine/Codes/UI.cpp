@@ -89,8 +89,6 @@ _uint CUI::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
 		return UPDATE_ERROR;
 
-<<<<<<< HEAD
-=======
 	//// Picking Check
 	//POINT	pt = {};
 	//GetCursorPos(&pt);
@@ -102,7 +100,6 @@ _uint CUI::LateUpdate_GameObject(_float fDeltaTime)
 
 	//}
 
->>>>>>> main
 	return _uint();
 }
 
