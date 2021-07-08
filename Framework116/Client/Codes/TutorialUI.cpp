@@ -119,8 +119,8 @@ _uint CTutorialUI::LateUpdate_GameObject(_float fDeltaTime)
 
 	BillBorad(fDeltaTime); 
 
-	if (m_bAllTargetCollide == true)
-		return DEAD_OBJECT;
+	//if (m_bAllTargetCollide == true)
+	//	return DEAD_OBJECT;
 
 	return _uint();
 }
@@ -136,6 +136,11 @@ _uint CTutorialUI::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	return _uint();
+}
+
+_uint CTutorialUI::Get_CountTarget()
+{
+	return m_iCountTarget;
 }
 
 _uint CTutorialUI::Movement(_float fDeltaTime)
@@ -231,8 +236,11 @@ _uint CTutorialUI::Search_Target(_float fDeltaTime)
 	m_bAllTargetCollide = true;
 	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_uint i = 0;
+	m_iCountTarget = 0;
 	for (auto& iter : m_listTargetObject)
 	{
+		++m_iCountTarget;
+
 		if (iter->Get_IsCollide() == false)
 		{
 			m_bAllTargetCollide = false;
@@ -242,10 +250,12 @@ _uint CTutorialUI::Search_Target(_float fDeltaTime)
 			_float fDis = fabs(D3DXVec3Length(&(vPos - fPlayerPos)));
 
 			m_vSearchTagetDis[i] = { vPos.x, vPos.y, vPos.z, fDis };
-
+			//--m_iCountTarget;
 			++i;
 		}
 	}
+	m_iCountTarget -= i;
+
 
 	_uint iSize = m_listTargetObject.size();
 

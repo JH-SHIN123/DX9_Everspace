@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Headers\QuestHandler.h"
+#include "TutorialUI.h"
 
 
 IMPLEMENT_SINGLETON(CQuestHandler)
@@ -74,6 +75,8 @@ _bool CQuestHandler::Get_IsClear()
 
 _bool CQuestHandler::Update_Quest()
 {
+	m_iCount = ((CTutorialUI*)CManagement::Get_Instance()->Get_GameObject(L"Layer_TutorialUI"))->Get_CountTarget();
+
 	if (m_iCount >= m_iCount_Max)
 	{
 		m_iCount = m_iCount_Max;

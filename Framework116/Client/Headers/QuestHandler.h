@@ -32,7 +32,7 @@ public:
 	_int  Get_CountMax();
 	_bool Get_IsClear();
 
-private:
+public: // 계속 돌려줘야함
 	_bool Update_Quest();
 
 private:

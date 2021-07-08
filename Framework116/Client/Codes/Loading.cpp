@@ -43,6 +43,7 @@
 #include "HP_Bar.h"
 #include "Asteroid.h"
 #include "MissionUI.h"
+#include "BackUI.h"
 #pragma endregion
 
 
@@ -703,6 +704,33 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
+	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!! 있는데 뭐지
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HP_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Bar");
+		return E_FAIL;
+	}
+
+	Ready_ScriptUI_Resources();
+
+	return S_OK;
+}
+
+HRESULT CLoading::Ready_ScriptUI_Resources()
+{
+	// 스크립트 UI
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ScriptUI",
+		CScriptUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
+		return E_FAIL;
+	}
+
 	// Script_UI blackbar
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -722,6 +750,7 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
+
 	// 초상화
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -740,13 +769,32 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
-	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!! 있는데 뭐지
+	// 미션/퀘스트 UI
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_MissionUI",
+		CMissionUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_MissionUI");
+		return E_FAIL;
+	}
+
+	// 미션 텍스처
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-		L"Component_Texture_HP_Bar",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar%d.png"))))
+		L"Component_Texture_Mission_HUD",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Mission/Mission_HUD.png"))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Bar");
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_ScriptUI_Portrait_Test");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_BackUI",
+		CBackUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
 		return E_FAIL;
 	}
 
@@ -834,25 +882,6 @@ HRESULT CLoading::Ready_Stage1()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_ScriptUI*/
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_ScriptUI",
-		CScriptUI::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
-		return E_FAIL;
-	}
-
-	// 미션/퀘스트 UI
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_MissionUI",
-		CMissionUI::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_MissionUI");
-		return E_FAIL;
-	}
 
 	return S_OK;
 }

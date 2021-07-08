@@ -18,11 +18,6 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
-private:
-	_uint Movement(_float fDeltaTime);
-	_uint Search_Target(_float fDeltaTime);
-	_uint BillBorad(_float fDeltaTime);
-
 public:
 	static CMissionUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;

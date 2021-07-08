@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "Pipeline.h"
 #include "Ring.h"
+#include "QuestHandler.h"
 
 CMissionUI::CMissionUI(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
@@ -26,7 +27,6 @@ HRESULT CMissionUI::Ready_GameObject(void * pArg/* = nullptr*/)
 	CUI::Ready_GameObject(pArg);
 
 
-
 	return S_OK;
 }
 
@@ -34,8 +34,16 @@ _uint CMissionUI::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 	
-	Movement(fDeltaTime);	
-	
+
+	CQuestHandler::Get_Instance()->Update_Quest();
+
+	m_wstrMissionName = CQuestHandler::Get_Instance()->Get_QusetName();
+	m_iMissionCount = CQuestHandler::Get_Instance()->Get_CountRemaining();
+	m_iMissionMaxCount = CQuestHandler::Get_Instance()->Get_CountMax();
+	m_IsClear = CQuestHandler::Get_Instance()->Get_IsClear();
+
+
+
 	return m_pTransform->Update_Transform();
 }
 
@@ -43,8 +51,8 @@ _uint CMissionUI::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CUI::LateUpdate_GameObject(fDeltaTime);
 	
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
-		return UPDATE_ERROR;
+	//if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
+	//	return UPDATE_ERROR;
 
 	return _uint();
 }
@@ -53,27 +61,26 @@ _uint CMissionUI::Render_GameObject()
 {
 	CUI::Render_GameObject();
 
-	//m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	//m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	//m_pTexture->Set_Texture(0);
-	//m_pVIBuffer->Render_VIBuffer();
-	//m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	wstring Info = to_wstring(m_iMissionCount) + L"/" + to_wstring(m_iMissionMaxCount);
 
-	return _uint();
-}
+	RECT m_tUIBounds;
+	GetClientRect(g_hWnd, &m_tUIBounds);
+	m_tUIBounds.top += 500;
+	m_tUIBounds.left += 1700;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, m_wstrMissionName.c_str(), -1
+		, &m_tUIBounds, DT_CENTER, D3DXCOLOR(200, 200, 200, 255));
 
-_uint CMissionUI::Movement(_float fDeltaTime)
-{
-	return _uint();
-}
+	GetClientRect(g_hWnd, &m_tUIBounds);
+	m_tUIBounds.top += 550;
+	m_tUIBounds.left += 1650;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, Info.c_str(), -1
+		, &m_tUIBounds, DT_CENTER, D3DXCOLOR(200, 200, 200, 255));
 
-_uint CMissionUI::Search_Target(_float fDeltaTime)
-{
-	return _uint();
-}
+	//wstring IsClear
+	//if(m_IsClear == true)
 
-_uint CMissionUI::BillBorad(_float fDeltaTime)
-{
 	return _uint();
 }
 

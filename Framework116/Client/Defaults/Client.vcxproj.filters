@@ -208,6 +208,9 @@
     <Filter Include="02.GameObject\15.Asteroid">
       <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\06.ScriptUI\00.BackUI">
+      <UniqueIdentifier>{0da2434a-1705-41f3-bace-2526a70a4433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -315,9 +318,6 @@
     <ClInclude Include="..\Headers\GatchaBox.h">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\PlayerLight.h">
-      <Filter>02.GameObject\10.Light\PlayerLight</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Ring.h">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClInclude>
@@ -383,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\BackUI.h">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -479,9 +482,6 @@
     <ClCompile Include="..\Codes\GatchaBox.cpp">
       <Filter>01.Scene\02.Lobby\01.LobbyUI\00.GatchaBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PlayerLight.cpp">
-      <Filter>02.GameObject\10.Light\PlayerLight</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Ring.cpp">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClCompile>
@@ -547,6 +547,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\BackUI.cpp">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
