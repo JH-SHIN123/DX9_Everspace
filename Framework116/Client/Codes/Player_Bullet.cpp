@@ -155,7 +155,7 @@ _uint CPlayer_Bullet::LateUpdate_GameObject(_float fDeltaTime)
 			m_pBulletParticle->Set_IsDead(true);
 			m_pBulletParticle = nullptr;
 		}
-
+		// 타격음 넣어야함!
 		return DEAD_OBJECT;
 	}
 

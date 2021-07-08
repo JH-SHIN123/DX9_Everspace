@@ -169,10 +169,10 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 	}
 	
 	// 카메라 쉐이킹
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-	{
-		CameraShakingStart(fDeltaTime);
-	}
+	//if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	//{
+	//	CameraShakingStart(fDeltaTime);
+	//}
 
 
 	return _uint();

@@ -153,6 +153,7 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 		m_IsDead = true;
 		m_pHp_Bar->Set_IsDead(TRUE);
 		m_pHP_Bar_Border->Set_IsDead(TRUE);
+		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {

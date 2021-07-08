@@ -190,8 +190,9 @@ _uint CCrosshair::Searching_Target(_float fDeltaTime)
 				{
 					PRINT_LOG(L"Error", L"Failed To Add LockOn In Layer");
 					return E_FAIL;
-					m_IsBossLockOn = true;
 				}
+				m_IsBossLockOn = true;
+				m_pManagement->PlaySound(L"Lock_On.ogg", CSoundMgr::LOCKON);
 
 			}
 			else if (!m_IsDistOn)

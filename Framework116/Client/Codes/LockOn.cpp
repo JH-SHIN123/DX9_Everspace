@@ -64,12 +64,16 @@ HRESULT CLockOn::Ready_GameObject(void * pArg/* = nullptr*/)
 	wstring* m_pTargetLayerTag = (wstring*)pArg;
 	m_wstrLayerTag = *m_pTargetLayerTag;
 	
-	m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
-	Safe_AddRef(m_pTargetCollide);
-	if (nullptr == m_pTargetCollide)
+	
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
 	{
-		PRINT_LOG(L"Error", L"m_pTargetCollide is nullptr");
-		return UPDATE_ERROR;
+		m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
+		Safe_AddRef(m_pTargetCollide);
+		if (nullptr == m_pTargetCollide)
+		{
+			PRINT_LOG(L"Error", L"m_pTargetCollide is nullptr");
+			return UPDATE_ERROR;
+		}
 	}
 	return S_OK;
 }
@@ -78,10 +82,12 @@ _uint CLockOn::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 
-	m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
-	
-	Movement(fDeltaTime);	
-	
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+	{
+		m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
+
+		Movement(fDeltaTime);
+	}
 
 
 	return m_pTransform->Update_Transform();
@@ -101,39 +107,41 @@ _uint CLockOn::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
-	_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
-	matWorld._11 = 10.f;
-	matWorld._22 = 10.f;
-	matWorld._33 = 10.f;
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+	{
+		_float4x4 matWorld = m_pTransform->Get_TransformDesc().matWorld;
+		matWorld._11 = 10.f;
+		matWorld._22 = 10.f;
+		matWorld._33 = 10.f;
 
-	matWorld._41 = m_pTargetCollide->Get_BoundingSphere().Get_Position().x;
-	matWorld._42 = m_pTargetCollide->Get_BoundingSphere().Get_Position().y;
-	matWorld._43 = m_pTargetCollide->Get_BoundingSphere().Get_Position().z;
+		matWorld._41 = m_pTargetCollide->Get_BoundingSphere().Get_Position().x;
+		matWorld._42 = m_pTargetCollide->Get_BoundingSphere().Get_Position().y;
+		matWorld._43 = m_pTargetCollide->Get_BoundingSphere().Get_Position().z;
 
-	_float4x4 matView;
-	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+		_float4x4 matView;
+		m_pDevice->GetTransform(D3DTS_VIEW, &matView);
 
-	_float4x4 matBill;
-	D3DXMatrixIdentity(&matBill);
+		_float4x4 matBill;
+		D3DXMatrixIdentity(&matBill);
 
-	matBill = matView;
-	matBill._41 = 0.f;
-	matBill._42 = 0.f;
-	matBill._43 = 0.f;
+		matBill = matView;
+		matBill._41 = 0.f;
+		matBill._42 = 0.f;
+		matBill._43 = 0.f;
 
-	D3DXMatrixInverse(&matBill, 0, &matBill);
-	_float4x4 realmatWorld;
-	realmatWorld = matBill * matWorld;
-	m_pTransform->Set_WorldMatrix(realmatWorld);
+		D3DXMatrixInverse(&matBill, 0, &matBill);
+		_float4x4 realmatWorld;
+		realmatWorld = matBill * matWorld;
+		m_pTransform->Set_WorldMatrix(realmatWorld);
 
-	m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	m_pVIBuffer->Render_VIBuffer();
-	m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	//////////////////////////////////////////////////////
+		m_pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+		m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+		m_pTexture->Set_Texture(0);
+		m_pVIBuffer->Render_VIBuffer();
+		m_pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+		//////////////////////////////////////////////////////
 
-
+	}
 
 	return _uint();
 }

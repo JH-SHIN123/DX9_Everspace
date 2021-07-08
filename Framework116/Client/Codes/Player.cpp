@@ -278,17 +278,37 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
+	{
 		m_pTransform->Go_Straight(fDeltaTime);
+		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+	}
 
+	
 	if (GetAsyncKeyState('S') & 0x8000)
+	{
 		m_pTransform->Go_Straight(-fDeltaTime);
+		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+	}
 
 	if (GetAsyncKeyState('D') & 0x8000)
+	{
 		m_pTransform->Go_Side(fDeltaTime);
+		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+	}
 
 	if (GetAsyncKeyState('A') & 0x8000)
+	{
 		m_pTransform->Go_Side(-fDeltaTime);
+		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+	}
 
+	if ((!GetAsyncKeyState('W') && 0x8000)
+		&& (!GetAsyncKeyState('A') && 0x8000)
+		&& (!GetAsyncKeyState('S') && 0x8000)
+		&& (!GetAsyncKeyState('D') && 0x8000))
+	{
+		m_pManagement->StopSound(CSoundMgr::PLAYER_MOVE);
+	}
 	// Booster
 	if (m_pController->Key_Pressing(KEY_SPACE) && m_fStamina > 0.f) {
 		m_IsBoost = true;
@@ -411,8 +431,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 					PRINT_LOG(L"Error", L"Failed To Add Player_Bullet In Layer");
 					return;
 				}
-				m_pManagement->StopSound(CSoundMgr::PLAYER_PULSE_LASER);
-				m_pManagement->PlaySound(L"Pulse_Laser.ogg", CSoundMgr::PLAYER_PULSE_LASER);
+				m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+				m_pManagement->PlaySound(L"Pulse_Laser.ogg", CSoundMgr::PLAYER_WEAPON);
 				m_fMachinegunFireDelay = 0.f;
 			}
 		}
@@ -457,7 +477,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 					PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
 					return;
 				}
-				
+				m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+				m_pManagement->PlaySound(L"Launch_Missile.ogg", CSoundMgr::PLAYER_WEAPON);
 			}
 			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Missile")->size() == 1)
 				m_IsMissile = true;

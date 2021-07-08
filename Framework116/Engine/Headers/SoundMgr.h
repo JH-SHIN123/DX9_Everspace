@@ -11,7 +11,11 @@ public:
 	virtual ~CSoundMgr() = default;
 
 public:
-	enum CHANNELID { BGM, PLAYER_MOVE, PLAYER_BOOST, PLAYER_MISSILE, PLAYER_PULSE_LASER , UI, MAXCHANNEL };
+	enum CHANNELID
+	{ 
+		BGM, PLAYER_MOVE, PLAYER_BOOST, PLAYER_WEAPON , PLAYER_MISSILE_EXPLOSION, LOCKON, 
+		SHIP_EXPLOSION, UI, MAXCHANNEL 
+	};
 
 public:
 	virtual void Free() override;

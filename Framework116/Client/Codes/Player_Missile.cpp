@@ -51,7 +51,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 50.f;
+	TransformDesc.fSpeedPerSec = 150.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.1f, 0.1f, 0.1f };
 
@@ -149,7 +149,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	{
 		if (m_pTargetTransform != nullptr)
 		{
-			m_fAddSpeed += 0.05f;
+			m_fAddSpeed += 0.15f;
 			m_fRotateSpeed += D3DXToRadian(15.f);
 			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -160,9 +160,9 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
 	// 아직 충돌하면 사라지게하는거 안했음!!
-	m_fLifeTime += fDeltaTime;
-	if (m_fLifeTime > 4.f)
-		return DEAD_OBJECT;
+	//m_fLifeTime += fDeltaTime;
+	//if (m_fLifeTime > 4.f)
+	//	return DEAD_OBJECT;
 	return NO_EVENT;
 }
 
@@ -180,25 +180,27 @@ _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 			m_pHeadParticle->Set_IsDead(true);
 			m_pHeadParticle = nullptr;
 		}
-		
-		return DEAD_OBJECT;
-	}
-
-	if (m_fLifeTime >= 2.f) {
-		m_IsDead = true;
-
-		if (m_pBulletParticle) {
-			m_pBulletParticle->Set_IsDead(true);
-			m_pBulletParticle = nullptr;
-		}
-
-		if (m_pHeadParticle) {
-			m_pHeadParticle->Set_IsDead(true);
-			m_pHeadParticle = nullptr;
-		}
+		m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+		m_pManagement->PlaySound(L"Missile_Explosion.ogg", CSoundMgr::PLAYER_MISSILE_EXPLOSION);
 
 		return DEAD_OBJECT;
 	}
+
+	//if (m_fLifeTime >= 4.f) {
+	//	m_IsDead = true;
+
+	//	if (m_pBulletParticle) {
+	//		m_pBulletParticle->Set_IsDead(true);
+	//		m_pBulletParticle = nullptr;
+	//	}
+
+	//	if (m_pHeadParticle) {
+	//		m_pHeadParticle->Set_IsDead(true);
+	//		m_pHeadParticle = nullptr;
+	//	}
+
+	//	return DEAD_OBJECT;
+	//}
 
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
