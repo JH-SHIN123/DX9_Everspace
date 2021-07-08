@@ -221,6 +221,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 		// 월드행렬 업데이트
 		m_pTransform->Update_Transform_Quaternion();
 
+		Collide_Planet_Or_Astroid(fDeltaTime);
 		// 충돌박스 업데이트
 		for (auto& collide : m_Collides)
 			collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -234,7 +235,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
-	Collide_Planet_Or_Astroid(fDeltaTime);
+	
 	if (m_fHp <= 0.f && !m_IsDead)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
@@ -263,8 +264,8 @@ _uint CPlayer::Render_GameObject()
 			, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
 
 #ifdef _DEBUG // Render Collide
-		//for (auto& collide : m_Collides)
-		//	collide->Render_Collide();
+		for (auto& collide : m_Collides)
+			collide->Render_Collide();
 #endif
 	}
 	return _uint();
@@ -502,7 +503,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * fSpeed * 0.6f);
 	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * fSpeed * 0.6f);
-
+	
 	return _uint();
 }
 
@@ -546,11 +547,58 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 	// 1.Planet
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Planet");
 
-	if (m_IsAstroidCollide == true)
+	// 일반이동 충돌
+	if (m_IsBoost == false && m_IsAstroidCollide == true)
 	{
-		// 부딪힌 만큼 밀어내는데.. 어디로 밀어낼까
-		m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), -fDeltaTime);
-		m_IsAstroidCollide = false;
+		//정면
+		if (GetAsyncKeyState(L'W') & 0x8000)
+		{
+			m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), -fDeltaTime);
+			m_IsAstroidCollide = false;
+		}
+		// 후진
+		if (GetAsyncKeyState(L'S') & 0x8000)
+		{
+			m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), fDeltaTime);
+			m_IsAstroidCollide = false;
+		}
+		// 좌측, 우측
+		if (GetAsyncKeyState(L'A') & 0x8000)
+		{
+			m_pTransform->Go_Side(fDeltaTime * 1.2f);
+			m_IsAstroidCollide = false;
+		}
+		if (GetAsyncKeyState(L'D') & 0x8000)
+		{
+			m_pTransform->Go_Side(-fDeltaTime * 1.2f);
+			m_IsAstroidCollide = false;
+		}
+	}
+	// 부스터 시 충돌
+	else if (m_IsBoost == true && m_IsAstroidCollide == true)
+	{
+		if (GetAsyncKeyState(L'W') & 0x8000)
+		{
+			m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), -fDeltaTime * 2.5f);
+			m_IsAstroidCollide = false;
+		}
+		// 후진
+		if (GetAsyncKeyState(L'S') & 0x8000)
+		{
+			m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), fDeltaTime * 1.f);
+			m_IsAstroidCollide = false;
+		}
+		if (GetAsyncKeyState(L'A') & 0x8000)
+		{
+			m_pTransform->Go_Side(fDeltaTime * 1.2f);
+			m_IsAstroidCollide = false;
+		}
+		if (GetAsyncKeyState(L'D') & 0x8000)
+		{
+			m_pTransform->Go_Side(-fDeltaTime * 1.2f);
+			m_IsAstroidCollide = false;
+		}
+	
 	}
 
 	return _uint();

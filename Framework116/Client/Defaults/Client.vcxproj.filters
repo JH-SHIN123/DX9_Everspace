@@ -163,6 +163,9 @@
     <Filter Include="02.GameObject\09.HUD\07.Stamina_Bar">
       <UniqueIdentifier>{d26afb06-6587-4612-8786-de21ca95aa86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\08.HP_Bar_Border">
+      <UniqueIdentifier>{e6c4d16a-58f1-4987-9dd1-f89517e86ff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -301,6 +304,9 @@
     <ClInclude Include="..\Headers\Stamina_Bar.h">
       <Filter>02.GameObject\09.HUD\07.Stamina_Bar</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\HP_Bar_Border.h">
+      <Filter>02.GameObject\09.HUD\08.HP_Bar_Border</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -426,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Stamina_Bar.cpp">
       <Filter>02.GameObject\09.HUD\07.Stamina_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HP_Bar_Border.cpp">
+      <Filter>02.GameObject\09.HUD\08.HP_Bar_Border</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

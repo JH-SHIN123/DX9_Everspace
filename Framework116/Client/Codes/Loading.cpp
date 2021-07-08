@@ -30,6 +30,7 @@
 #include "TutorialUI.h"
 #include "WingBoost_System.h"
 #include "HP_Bar.h"
+#include "HP_Bar_Border.h"
 #include "Stamina_Bar.h"
 #include "Asteroid.h"
 #pragma endregion
@@ -238,6 +239,16 @@ HRESULT CLoading::Ready_StageResources()
 		CHP_Bar::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_HP_Bar");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_HP_Bar_Border */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_HP_Bar_Border",
+		CHP_Bar_Border::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_HP_Bar_Border");
 		return E_FAIL;
 	}
 
@@ -638,6 +649,16 @@ HRESULT CLoading::Ready_HUD_Resources()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Out_Bar.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Out_Bar");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_HUD_Out_Bar */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HP_Border",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HUD_Out_Bar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Border");
 		return E_FAIL;
 	}
 

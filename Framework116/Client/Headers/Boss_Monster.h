@@ -94,6 +94,7 @@ private: /* Skills */
 	// HP Bar Ãß°¡
 	_bool m_IsHPBar = false;
 	class CHP_Bar* m_pHp_Bar = nullptr;
+	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
 	_float m_fHpLength = 64.f;
 };
 

@@ -75,12 +75,15 @@ _uint CCollideSphere::Update_Collide(const _float4x4& matParent)
 
 _uint CCollideSphere::Render_Collide()
 {
+	//Test 때문에 컬모드 꺼놓았음.
+	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_tBoundingSphere.matWorld);
 	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pDevice->SetTexture(0,nullptr);
 	m_pSphere->DrawSubset(0);
 	m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 	return _uint();
 }

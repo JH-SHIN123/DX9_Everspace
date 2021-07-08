@@ -1,33 +1,33 @@
 #include "stdafx.h"
-#include "..\Headers\HP_Bar.h"
+#include "..\Headers\HP_Bar_Border.h"
 #include "Pipeline.h"
 #include "Collision.h"
 
-CHP_Bar::CHP_Bar(LPDIRECT3DDEVICE9 pDevice)
+CHP_Bar_Border::CHP_Bar_Border(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
 {
 }
 
-CHP_Bar::CHP_Bar(const CHP_Bar & other)
+CHP_Bar_Border::CHP_Bar_Border(const CHP_Bar_Border & other)
 	: CUI(other)
 {
 }
 
-HRESULT CHP_Bar::Ready_GameObject_Prototype()
+HRESULT CHP_Bar_Border::Ready_GameObject_Prototype()
 {
 	CUI::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CHP_Bar::Ready_GameObject(void * pArg/* = nullptr*/)
+HRESULT CHP_Bar_Border::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CUI::Ready_GameObject(pArg);
 
 	return S_OK;
 }
 
-_uint CHP_Bar::Update_GameObject(_float fDeltaTime)
+_uint CHP_Bar_Border::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 	
@@ -46,7 +46,7 @@ _uint CHP_Bar::Update_GameObject(_float fDeltaTime)
 	return NO_EVENT;
 }
 
-_uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
+_uint CHP_Bar_Border::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CUI::LateUpdate_GameObject(fDeltaTime);
 
@@ -56,24 +56,24 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CHP_Bar::Render_GameObject()
+_uint CHP_Bar_Border::Render_GameObject()
 {
 	CUI::Render_GameObject();
 
 	return _uint();
 }
 
-void CHP_Bar::Set_ScaleX(_float _fDamage)
+void CHP_Bar_Border::Set_ScaleX(_float _fDamage)
 {
 	m_pTransform->Set_ScaleX(m_pTransform->Get_TransformDesc().vScale.x + _fDamage);
 }
 
-_uint CHP_Bar::Movement(_float fDeltaTime)
+_uint CHP_Bar_Border::Movement(_float fDeltaTime)
 {
 	return _uint();
 }
 
-_uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
+_uint CHP_Bar_Border::Adjust_Pos(_float fDeltaTime)
 {
 	if (m_eMakerID == MAKER_BOSS_MONSTER)
 	{
@@ -102,29 +102,22 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 		ptBoss.z = 0.f;
 		//////////////////////////////////////////////////////////////////
 		if (m_pTransform) {
-			m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) - 30.f, -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f));
-			m_pTransform->Update_Transform();
-		}
-	}
-	else if (m_eMakerID == MAKER_PLAYER)
-	{
-		if (m_pTransform) {
-			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 132.5f, WINCY / 2.f - 84.f , 0.f));
+			m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) - 31.5f, -ptBoss.y + (WINCY / 2.f) + 29.f, 0.f));
 			m_pTransform->Update_Transform();
 		}
 	}
 	return _uint();
 }
 
-_uint CHP_Bar::Who_Make_Me(MAKERID _iMakerName)
+_uint CHP_Bar_Border::Who_Make_Me(MAKERID _iMakerName)
 {
 	m_eMakerID = _iMakerName;
 	return _uint();
 }
 
-CHP_Bar * CHP_Bar::Create(LPDIRECT3DDEVICE9 pDevice)
+CHP_Bar_Border * CHP_Bar_Border::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CHP_Bar* pInstance = new CHP_Bar(pDevice);
+	CHP_Bar_Border* pInstance = new CHP_Bar_Border(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create HP_Bar");
@@ -134,9 +127,9 @@ CHP_Bar * CHP_Bar::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
+CGameObject * CHP_Bar_Border::Clone(void * pArg/* = nullptr*/)
 {
-	CHP_Bar* pClone = new CHP_Bar(*this); /* 복사 생성자 호출 */
+	CHP_Bar_Border* pClone = new CHP_Bar_Border(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone HP_Bar");
@@ -146,7 +139,7 @@ CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
    	return pClone;
 }
 
-void CHP_Bar::Free()
+void CHP_Bar_Border::Free()
 {
 	CUI::Free();
 }

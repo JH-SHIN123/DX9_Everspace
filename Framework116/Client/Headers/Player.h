@@ -91,6 +91,8 @@ private: // HP, 스태미너 관련
 	_float m_fStaminaLength = 256.f;
 	_bool m_IsStaminaShrink = false;
 	_float m_fStaminaIncreaseDelay = 0.f;
+
+	// 행성, 운석이랑 충돌처리
 };
 
 #define __PLAYER_H__
