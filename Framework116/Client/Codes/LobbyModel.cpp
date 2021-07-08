@@ -141,6 +141,7 @@ _uint CLobbyModel::Movement(_float fDeltaTime)
 
 void CLobbyModel::StartSceneChange(_float fDeltaTime)
 {
+	//
 	static _float fTime = 0;
 	fTime += fDeltaTime;
 	if (m_bGo_Straight)
