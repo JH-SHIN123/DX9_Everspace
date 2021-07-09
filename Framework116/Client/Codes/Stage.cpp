@@ -65,7 +65,7 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
-	Stage_Flow(fDeltaTime);
+	//Stage_Flow(fDeltaTime);
 
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
