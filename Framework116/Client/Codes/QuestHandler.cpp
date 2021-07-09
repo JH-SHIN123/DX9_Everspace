@@ -75,6 +75,11 @@ _bool CQuestHandler::Get_IsClear()
 
 _bool CQuestHandler::Update_Quest()
 {
+	if (CManagement::Get_Instance()->Get_GameObject(L"Layer_TutorialUI") == nullptr)
+	{
+		return -1;
+	}
+
 	m_iCount = ((CTutorialUI*)CManagement::Get_Instance()->Get_GameObject(L"Layer_TutorialUI"))->Get_CountTarget();
 
 	if (m_iCount >= m_iCount_Max)

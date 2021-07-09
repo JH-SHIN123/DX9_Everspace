@@ -546,7 +546,6 @@ _uint CPlayer::Movement(_float fDeltaTime)
 {
 	if (m_IsScript == true || m_IsCameraMove) // 대화중이거나 카메라가 움직이는중!
 		return 0;
-		
 
 	// 화면 가둬줄 가상의 네모
 	POINT pt;
@@ -571,7 +570,7 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	rc.right = p2.x;
 	rc.bottom = p2.y;
 
-	//ClipCursor(&rc);
+	ClipCursor(&rc);
 	
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
