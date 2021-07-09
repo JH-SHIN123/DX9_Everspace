@@ -247,7 +247,7 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 		}
 	}
 
-	_float fSpeedPerSec = 80.f;
+	_float fSpeedPerSec = 120.f;
 	// eye, up, at
 
 	switch (m_byMoveCount)
@@ -283,17 +283,27 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 		vCameraPos.y += 20.f;
 		vCameraPos.z += 20.f;
 
-		m_CameraDesc.vEye = vCameraPos;
-		m_CameraDesc.vUp = vCameraUp;
-		m_CameraDesc.vAt = vCameraLookAt;
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_pPlayerTransform->Get_State(EState::Position));
+		_float3 vLen = (m_pPlayerTransform->Get_State(EState::Position) - m_CameraDesc.vEye);
 
-		++m_byMoveCount;
+		//if (D3DXVec3Length(&vLen) <= 10.f)
+		//{
+			m_CameraDesc.vEye = vCameraPos;
+			m_CameraDesc.vUp = vCameraUp;
+			m_CameraDesc.vAt = vCameraLookAt;
+			++m_byMoveCount;
+		//}
+
+		D3DXVec3Normalize(&vDir, &vDir);
+		//_float fSpeedPerSec = 50.f;
+		m_CameraDesc.vEye += fSpeedPerSec * fDeletaTime * vDir;
+		m_CameraDesc.vAt += fSpeedPerSec * fDeletaTime * vDir;
 	}
 		break;
 	case 1:
 	{
 		//_float3 vTargetPos = ((CTransform*)(m_pManagement->Get_GameObject(L"Layer_Ring", 4)->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
-		_float3 vTargetPos = { 250.f, 10.f, 100.f };
+		_float3 vTargetPos = { -200.f, 10.f, 500.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
@@ -307,7 +317,7 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 
 	case 2:
 	{
-		_float3 vTargetPos = { 450.f, 35.f, 175.f };
+		_float3 vTargetPos = { 0.f, 35.f, 1400.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
@@ -321,35 +331,47 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 
 	case 3:
 	{
-		_float3 vTargetPos = { 600.f, 60.f, 120.f };
+		_float3 vTargetPos = { 400.f, 60.f, 1850.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
 
 		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeletaTime;
-
+		
 		if (vLength <= 20.f)
 			++m_byMoveCount;
 	}
 	break;
-
+	
 	case 4:
 	{
-		_float3 vTargetPos = { 650.f, 35.f, -50.f };
+		_float3 vTargetPos = { 650.f, 35.f, 1800.f };
+		_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
 
 		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeletaTime;
 
+		if (vLength <= 50.f)
+		{
+			vDir = vPlayerPos - vTargetPos;
+			D3DXVec3Normalize(&vDir, &vDir);
+			m_CameraDesc.vAt += vDir * fSpeedPerSec * fDeletaTime;
+		}
+
 		if (vLength <= 20.f)
+		{
+			m_CameraDesc.vAt = m_pPlayerTransform->Get_State(EState::Position);
 			++m_byMoveCount;
+		}
+
 	}
 	break;
 
 	case 5:
 	{
-		_float3 vTargetPos = { 600.f, 10.f, -150.f };
+		_float3 vTargetPos = { 800.f, 10.f, 1400.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
@@ -363,7 +385,7 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 
 	case 6:
 	{
-		_float3 vTargetPos = { 405.f, 0.f, -150.f };
+		_float3 vTargetPos = { 505.f, 5.f, 550.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
@@ -377,7 +399,7 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 
 	case 7:
 	{
-		_float3 vTargetPos = { 405.f, 0.f, -150.f };
+		_float3 vTargetPos = { 200.f, 0.f, 100.f };
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float vLength = D3DXVec3Length(&vDir);
 		D3DXVec3Normalize(&vDir, &vDir);
@@ -389,19 +411,19 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 	}
 	break;
 
-	//case 8:
-	//{
-	//	_float3 vTargetPos = m_pPlayerTransform->Get_State(EState::Position);
-	//	_float3 vDir = vTargetPos - m_CameraDesc.vEye;
-	//	_float vLength = D3DXVec3Length(&vDir);
-	//	D3DXVec3Normalize(&vDir, &vDir);
+	case 8:
+	{
+		_float3 vTargetPos = m_pPlayerTransform->Get_State(EState::Position);
+		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
+		_float vLength = D3DXVec3Length(&vDir);
+		D3DXVec3Normalize(&vDir, &vDir);
 
-	//	m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeletaTime;
+		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeletaTime;
 
-	//	if (vLength <= 20.f)
-	//		++m_byMoveCount;
-	//}
-	//break;
+		if (vLength <= 10.f)
+			++m_byMoveCount;
+	}
+	break;
 
 	default:
 		Safe_Release(m_pTargetTransform);
@@ -464,6 +486,11 @@ void CMainCam::Set_IsSoloMove(ESoloMoveMode eMove)
 		eMove = ESoloMoveMode::End;
 
 	m_eSoloMoveMode = eMove;
+}
+
+const ESoloMoveMode CMainCam::Get_SoloMoveMode()
+{
+	return m_eSoloMoveMode;
 }
 
 _uint CMainCam::CameraShakingStart(_float fDeltaTime)

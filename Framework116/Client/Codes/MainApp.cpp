@@ -12,7 +12,7 @@
 #include "ScriptUI.h"
 #include "HP_Bar.h"
 
-CMainApp::CMainApp()
+CMainApp::CMainApp() //glhf
 	: m_pManagement(CManagement::Get_Instance())
 {
 }

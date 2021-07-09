@@ -18,6 +18,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	_uint Get_CountTarget();
+
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Search_Target(_float fDeltaTime);
@@ -47,6 +50,7 @@ private:
 	_bool m_bAllTargetCollide = false;
 	_float m_fSearchDisMax = 50.f;
 	_float m_fSearchDisMin = 1.f;
+	_uint m_iCountTarget = 0;
 };
 
 #define __TUTORIALUI_H__
