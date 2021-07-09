@@ -25,8 +25,8 @@ HRESULT CLobbyCam::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CCamera::Ready_GameObject(pArg);
 
-	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model", L"Com_Transform");
-	Safe_AddRef(m_pPlayerTransform);
+	m_pPlayerTransform = (CTransform*)m_pManagement->
+		Get_Component(L"Layer_Lobby_Model", L"Com_Transform");
 	if (nullptr == m_pPlayerTransform)
 	{
 		PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
@@ -43,24 +43,18 @@ _uint CLobbyCam::Update_GameObject(_float fDeltaTime)
 	{
 		if (m_pLobby->Get_GotoNextScene())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
 		}
 		if (m_pLobby->Get_IsGatcha())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_GatchaBox")
 				->Get_Component(L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
 		}
 		else if (m_pLobby->Get_IsSetPlayerModel())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
 		}
 	}
 	OffSet(fDeltaTime);
@@ -94,10 +88,8 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 	{
 		if (m_bUnPacked)
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Product"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
 			m_CameraDesc.vAt = m_pPlayerTransform->Get_State(EState::Position);
 			return 0;
 		}
@@ -176,7 +168,6 @@ CGameObject * CLobbyCam::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyCam::Free()
 {
-	Safe_Release(m_pPlayerTransform);
-	Safe_Release(m_pLobby);
+	
 	CCamera::Free();
 }

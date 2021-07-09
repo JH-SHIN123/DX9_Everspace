@@ -236,7 +236,7 @@ CGameObject * CGatchaBox::Clone(void * pArg/* = nullptr*/)
 
 void CGatchaBox::Free()
 {
-	Safe_Release(m_pLobby);
+	Safe_Release(m_pCollide);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

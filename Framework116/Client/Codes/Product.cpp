@@ -306,7 +306,6 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
-	Safe_Release(m_pLobby);
 	Safe_Release(m_pProductTex);
 	Safe_Release(m_pProductVIBuffer);
 	Safe_Release(m_pGeoMesh);

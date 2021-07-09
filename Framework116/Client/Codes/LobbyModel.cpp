@@ -205,7 +205,7 @@ CGameObject * CLobbyModel::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyModel::Free()
 {
-	Safe_Release(m_pLobby);
+
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

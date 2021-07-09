@@ -461,7 +461,7 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 
 void CLobbyUI::Free()
 {
-	Safe_Release(m_pLobby);
+	
 	CUI::Free();
 }
 

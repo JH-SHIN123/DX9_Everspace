@@ -138,7 +138,7 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 	}
 	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
 	pModel->Set_Scene(this);
-	AddRef();
+	
 	return S_OK;
 
 }
@@ -163,7 +163,7 @@ HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
 	}
 	CLobbyCam* pLobbyCam = (CLobbyCam*)(m_pManagement->Get_GameObject(LayerTag));
 	pLobbyCam->Set_Scene(this);
-	AddRef();
+
 	return S_OK;
 }
 
@@ -198,7 +198,6 @@ HRESULT CLobby::Add_Layer_UI(const wstring& LayerTag)
 		if (!static_cast<CLobbyUI*>(pDst)->Get_Scene())
 		{
 			static_cast<CLobbyUI*>(pDst)->Set_Scene(this);
-			AddRef();
 		}
 	}
 	return S_OK;
@@ -217,7 +216,6 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 	}
 	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(LayerTag));
 	pBox->Set_Scene(this);
-	AddRef();
 
 	return S_OK;
 
@@ -236,7 +234,6 @@ HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)
 	}
 	CStatusBoard* pBoard = (CStatusBoard*)m_pManagement->Get_GameObject(LayerTag);
 	pBoard->Set_Scene(this);
-	AddRef();
 	return S_OK;
 }
 
@@ -253,7 +250,6 @@ HRESULT CLobby::Add_Layer_Status(const wstring & LayerTag)
 	}
 	CStatus* pBoard = (CStatus*)m_pManagement->Get_GameObject(LayerTag);
 	pBoard->Set_Scene(this);
-	AddRef();
 	return S_OK;
 }
 
@@ -358,7 +354,7 @@ CLobby * CLobby::Create(LPDIRECT3DDEVICE9 pDevice)
 
 void CLobby::Free()
 {
-	
+
 	Safe_Release(m_pPlayer);
 	CScene::Free();
 }

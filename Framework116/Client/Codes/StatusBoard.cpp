@@ -234,6 +234,5 @@ void CStatusBoard::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
-	Safe_Release(m_pLobby);
 	CGameObject::Free();
 }

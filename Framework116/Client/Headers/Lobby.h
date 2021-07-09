@@ -67,7 +67,7 @@ public:
 	virtual void Free() override;
 
 private:
-	class CPlayer* m_pPlayer;
+	class CPlayer* m_pPlayer = nullptr;
 
 
 	_bool m_bGotoNextScene = false;
