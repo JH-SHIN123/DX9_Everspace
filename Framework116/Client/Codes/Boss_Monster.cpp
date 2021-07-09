@@ -40,32 +40,20 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_VIBuffer_CubeTexture",
-		L"Com_CubeTexture",
-		(CComponent**)&m_pCube)))
+		L"Component_Mesh_Boss",
+		L"Com_Mesh",
+		(CComponent**)&m_pMesh)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_CubeTexture");
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_TestCube",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(900.f, 3.f, 50.f);
+	TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
 	TransformDesc.fSpeedPerSec = 2.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
-	TransformDesc.vScale = { 10.f,10.f,30.f };
-
+	TransformDesc.vScale = { 1.f,1.f,1.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -170,8 +158,7 @@ _uint CBoss_Monster::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	m_pCube->Render_VIBuffer();
+	m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
 	m_pCollide->Render_Collide();
@@ -650,9 +637,8 @@ void CBoss_Monster::Free()
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pTargetTransform);
-	Safe_Release(m_pCube);
+	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 
 	CGameObject::Free();
