@@ -106,6 +106,9 @@ private: //연출 관련
 	_bool m_IsScript = false; //대화
 	_bool m_IsCameraMove = false; // 카메라 연출
 
+private: // 정찰 포탄 관련. 특정 버튼을 누르면 정찰포 시점으로 카메라 돌리게? 아니면 뷰포트 하나 만들어서 멀티화면?
+
+
 };
 
 #define __PLAYER_H__

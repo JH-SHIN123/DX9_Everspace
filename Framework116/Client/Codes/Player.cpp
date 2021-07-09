@@ -454,15 +454,16 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_fHp -= 10.f;
 		m_pHp_Bar->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
 	}
-
 	if (m_pController->Key_Down(KEY_F2))
 	{
 		//반짝이게 하는 Effect How?
+		m_pManagement->PlaySound(L"Overdrive.ogg", CSoundMgr::PLAYER_SKILL);
 		m_fOverDrive = 2.f;
 		m_bOverDrive = true;
 	}
 	if (m_pController->Key_Down(KEY_F3))
 	{
+		m_pManagement->PlaySound(L"Shield_Boost.ogg", CSoundMgr::PLAYER_SKILL);
 		// 실드활성화.
 	}
 
