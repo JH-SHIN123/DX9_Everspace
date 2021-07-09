@@ -360,16 +360,23 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	}
 
 	// Booster
-	if (m_pController->Key_Pressing(KEY_SPACE) && m_fStamina > 0.f) {
-		m_IsBoost = true;
-		m_pTransform->Go_Straight(fDeltaTime * 1.5f);
-		//Stamina
-		m_IsStaminaShrink = true;
-		m_fStamina -= 0.2f;
-		m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
-
-		m_pManagement->PlaySound(L"Player_Boost_Loop.ogg", CSoundMgr::PLAYER_BOOST);
-		
+	if (m_pController->Key_Pressing(KEY_SPACE))
+	{
+		if (m_fStamina > m_fMinStamina)
+		{
+			m_IsBoost = true;
+			m_pTransform->Go_Straight(fDeltaTime * 1.5f);
+			//Stamina
+			m_IsStaminaShrink = true;
+			m_fStamina -= 0.2f;
+			m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
+			m_pManagement->PlaySound(L"Player_Boost_Loop.ogg", CSoundMgr::PLAYER_BOOST);
+		}
+		else
+		{
+			m_IsBoost = false;
+			m_IsStaminaShrink = false;
+		}
 	}
 	if (m_pController->Key_Up(KEY_SPACE))
 	{

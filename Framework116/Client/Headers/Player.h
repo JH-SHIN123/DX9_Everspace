@@ -96,6 +96,7 @@ private: // HP, 스태미너 관련
 
 	class CStamina_Bar* m_pStamina_Bar = nullptr;
 	_float m_fStamina = 100.f;
+	_float m_fMinStamina = 10.f;
 	_float m_fFullStamina = 100.f;
 	_float m_fStaminaLength = 256.f;
 	_bool m_IsStaminaShrink = false;
