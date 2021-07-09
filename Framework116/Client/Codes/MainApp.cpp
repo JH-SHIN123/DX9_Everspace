@@ -5,7 +5,6 @@
 #include "MainCam.h"
 #include "UI.h"
 #include "Player_Bullet.h"
-#include "Player_Lazer.h"
 #include "Player_Missile.h"
 #include "Light.h"
 #include "AlertArrow.h"
@@ -118,15 +117,15 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_Player_Lazer */
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::Static,
-		L"GameObject_Player_Lazer",
-		CPlayer_Lazer::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Player_Lazer");
-		return E_FAIL;
-	}
+	///* For.GameObject_Player_Lazer */
+	//if (FAILED(m_pManagement->Add_GameObject_Prototype(
+	//	EResourceType::Static,
+	//	L"GameObject_Player_Lazer",
+	//	CPlayer_Lazer::Create(m_pDevice))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add GameObject_Player_Lazer");
+	//	return E_FAIL;
+	//}
 
 	/* For.GameObject_Player_Missile */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(

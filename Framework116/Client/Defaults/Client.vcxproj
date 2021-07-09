@@ -205,7 +205,6 @@
     <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Player_Bullet.h" />
-    <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
     <ClInclude Include="..\Headers\Product.h" />
     <ClInclude Include="..\Headers\QuestHandler.h" />
@@ -265,7 +264,6 @@
     <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Player_Bullet.cpp" />
-    <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
     <ClCompile Include="..\Codes\Product.cpp" />
     <ClCompile Include="..\Codes\QuestHandler.cpp" />
