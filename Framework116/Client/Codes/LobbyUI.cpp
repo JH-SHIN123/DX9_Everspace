@@ -48,9 +48,10 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 		if (m_bGotoNextScene || m_bStartUnPacking)
 			return NO_EVENT;
 	}
-	if (m_pLobby->Get_SceneSelect())
+	else if (m_pLobby->Get_SceneSelect())
 	{
-		if (m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
+		if (m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect"
+			&&m_wstrTexturePrototypeTag != L"Component_Texture_X")
 			return NO_EVENT;
 	}
 	CUI::Update_GameObject(fDeltaTime);
@@ -72,9 +73,10 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 		if (m_bGotoNextScene || m_bStartUnPacking)
 			return NO_EVENT;
 	}
-	else if (!m_pLobby->Get_StartUnPacking())
+	else if (!m_pBox->Get_StartUnpacking())
 	{
-		m_bDead = TRUE;
+		if(!m_pLobby->Get_GotoNextScene())
+			m_bDead = TRUE;
 	}
 	
 
@@ -249,7 +251,6 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 					if (!static_cast<CLobbyUI*>(pUI)->Get_Scene())
 					{
 						static_cast<CLobbyUI*>(pUI)->Set_Scene(m_pLobby);
-						m_pLobby->AddRef();
 					}
 				}
 				m_pLobby->Set_SceneSelect(TRUE);
@@ -260,6 +261,9 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 				{
 					m_bCancel = TRUE;
 				}
+				if (m_pLobby->Get_SceneSelect())
+					m_pLobby->Set_SceneChange(TRUE);
+
 			}
 			
 		}

@@ -32,6 +32,7 @@ private:
 public:
 	void Set_GotoNextScene(_bool bSet) { m_bGotoNextScene = bSet; }
 	void Set_StartUnPacking(_bool bSet) { m_bStartUnPacking = bSet; }
+
 public:
 	static CLobbyUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
@@ -40,8 +41,11 @@ public:
 	void Set_Scene(class CLobby* _pUI);
 	class CLobby* Get_Scene() { return m_pLobby; }
 
+	//for Skip
 	void Set_GatchaBox(class CGatchaBox* pBox) { m_pBox = pBox; }
 	void Set_Product(class CProduct* pProduct) { m_pProduct = pProduct; }
+	void Set_Model(class CLobbyModel* pModel) { m_pModel = pModel; }
+	
 private:
 	//for KeyCheck
 	_float m_fDelayCheck = 0;
@@ -51,6 +55,7 @@ private:
 	//for Skip
 	class CGatchaBox* m_pBox = nullptr;
 	class CProduct* m_pProduct = nullptr;
+	class CLobbyModel* m_pModel = nullptr;
 	_bool m_bCancel = false;
 
 	_bool m_bGotoNextScene = false;
