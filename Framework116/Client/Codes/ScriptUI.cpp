@@ -5,6 +5,7 @@
 #include "Ring.h"
 #include "Player.h"
 #include "MainCam.h"
+#include "QuestHandler.h"
 
 CScriptUI::CScriptUI(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -115,7 +116,7 @@ _uint CScriptUI::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
-	Lock_Cursor();
+	//Lock_Cursor();
 
 	switch (m_eScriptFlow)
 	{
@@ -145,13 +146,30 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
 		return UPDATE_ERROR;
 
+	// 대화가 끝나면
 	if (m_eScriptFlow == EScriptFlow::Flow_End)
 	{
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsScript(false);
-		((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage1_Ring);
+
+		// 스크립트 모드 종료
+		switch (m_eScriptMode)
+		{
+		case EScript::Tutorial:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage1_Ring);
+			break;
+		case EScript::Tutorial_Ring_Clear:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Set_Start_Quest(EQuest::Stage_1_Target);
+			break;
+		default:
+			break;
+		}
 
 		return DEAD_OBJECT;
 	}
+
+
 
 	return _uint();
 }
@@ -191,6 +209,8 @@ _uint CScriptUI::Render_GameObject()
 		, m_wstrScript.c_str(), _int(m_dwScriptCount)
 		, &m_tUIBounds, DT_CENTER, D3DXCOLOR(200, 200, 200, 255));
 
+	Portrait_Check();
+
 	GetClientRect(g_hWnd, &m_tUIBounds);
 	m_tUIBounds.top += 930;
 	m_tUIBounds.right -= 1400;
@@ -214,7 +234,11 @@ _uint CScriptUI::Script_Check()
 		Script_Tutorial();
 		break;
 	case EScript::Tutorial_Ring_Clear:
-
+		Script_Tutorial_Ring_Clear();
+		break;
+	case EScript::Tutorial_Target_Clear:
+		Script_Tutorial_Target_Clear();
+		break;
 	default:
 		break;
 	}
@@ -272,32 +296,26 @@ void CScriptUI::Script_Tutorial_Ring_Clear()
 	{
 	case 0:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrName = L"사령관 헥터 도일";
 		m_wstrScript = L"아니 자네 경력있는 신입 뭐 그런건가?";
 		break;
 	case 1:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrName = L"사령관 헥터 도일";
 		m_wstrScript = L"비행 솜씨가 꽤 뛰어나군 그래!";
 		break;
 	case 2:
 		m_ePortrait = EPortraitNumber::Player;
-		m_wstrName = L"잭 한마";
 		m_wstrScript = L"하하하 과찬이십니다.";
 		break;
 	case 3:
 		m_ePortrait = EPortraitNumber::Player;
-		m_wstrName = L"잭 한마";
 		m_wstrScript = L"주제를 넘을지 모르겠지만, 다음 임무는 무엇입니까?";
 		break;
 	case 4:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrName = L"사령관 헥터 도일";
-		m_wstrScript = L"이번에는 과녁을 쏘면 된다네 그리 어렵진 않을걸세";
+		m_wstrScript = L"이번에는 자유로이 움직이며 과녁을 모두 쏘면 된다네 그리 어렵진 않을걸세";
 		break;
 	case 5:
 		m_ePortrait = EPortraitNumber::End;
-		m_wstrName = L"";
 		m_wstrScript = L"(마우스 좌클릭을 이용하여 무기를 발사 할 수 있습니다.)";
 		break;
 	default:
@@ -308,6 +326,81 @@ void CScriptUI::Script_Tutorial_Ring_Clear()
 	}
 	m_dwScriptCountMax = m_wstrScript.length();
 
+}
+
+void CScriptUI::Script_Tutorial_Target_Clear()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"모두 완수하였습니다!";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"썩 괜찮은 재능이군 그래";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"좋든 나쁘든 자네는 바로 작전에 투입될 예정이었네";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"자네도 알고 있을거라고 믿네";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"군번줄에 기스도 안난 신병이 바로 조종법을 익히는게 무엇을 의미 하는지";
+		break;	
+	case 5:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"...";
+		break;
+	case 6:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"당연히 알고있습니다";
+		break;
+	case 7:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"죽음을 각오하게";
+		break;
+	case 8:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"작전 내용을 그쪽으로 전송하였네, 확인해 보게";
+		break;
+	case 9:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"-작전명 : 신세계 프로젝트 ";
+		break;
+	case 10:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"-작전 개요 : 적대 세력을 말살하고 안전지를 확보하라 ";
+		break;
+	case 11:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"-작전지 : 노르망디 대은하";
+		break;
+	case 12:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"-좌표 : ×××, ×××, ×××";
+		break;
+	case 13:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"항로 설정 완료, 명령만 내려주십시오.";
+		break;
+	case 14:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"좋아, 바로 출발 하도록";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
 }
 
 void CScriptUI::Lock_Cursor()
@@ -323,6 +416,25 @@ void CScriptUI::Lock_Cursor()
 
 	//ClipCursor(&rc);
 	SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+}
+
+void CScriptUI::Portrait_Check()
+{
+	switch (m_ePortrait)
+	{
+	case EPortraitNumber::Admiral:
+		m_wstrName = L"사령관 헥터 도일";
+		break;
+	case EPortraitNumber::Player:
+		m_wstrName = L"잭 한마";
+		break;
+	case EPortraitNumber::Friendly:
+		m_wstrName = L"마호메드 아라이 주니어";
+		break;
+	default:
+		m_wstrName = L"";
+		break;
+	}
 }
 
 void CScriptUI::BlackBar_Start(_float fDeltaTime)

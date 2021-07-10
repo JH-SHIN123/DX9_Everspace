@@ -9,7 +9,8 @@ USING(Engine)
 
 enum class EScript {
 	Tutorial,
-	Tutorial_Ring_Clear, 
+	Tutorial_Ring_Clear,
+	Tutorial_Target_Clear,
 	End
 };
 
@@ -40,13 +41,19 @@ public:
 	_uint Set_NextScript();
 	_uint Set_Script(EScript eScript);
 
-private:
-	void Lock_Cursor();
-	void BlackBar_Start(_float fDeltaTime); // 대화의 시작
-	void BlackBar_End(_float fDeltaTime);
+private: //대화 순서
+	void BlackBar_Start(_float fDeltaTime);
 	_uint Script_Check();
+	void BlackBar_End(_float fDeltaTime);
+
+private: //대화
 	void Script_Tutorial();
 	void Script_Tutorial_Ring_Clear();
+	void Script_Tutorial_Target_Clear();
+
+private: // 기타
+	void Lock_Cursor();
+	void Portrait_Check();
 	HRESULT Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc);
 
 

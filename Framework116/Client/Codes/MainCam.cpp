@@ -78,16 +78,7 @@ _uint CMainCam::LateUpdate_GameObject(_float fDeltaTime)
 
 
 
-	if (m_eSoloMoveMode < ESoloMoveMode::Lock)
-	{
-		RECT m_tUIBounds;
-		GetClientRect(g_hWnd, &m_tUIBounds);
-		m_tUIBounds.top += 800;
-		m_tUIBounds.left += 1670;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, L"C 키를 눌러 스킵", -1
-			, &m_tUIBounds, DT_CENTER, D3DXCOLOR(100, 100, 100, 255));
-	}
+
 
 	return _uint();
 }
@@ -95,6 +86,18 @@ _uint CMainCam::LateUpdate_GameObject(_float fDeltaTime)
 _uint CMainCam::Render_GameObject()
 {
 	CCamera::Render_GameObject();
+
+	if (m_eSoloMoveMode < ESoloMoveMode::Lock)
+	{
+		wstring mesage = L"C 키를 눌러 스킵";
+		RECT tUIBounds;
+		GetClientRect(g_hWnd, &tUIBounds);
+		tUIBounds.top += 700;
+		tUIBounds.left += 1670;
+		m_pManagement->Get_Font()->DrawText(NULL
+			, mesage.c_str(), -1
+			, &tUIBounds, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
+	}
 
 
 	return _uint();

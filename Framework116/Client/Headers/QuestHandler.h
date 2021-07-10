@@ -38,6 +38,7 @@ public: // 계속 돌려줘야함
 
 private:
 	void Update_Quest_Stage1_Ring();
+	void Update_Quest_Stage1_Target();
 
 private:
 	EQuest	m_eNowQuest = End;

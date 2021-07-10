@@ -52,11 +52,8 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
 
-	//if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
-	//	return E_FAIL;
-
-	//if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_1_Ring)))
-	//	return E_FAIL;
+	if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -70,7 +67,7 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 	Stage_Flow(fDeltaTime);
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
-	
+
 	return _uint();
 }
 
@@ -139,6 +136,16 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 
 		}
 
+		return S_OK;
+	case 3:
+	{
+		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Tutorial_Ring_Clear)))
+				return E_FAIL;
+			++m_iFlowCount;
+		}
+	}
 		return S_OK;
 
 	default:

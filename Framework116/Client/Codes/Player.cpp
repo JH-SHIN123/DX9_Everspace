@@ -359,7 +359,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	}
 
 	// Booster
-	if (m_pController->Key_Pressing(KEY_SPACE) && m_fStamina > 0.f) {
+	if (m_pController->Key_Pressing(KEY_SPACE) /*&& m_fStamina > 0.f*/) {
 		m_IsBoost = true;
 		m_pTransform->Go_Straight(fDeltaTime * 1.5f);
 		//Stamina

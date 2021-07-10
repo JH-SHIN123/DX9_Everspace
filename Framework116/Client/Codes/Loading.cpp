@@ -683,6 +683,15 @@ HRESULT CLoading::Ready_StageEffect()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Ring_Pass");
 		return E_FAIL;
 	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Particle_Yellow",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/Particle_Yellow.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Particle_Yellow");
+		return E_FAIL;
+	}
 #pragma endregion
 	return S_OK;
 }
@@ -940,6 +949,8 @@ HRESULT CLoading::Ready_Stage1()
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Player_Lazer");
 		return E_FAIL;
 	}
+
+
 
 
 	// °í¸®

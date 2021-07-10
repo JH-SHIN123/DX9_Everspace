@@ -89,15 +89,6 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	//m_pGunTranform[0] = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster_Has_A_EnergyBall_LEFT", L"Com_Transform");
-	//Safe_AddRef(m_pGunTranform[0]);
-	//m_pGunTranform[1] = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster_Has_A_EnergyBall_RIGHT", L"Com_Transform");
-	//Safe_AddRef(m_pGunTranform[1]);
-	//if (nullptr == m_pGunTranform[0] || nullptr == m_pGunTranform[1])
-	//{
-	//	PRINT_LOG(L"Error", L"m_pGunTranform is nullptr");
-	//	return E_FAIL;
-	//}
 
 	// HP ¼¼ÆÃ
 	m_fHp = 900.f;

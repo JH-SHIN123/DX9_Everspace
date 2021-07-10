@@ -22,6 +22,7 @@ public:
 	static HRESULT Add_Layer_Effect_WingBoost(class CGameObject** ppGameObject = nullptr);
 
 	static HRESULT Add_Layer_Effect_Ring_Pass(const _float3& _vPos);
+	static HRESULT Add_Layer_Effect_Particle_Yellow(const _float3& _vPos);
 
 
 };
