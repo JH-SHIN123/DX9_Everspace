@@ -537,26 +537,51 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 					switch (i)
 					{
 					case 0:
-						vMissileDir = {m_pTransform->Get_State(EState::Right)};
+						vMissileDir1 = {m_pTransform->Get_State(EState::Right)};
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir1)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
 						break;
 					case 1:
-						vMissileDir = { m_pTransform->Get_State(EState::Right) * -1.f };
+						vMissileDir2 = { m_pTransform->Get_State(EState::Right) * -1.f };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir2)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
 						break;
 					case 2:
-						vMissileDir = { m_pTransform->Get_State(EState::Up) };
+						vMissileDir3 = { m_pTransform->Get_State(EState::Up) };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir3)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
 						break;
 					case 3:
-						vMissileDir = { m_pTransform->Get_State(EState::Up) * -1.f };
+						vMissileDir4 = { m_pTransform->Get_State(EState::Up) * -1.f };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir4)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
 						break;
 					}
-					if (FAILED(m_pManagement->Add_GameObject_InLayer(
-						EResourceType::Static,
-						L"GameObject_Player_Missile",
-						L"Layer_Player_Missile", (void*)&vMissileDir)))
-					{
-						PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
-						return;
-					}
+
 				}
 					m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
 					m_pManagement->PlaySound(L"Launch_Missile.ogg", CSoundMgr::PLAYER_WEAPON);

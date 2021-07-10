@@ -50,7 +50,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 150.f;
+	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.1f, 0.1f, 0.1f };
 
@@ -151,7 +151,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	{
 		if (m_pTargetTransform != nullptr)
 		{
-			m_fAddSpeed += 0.15f;
+			m_fAddSpeed += 0.35f;
 			m_fRotateSpeed += D3DXToRadian(15.f);
 			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);

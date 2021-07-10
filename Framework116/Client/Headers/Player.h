@@ -112,7 +112,10 @@ private: //연출 관련
 	_bool m_IsCameraMove = false; // 카메라 연출
 
 private: 
-	_float3 vMissileDir = {};
+	_float3 vMissileDir1 = {};
+	_float3 vMissileDir2 = {};
+	_float3 vMissileDir3 = {};
+	_float3 vMissileDir4 = {};
 
 
 };
