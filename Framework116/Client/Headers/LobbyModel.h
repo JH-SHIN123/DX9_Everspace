@@ -40,8 +40,15 @@ private:
 	_bool m_bGotoNextScene = false;
 	_bool m_bGo_Straight = false;
 	_float m_fDelaySceneChange = 0.f;
+<<<<<<< HEAD
 	class CLobby* m_pLobby = nullptr;
 	_bool m_bSetCreateCancelButton = false;
+=======
+	class CLobby* m_pLobby;
+
+	//Sound
+	_float m_fSoundTiming = 0.f;
+>>>>>>> main
 };
 
 #define __LOBBYMODEL_H__

@@ -44,6 +44,9 @@
 #include "HP_Bar_Border.h"
 #include "Stamina_Bar.h"
 #include "Asteroid.h"
+#include "MissionUI.h"
+#include "BackUI.h"
+#include "NaviArrow.h"
 #pragma endregion
 
 
@@ -66,7 +69,7 @@ HRESULT CLoading::Ready_Scene()
 		PRINT_LOG(L"Error", L"Failed To _beginthreadex");
 		return E_FAIL;
 	}
-
+	m_pManagement->StopSound(CSoundMgr::BGM);
 	InitializeCriticalSection(&m_CriticalSection);
 
 	return S_OK;
@@ -75,7 +78,8 @@ HRESULT CLoading::Ready_Scene()
 _uint CLoading::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
-
+	
+	m_pManagement->PlaySound(L"Loading_Ambience.ogg", CSoundMgr::BGM);
 	if (m_IsFinished)
 	{
 		//
@@ -174,8 +178,6 @@ HRESULT CLoading::Ready_StageResources()
 	m_pManagement->Clear_NonStatic_Resources();
 
 #pragma region GameObjects
-
-
 	/* For.GameObject_Monster */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -251,6 +253,15 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_NaviArrow",
+		CNaviArrow::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_NaviArrow");
+		return E_FAIL;
+	}
+
 	/* For.GameObject_Stamina_Bar */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -270,8 +281,11 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid");
 		return E_FAIL;
 	}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> main
 #pragma endregion
 
 #pragma region Components
@@ -385,7 +399,63 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+<<<<<<< HEAD
 	
+=======
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_NaviArrow",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/naviArrow.X", L"../../Resources/Textures/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_NaviArrow");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Boss",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/boss.X", L"../../Resources/Textures/Boss/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Boss");
+		return E_FAIL;
+	}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Drone",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/drone.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Enemy1",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Enemy2",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Delivery",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/delivery.X", L"../../Resources/Textures/Delivery/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+>>>>>>> main
 
 	Ready_HUD_Resources();
 	Ready_StageEffect();
@@ -729,6 +799,33 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
+	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!! 있는데 뭐지
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HP_Bar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Bar");
+		return E_FAIL;
+	}
+
+	Ready_ScriptUI_Resources();
+
+	return S_OK;
+}
+
+HRESULT CLoading::Ready_ScriptUI_Resources()
+{
+	// 스크립트 UI
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ScriptUI",
+		CScriptUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
+		return E_FAIL;
+	}
+
 	// Script_UI blackbar
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -748,6 +845,7 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
+
 	// 초상화
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -766,13 +864,52 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
-	/* For.Component_Texture_HUD_HP_Bar */ //HP_Bar!! 있는데 뭐지
+	// 미션/퀘스트 UI
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_MissionUI",
+		CMissionUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_MissionUI");
+		return E_FAIL;
+	}
+
+	// 미션 텍스처
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-		L"Component_Texture_HP_Bar",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HP/HP_Bar%d.png"))))
+		L"Component_Texture_HUD_Mission",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Mission/HUD_Mission.png"))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HP_Bar");
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Mission_HUD");
+		return E_FAIL;
+	}
+
+	// 미션 텍스처1
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Mission_Name",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Mission/HUD_Mission_Name.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Mission_Name");
+		return E_FAIL;
+	}
+
+	// 미션 텍스처2
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_HUD_Mission_Deco",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Mission/HUD_Mission_Deco.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_Mission_Deco");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_BackUI",
+		CBackUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
 		return E_FAIL;
 	}
 
@@ -870,15 +1007,6 @@ HRESULT CLoading::Ready_Stage1()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_ScriptUI*/
-	if (FAILED(m_pManagement->Add_GameObject_Prototype(
-		EResourceType::NonStatic,
-		L"GameObject_ScriptUI",
-		CScriptUI::Create(m_pDevice))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
-		return E_FAIL;
-	}
 
 	return S_OK;
 }

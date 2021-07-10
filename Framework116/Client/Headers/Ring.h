@@ -40,6 +40,9 @@ private:
 	_bool m_bHitRing = false;
 	//COLLIDES m_TargetCollide;
 	//_float m_fSpawnTime = 2.f;
+
+	//Sound
+	_bool m_bSoundOnce = false;
 };
 
 #define __RING_H__ 

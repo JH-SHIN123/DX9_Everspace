@@ -73,9 +73,6 @@
     <Filter Include="02.GameObject\08.Bullet\00.Player_Bullet">
       <UniqueIdentifier>{7d5cac0b-1660-4c0f-b751-150a20b3d770}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\08.Bullet\01.Player_Lazer">
-      <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\08.Bullet\02.Player_Missile">
       <UniqueIdentifier>{dff417bd-e330-43c0-b8a0-558cadf4c97a}</UniqueIdentifier>
     </Filter>
@@ -208,11 +205,20 @@
     <Filter Include="02.GameObject\15.Asteroid">
       <UniqueIdentifier>{0f2d898c-4c85-4d14-8e5e-62e0a5845a28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\06.ScriptUI\00.BackUI">
+      <UniqueIdentifier>{0da2434a-1705-41f3-bace-2526a70a4433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\16.NaviArrow">
+      <UniqueIdentifier>{39a5666c-bfbc-4048-9492-51b50235537c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObject\09.HUD\07.Stamina_Bar">
       <UniqueIdentifier>{d26afb06-6587-4612-8786-de21ca95aa86}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObject\09.HUD\08.HP_Bar_Border">
       <UniqueIdentifier>{e6c4d16a-58f1-4987-9dd1-f89517e86ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\08.Bullet\01.Player_Observe_Missile">
+      <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +293,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Player_Bullet.h">
       <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Player_Lazer.h">
-      <Filter>02.GameObject\08.Bullet\01.Player_Lazer</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Crosshair.h">
       <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
@@ -375,9 +378,6 @@
     <ClInclude Include="..\Headers\QuestHandler.h">
       <Filter>97.Utilities\04.Quest</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\HP_Bar.h">
-      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
@@ -393,7 +393,19 @@
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\Headers\HP_Bar.h" />
+=======
+    <ClInclude Include="..\Headers\BackUI.h">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\NaviArrow.h">
+      <Filter>02.GameObject\16.NaviArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\HP_Bar.h">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClInclude>
+>>>>>>> main
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -452,9 +464,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Player_Bullet.cpp">
       <Filter>02.GameObject\08.Bullet\00.Player_Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Player_Lazer.cpp">
-      <Filter>02.GameObject\08.Bullet\01.Player_Lazer</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Crosshair.cpp">
       <Filter>02.GameObject\09.HUD\00.Crosshair</Filter>
@@ -543,9 +552,6 @@
     <ClCompile Include="..\Codes\QuestHandler.cpp">
       <Filter>97.Utilities\04.Quest</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\HP_Bar.cpp">
-      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
@@ -561,7 +567,19 @@
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
+=======
+    <ClCompile Include="..\Codes\BackUI.cpp">
+      <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\NaviArrow.cpp">
+      <Filter>02.GameObject\16.NaviArrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HP_Bar.cpp">
+      <Filter>02.GameObject\09.HUD\06.HP_Bar</Filter>
+    </ClCompile>
+>>>>>>> main
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

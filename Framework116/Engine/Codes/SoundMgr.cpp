@@ -13,7 +13,6 @@ HRESULT CSoundMgr::Ready_SoundManager()
 	// 1. 시스템 포인터, 2. 사용할 가상채널 수 , 초기화 방식) 
 	FMOD_System_Init(m_pSystem, 32, FMOD_INIT_NORMAL, NULL);
 	LoadSoundFile();
-
 	return S_OK;
 }
 
@@ -35,6 +34,7 @@ void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID)
 		FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[eID]);
 	}
 	FMOD_System_Update(m_pSystem);
+	
 }
 
 void CSoundMgr::PlayBGM(TCHAR * pSoundKey)

@@ -18,6 +18,8 @@ HRESULT CLobby::Ready_Scene()
 {
 	::SetWindowText(g_hWnd, L"Lobby");
 
+	m_pManagement->StopSound(CSoundMgr::BGM);
+
 		CScene::Ready_Scene();
 	if (FAILED(Add_Layer_Lobby_Model(L"Layer_Lobby_Model")))
 		return E_FAIL;
@@ -51,6 +53,8 @@ HRESULT CLobby::Ready_Scene()
 
 _uint CLobby::Update_Scene(_float fDeltaTime)
 {
+	m_pManagement->PlaySound(L"Garage_BGM.ogg", CSoundMgr::BGM);
+
 	if (m_bSceneChange)
 	{
 		m_pManagement->Clear_NonStatic_Resources();
@@ -138,9 +142,15 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 	}
 	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
 	pModel->Set_Scene(this);
+<<<<<<< HEAD
 	
 	return S_OK;
 
+=======
+	AddRef();
+
+	return S_OK;
+>>>>>>> main
 }
 
 HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
@@ -216,9 +226,14 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 	}
 	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(LayerTag));
 	pBox->Set_Scene(this);
+<<<<<<< HEAD
 
 	return S_OK;
 
+=======
+	AddRef();
+	return S_OK;
+>>>>>>> main
 }
 
 HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)

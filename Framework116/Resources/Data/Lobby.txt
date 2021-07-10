@@ -2,8 +2,13 @@
 ..\..\Resources\Textures\Ui\everspace_logo\everspace_logo%d.png|everspace_logo|SINGLE|1
 ..\..\Resources\Textures\Ui\GatchaBox\GatchaBox%d.dds|GatchaBox|CUBE|1
 ..\..\Resources\Textures\Ui\LobbySkybox\LobbySkybox%d.dds|LobbySkybox|CUBE|1
+<<<<<<< HEAD
 ..\..\Resources\Textures\Ui\PlaneTemplete\PlaneTemplete%d.png|PlaneTemplete|MULTI|5
 ..\..\Resources\Textures\Ui\SceneSelect\SceneSelect%d.png|SceneSelect|MULTI|6
+=======
+..\..\Resources\Textures\Ui\PlaneTemplete\PlaneTemplete%d.png|PlaneTemplete|MULTI|4
+..\..\Resources\Textures\Ui\SceneSelect\SceneSelect%d.png|SceneSelect|MULTI|5
+>>>>>>> main
 ..\..\Resources\Textures\Ui\Product\Product%d.png|Product|MULTI|5
 ..\..\Resources\Textures\Ui\StatusBoard\StatusBoard%d.png|StatusBoard|MULTI|2
 ..\..\Resources\Textures\Ui\RepairIcon\RepairIcon%d.png|RepairIcon|SINGLE|1

@@ -2,6 +2,8 @@
 #ifndef __STAGE_H__
 
 #include "Scene.h"
+#include "QuestHandler.h"
+#include "ScriptUI.h"
 
 USING(Engine)
 class CStage final : public CScene
@@ -14,6 +16,9 @@ public:
 	virtual HRESULT Ready_Scene() override;
 	virtual _uint Update_Scene(_float fDeltaTime) override;
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) override;
+
+private:
+	_uint Stage_Flow(_float fDeltaTime);
 
 private:
 	HRESULT Add_Layer_Player(const wstring& LayerTag);
@@ -29,26 +34,22 @@ private:
 
 	HRESULT Add_Layer_Ring(const wstring& LayerTag);
 	HRESULT Add_Layer_TargetMonster(const wstring& LayerTag);
-	HRESULT Add_Layer_Planet(const wstring& LayerTag);
-	HRESULT Add_Layer_Meteor(const wstring& LayerTag);
-
-
 
 	// HUD
 	HRESULT Add_Layer_HUD(const wstring& LayerTag);
 	HRESULT Add_Layer_TutorialUI(const wstring& LayerTag);
-	HRESULT Add_Layer_ScriptUI(const wstring& LayerTag);
 
-
-
+	// InGame
+	HRESULT Add_Layer_ScriptUI(const wstring& LayerTag, EScript eScript);
+	HRESULT Add_Layer_MissionUI(const wstring& LayerTag, EQuest eQuest);
 
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
 
 private:
-	_float m_fDummyTime = 1.f;
-	_uint m_iDummyCount = 0;
+	_float m_fFlowTime = 1.f;
+	_uint m_iFlowCount = 0;
 };
 
 #define __STAGE_H__

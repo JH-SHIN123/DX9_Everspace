@@ -7,7 +7,9 @@
 USING(Engine)
 
 enum class EScript {
-	Tutorial, End
+	Tutorial,
+	Tutorial_Ring_Clear, 
+	End
 };
 
 enum class EScriptFlow
@@ -19,7 +21,7 @@ enum class EScriptFlow
 	End
 };
 
-class CScriptUI final : public CUI
+class CScriptUI final : public CGameObject
 {
 public:
 	explicit CScriptUI(LPDIRECT3DDEVICE9 pDevice);
@@ -38,10 +40,12 @@ public:
 	_uint Set_Script(EScript eScript);
 
 private:
+	void Lock_Cursor();
 	void BlackBar_Start(_float fDeltaTime); // 대화의 시작
 	void BlackBar_End(_float fDeltaTime);
 	_uint Script_Check();
 	void Script_Tutorial();
+	void Script_Tutorial_Ring_Clear();
 	HRESULT Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc);
 
 
@@ -63,6 +67,17 @@ private:
 	EScript m_eScriptMode = EScript::End;
 	EScriptFlow m_eScriptFlow = EScriptFlow::End;
 
+private:
+	class CVIBuffer* m_pVIBuffer = nullptr;
+	class CTransform* m_pTransform = nullptr;
+	class CTexture* m_pTexture = nullptr;
+
+private:
+	wstring m_wstrTexturePrototypeTag = L"";
+	TRANSFORM_DESC m_tTransformDesc;
+	RECT m_tUIBounds;
+
+
 private:	// m_pTransform = 대화 창
 	CTransform* m_pTransfrom_BlackBar_Up = nullptr;
 	CTransform* m_pTransfrom_BlackBar_Down = nullptr;
@@ -73,7 +88,10 @@ private:	// m_pTransform = 대화 창
 private:
 	_float3 m_vUI_BlackBar_Up_Pos = { 0.f, 740.f, 0.f };
 	_float3 m_vUI_BlackBar_Down_Pos = { 0.f, -740.f, 0.f };
-	_float3 m_vUI_Protrait_Pos = { -700.f, -340.f, 0.f };
+	_float3 m_vUI_Protrait_Pos = { -700.f, -500.f, 0.f };
+
+	//Sound
+	_bool m_bSoundOnce = false;
 
 
 

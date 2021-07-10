@@ -165,6 +165,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\AlertArrow.h" />
+    <ClInclude Include="..\Headers\BackUI.h" />
+    <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\StatusBoard.h" />
     <ClInclude Include="..\Headers\Asteroid.h" />
@@ -182,7 +184,6 @@
     <ClInclude Include="..\Headers\ExplosionSystem.h" />
     <ClInclude Include="..\Headers\GatchaBox.h" />
     <ClInclude Include="..\Headers\Grass.h" />
-    <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\HP_Bar_Border.h" />
     <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Lobby.h" />
@@ -190,7 +191,6 @@
     <ClInclude Include="..\Headers\LobbyModel.h" />
     <ClInclude Include="..\Headers\LobbyUI.h" />
     <ClInclude Include="..\Headers\FollowSystem.h" />
-    <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\LockOn.h" />
     <ClInclude Include="..\Headers\Logo.h" />
@@ -201,10 +201,10 @@
     <ClInclude Include="..\Headers\Meteor.h" />
     <ClInclude Include="..\Headers\MissionUI.h" />
     <ClInclude Include="..\Headers\Monster.h" />
+    <ClInclude Include="..\Headers\NaviArrow.h" />
     <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Player_Bullet.h" />
-    <ClInclude Include="..\Headers\Player_Lazer.h" />
     <ClInclude Include="..\Headers\Player_Missile.h" />
     <ClInclude Include="..\Headers\Product.h" />
     <ClInclude Include="..\Headers\QuestHandler.h" />
@@ -226,6 +226,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
+    <ClCompile Include="..\Codes\BackUI.cpp" />
+    <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\StatusBoard.cpp" />
     <ClCompile Include="..\Codes\Asteroid.cpp" />
@@ -241,7 +243,6 @@
     <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\GatchaBox.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
-    <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\HP_Bar_Border.cpp" />
     <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Lobby.cpp" />
@@ -249,7 +250,6 @@
     <ClCompile Include="..\Codes\LobbyModel.cpp" />
     <ClCompile Include="..\Codes\LobbyUI.cpp" />
     <ClCompile Include="..\Codes\FollowSystem.cpp" />
-    <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\LockOn.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
@@ -260,10 +260,10 @@
     <ClCompile Include="..\Codes\Meteor.cpp" />
     <ClCompile Include="..\Codes\MissionUI.cpp" />
     <ClCompile Include="..\Codes\Monster.cpp" />
+    <ClCompile Include="..\Codes\NaviArrow.cpp" />
     <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\Player_Bullet.cpp" />
-    <ClCompile Include="..\Codes\Player_Lazer.cpp" />
     <ClCompile Include="..\Codes\Player_Missile.cpp" />
     <ClCompile Include="..\Codes\Product.cpp" />
     <ClCompile Include="..\Codes\QuestHandler.cpp" />

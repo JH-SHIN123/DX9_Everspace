@@ -26,6 +26,7 @@ public: /* For.Loading Thread */
 	HRESULT Ready_StageEffect();
 	HRESULT Ready_BossAndOthers();
 	HRESULT Ready_HUD_Resources();
+	HRESULT Ready_ScriptUI_Resources();
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Map_Effect_Resources();
 	

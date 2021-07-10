@@ -159,9 +159,8 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
 	// 아직 충돌하면 사라지게하는거 안했음!!
-	//m_fLifeTime += fDeltaTime;
-	//if (m_fLifeTime > 4.f)
-	//	return DEAD_OBJECT;
+	m_fLifeTime += fDeltaTime;
+	
 	return NO_EVENT;
 }
 
@@ -185,21 +184,21 @@ _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 		return DEAD_OBJECT;
 	}
 
-	//if (m_fLifeTime >= 4.f) {
-	//	m_IsDead = true;
+	if (m_fLifeTime >= 4.f) {
+		m_IsDead = true;
 
-	//	if (m_pBulletParticle) {
-	//		m_pBulletParticle->Set_IsDead(true);
-	//		m_pBulletParticle = nullptr;
-	//	}
+		if (m_pBulletParticle) {
+			m_pBulletParticle->Set_IsDead(true);
+			m_pBulletParticle = nullptr;
+		}
 
-	//	if (m_pHeadParticle) {
-	//		m_pHeadParticle->Set_IsDead(true);
-	//		m_pHeadParticle = nullptr;
-	//	}
-
-	//	return DEAD_OBJECT;
-	//}
+		if (m_pHeadParticle) {
+			m_pHeadParticle->Set_IsDead(true);
+			m_pHeadParticle = nullptr;
+		}
+		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
+		return DEAD_OBJECT;
+	}
 
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
@@ -228,7 +227,7 @@ _uint CPlayer_Missile::Render_GameObject()
 
 _uint CPlayer_Missile::Movement(_float fDeltaTime)
 {
-	m_pTransform->Go_Straight(fDeltaTime);
+	m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), fDeltaTime);
 	return _uint();
 }
 

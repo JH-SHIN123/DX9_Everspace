@@ -37,8 +37,8 @@ typedef struct tagPassingData_Map {
 }PASSDATA_MAP;
 
 typedef struct tagPassingData_Route {
-	_float3 vNodePos;
-	int iNodeOrder;
+	_float3 vNodePos = { 0.f,0.f,0.f };
+	_float3 vNodeDir = { 0.f,0.f,0.f };
 }PASSDATA_ROUTE;
 
 typedef struct tagPassingData_Resource {

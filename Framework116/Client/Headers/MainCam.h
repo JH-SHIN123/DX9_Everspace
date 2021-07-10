@@ -36,6 +36,7 @@ public:
 
 	// 카메라 연출
 	void Set_IsSoloMove(ESoloMoveMode eMove);
+	const ESoloMoveMode Get_SoloMoveMode();
 
 	// 카메라 쉐이킹
 	_uint CameraShakingStart(_float fDeltaTime);

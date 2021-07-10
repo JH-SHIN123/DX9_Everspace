@@ -157,6 +157,12 @@ _bool CRing::CollideCheck()
 {
 	if (m_IsCollide == true)
 	{
+		if (m_bSoundOnce == false)
+		{
+			m_pManagement->StopSound(CSoundMgr::RINGCOLLISION);
+			m_pManagement->PlaySound(L"PopUp_Quest.ogg", CSoundMgr::RINGCOLLISION);
+		}
+		m_bSoundOnce = true;
 		CMaterialHandler::Set_RGBA(vColorRGBA.x, vColorRGBA.y, vColorRGBA.z, vColorRGBA.w, &m_tMaterial);
 	}
 

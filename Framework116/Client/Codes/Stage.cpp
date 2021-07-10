@@ -2,8 +2,10 @@
 #include "..\Headers\Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
-#include "ScriptUI.h"
 #include "Asteroid.h"
+#include "MissionUI.h"
+#include "MainCam.h"
+#include "Ring.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -16,7 +18,10 @@ HRESULT CStage::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Stage");
 
-	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/stage1.map");
+	m_pManagement->StopSound(CSoundMgr::BGM);
+
+	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
+	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
@@ -35,22 +40,22 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
+	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
+		return E_FAIL;
+
+	//if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
+	//	return E_FAIL;
+
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
 	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
-		return E_FAIL;
+	//if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
+	//	return E_FAIL;
 
-	if (FAILED(Add_Layer_Planet(L"Layer_Meteor")))
-		return E_FAIL;
-
-	if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
-		return E_FAIL;
-
-	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
+	if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_1_Ring)))
 		return E_FAIL;
 
 	return S_OK;
@@ -59,6 +64,11 @@ HRESULT CStage::Ready_Scene()
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
+
+	CQuestHandler::Get_Instance()->Update_Quest();
+	
+	//Stage_Flow(fDeltaTime);
+
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 	
 	return _uint();
@@ -68,18 +78,6 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
 	
-
-	if (m_fDummyTime >= 0)
-	{
-		m_fDummyTime -= fDeltaTime;
-
-		if (m_fDummyTime <= 0)
-		{
-			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI")))
-				return E_FAIL;
-		}
-	}
-
 
 
 	// Monster
@@ -102,6 +100,52 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	// CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Planet");
 
 	return _uint();
+}
+
+_uint CStage::Stage_Flow(_float fDeltaTime)
+{
+	switch (m_iFlowCount)
+	{
+	case 0: // 스크립트 시작
+		if (m_fFlowTime >= 0)
+		{
+			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+
+			m_fFlowTime -= fDeltaTime;
+
+			if (m_fFlowTime <= 0)
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Tutorial)))
+					return E_FAIL;
+				++m_iFlowCount;
+			}
+		}
+		return S_OK;
+	case 1:
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_1_Ring)))
+				return E_FAIL;
+			++m_iFlowCount;
+		}
+		return S_OK;
+
+	case 2:
+		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Tutorial_Ring_Clear)))
+				return E_FAIL;
+			++m_iFlowCount;
+
+		}
+
+		return S_OK;
+
+	default:
+		return E_FAIL;
+	}
+
+	return S_OK;
 }
 
 HRESULT CStage::Add_Layer_Player(const wstring & LayerTag)
@@ -321,25 +365,6 @@ HRESULT CStage::Add_Layer_TargetMonster(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_Planet(const wstring & LayerTag)
-{
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Planet",
-	//	LayerTag)))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add GameObject_TargetMonster In Layer");
-	//	return E_FAIL;
-	//}
-
-	return S_OK;
-}
-
-HRESULT CStage::Add_Layer_Meteor(const wstring & LayerTag)
-{
-	return E_NOTIMPL;
-}
-
 CStage * CStage::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)
@@ -362,6 +387,8 @@ void CStage::Free()
 {
 	/* 자식의 소멸자 호출 순서처럼 Free도 같은 순서로 호출해주자*/
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
+
+	CQuestHandler::Get_Instance()->Release_Ref();
 
 	CScene::Free(); // 2.부모 리소스 정리	
 }
@@ -507,13 +534,10 @@ HRESULT CStage::Add_Layer_TutorialUI(const wstring & LayerTag)
 	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_TutorialUI)))
 	//	return E_FAIL;
 
-
-
-
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_ScriptUI(const wstring & LayerTag)
+HRESULT CStage::Add_Layer_ScriptUI(const wstring & LayerTag, EScript eScript)
 {
 	UI_DESC Desc;
 	Desc.tTransformDesc.vPosition = { 0.f, 0.f ,0.f };
@@ -529,10 +553,29 @@ HRESULT CStage::Add_Layer_ScriptUI(const wstring & LayerTag)
 		return E_FAIL;
 	}
 
-	((CScriptUI*)m_pManagement->Get_GameObject(LayerTag))->Set_Script(EScript::Tutorial);
+	((CScriptUI*)m_pManagement->Get_GameObject(LayerTag))->Set_Script(eScript);
 
-	//if (FAILED(Add_Layer_UI(LayerTag, &Desc)))
-	//	return E_FAIL;
+	return S_OK;
+}
+
+HRESULT CStage::Add_Layer_MissionUI(const wstring & LayerTag, EQuest eQuest)
+{
+	CQuestHandler::Get_Instance()->Set_Start_Quest(eQuest);
+
+	UI_DESC Desc;
+	Desc.tTransformDesc.vPosition = { 835.f, -50.f ,0.f };
+	Desc.tTransformDesc.vScale = { 201.f, 123.f,0.f };
+	Desc.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_MissionUI",
+		LayerTag, &Desc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add ScriptUI In Layer");
+		return E_FAIL;
+	}
+
 
 	return S_OK;
 }
