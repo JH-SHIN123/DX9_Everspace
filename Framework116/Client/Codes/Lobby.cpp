@@ -312,6 +312,11 @@ _bool CLobby::Get_SceneSelect() const
 	return m_bSelectScene;
 }
 
+_bool CLobby::Get_StartUnPacking() const
+{
+	return m_bStartUnPacking;
+}
+
 _uint CLobby::Get_Money() const
 {
 	return m_iMoney;

@@ -4,6 +4,8 @@
 #include "Management.h"
 #include"Loading.h"
 #include"Lobby.h"
+#include"GatchaBox.h"
+#include"Product.h"
 USING(Engine)
 
 CLobbyUI::CLobbyUI(LPDIRECT3DDEVICE9 pDevice)
@@ -41,8 +43,11 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 {
 	if (m_bDead)
 		return DEAD_OBJECT;
-	if (m_bGotoNextScene || m_bStartUnPacking)
-		return NO_EVENT;
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
+	{
+		if (m_bGotoNextScene || m_bStartUnPacking)
+			return NO_EVENT;
+	}
 	if (m_pLobby->Get_SceneSelect())
 	{
 		if (m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
@@ -62,9 +67,15 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 
 _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 {
-
-	if (m_bGotoNextScene || m_bStartUnPacking)
-		return NO_EVENT;
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
+	{
+		if (m_bGotoNextScene || m_bStartUnPacking)
+			return NO_EVENT;
+	}
+	else if (!m_pLobby->Get_StartUnPacking())
+	{
+		m_bDead = TRUE;
+	}
 	
 
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
@@ -72,20 +83,33 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 	{
 		m_bShowModelIcon = false;
 	}
-	
 
+	if (m_bCancel)
+	{
+		if(m_pBox)
+		m_pBox->Set_CancelUnPacking(TRUE);
+		if(!m_pProduct)
+		m_pProduct = (CProduct*)m_pManagement->Get_GameObject(L"Layer_Product");
+		if (m_pProduct)
+		{
+			m_pProduct->Set_Cancel(TRUE);
+			m_pProduct->Set_ShowProduct(TRUE);
+		}
+	}
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
 		return UPDATE_ERROR;
 	
-
-
+	
 	return _uint();
 }
 
 _uint CLobbyUI::Render_GameObject()
 {
-	if (m_bGotoNextScene || m_bStartUnPacking)
-		return 0;
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
+	{
+		if (m_bGotoNextScene || m_bStartUnPacking)
+			return 0;
+	}
 	
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
@@ -230,6 +254,14 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 				}
 				m_pLobby->Set_SceneSelect(TRUE);
 			}
+			else if (m_wstrTexturePrototypeTag == L"Component_Texture_X")
+			{
+				if (m_pLobby->Get_StartUnPacking())
+				{
+					m_bCancel = TRUE;
+				}
+			}
+			
 		}
 	}
 

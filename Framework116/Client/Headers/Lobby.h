@@ -57,6 +57,8 @@ public:
 	_bool Get_IsSetPlayerModel()const;
 	_bool Get_GotoNextScene()const;
 	_bool Get_SceneSelect()const;
+	_bool Get_StartUnPacking()const;
+
 	_uint Get_Money()const;
 	UNIT_INFO* Get_UnitInfo();
 
@@ -69,7 +71,7 @@ public:
 private:
 	class CPlayer* m_pPlayer = nullptr;
 
-
+	
 	_bool m_bGotoNextScene = false;
 	_bool m_bIsGatcha = false;
 	_bool m_bIsSetPlayerModel = false;

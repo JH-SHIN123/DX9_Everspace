@@ -8,4 +8,5 @@
 ..\..\Resources\Textures\Ui\StatusBoard\StatusBoard%d.png|StatusBoard|MULTI|2
 ..\..\Resources\Textures\Ui\RepairIcon\RepairIcon%d.png|RepairIcon|SINGLE|1
 ..\..\Resources\Textures\Ui\ShopIcon\ShopIcon%d.png|ShopIcon|SINGLE|1
+..\..\Resources\Textures\Ui\X\X%d.png|X|SINGLE|1
 

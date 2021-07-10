@@ -37,6 +37,8 @@ public:
 	virtual void Free() override;
 
 	void Set_Scene(class CLobby* pLobby) { m_pLobby = pLobby; }
+	void Set_ShowProduct(_bool bSet) { m_bShowProduct = bSet; }
+	void  Set_Cancel(_bool bSet) { m_bCancel = bSet; }
 private:
 	CTexture*	m_pTexture = nullptr;
 	CTexture* m_pProductTex = nullptr;
@@ -59,6 +61,8 @@ private:
 	_float4x4 m_matProduct;
 	_float m_fRotProductY = 0.f;
 	_float m_fCountTime = 0.f;
+	_float m_fCancelCount = 0.f;
+	_bool m_bCancel = false;
 };
 
 #define __PRODUCT_H__ 

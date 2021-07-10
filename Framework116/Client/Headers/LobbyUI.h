@@ -39,12 +39,19 @@ public:
 public:
 	void Set_Scene(class CLobby* _pUI);
 	class CLobby* Get_Scene() { return m_pLobby; }
+
+	void Set_GatchaBox(class CGatchaBox* pBox) { m_pBox = pBox; }
+	void Set_Product(class CProduct* pProduct) { m_pProduct = pProduct; }
 private:
 	//for KeyCheck
 	_float m_fDelayCheck = 0;
 	_float m_fDeltaTime = 0;
 	DWORD m_dwIdx = 0;
-	class CLobby* m_pLobby;
+	class CLobby* m_pLobby = nullptr;
+	//for Skip
+	class CGatchaBox* m_pBox = nullptr;
+	class CProduct* m_pProduct = nullptr;
+	_bool m_bCancel = false;
 
 	_bool m_bGotoNextScene = false;
 	_bool m_bDead = false;
