@@ -180,7 +180,7 @@ HRESULT CStreamHandler::Load_PassData_Resource(const wstring& wstrFilePath, cons
 
 HRESULT CStreamHandler::Load_PassData_Collide(const wstring& wstrFileName, const wstring& wstrMeshPrototypeTag, PASSDATA_COLLIDE& OutPassData)
 {
-	wstring wstrFilePath = L"../../Resources/Data/";
+	wstring wstrFilePath = L"../../Resources/Data/Collide/";
 	wstrFilePath += wstrFileName;
 	wstrFilePath += L".collide";
 
@@ -371,6 +371,10 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			PRINT_LOG(L"Error", errMsg.c_str());
 			return E_FAIL;
 		}
+	}
+	else if (wstrPrototypeTag == L"GameObject_Drone")
+	{
+
 	}
 #pragma endregion
 

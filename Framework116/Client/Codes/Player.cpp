@@ -180,7 +180,6 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Collide
 	PASSDATA_COLLIDE tCollide;
 	CStreamHandler::Load_PassData_Collide(L"BigShip", meshTag, tCollide);
-
 	m_Collides.reserve(tCollide.vecBoundingSphere.size());
 	int i = 0;
 	for (auto& bounds : tCollide.vecBoundingSphere) {

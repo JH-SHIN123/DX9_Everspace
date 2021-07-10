@@ -38,34 +38,22 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	CGameObject::Ready_GameObject(pArg);
 
 	// For.Com_VIBuffer
+	wstring meshTag = L"Component_Mesh_Boss";
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_VIBuffer_CubeTexture",
-		L"Com_CubeTexture",
-		(CComponent**)&m_pCube)))
+		meshTag,
+		L"Com_Mesh",
+		(CComponent**)&m_pMesh)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_CubeTexture");
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_TestCube",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(900.f, 3.f, 50.f);
+	TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
 	TransformDesc.fSpeedPerSec = 2.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
-	TransformDesc.vScale = { 10.f,10.f,30.f };
-
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -79,19 +67,22 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Collide
-	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_CollideSphere",
-		L"Com_CollideSphere",
-		(CComponent**)&m_pCollide,
-		&BoundingSphere,
-		true)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
+	PASSDATA_COLLIDE tCollide;
+	CStreamHandler::Load_PassData_Collide(L"Boss", meshTag, tCollide);
+	m_Collides.reserve(tCollide.vecBoundingSphere.size());
+	int i = 0;
+	for (auto& bounds : tCollide.vecBoundingSphere) {
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_CollideSphere",
+			L"Com_CollideSphere" + to_wstring(i++),
+			nullptr,
+			&bounds,
+			true)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
 	}
 
 	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
@@ -135,7 +126,10 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 		Add_Hp_Bar(fDeltaTime);
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+	// 충돌박스 업데이트
+	for (auto& collide : m_Collides)
+		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+
 	return NO_EVENT;
 }
 
@@ -170,11 +164,11 @@ _uint CBoss_Monster::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	m_pCube->Render_VIBuffer();
+	m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	for (auto& collide : m_Collides)
+		collide->Render_Collide();
 #endif
 
 	return _uint();
@@ -650,10 +644,8 @@ void CBoss_Monster::Free()
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pTargetTransform);
-	Safe_Release(m_pCube);
+	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
-	Safe_Release(m_pCollide);
 
 	CGameObject::Free();
 }

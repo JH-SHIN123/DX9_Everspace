@@ -179,8 +179,6 @@ HRESULT CLoading::Ready_StageResources()
 	m_pManagement->Clear_NonStatic_Resources();
 
 #pragma region GameObjects
-
-
 	/* For.GameObject_Monster */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -265,9 +263,6 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-#pragma endregion
-
-#pragma region Components
 	/* For.GameObject_Stamina_Bar */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -287,8 +282,6 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid");
 		return E_FAIL;
 	}
-
-
 #pragma endregion
 
 #pragma region Components
@@ -411,10 +404,46 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Boss",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/boss.X", L"../../Resources/Textures/Boss/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Boss");
+		return E_FAIL;
+	}
+
 	//if (FAILED(m_pManagement->Add_Component_Prototype(
 	//	EResourceType::Static,
-	//	L"Component_Mesh_Monster",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/monster.X", L"../../Resources/Textures/Monster/"))))
+	//	L"Component_Mesh_Drone",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/drone.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Enemy1",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Enemy2",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
+	//	return E_FAIL;
+	//}
+
+	//if (FAILED(m_pManagement->Add_Component_Prototype(
+	//	EResourceType::Static,
+	//	L"Component_Mesh_Delivery",
+	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/delivery.X", L"../../Resources/Textures/Delivery/"))))
 	//{
 	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
 	//	return E_FAIL;

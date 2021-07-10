@@ -176,7 +176,7 @@ _uint CCrosshair::Searching_Target(_float fDeltaTime)
 		D3DXVec3Normalize(&m_vLockOn, &m_vLockOn);
 
 		// True¸é? - LockOn HUD »ý¼º
-		if (CCollision::IntersectRayToSphere(ray, m_pBossMonsterCollide->Get_BoundingSphere()))
+		if (m_pBossMonsterCollide && CCollision::IntersectRayToSphere(ray, m_pBossMonsterCollide->Get_BoundingSphere()))
 		{
 			if (!m_IsBossLockOn)
 			{

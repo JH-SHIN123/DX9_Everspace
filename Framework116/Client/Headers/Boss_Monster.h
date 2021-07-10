@@ -59,10 +59,8 @@ public:
 	HRESULT Add_InLayer_MyParts();
 
 private:
-	CVIBuffer_CubeTexture*  m_pCube = nullptr;
+	CModelMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
-	CCollideSphere* m_pCollide = nullptr;
 	CTransform* m_pTargetTransform = nullptr;
 
 
