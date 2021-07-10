@@ -131,7 +131,7 @@ _uint CTargetMonster::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_IsDead == true)
 	{
 		CEffectHandler::Add_Layer_Effect_Particle_Yellow(m_pTransform->Get_State(EState::Position));
-		CQuestHandler::Get_Instance()->Set_Counting();
+		//CQuestHandler::Get_Instance()->Set_Counting();
 		return DEAD_OBJECT;
 	}
 

@@ -65,8 +65,6 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 
 _int CQuestHandler::Set_Counting(const _int iCount)
 {
-	Update_Quest();
-
 	m_iCount += iCount;
 
 	if (m_IsClear == true)
@@ -182,9 +180,10 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 
 void CQuestHandler::Update_Quest_Stage1_Target()
 {
-	/*for (auto& iter : m_listTargetObject)
+	m_iCount = 0;
+	for (auto& iter : m_listTargetObject)
 	{
 		if(iter->Get_IsDead() == true)
 			++m_iCount;
-	}*/
+	}
 }
