@@ -64,6 +64,11 @@ public:
 
 	void Set_UnitInfo(UNIT_INFO _tUnitInfo);
 	void Set_Money(_uint _iMoney);
+
+	_uint GetAtkBuffItemCount() { return m_iAtkBuffItem; }
+	_uint GetDefBuffItemCount() { return m_iDefBuffItem; }
+	_uint GetHpBuffItemCount() { return m_iHpBuffItem; }
+	_uint GetEnergyBuffItemCount() { return m_iEnergyBuffItem; }
 public:
 	static CLobby* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
@@ -81,6 +86,11 @@ private:
 
 	_uint m_iMoney = 3000;
 	UNIT_INFO m_tUnitInfo;
+
+	_uint m_iAtkBuffItem = 0;
+	_uint m_iDefBuffItem = 0;
+	_uint m_iHpBuffItem = 0;
+	_uint m_iEnergyBuffItem = 0;
 };
 
 #define __LOBBY_H__

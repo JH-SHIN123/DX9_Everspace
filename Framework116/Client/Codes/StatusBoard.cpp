@@ -49,8 +49,8 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	TRANSFORM_DESC tTrans;
-	tTrans.vScale = { 350.f,350.f,0.f };
-	tTrans.vPosition = _float3(-750.f, -200.f, 0.f);
+	tTrans.vScale = { 200.f,200.f,0.f };
+	tTrans.vPosition = _float3(-750.f, -100.f, 0.f);
 	// For.Com_Transform
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,

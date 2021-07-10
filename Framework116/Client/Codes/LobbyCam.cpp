@@ -45,16 +45,19 @@ _uint CLobbyCam::Update_GameObject(_float fDeltaTime)
 		{
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
+			m_bDir = false;
 		}
 		if (m_pLobby->Get_IsGatcha())
 		{
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_GatchaBox")
 				->Get_Component(L"Com_Transform");
+			m_bDir = true;
 		}
 		else if (m_pLobby->Get_IsSetPlayerModel())
 		{
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
+			m_bDir = false;
 		}
 	}
 	OffSet(fDeltaTime);
@@ -105,17 +108,30 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 		return 0;
 	}
 	_float3 vTargetPos = m_pPlayerTransform->Get_TransformDesc().vPosition;
-	vTargetPos.y = 0.f;
 	_float3 vAt = m_CameraDesc.vAt;
+
+	vTargetPos.y = 0.f;
 	vAt.y = 0.f;
 	if (vTargetPos != vAt)
 	{
-
 		D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 		D3DXVec3Normalize(&vAt, &vAt);
-		_float fAngle = acosf(D3DXVec3Dot(&vTargetPos, &vAt));
-		if (fAngle <= D3DXToRadian(1.f))
-			return 0;
+		_float fAngle = 0.f;
+		if (m_bDir)
+		{
+			fAngle = acosf(D3DXVec3Dot(&vAt,&vTargetPos));
+			if (fAngle <= D3DXToRadian(1.f))
+				return 0;
+		}
+		else
+		{
+			fAngle = -acosf(D3DXVec3Dot(&vAt, &vTargetPos));
+			if (fAngle >= -D3DXToRadian(1.f))
+				return 0;
+		}
+			
+		
+		
 		fAngle *= fDeltaTime;
 		vAt = m_CameraDesc.vAt;
 		_float3 vNextAim;

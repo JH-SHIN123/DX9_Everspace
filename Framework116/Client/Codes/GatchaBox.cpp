@@ -52,7 +52,7 @@ HRESULT CGatchaBox::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 1.f;
 	TransformDesc.fRotatePerSec = 1.f;
-	TransformDesc.vPosition = _float3(-15.f, 0.f, -15.f);	
+	TransformDesc.vPosition = _float3(-20.f, 0.f, -20.f);	
 	TransformDesc.vScale = { 10.f,10.f,10.f };
 	TransformDesc.vRotate = { 0.f,0.f,0.f };
 	if (FAILED(CGameObject::Add_Component(
@@ -222,7 +222,7 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 			CLobbyCam* pLobbyCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 			pLobbyCam->Set_UnPacked(FALSE);
 			m_bBomb = FALSE;
-			m_pTransform->Set_Position(_float3(-15.f, 0.f, -15.f));
+			m_pTransform->Set_Position(_float3(-20.f, 0.f, -20.f));
 			pLobbyCam->Set_CamAt(m_pTransform->Get_TransformDesc().vPosition);
 			return TRUE;
 		}
@@ -233,7 +233,7 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 		CLobbyCam* pLobbyCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 		pLobbyCam->Set_UnPacked(FALSE);
 		m_bBomb = FALSE;
-		m_pTransform->Set_Position(_float3(-15.f, 0.f, -15.f));
+		m_pTransform->Set_Position(_float3(-20.f, 0.f, -20.f));
 		pLobbyCam->Set_CamAt(m_pTransform->Get_TransformDesc().vPosition);
 		return TRUE;
 	}

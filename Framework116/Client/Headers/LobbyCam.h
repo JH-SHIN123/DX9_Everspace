@@ -47,6 +47,7 @@ private:
 	_bool m_bStartUnPacking = false;
 	_bool m_bUnPacked = false;
 	class CLobby* m_pLobby = nullptr;
+	_bool m_bDir = false;
 
 };
 

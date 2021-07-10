@@ -37,7 +37,7 @@ HRESULT CLobbyModel::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 45.f;
-	TransformDesc.vPosition = _float3(15.f, 0.f, 15.f);
+	TransformDesc.vPosition = _float3(20.f, 0.f, 20.f);
 	TransformDesc.fSpeedPerSec = 25.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 1.f,1.f,1.f };

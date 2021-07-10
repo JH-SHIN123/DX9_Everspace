@@ -43,6 +43,19 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 {
 	if (m_bDead)
 		return DEAD_OBJECT;
+	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
+	{
+		_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+		if (m_pTransform->Get_TransformDesc().vScale.x < 1000.f)
+		{
+			vScale.x += fDeltaTime *1000.f;
+		}
+		if (m_pTransform->Get_TransformDesc().vScale.y < 600)
+		{
+			vScale.y += fDeltaTime*600.f;
+		}
+		m_pTransform->Set_Scale(vScale);
+	}
 	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
 	{
 		if (m_bGotoNextScene || m_bStartUnPacking)
@@ -56,7 +69,6 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	}
 	CUI::Update_GameObject(fDeltaTime);
 	Update_Bounds();
-
 	Update_SceneSelect(fDeltaTime);
 
 	Check_Picking();
@@ -107,6 +119,14 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLobbyUI::Render_GameObject()
 {
+	if (m_bClicked)
+	{
+		m_fClicked += m_pManagement->Get_DeltaTime();
+		if (m_fClicked >= 0.1f)
+			m_bClicked = false;
+		return 0;
+
+	}
 	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
 	{
 		if (m_bGotoNextScene || m_bStartUnPacking)
@@ -130,8 +150,13 @@ _uint CLobbyUI::Render_GameObject()
 
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
-		Render_Cursor();
-		Render_Nodes();
+		_float3 vScale = { 1000.f,600.f,0.f };
+		if (m_pTransform->Get_TransformDesc().vScale.x >= vScale.x
+			&&m_pTransform->Get_TransformDesc().vScale.y >= vScale.y)
+		{
+			Render_Cursor();
+			Render_Nodes();
+		}
 	}
 
 	if (m_bShowModelIcon)
@@ -139,9 +164,9 @@ _uint CLobbyUI::Render_GameObject()
 		if(m_fDeltaTime < 1.f)
 		m_fDeltaTime += m_pManagement->Get_DeltaTime();
 		int iIndex = m_dwIdx;
-		for (int i = 0; i <4; i++)
+		for (int i = 0; i <5; i++)
 		{	
-			if (iIndex >= 4)
+			if (iIndex >= 5)
 				iIndex = 0;
 			matView._11 = transformDesc.vScale.x;
 			matView._22 = transformDesc.vScale.y;
@@ -152,8 +177,11 @@ _uint CLobbyUI::Render_GameObject()
 			m_pVIBuffer->Render_VIBuffer();
 			iIndex++;
 		}
+	
+		if (Get_IsPicking())
+			Render_ItemMean();
+		
 	}
-
 
 	if (Get_IsPicking())
 		Set_Text();
@@ -210,12 +238,17 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 		}
 		if (Get_IsPicking())
 		{
+			m_bClicked = TRUE;
 			if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
 			{
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
 			{
-				m_pLobby->Set_IsGatcha(TRUE);
+				if(!m_pLobby->Get_IsGatcha())
+					m_pLobby->Set_IsGatcha(TRUE);
+				else if (!m_pLobby->Get_IsSetPlayerModel())
+					m_pLobby->Set_IsSetPlayerModel(TRUE);
+				m_fDelayCheck = 0.f;
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_PlaneTemplete")
 			{
@@ -230,12 +263,11 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 			{
-				//m_pLobby->Set_GotoNextScene(TRUE);
 				UI_DESC UiDesc;
 				_float PosX = 0.f;
 				_float PosY = 0.f;
-				_float ScaleX = 1000;
-				_float ScaleY = 600;
+				_float ScaleX = 0;
+				_float ScaleY = 0;
 				UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
 				UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
 				UiDesc.wstrTexturePrototypeTag = L"Component_Texture_SceneSelect";
@@ -299,7 +331,7 @@ void CLobbyUI::Set_Text()
 	}
 	if (L"Component_Texture_PlaneTemplete" == m_wstrTexturePrototypeTag)
 	{
-		str = L"플레이어 선택";
+		str = L"아이템 슬롯";
 		rc.left = (WINCX >> 1) + 500;
 		rc.top = (WINCY >> 1) + 200;
 		m_pManagement->Get_Font()->DrawText(NULL
@@ -351,12 +383,12 @@ void CLobbyUI::ChangeModelIcon()
 {
 	if (!m_bChangeModelIcon)
 		return;
-	RECT rc[4] = {};
+	RECT rc[5] = {};
 	POINT pt = {};
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 	_float3 vPos = _float3(0.f, 0.f, 0.f);
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
@@ -378,8 +410,8 @@ void CLobbyUI::ChangeModelIcon()
 			if (PtInRect(&rc[i], pt))
 			{
 				m_dwIdx += i;
-				if (m_dwIdx >= 4)
-					m_dwIdx -= 4;
+				if (m_dwIdx >= 5)
+					m_dwIdx -= 5;
 			
 				m_bShowModelIcon = FALSE;
 				m_bChangeModelIcon = FALSE;
@@ -387,6 +419,59 @@ void CLobbyUI::ChangeModelIcon()
 			}
 		}
 	}
+}
+
+void CLobbyUI::Render_ItemMean()
+{
+	TCHAR str[32];
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	
+	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
+	_float3 vPos = {0,0,0};
+	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+	vScale.y *= 0.5f;
+	_uint  i = 1;
+
+	swprintf_s(str, L"Atk Buff : %d", m_pLobby->GetAtkBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = vPos.x + i*vScale.x;
+	rc.top = vPos.y - vScale.y;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	i++;
+	swprintf_s(str, L"Def Buff : %d", m_pLobby->GetDefBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = vPos.x + i*vScale.x;
+	rc.top = vPos.y - vScale.y;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+
+	i++;
+	swprintf_s(str, L"Hp Buff : %d", m_pLobby->GetHpBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = vPos.x + i*vScale.x;
+	rc.top = vPos.y - vScale.y;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	i++;
+	swprintf_s(str, L"Energy Buff : %d", m_pLobby->GetEnergyBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = vPos.x + i*vScale.x;
+	rc.top = vPos.y - vScale.y;
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+
+
+
 }
 
 void CLobbyUI::Render_Cursor()

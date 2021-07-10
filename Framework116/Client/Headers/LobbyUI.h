@@ -24,8 +24,9 @@ private:
 	void OnMouseButton();
 	void ChangeModelIcon();
 
-	//For.SceneSelect
+	void Render_ItemMean();
 private:
+	//For.SceneSelect
 	void Render_Cursor();
 	void Render_Nodes();
 	void Update_SceneSelect(_float fDeltaTime);
@@ -72,6 +73,9 @@ private:
 	_float3 m_vThirdNode = { 0.f,0.f,0.f };
 	_uint m_iSelect = 0;
 	_float m_fDelaySceneSelectCheck = 0.f;
+
+	_float m_fClicked = 0.f;
+	_bool m_bClicked = false;
 
 };
 
