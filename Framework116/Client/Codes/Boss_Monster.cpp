@@ -17,11 +17,7 @@ CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	, m_fEnergyBall_CoolTime(other.m_fEnergyBall_CoolTime)
 	, m_fLaser_CoolTime(other.m_fLaser_CoolTime)
 	, m_fEmpBomb_CoolTime(other.m_fEmpBomb_CoolTime)
-{
-	//, m_fDetectionRange_Near(other.m_fDetectionRange_Near)
-	//, m_fDetectionRange_Middle(other.m_fDetectionRange_Middle)
-	//, m_fDetectionRange_Far(other.m_fDetectionRange_Far)
-	
+{	
 }
 
 HRESULT CBoss_Monster::Ready_GameObject_Prototype()

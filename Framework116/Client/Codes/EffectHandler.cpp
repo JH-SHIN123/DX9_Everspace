@@ -250,3 +250,29 @@ HRESULT CEffectHandler::Add_Layer_Effect_WingBoost(CGameObject** ppGameObject)
 
 	return S_OK;
 }
+
+HRESULT CEffectHandler::Add_Layer_Effect_Ring_Pass(const _float3& _vPos)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Ring_Pass";
+	pSystemDesc.iNumParticles = 1;
+	pSystemDesc.tResetAttribute.fParticleSize = 5.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 5.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.05f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+	pSystemDesc.tTransformDesc.vPosition = _vPos;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
+	}
+
+	return S_OK;
+}
