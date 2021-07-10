@@ -36,11 +36,20 @@ public: // 계속 돌려줘야함
 	_bool Update_Quest();
 
 private:
+	void Update_Quest_Stage1_Ring();
+
+private:
 	EQuest	m_eNowQuest = End;
 	wstring m_wstrQuestName = L"";
 	_bool	m_IsClear = true;
 	_int	m_iCount = 0;
 	_int	m_iCount_Max = 0;
+
+private:
+	list<class CGameObject*> m_listTargetObject;
+	CTransform* m_pPlayerTransform = nullptr;
+	_float4 m_vSearchTagetDis[20];
+	_bool m_bAllTargetCollide = false;
 };
 
 #define __UIHANDLER_H__

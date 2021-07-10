@@ -18,6 +18,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+private:
+	_uint Key_Input();
+
 public:
 	static CMissionUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;

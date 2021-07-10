@@ -329,13 +329,7 @@ CGameObject * CTutorialUI::Clone(void * pArg/* = nullptr*/)
 
 void CTutorialUI::Free()
 {
-	for (auto& pObject : m_listTargetObject)
-	{
-		Safe_Release(pObject);
-	}
-	m_listTargetObject.clear();
 
-	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

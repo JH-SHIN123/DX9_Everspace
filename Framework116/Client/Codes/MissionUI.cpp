@@ -81,7 +81,7 @@ _uint CMissionUI::Update_GameObject(_float fDeltaTime)
 	CUI::Update_GameObject(fDeltaTime);
 	
 
-	CQuestHandler::Get_Instance()->Update_Quest();
+	//CQuestHandler::Get_Instance()->Update_Quest();
 
 	m_wstrMissionName = CQuestHandler::Get_Instance()->Get_QusetName();
 	m_iMissionCount = CQuestHandler::Get_Instance()->Get_CountRemaining();
@@ -107,7 +107,7 @@ _uint CMissionUI::Render_GameObject()
 {
 	CUI::Render_GameObject();
 
-	wstring Info = to_wstring(m_iMissionCount) + L"/" + to_wstring(m_iMissionMaxCount);
+	wstring Info = to_wstring(m_iMissionCount) + L" / " + to_wstring(m_iMissionMaxCount);
 
 	RECT m_tUIBounds;
 	GetClientRect(g_hWnd, &m_tUIBounds);
@@ -134,6 +134,11 @@ _uint CMissionUI::Render_GameObject()
 	//wstring IsClear
 	//if(m_IsClear == true)
 
+	return _uint();
+}
+
+_uint CMissionUI::Key_Input()
+{
 	return _uint();
 }
 

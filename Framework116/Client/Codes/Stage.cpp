@@ -43,8 +43,8 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
-		return E_FAIL;
+	//if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
+	//	return E_FAIL;
 
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
@@ -65,6 +65,8 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
+	CQuestHandler::Get_Instance()->Update_Quest();
+	
 	//Stage_Flow(fDeltaTime);
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
