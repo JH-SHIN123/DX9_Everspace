@@ -1,15 +1,15 @@
 #pragma once
-#ifndef __CROSSHAIR_H__
+#ifndef __AIMASSIST2_H__
 
 #include "GameObject.h"
 
 USING(Engine)
-class CCrosshair final : public CGameObject
+class CAimAssist2 final : public CGameObject
 {
 public:
-	explicit CCrosshair(LPDIRECT3DDEVICE9 pDevice);
-	explicit CCrosshair(const CCrosshair& other);
-	virtual ~CCrosshair() = default;
+	explicit CAimAssist2(LPDIRECT3DDEVICE9 pDevice);
+	explicit CAimAssist2(const CAimAssist2& other);
+	virtual ~CAimAssist2() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -20,10 +20,9 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-	_uint Searching_Target(_float fDeltaTime);
 
 public:
-	static CCrosshair* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CAimAssist2* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -32,15 +31,8 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
 
-	//
-	CTexture* m_pTexture_Gatling = nullptr;
-	CTexture* m_pTexture_Missile = nullptr;
-
-	// Lock On Test
-	CCollideSphere* m_pBossMonsterCollide = nullptr;
-	_bool m_IsBossLockOn = false;
-	_bool m_IsDistOn = false;
+	CTexture* m_pTexture_Dot = nullptr;
 };
 
-#define __CROSSHAIR_H__
+#define __AIMASSIST2_H__
 #endif

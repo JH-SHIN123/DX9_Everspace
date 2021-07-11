@@ -23,8 +23,11 @@ private:
 	_uint	Movement(_float fDeltaTime);
 	void	StartSceneChange(_float fDeltaTime);
 	void	Add_Layer_CancelButton();
+<<<<<<< HEAD
 	void Update_Effect();
 
+=======
+>>>>>>> main
 public:
 	static CLobbyModel* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -48,6 +51,7 @@ private:
 
 	//Sound
 	_float m_fSoundTiming = 0.f;
+<<<<<<< HEAD
 private: // Engine Effect
 	_bool m_IsBoost = FALSE;
 
@@ -61,6 +65,8 @@ private: // Wing Effect
 	_float3 m_vRightWingOffset = { 0.f, 0.f, 0.f };
 	class CWingBoost_System* m_pLeftWingBoost = nullptr;
 	class CWingBoost_System* m_pRightWingBoost = nullptr;
+=======
+>>>>>>> main
 
 };
 

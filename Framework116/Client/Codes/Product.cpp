@@ -56,8 +56,30 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+<<<<<<< HEAD
 
 	
+=======
+	// For.Com_Texture
+	/*if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Ring",
+		L"Com_Texture",
+		(CComponent**)&m_pTexture)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+		return E_FAIL;
+	}*/
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Product",
+		L"Com_Product_Texture",
+		(CComponent**)&m_pProductTex)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+		return E_FAIL;
+	}
+>>>>>>> main
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	if (pArg != nullptr)
@@ -170,6 +192,7 @@ _uint CProduct::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+<<<<<<< HEAD
 	switch (m_eRank)
 	{
 	case ERank::PurpleRank:
@@ -182,6 +205,9 @@ _uint CProduct::Render_GameObject()
 		m_pDevice->SetMaterial(&m_tGoldMaterial);
 		break;
 	}
+=======
+	m_pDevice->SetMaterial(&m_tMaterial);
+>>>>>>> main
 	m_pGeoMesh->Render_Mesh();
 	if (m_bShowProduct)
 		Render_Product();

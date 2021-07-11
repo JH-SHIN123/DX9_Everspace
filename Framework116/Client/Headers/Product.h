@@ -67,9 +67,12 @@ private:
 	_float m_fCountTime = 0.f;
 	_float m_fCancelCount = 0.f;
 	_bool m_bCancel = false;
+<<<<<<< HEAD
 
 	ERank m_eRank = ERank::Rank_End;
 
+=======
+>>>>>>> main
 };
 
 #define __PRODUCT_H__ 

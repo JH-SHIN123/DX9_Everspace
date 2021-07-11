@@ -133,7 +133,7 @@ _uint CAsteroid::Render_GameObject()
 	// Test
 
 #ifdef _DEBUG // Render Collide
-	if(m_pCollide) m_pCollide->Render_Collide();
+	//if(m_pCollide) m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -141,29 +141,33 @@ _uint CAsteroid::Render_GameObject()
 
 _uint CAsteroid::Movement(_float fDeltaTime)
 {
-	if (m_vRandomRotateDir.x) {
-		m_pTransform->RotateX(fDeltaTime);
-	}
-	if (m_vRandomRotateDir.y) {
-		m_pTransform->RotateY(fDeltaTime);
-	}
-	if (m_vRandomRotateDir.z) {
-		m_pTransform->RotateZ(fDeltaTime);
-	}
+	//if (m_vRandomRotateDir.x) {
+	//	m_pTransform->RotateX(fDeltaTime);
+	//}
+	//if (m_vRandomRotateDir.y) {
+	//	m_pTransform->RotateY(fDeltaTime);
+	//}
+	//if (m_vRandomRotateDir.z) {
+	//	m_pTransform->RotateZ(fDeltaTime);
+	//}
 
-	float fMoveSpeed = m_pTransform->Get_TransformDesc().fSpeedPerSec;
-	if(m_fMoveUpDeltaT <= 2.f)
-	{
-		m_pTransform->Move({ 0.f,fDeltaTime * fMoveSpeed ,0.f });
-		m_fMoveUpDeltaT += fDeltaTime;
-	}
-	else if (m_fMoveUpDeltaT <= 4.f) {
-		m_pTransform->Move({ 0.f,-fDeltaTime * fMoveSpeed,0.f });
-		m_fMoveUpDeltaT += fDeltaTime;
-	}
-	else {
-		m_fMoveUpDeltaT = 0.f;
-	}
+	//float fMoveSpeed = m_pTransform->Get_TransformDesc().fSpeedPerSec;
+	//if(m_fMoveUpDeltaT <= 2.f)
+	//{
+	//	m_pTransform->Move({ 0.f,fDeltaTime * fMoveSpeed ,0.f });
+	//	m_fMoveUpDeltaT += fDeltaTime;
+	//}
+	//else if (m_fMoveUpDeltaT <= 4.f) {
+	//	m_pTransform->Move({ 0.f,-fDeltaTime * fMoveSpeed,0.f });
+	//	m_fMoveUpDeltaT += fDeltaTime;
+	//}
+	//else {
+	//	m_fMoveUpDeltaT = 0.f;
+	//}
+
+	m_pTransform->RotateZ(fDeltaTime);
+	m_pTransform->RotateX(fDeltaTime);
+	m_pTransform->RotateY(fDeltaTime);
 
 	return _uint();
 }

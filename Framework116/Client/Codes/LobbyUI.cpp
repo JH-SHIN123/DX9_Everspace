@@ -197,7 +197,11 @@ _uint CLobbyUI::Render_GameObject()
 			iIndex++;
 		}
 	
+<<<<<<< HEAD
 		if (m_bRenderItemMean)
+=======
+		if (Get_IsPicking())
+>>>>>>> main
 			Render_ItemMean();
 		
 	}
@@ -447,6 +451,7 @@ void CLobbyUI::ChangeModelIcon()
 
 void CLobbyUI::Render_ItemMean()
 {
+<<<<<<< HEAD
 	if (!m_bRenderItemMean)
 		return;
 	TCHAR str[5][32];
@@ -477,6 +482,56 @@ void CLobbyUI::Render_ItemMean()
 		iFirstIndex++;
 	}
 	
+=======
+	TCHAR str[32];
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	
+	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
+	_float3 vPos = {0,0,0};
+	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+	vScale.y *= 0.5f;
+	_uint  i = 1;
+
+	swprintf_s(str, L"Atk Buff : %d", m_pLobby->GetAtkBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = (LONG)(vPos.x + i*vScale.x);
+	rc.top = (LONG)(vPos.y - vScale.y);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	i++;
+	swprintf_s(str, L"Def Buff : %d", m_pLobby->GetDefBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = (LONG)(vPos.x + i*vScale.x);
+	rc.top = (LONG)(vPos.y - vScale.y);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+
+	i++;
+	swprintf_s(str, L"Hp Buff : %d", m_pLobby->GetHpBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = (LONG)(vPos.x + i*vScale.x);
+	rc.top = (LONG)(vPos.y - vScale.y);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	i++;
+	swprintf_s(str, L"Energy Buff : %d", m_pLobby->GetEnergyBuffItemCount());
+	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	rc.left = (LONG)(vPos.x + i*vScale.x);
+	rc.top = (LONG)(vPos.y - vScale.y);
+	m_pManagement->Get_Font()->DrawText(NULL
+		, str, -1
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+
+
+>>>>>>> main
 
 }
 

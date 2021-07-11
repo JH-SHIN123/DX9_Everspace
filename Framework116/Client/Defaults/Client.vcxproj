@@ -164,9 +164,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Headers\AimAssist.h" />
+    <ClInclude Include="..\Headers\AimAssist2.h" />
     <ClInclude Include="..\Headers\AlertArrow.h" />
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
+    <ClInclude Include="..\Headers\Shield_Battery.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\StatusBoard.h" />
     <ClInclude Include="..\Headers\Asteroid.h" />
@@ -225,9 +228,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\AimAssist.cpp" />
+    <ClCompile Include="..\Codes\AimAssist2.cpp" />
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
+    <ClCompile Include="..\Codes\Shield_Battery.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\StatusBoard.cpp" />
     <ClCompile Include="..\Codes\Asteroid.cpp" />

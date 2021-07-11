@@ -11,6 +11,7 @@
 #include "ScriptUI.h"
 #include "HP_Bar.h"
 #include "Loading.h"
+#include "Shield_Battery.h"
 
 CMainApp::CMainApp() //glhf
 	: m_pManagement(CManagement::Get_Instance())
@@ -145,6 +146,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CAlertArrow::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_AlertArrow");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_AlertArrow */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_Shield_Battery",
+		CShield_Battery::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Shield_Battery");
 		return E_FAIL;
 	}
 

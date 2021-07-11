@@ -50,7 +50,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 150.f;
+	TransformDesc.fSpeedPerSec = 20.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.1f, 0.1f, 0.1f };
 
@@ -133,6 +133,9 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	CEffectHandler::Add_Layer_Effect_Missile_Head(this, &m_pHeadParticle);
 	CEffectHandler::Add_Layer_Effect_Missile_Smoke(this, &m_pBulletParticle);
 
+	vDir = (_float3*)pArg;
+	
+
 	return S_OK;
 }
 
@@ -148,7 +151,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	{
 		if (m_pTargetTransform != nullptr)
 		{
-			m_fAddSpeed += 0.15f;
+			m_fAddSpeed += 0.35f;
 			m_fRotateSpeed += D3DXToRadian(15.f);
 			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -219,7 +222,7 @@ _uint CPlayer_Missile::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -227,7 +230,10 @@ _uint CPlayer_Missile::Render_GameObject()
 
 _uint CPlayer_Missile::Movement(_float fDeltaTime)
 {
-	m_pTransform->Go_Dir(m_pTransform->Get_State(EState::Look), fDeltaTime);
+	m_pTransform->Go_Dir(*vDir, fDeltaTime);
+	
+	_float3 vLook = m_pPlayerTransform->Get_State(EState::Look);
+	m_pTransform->Go_Dir(vLook, fDeltaTime);
 	return _uint();
 }
 

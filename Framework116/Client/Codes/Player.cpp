@@ -123,16 +123,16 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// 최초 무기(기관총) HUD 생성.
-	UI_DESC MachinegunHUD;
-	MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-	MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-	MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+	// 최초 무기(펄스) HUD 생성.
+	UI_DESC LaserHUD;
+	LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+	LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+	LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
 		L"GameObject_UI",
 		L"Layer_HUD_Weapon",
-		(void*)&MachinegunHUD)))
+		(void*)&LaserHUD)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
@@ -285,8 +285,8 @@ _uint CPlayer::Render_GameObject()
 		, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
 
 #ifdef _DEBUG // Render Collide
-		for (auto& collide : m_Collides)
-			collide->Render_Collide();
+		//for (auto& collide : m_Collides)
+			//collide->Render_Collide();
 #endif
 	}
 	return _uint();
@@ -359,16 +359,23 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	}
 
 	// Booster
-	if (m_pController->Key_Pressing(KEY_SPACE) && m_fStamina > 0.f) {
-		m_IsBoost = true;
-		m_pTransform->Go_Straight(fDeltaTime * 1.5f);
-		//Stamina
-		m_IsStaminaShrink = true;
-		m_fStamina -= 0.2f;
-		m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
-
-		m_pManagement->PlaySound(L"Player_Boost_Loop.ogg", CSoundMgr::PLAYER_BOOST);
-		
+	if (m_pController->Key_Pressing(KEY_SPACE))
+	{
+		if (m_fStamina > m_fMinStamina)
+		{
+			m_IsBoost = true;
+			m_pTransform->Go_Straight(fDeltaTime * 1.5f);
+			//Stamina
+			m_IsStaminaShrink = true;
+			m_fStamina -= 0.2f;
+			m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
+			m_pManagement->PlaySound(L"Player_Boost_Loop.ogg", CSoundMgr::PLAYER_BOOST);
+		}
+		else
+		{
+			m_IsBoost = false;
+			m_IsStaminaShrink = false;
+		}
 	}
 	if (m_pController->Key_Up(KEY_SPACE))
 	{
@@ -386,24 +393,6 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// Weapon Change / Skills (OverDrive, Shield)
 	if (m_pController->Key_Down(KEY_1))
 	{
-		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-		m_iWeapon = WEAPON_MACHINEGUN;
-		UI_DESC MachinegunHUD;
-		MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_UI",
-			L"Layer_HUD_Weapon",
-			(void*)&MachinegunHUD)))
-		{
-			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-			return;
-		}
-	}
-	else if (m_pController->Key_Down(KEY_2))
-	{
 		// 이전 무기 HUD 삭제
 		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 		m_iWeapon = WEAPON_LAZER;
@@ -416,6 +405,24 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			L"GameObject_UI",
 			L"Layer_HUD_Weapon",
 			(void*)&LaserHUD)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return;
+		}
+	}
+	else if (m_pController->Key_Down(KEY_2))
+	{
+		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+		m_iWeapon = WEAPON_MACHINEGUN;
+		UI_DESC MachinegunHUD;
+		MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_UI",
+			L"Layer_HUD_Weapon",
+			(void*)&MachinegunHUD)))
 		{
 			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 			return;
@@ -446,22 +453,31 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_fHp -= 10.f;
 		m_pHp_Bar->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
 	}
-
 	if (m_pController->Key_Down(KEY_F2))
 	{
 		//반짝이게 하는 Effect How?
+		m_pManagement->PlaySound(L"Overdrive.ogg", CSoundMgr::PLAYER_SKILL);
 		m_fOverDrive = 2.f;
 		m_bOverDrive = true;
 	}
 	if (m_pController->Key_Down(KEY_F3))
 	{
+		m_pManagement->PlaySound(L"Shield_Boost.ogg", CSoundMgr::PLAYER_SKILL);
 		// 실드활성화.
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_Shield_Battery",
+			L"Layer_Player_Shield")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Shield_Battery In Layer");
+			return;
+		}
 	}
 
 	//공격
 	if (m_pController->Key_Pressing(KEY_LBUTTON))
 	{
-		if (m_iWeapon == WEAPON_MACHINEGUN)
+		if (m_iWeapon == WEAPON_LAZER)
 		{
 			m_fMachinegunFireDelay += fDeltaTime * m_fOverDrive;
 			if (m_fMachinegunFireDelay > 0.25f)
@@ -485,54 +501,112 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 				m_fMachinegunFireDelay = 0.f;
 			}
 		}
-		else if (m_iWeapon == WEAPON_LAZER)
+		else if (m_iWeapon == WEAPON_MACHINEGUN)
 		{
-			if (!m_IsLazer)
+			//총열돌리는시간
+			if (m_IsShooting == false)
 			{
-				if (FAILED(m_pManagement->Add_GameObject_InLayer(
-					EResourceType::Static,
-					L"GameObject_Player_Lazer",
-					L"Layer_Player_Lazer",
-					(void*)true)))
+				m_fMachinegunDelay += fDeltaTime;
+				m_pManagement->PlaySound(L"Gatling_StartUp.ogg", CSoundMgr::PLAYER_GATLING);
+			}
+			if (m_fMachinegunDelay > 0.4f)
+			{
+				m_IsShooting = true;
+				m_fMachinegunFireDelay += fDeltaTime * m_fOverDrive;
+				if (m_fMachinegunFireDelay > 0.10f)
 				{
-					PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
-					return;
-				}
-				if (FAILED(m_pManagement->Add_GameObject_InLayer(
-					EResourceType::Static,
-					L"GameObject_Player_Lazer",
-					L"Layer_Player_Lazer",
-					(void*)false)))
-				{
-					PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
-					return;
+					if (m_IsLeft)
+						m_IsLeft = false;
+					else
+						m_IsLeft = true;
+
+					if (FAILED(m_pManagement->Add_GameObject_InLayer(
+						EResourceType::Static,
+						L"GameObject_Player_Bullet",
+						L"Layer_Player_Bullet",
+						(void*)m_IsLeft)))
+					{
+						PRINT_LOG(L"Error", L"Failed To Add Player_Bullet In Layer");
+						return;
+					}
+					m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+					m_pManagement->PlaySound(L"Gatling_Fire_Loop.ogg", CSoundMgr::PLAYER_WEAPON);
+					m_fMachinegunFireDelay = 0.f;
 				}
 			}
-			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Lazer")->size() == 2)
-				m_IsLazer = true;
-			else
-				m_IsLazer = false;
-			
 		}
 		else if (m_iWeapon == WEAPON_MISSILE)
 		{
 			if (!m_IsMissile)
 			{
-				if (FAILED(m_pManagement->Add_GameObject_InLayer(
-					EResourceType::Static,
-					L"GameObject_Player_Missile",
-					L"Layer_Player_Missile")))
+				for (int i = 0; i < 4; ++i)
 				{
-					PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
-					return;
+					switch (i)
+					{
+					case 0:
+						vMissileDir1 = {m_pTransform->Get_State(EState::Right)};
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir1)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
+						break;
+					case 1:
+						vMissileDir2 = { m_pTransform->Get_State(EState::Right) * -1.f };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir2)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
+						break;
+					case 2:
+						vMissileDir3 = { m_pTransform->Get_State(EState::Up) };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir3)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
+						break;
+					case 3:
+						vMissileDir4 = { m_pTransform->Get_State(EState::Up) * -1.f };
+						if (FAILED(m_pManagement->Add_GameObject_InLayer(
+							EResourceType::Static,
+							L"GameObject_Player_Missile",
+							L"Layer_Player_Missile", (void*)&vMissileDir4)))
+						{
+							PRINT_LOG(L"Error", L"Failed To Add Player_Lazer In Layer");
+							return;
+						}
+						break;
+					}
+
 				}
-				m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
-				m_pManagement->PlaySound(L"Launch_Missile.ogg", CSoundMgr::PLAYER_WEAPON);
+					m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+					m_pManagement->PlaySound(L"Launch_Missile.ogg", CSoundMgr::PLAYER_WEAPON);
 			}
-			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Missile")->size() == 1)
+			if (m_pManagement->Get_GameObjectList(L"Layer_Player_Missile")->size() == 4)
 				m_IsMissile = true;
 			else
 				m_IsMissile = false;
+		}
+	}
+	if(m_pController->Key_Up(KEY_LBUTTON))
+	{
+		m_IsShooting = false;
+		m_fMachinegunDelay = 0.f;
+		if (m_iWeapon == WEAPON_MACHINEGUN)
+		{
+			m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
+			m_pManagement->PlaySound(L"Gatling_Stop.ogg", CSoundMgr::PLAYER_WEAPON);
 		}
 	}
 
@@ -740,6 +814,9 @@ _uint CPlayer::Make_Arrow()
 	// 나중에는 모든 몬스터 순회하면서 검사해야함.
 	// 몬스터 pos - 플레이어 pos. => 
 	// 각도로 비교하자~
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() == 0 
+		/*||m_pManagement->Get_GameObjectList(L"Layer_Monster")->size() == 0*/)
+		return UPDATE_ERROR;
 
 	//Test
 	m_pTransform->Get_TransformDesc().matWorld;
