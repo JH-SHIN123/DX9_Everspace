@@ -57,13 +57,13 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
 		_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
-		if (m_pTransform->Get_TransformDesc().vScale.x < 1000.f)
+		if (m_pTransform->Get_TransformDesc().vScale.x < 1171.f)
 		{
-			vScale.x += fDeltaTime *1000.f;
+			vScale.x += fDeltaTime * 1171.f;
 		}
-		if (m_pTransform->Get_TransformDesc().vScale.y < 600)
+		if (m_pTransform->Get_TransformDesc().vScale.y < 683.f)
 		{
-			vScale.y += fDeltaTime*600.f;
+			vScale.y += fDeltaTime* 683.f;
 		}
 		m_pTransform->Set_Scale(vScale);
 	}

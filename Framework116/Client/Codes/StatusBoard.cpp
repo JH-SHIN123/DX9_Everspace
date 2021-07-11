@@ -100,25 +100,6 @@ _uint CStatusBoard::Update_GameObject(_float fDeltaTime)
 	
 
 
-//#ifdef _DEBUG
-//    TCHAR szBuff[256] = L"";
-//    GetPrivateProfileString(L"Section_1", L"Key_1", L"650", szBuff, 256, L"../test.ini");
-//    float x = _ttof(szBuff);
-//	GetPrivateProfileString(L"Section_1", L"Key_2", L"70", szBuff, 256, L"../test.ini");
-//	float y = _ttof(szBuff);
-//	_float3 vPos = { x ,y,0.f };
-//
-//	//GetPrivateProfileString(L"Section_1", L"Key_3", L"0", szBuff, 256, L"../test.ini");
-//	//x = _ttof(szBuff);
-//	//GetPrivateProfileString(L"Section_1", L"Key_4", L"0", szBuff, 256, L"../test.ini");
-//	//y = _ttof(szBuff);
-//	//_float3 vScale = { x ,y, 1.f };
-//
-//	m_pTransform->Set_Position(vPos);
-//	//m_pTransform->Set_Scale(vScale);
-//#endif // _DEBUG
-
-
 	return m_pTransform->Update_Transform();
 	
 }

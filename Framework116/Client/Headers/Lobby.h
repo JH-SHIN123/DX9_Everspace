@@ -90,7 +90,7 @@ private:
 	_bool m_bSceneChange = false;
 	_bool m_bStartUnPacking = false;
 
-	_uint m_iMoney = 3000;
+	_uint m_iMoney = 300000;
 	UNIT_INFO m_tUnitInfo;
 
 	_uint m_iAtkBuffItem = 0;

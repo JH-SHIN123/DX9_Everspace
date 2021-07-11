@@ -145,13 +145,15 @@ _bool CGatchaBox::CheckPicking()
 		if (pObj && m_pLobby->Get_Money() >=1000)
 		{
 			UI_DESC UiDesc;
-			_float PosX = 800.f;
-			_float PosY = 450.f;
-			_float ScaleX =120.f;
-			_float ScaleY =120.f;
+
+			_float PosX = 880.f;
+			_float PosY = 470.f;
+			_float ScaleX = 80.f;
+			_float ScaleY = 70.f;
 			UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
 			UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
 			UiDesc.wstrTexturePrototypeTag = L"Component_Texture_X";
+
 			if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
 				EResourceType::NonStatic, L"GameObject_LobbyUI"
 				, L"Layer_UI", &UiDesc)))
