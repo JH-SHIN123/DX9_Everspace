@@ -12,7 +12,7 @@ public:
 	virtual ~CDrone() = default;
 
 public:
-	enum State { Research, Die, End };
+	enum State { Idle, Move, Research, Die,End };
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -22,8 +22,12 @@ public:
 	virtual _uint Render_GameObject() override;
 
 private:
+	_uint	State_Idle(_float fDelataTime);
 	_uint	Movement(_float fDeltaTime);
 	_uint	Researching(_float fDeltaTime);
+
+private:
+	_uint Movement_Common(_float fDeltaTime);
 
 private:
 	void	StateCheck();
@@ -54,6 +58,10 @@ private:
 	CModelMesh* m_pModelMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTransform* m_pTargetTransform = nullptr;
+
+private:
+	_float m_fAngle = 0.f;
+	_bool m_bAnglePlus = true;
 
 };
 

@@ -8,6 +8,7 @@
 #include "Stamina_Bar.h"
 #include "CollisionHandler.h"
 #include "ScriptUI.h"
+#include "MainCam.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -287,6 +288,24 @@ _uint CPlayer::Render_GameObject()
 		, str.c_str(), -1
 		, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
 
+	// 카메라 스킵
+	if (m_IsCameraMove)
+	{
+		ESoloMoveMode eCheck = ((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Get_SoloMoveMode();
+		if (eCheck < ESoloMoveMode::Lock)
+		{
+			wstring mesage = L"C 키를 눌러 스킵";
+			RECT tUIBounds;
+			GetClientRect(g_hWnd, &tUIBounds);
+			//tUIBounds.top += 700;
+			tUIBounds.left += 1700;
+			m_pManagement->Get_Font()->DrawText(NULL
+				, mesage.c_str(), -1
+				, &tUIBounds, DT_CENTER, D3DXCOLOR(100, 100, 100, 255));
+		}
+	}
+
+
 #ifdef _DEBUG // Render Collide
 		//for (auto& collide : m_Collides)
 			//collide->Render_Collide();
@@ -370,7 +389,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pTransform->Go_Straight(fDeltaTime * 1.5f);
 			//Stamina
 			m_IsStaminaShrink = true;
-			m_fStamina -= 0.2f;
+			//m_fStamina -= 0.2f;
 			m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
 			m_pManagement->PlaySound(L"Player_Boost_Loop.ogg", CSoundMgr::PLAYER_BOOST);
 		}

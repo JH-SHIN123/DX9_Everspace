@@ -29,16 +29,16 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	{
 	case Stage_1_Ring:
 	{
-		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"))->size();
 		m_wstrQuestName = L"고리를 통과하라";
+		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"))->size();
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"));
 	}
 		break;
 	case Stage_1_Target:
 	{
-		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_TargetMonster"))->size();
 		m_wstrQuestName = L"과녁을 파괴하라";
-		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_TargetMonster"));
+		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"))->size();
+		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"));
 	}
 
 		break;

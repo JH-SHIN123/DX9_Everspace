@@ -44,20 +44,11 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-	if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_1_Ring)))
-		return E_FAIL;
-
-	//if (FAILED(Add_Layer_TutorialUI(L"Layer_TutorialUI")))
-	//	return E_FAIL;
-
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 	//	return E_FAIL;
 
 	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
-
-	//if (FAILED(Add_Layer_TargetMonster(L"Layer_TargetMonster")))
-	//	return E_FAIL;
 
 	// TEST
 	GAMEOBJECT_DESC tDesc;

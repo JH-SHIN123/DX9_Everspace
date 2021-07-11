@@ -2,6 +2,7 @@
 #include "Drone.h"
 #include "HP_Bar.h"
 #include "HP_Bar_Border.h"
+#include "Pipeline.h"
 
 CDrone::CDrone(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -101,7 +102,14 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	m_vResearchRange = { 50.f,50.f,50.f };
 
 	m_fHp = 900.f;
-	m_fFullHp = m_fHp;
+	m_fFullHp = m_fHp; 
+
+	m_fAngle = CPipeline::GetRandomFloat(0.1f, 1.f);
+	_float Check = CPipeline::GetRandomFloat(0.f, 1.f);
+	m_bAnglePlus = false;
+	if (Check > 0.5f)
+		m_bAnglePlus = true;
+	
 
 	return S_OK;
 }
@@ -110,6 +118,7 @@ _uint CDrone::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
+	Movement_Common(fDeltaTime);
 	Movement(fDeltaTime);
 	StateCheck();
 
@@ -165,11 +174,29 @@ _uint CDrone::Render_GameObject()
 	return _uint();
 }
 
+_uint CDrone::State_Idle(_float fDelataTime)
+{
+	return _uint();
+}
+
 _uint CDrone::Movement(_float fDeltaTime)
 {
-	if (m_eCurState = State::Research) {
+
+	switch (m_eCurState)
+	{
+	case State::Idle:
+		break;
+	case State::Move:
+		break;
+	case State::Research:
 		Researching(fDeltaTime);
+		break;
+	case State::Die:
+		break;
+	default:
+		break;
 	}
+
 
 
 	return _uint();
@@ -183,9 +210,28 @@ _uint CDrone::Researching(_float fDeltaTime)
 	return _uint();
 }
 
+_uint CDrone::Movement_Common(_float fDeltaTime)
+{
+	_float3 vUp = m_pTransform->Get_State(EState::Up);
+	_float3 vPos = m_pTransform->Get_State(EState::Position);
+
+	m_fAngle -= 2.f;
+	if(m_bAnglePlus == true)
+		m_fAngle += 4.f;
+
+	_float fSin = (sinf(D3DXToRadian(m_fAngle)) * 0.5f);
+	vUp *= fSin;
+	vPos += vUp;
+
+	m_pTransform->Set_Position(vPos);
+
+	return _uint();
+}
+
 void CDrone::StateCheck()
 {
-	if (m_eCurState != m_eNextState) {
+	if (m_eCurState != m_eNextState)
+	{
 		switch (m_eNextState)
 		{
 		case State::Research:
