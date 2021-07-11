@@ -5,6 +5,8 @@
 #include"Lobby.h"
 #include"LobbyUI.h"
 #include"GatchaBox.h"
+#include"EngineEffectSystem.h"
+#include"WingBoost_System.h"
 CLobbyModel::CLobbyModel(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -63,7 +65,7 @@ HRESULT CLobbyModel::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Controller");
 		return E_FAIL;
 	}
-
+	
 	return S_OK;
 }
 
@@ -77,13 +79,27 @@ _uint CLobbyModel::Update_GameObject(_float fDeltaTime)
 		m_pTransform->Update_Transform();
 	}
 	else
-
 	{
 		if (!m_bSetCreateCancelButton)
 		{
+			// Add Engine-Boost Effect
+			CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pLeftEngineEffect);
+			m_vLeftEngineOffset = { -1.4f, 0.9f, -6.7f };
+			CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pRightEngineEffect);
+			m_vRightEngineOffset = { 1.4f, 0.9f, -6.7f };
+
+			// Add Wing-Boost Effect
+
+			CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pLeftWingBoost);
+			m_vLeftWingOffset = { -8.2f, -1.5f, -2.f };
+			CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pRightWingBoost);
+			m_vRightWingOffset = { 8.2f, -1.5f, -2.f };
+
+			m_IsBoost = TRUE;
 			m_bSetCreateCancelButton = TRUE;
 			Add_Layer_CancelButton();
 		}
+		Update_Effect();
 		StartSceneChange(fDeltaTime);
 	}
 	return m_pTransform->Update_Transform();;
@@ -216,6 +232,49 @@ void CLobbyModel::Add_Layer_CancelButton()
 	
 }
 
+void CLobbyModel::Update_Effect()
+{
+	// Engine-Boost Effect
+	if (m_pLeftEngineEffect) {
+		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vLeftEngineOffset.x;
+		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
+		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z;
+		m_pLeftEngineEffect->Set_EngineOffset(vEnginePos);
+		m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
+	}
+	if (m_pRightEngineEffect) {
+		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vRightEngineOffset.x;
+		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
+		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z;
+		m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
+		m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
+	}
+
+	// Wing-Boost Effect
+	
+	if (m_pLeftWingBoost)
+	{
+		_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+		vWingPos += m_pTransform->Get_State(EState::Right) * m_vLeftWingOffset.x;
+		vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
+		vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z;
+		m_pLeftWingBoost->Set_WingOffset(vWingPos);
+		m_pLeftWingBoost->Set_IsBoost(m_IsBoost);
+	}
+	if (m_pRightWingBoost) 
+	{
+		_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+		vWingPos += m_pTransform->Get_State(EState::Right) * m_vRightWingOffset.x;
+		vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
+		vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z;
+		m_pRightWingBoost->Set_WingOffset(vWingPos);
+		m_pRightWingBoost->Set_IsBoost(m_IsBoost);
+	}
+	
+}
+
 
 CLobbyModel * CLobbyModel::Create(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -243,7 +302,23 @@ CGameObject * CLobbyModel::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyModel::Free()
 {
+	if (m_pLeftEngineEffect) {
+		m_pLeftEngineEffect->Set_IsDead(true);
+		m_pLeftEngineEffect = nullptr;
+	}
+	if (m_pRightEngineEffect) {
+		m_pRightEngineEffect->Set_IsDead(true);
+		m_pRightEngineEffect = nullptr;
+	}
 
+	if (m_pLeftWingBoost) {
+		m_pLeftWingBoost->Set_IsDead(true);
+		m_pLeftWingBoost = nullptr;
+	}
+	if (m_pRightWingBoost) {
+		m_pRightWingBoost->Set_IsDead(true);
+		m_pLeftWingBoost = nullptr;
+	}
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

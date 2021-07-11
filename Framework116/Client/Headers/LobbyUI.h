@@ -50,6 +50,7 @@ public:
 	void Set_Model(class CLobbyModel* pModel) { m_pModel = pModel; }
 	
 private:
+	
 	//for KeyCheck
 	_float m_fDelayCheck = 0;
 	_float m_fDeltaTime = 0;

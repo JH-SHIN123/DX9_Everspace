@@ -95,8 +95,7 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 	
 	_uint iProduct =(_uint)CPipeline::GetRandomFloat(0,9);
 	m_eProduct = (EProduct)iProduct;
-	_uint iRank = 2;
-		//(_uint)CPipeline::GetRandomFloat(0, 2);
+	_uint iRank = (_uint)CPipeline::GetRandomFloat(0, 2);
 	m_eRank = (ERank)iRank;
 	if ((_uint)m_eProduct < 6)
 	{
