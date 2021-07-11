@@ -26,6 +26,8 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
+	_int iWeapon = ((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_Weapon_Type();
+
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -38,20 +40,41 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 800.f;
-	TransformDesc.vScale = { 0.5f, 0.5f, 0.5f };
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Transform",
-		L"Com_Transform",
-		(CComponent**)&m_pTransform,
-		&TransformDesc)))
+	if (iWeapon == WEAPON_LAZER)
 	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
+		TRANSFORM_DESC TransformDesc;
+		TransformDesc.fSpeedPerSec = 800.f;
+		TransformDesc.vScale = { 0.5f, 0.5f, 0.5f };
+
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_Transform",
+			L"Com_Transform",
+			(CComponent**)&m_pTransform,
+			&TransformDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
 	}
+	else if (iWeapon == WEAPON_MACHINEGUN)
+	{
+		TRANSFORM_DESC TransformDesc;
+		TransformDesc.fSpeedPerSec = 800.f;
+		TransformDesc.vScale = { 0.2f, 0.2f, 1.f };
+
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_Transform",
+			L"Com_Transform",
+			(CComponent**)&m_pTransform,
+			&TransformDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
+	}
+
 
 
 	// For.Com_Collide
@@ -127,7 +150,12 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	m_tMaterial.Diffuse.a = m_tMaterial.Ambient.a = m_tMaterial.Specular.a = m_tMaterial.Emissive.a = 1.f;
 
 	// Add Effect
-	CEffectHandler::Add_Layer_Effect_Bullet(this, &m_pBulletParticle);
+	
+	if (iWeapon == WEAPON_LAZER)
+		CEffectHandler::Add_Layer_Effect_Bullet(this, &m_pBulletParticle);
+	else if (iWeapon == WEAPON_MACHINEGUN)
+		CEffectHandler::Add_Layer_Effect_Gatling(this, &m_pGatlingParticle);
+
 
 	return S_OK;
 }

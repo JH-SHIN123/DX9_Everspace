@@ -223,9 +223,6 @@
     <Filter Include="02.GameObject\09.HUD\10.AimAssist2">
       <UniqueIdentifier>{58ff72af-bd08-4df7-b11f-9e190a9f8a16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\08.Bullet\01.Player_Observe_Missile">
-      <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\09.HUD\11.Shield_Battery">
       <UniqueIdentifier>{03891a8b-bd20-404d-addc-68a478e9126b}</UniqueIdentifier>
     </Filter>

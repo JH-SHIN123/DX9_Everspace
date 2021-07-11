@@ -190,6 +190,36 @@ HRESULT CEffectHandler::Add_Layer_Effect_Bullet(CGameObject* pTarget, CGameObjec
 	return S_OK;
 }
 
+HRESULT CEffectHandler::Add_Layer_Effect_Gatling(CGameObject * pTarget, CGameObject ** ppGameObject)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Orange";
+	pSystemDesc.iNumParticles = 1;
+	pSystemDesc.tResetAttribute.fParticleSize = 0.4f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 5.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.4f;
+	pSystemDesc.tResetAttribute.fLifeTime = 0.2f;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 0.5f, 0.5f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 0.f, 0.f };
+	pSystemDesc.pTarget = pTarget;
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_FollowSystem",
+		L"Layer_FollowSystem",
+		(void*)&pSystemDesc,
+		(CGameObject**)ppGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Follow In Layer");
+	}
+
+	CGameObject* pGameObject = *ppGameObject;
+	Safe_Release(pGameObject);
+
+	return S_OK;
+}
+
 HRESULT CEffectHandler::Add_Layer_Effect_EngineBoost(CGameObject** ppGameObject)
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
