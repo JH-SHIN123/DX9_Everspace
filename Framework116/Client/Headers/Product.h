@@ -6,10 +6,14 @@ enum class EProduct
 {
 	ATK_UP, DEF_UP, 
 	MAX_HP_UP, MAX_SHIELD_UP,
-	MONEY, SHIP0, SHIP1,
+	MONEY, Atk_Buff,Def_Buff,Hp_Buff,Energy_Buff,
 	PRODUCT_END
 };
-
+enum class ERank
+{
+	PurpleRank,RedRank
+	,GoldRank,Rank_End
+};
 USING(Engine)
 class CProduct final : public CGameObject
 {
@@ -37,6 +41,8 @@ public:
 	virtual void Free() override;
 
 	void Set_Scene(class CLobby* pLobby) { m_pLobby = pLobby; }
+	void Set_ShowProduct(_bool bSet) { m_bShowProduct = bSet; }
+	void  Set_Cancel(_bool bSet) { m_bCancel = bSet; }
 private:
 	CTexture*	m_pTexture = nullptr;
 	CTexture* m_pProductTex = nullptr;
@@ -47,7 +53,7 @@ private:
 
 
 private:
-	D3DMATERIAL9 m_tMaterial;
+	D3DMATERIAL9 m_tPurpleMaterial,m_tGoldMaterial,m_tRedMaterial;
 	_float4 vColorRGBA = { 0.004f, 0.002f, 0.005f, 0.f };
 	_bool m_bHitRing = false;
 
@@ -59,6 +65,11 @@ private:
 	_float4x4 m_matProduct;
 	_float m_fRotProductY = 0.f;
 	_float m_fCountTime = 0.f;
+	_float m_fCancelCount = 0.f;
+	_bool m_bCancel = false;
+
+	ERank m_eRank = ERank::Rank_End;
+
 };
 
 #define __PRODUCT_H__ 

@@ -2,6 +2,7 @@
 #include "..\Headers\Crosshair.h"
 #include "Pipeline.h"
 #include "Collision.h"
+#include "Player.h"
 
 CCrosshair::CCrosshair(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -43,6 +44,28 @@ HRESULT CCrosshair::Ready_GameObject(void * pArg/* = nullptr*/)
 		(CComponent**)&m_pTexture)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+		return E_FAIL;
+	}
+
+	// For.Com_Texture (개틀링건)
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair_Gatling",
+		L"Com_Texture2",
+		(CComponent**)&m_pTexture_Gatling)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture2");
+		return E_FAIL;
+	}
+
+	// For.Com_Texture (미사일)
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair_Missile",
+		L"Com_Texture3",
+		(CComponent**)&m_pTexture_Missile)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture3");
 		return E_FAIL;
 	}
 
@@ -103,14 +126,30 @@ _uint CCrosshair::Render_GameObject()
 
 	_float4x4 matView;
 	D3DXMatrixIdentity(&matView);
-	matView._11 = 50.f;
-	matView._22 = 50.f;
+	matView._11 = 60.f;
+	matView._22 = 60.f;
 	matView._41 = (_float)pt.x - (WINCX >> 1);
 	matView._42 = (_float)pt.y * -1.f + (WINCY >> 1) - 15.f;
 
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
-	m_pTexture->Set_Texture(0);
+	
+
+	_int iWeapon = ((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_Weapon_Type();
+	switch (iWeapon)
+	{
+	case WEAPON_LAZER:
+		m_pTexture->Set_Texture(0);
+		break;
+	case WEAPON_MACHINEGUN:
+		m_pTexture_Gatling->Set_Texture(0);
+		break;
+	case WEAPON_MISSILE:
+		m_pTexture_Missile->Set_Texture(0);
+		break;
+	default:
+		break;
+	}
 	m_pVIBuffer->Render_VIBuffer();	
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
@@ -152,6 +191,8 @@ void CCrosshair::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pTexture_Gatling);
+	Safe_Release(m_pTexture_Missile);
 
 	CGameObject::Free();
 }

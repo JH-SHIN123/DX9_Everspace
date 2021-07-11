@@ -29,7 +29,8 @@ public:
 	virtual void Free() override;
 public:
 	void Set_Scene(class CLobby* _pLobby) { m_pLobby = _pLobby; }
-
+	void Set_StartUnPacking(_bool bSet) { m_bStartUnpacking = bSet; }
+	void Set_CancelUnPacking(_bool bSet) { m_bCancelUnPacking = bSet; }
 	_bool Get_StartUnpacking() { return m_bStartUnpacking; }
 private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
@@ -41,6 +42,9 @@ private:
 	_bool m_bStartUnpacking = false;
 	_float m_fUnPackingTime = 0.f;
 	_bool m_bBomb = false;
+	_bool m_bCancelUnPacking = false;
+
+	
 };
 
 #define __GATCHABOX_H__

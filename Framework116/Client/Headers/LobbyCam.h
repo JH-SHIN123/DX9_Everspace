@@ -37,6 +37,7 @@ public:
 	virtual void Free() override;
 
 private:
+	_bool m_bStart = false;
 	CTransform* m_pPlayerTransform = nullptr;
 	_float m_fDistanceFromTarget = 10.f;
 	_float m_fCamAngle = D3DXToRadian(45.f);
@@ -47,6 +48,7 @@ private:
 	_bool m_bStartUnPacking = false;
 	_bool m_bUnPacked = false;
 	class CLobby* m_pLobby = nullptr;
+	_bool m_bDir = false;
 
 };
 

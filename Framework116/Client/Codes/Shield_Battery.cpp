@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "..\Headers\Planet.h"
+#include "..\Headers\Shield_Battery.h"
 #include "MaterialHandler.h"
 
-CPlanet::CPlanet(LPDIRECT3DDEVICE9 pDevice)
+CShield_Battery::CShield_Battery(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
 }
 
-CPlanet::CPlanet(const CPlanet & other)
+CShield_Battery::CShield_Battery(const CShield_Battery & other)
 	: CGameObject(other)
 {
 }
 
 
-HRESULT CPlanet::Ready_GameObject_Prototype()
+HRESULT CShield_Battery::Ready_GameObject_Prototype()
 {
 	CGameObject::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CPlanet::Ready_GameObject(void* pArg)
+HRESULT CShield_Battery::Ready_GameObject(void* pArg)
 {
 	CGameObject::Ready_GameObject(pArg);
 
@@ -48,19 +48,22 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_Earth",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
+	//// For.Com_Texture
+	//if (FAILED(CGameObject::Add_Component(
+	//	EResourceType::NonStatic,
+	//	L"Component_Texture_Earth",
+	//	L"Com_Texture",
+	//	(CComponent**)&m_pTexture)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+	//	return E_FAIL;
+	//}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player",L"Com_Transform");
+	Safe_AddRef(m_pPlayerTransform);
+
+	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fRotatePerSec = D3DXToRadian(20.f);
 
 	if (FAILED(CGameObject::Add_Component(
@@ -76,7 +79,7 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 100.f;
+	BoundingSphere.fRadius = 0.f;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_CollideSphere",
@@ -89,36 +92,41 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	// Point Light 추가
-	LIGHT_DESC lightDesc;
-	lightDesc.eLightType = ELightType::PointLight;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
-	lightDesc.tTransformDesc.vPosition = TransformDesc.vPosition;
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::Static,
-		L"GameObject_Light",
-		L"Layer_Light",
-		(void*)&lightDesc)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Light In Layer");
-		return E_FAIL;
-	}
-
 	return S_OK;
 }
 
-_uint CPlanet::Update_GameObject(_float fDeltaTime)
+_uint CShield_Battery::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
-	
+
 	Movement(fDeltaTime);
 
+	if (m_fRadian >= 0.105f)
+	{
+		m_IsAdd = false;
+	}
+
+	if (m_IsAdd)
+		m_fRadian += 0.002f;
+
+
+	if (!m_IsAdd)
+	{
+		m_fRadian -= 0.0005f;
+		m_fLifeTime += fDeltaTime;
+
+		if (m_fLifeTime > 3.6f)
+			return DEAD_OBJECT;
+	}
+
+
+	m_pCollide->Resize_Shpere(m_fRadian);
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	return _uint();
 }
 
-_uint CPlanet::LateUpdate_GameObject(_float fDeltaTime)
+_uint CShield_Battery::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
@@ -128,41 +136,36 @@ _uint CPlanet::LateUpdate_GameObject(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CPlanet::Render_GameObject()
+_uint CShield_Battery::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	//m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture();
-	m_pModelMesh->Render_Mesh();
-	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	//m_pTexture->Set_Texture();
+	//m_pModelMesh->Render_Mesh();
+	//m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
-	m_pDevice->SetRenderState(D3DRS_LIGHTING, true);
-
-
 	return _uint();
 }
 
-_uint CPlanet::Movement(_float fDeltaTime)
+_uint CShield_Battery::Movement(_float fDeltaTime)
 {
-	if (m_pTransform) {
-		m_pTransform->RotateY(fDeltaTime);
-	}
 
+	m_vPos = m_pPlayerTransform->Get_State(EState::Position);
+	m_pTransform->Set_Position(m_vPos);
 
 	return _uint();
 }
 
 
-CPlanet* CPlanet::Create(LPDIRECT3DDEVICE9 pDevice)
+CShield_Battery* CShield_Battery::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CPlanet* pInstance = new CPlanet(pDevice);
+	CShield_Battery* pInstance = new CShield_Battery(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player");
@@ -172,9 +175,9 @@ CPlanet* CPlanet::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject* CPlanet::Clone(void* pArg)
+CGameObject* CShield_Battery::Clone(void* pArg)
 {
-	CPlanet* pClone = new CPlanet(*this); /* 복사 생성자 호출 */
+	CShield_Battery* pClone = new CShield_Battery(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone Player");
@@ -184,11 +187,11 @@ CGameObject* CPlanet::Clone(void* pArg)
 	return pClone;
 }
 
-void CPlanet::Free()
+void CShield_Battery::Free()
 {
 	Safe_Release(m_pModelMesh);
+	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 
 	CGameObject::Free();

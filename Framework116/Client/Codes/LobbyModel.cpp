@@ -3,11 +3,14 @@
 #include "Collision.h"
 #include"Player.h"
 #include"Lobby.h"
+#include"LobbyUI.h"
+#include"GatchaBox.h"
+#include"EngineEffectSystem.h"
+#include"WingBoost_System.h"
+
 CLobbyModel::CLobbyModel(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	
-	
 }
 
 CLobbyModel::CLobbyModel(const CLobbyModel & other)
@@ -37,7 +40,7 @@ HRESULT CLobbyModel::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 45.f;
-	TransformDesc.vPosition = _float3(15.f, 0.f, 15.f);
+	TransformDesc.vPosition = _float3(20.f, 0.f, 20.f);
 	TransformDesc.fSpeedPerSec = 25.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 1.f,1.f,1.f };
@@ -63,7 +66,7 @@ HRESULT CLobbyModel::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Controller");
 		return E_FAIL;
 	}
-
+	
 	return S_OK;
 }
 
@@ -77,9 +80,30 @@ _uint CLobbyModel::Update_GameObject(_float fDeltaTime)
 		m_pTransform->Update_Transform();
 	}
 	else
-	{
-		StartSceneChange(fDeltaTime);
 
+	{
+		if (!m_bSetCreateCancelButton)
+		{
+			// Add Engine-Boost Effect
+			CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pLeftEngineEffect);
+			m_vLeftEngineOffset = { -1.4f, 0.9f, -6.7f };
+			CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pRightEngineEffect);
+			m_vRightEngineOffset = { 1.4f, 0.9f, -6.7f };
+
+			// Add Wing-Boost Effect
+
+			CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pLeftWingBoost);
+			m_vLeftWingOffset = { -8.2f, -1.5f, -2.f };
+			CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pRightWingBoost);
+			m_vRightWingOffset = { 8.2f, -1.5f, -2.f };
+
+			m_IsBoost = TRUE;
+			m_bSetCreateCancelButton = TRUE;
+			Add_Layer_CancelButton();
+		}
+		Update_Effect();
+
+		StartSceneChange(fDeltaTime);
 	}
 	return m_pTransform->Update_Transform();;
 }
@@ -93,7 +117,7 @@ _uint CLobbyModel::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_bGo_Straight)
 	{
 		m_fDelaySceneChange += fDeltaTime;
-		if (m_fDelaySceneChange >= 5.f)
+		if (m_fDelaySceneChange >= 4.f)
 			m_pLobby->Set_SceneChange(TRUE);
 	}
 	return _uint();
@@ -119,17 +143,6 @@ void CLobbyModel::KeyProcess(_float fDeltaTime)
 {
 	if (nullptr == m_pController) return;
 	m_pController->Update_Controller();
-	if (GetAsyncKeyState('Q') & 0x8000)
-	{
-		m_pTransform->RotateZ(D3DXToRadian(45.f)*fDeltaTime);
-	}
-	else if (GetAsyncKeyState('E') & 0x8000)
-	{
-		m_pTransform->RotateZ(-D3DXToRadian(45.f)*fDeltaTime);
-	}
-	
-	
-
 }
 
 _uint CLobbyModel::Movement(_float fDeltaTime)
@@ -149,7 +162,7 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 		m_pTransform->Go_Straight(fDeltaTime* 10.f);
 		return;
 	}
-	if (fTime < 5.f)
+	if (fTime < 3.f)
 	{
 		m_pTransform->Go_Up(0.01f*fDeltaTime);
 	}
@@ -164,8 +177,7 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 		_float fAngle = acosf(D3DXVec3Dot(&vTargetDir, &vDir));
 		m_pTransform->RotateY(fDeltaTime*D3DXToRadian(fAngle)*20.f);
 		
-
-		if (0.05>= fAngle)
+		if (0.1>= fAngle)
 		{
 			m_fSoundTiming += fDeltaTime;
 			m_pManagement->PlaySound(L"Jump_Gate.ogg", CSoundMgr::LOBBY_EFFECT);
@@ -177,12 +189,83 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 			
 			fAngle = D3DXVec3Dot(&vDir, &vTargetDir);
 			m_pTransform->RotateX(fDeltaTime*fAngle);
-			if (0.005 >= fAngle && m_fSoundTiming >= 9.f)
+		
+			if (0.1 >= fAngle&&m_fSoundTiming >= 7.f)
 			{
 				m_bGo_Straight = TRUE;
 			}
 		}
 	}
+}
+
+void CLobbyModel::Add_Layer_CancelButton()
+{
+	UI_DESC UiDesc;
+	_float PosX = 800.f;
+	_float PosY = 450.f;
+	_float ScaleX = 120.f;
+	_float ScaleY = 120.f;
+	UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
+	UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
+	UiDesc.wstrTexturePrototypeTag = L"Component_Texture_X";
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic, L"GameObject_LobbyUI"
+		, L"Layer_UI", &UiDesc)))
+	{
+		PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+		return;
+	}
+	_uint iCount = m_pManagement->Get_GameObjectList(L"Layer_UI")->size()-1;
+	CLobbyUI* pUi = (CLobbyUI*)m_pManagement->Get_GameObject(L"Layer_UI",iCount);
+	pUi->Set_Model(this);
+	pUi->Set_Scene(m_pLobby);
+	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(L"Layer_GatchaBox"));
+	pUi->Set_GatchaBox(pBox);
+	
+}
+
+
+void CLobbyModel::Update_Effect()
+{
+	// Engine-Boost Effect
+	if (m_pLeftEngineEffect) {
+		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vLeftEngineOffset.x;
+		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
+		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z;
+		m_pLeftEngineEffect->Set_EngineOffset(vEnginePos);
+		m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
+	}
+	if (m_pRightEngineEffect) {
+		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vRightEngineOffset.x;
+		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
+		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z;
+		m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
+		m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
+	}
+
+	// Wing-Boost Effect
+	
+	if (m_pLeftWingBoost)
+	{
+		_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+		vWingPos += m_pTransform->Get_State(EState::Right) * m_vLeftWingOffset.x;
+		vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
+		vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z;
+		m_pLeftWingBoost->Set_WingOffset(vWingPos);
+		m_pLeftWingBoost->Set_IsBoost(m_IsBoost);
+	}
+	if (m_pRightWingBoost) 
+	{
+		_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+		vWingPos += m_pTransform->Get_State(EState::Right) * m_vRightWingOffset.x;
+		vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
+		vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z;
+		m_pRightWingBoost->Set_WingOffset(vWingPos);
+		m_pRightWingBoost->Set_IsBoost(m_IsBoost);
+	}
+	
 }
 
 
@@ -212,7 +295,25 @@ CGameObject * CLobbyModel::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyModel::Free()
 {
-	Safe_Release(m_pLobby);
+
+	if (m_pLeftEngineEffect) {
+		m_pLeftEngineEffect->Set_IsDead(true);
+		m_pLeftEngineEffect = nullptr;
+	}
+	if (m_pRightEngineEffect) {
+		m_pRightEngineEffect->Set_IsDead(true);
+		m_pRightEngineEffect = nullptr;
+	}
+
+	if (m_pLeftWingBoost) {
+		m_pLeftWingBoost->Set_IsDead(true);
+		m_pLeftWingBoost = nullptr;
+	}
+	if (m_pRightWingBoost) {
+		m_pRightWingBoost->Set_IsDead(true);
+		m_pLeftWingBoost = nullptr;
+	}
+
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

@@ -8,17 +8,27 @@
 CProduct::CProduct(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	ZeroMemory(&m_tMaterial, sizeof(D3DMATERIAL9));
+	ZeroMemory(&m_tPurpleMaterial, sizeof(D3DMATERIAL9));
+	CMaterialHandler::Set_RGBA(0.4f, 0.2f, 0.5f, 0.f, &m_tPurpleMaterial);
+	m_tPurpleMaterial.Power = 1.f;
 
-	CMaterialHandler::Set_RGBA(0.4f, 0.2f, 0.5f, 0.f, &m_tMaterial);
+	ZeroMemory(&m_tGoldMaterial, sizeof(D3DMATERIAL9));
+	CMaterialHandler::Set_RGBA(255, 215, 0.f, 0.f, &m_tGoldMaterial);
+	m_tGoldMaterial.Power = 1.f;
 
-	m_tMaterial.Power = 1.f;
+	ZeroMemory(&m_tRedMaterial, sizeof(D3DMATERIAL9));
+	CMaterialHandler::Set_RGBA(1.f, 0.f, 0.f, 0.f, &m_tRedMaterial);
+	m_tRedMaterial.Power = 1.f;
+
+
 }
 
 CProduct::CProduct(const CProduct & other)
 	: CGameObject(other)
 	, m_bHitRing(other.m_bHitRing)
-	, m_tMaterial(other.m_tMaterial)
+	, m_tPurpleMaterial(other.m_tPurpleMaterial)
+	,m_tRedMaterial(other.m_tRedMaterial)
+	, m_tGoldMaterial(other.m_tGoldMaterial)
 	, vColorRGBA(other.vColorRGBA)
 {
 
@@ -46,25 +56,8 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_Ring",
-		L"Com_Texture",
-		(CComponent**)&m_pTexture)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::NonStatic,
-		L"Component_Texture_Product",
-		L"Com_Product_Texture",
-		(CComponent**)&m_pProductTex)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
-		return E_FAIL;
-	}
+	
+
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	if (pArg != nullptr)
@@ -90,11 +83,6 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	_uint iProduct =(_uint)CPipeline::GetRandomFloat(0,5);
-
-	m_eProduct = (EProduct)iProduct;
-
-	
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_VIBuffer_RectTexture",
@@ -105,6 +93,34 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 	
+	_uint iProduct =(_uint)CPipeline::GetRandomFloat(0,9);
+	m_eProduct = (EProduct)iProduct;
+	_uint iRank = (_uint)CPipeline::GetRandomFloat(0, 2);
+	m_eRank = (ERank)iRank;
+	if ((_uint)m_eProduct < 6)
+	{
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::NonStatic,
+			L"Component_Texture_Product",
+			L"Com_Product_Texture",
+			(CComponent**)&m_pProductTex)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+			return E_FAIL;
+		}
+	}
+	else
+	{
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::NonStatic,
+			L"Component_Texture_PlaneTemplete",
+			L"Com_Product_Texture",
+			(CComponent**)&m_pProductTex)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 
@@ -112,7 +128,20 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	m_fCountTime += fDeltaTime;
-	if (m_fCountTime >= 9.f)
+	if (m_bCancel)
+	{
+		m_fCancelCount += fDeltaTime;
+		if(m_fCancelCount >= 2.f)
+		{
+			CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			pCam->Set_StartUnPacking(TRUE);
+			pCam->Set_UnPacked(FALSE);
+			Get_Product();
+			m_pLobby->Set_Money(-1000);
+			return DEAD_OBJECT;
+		}
+	}
+	else if (m_fCountTime >= 5.f)
 	{
 		CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 		pCam->Set_StartUnPacking(TRUE);
@@ -140,13 +169,25 @@ _uint CProduct::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+
+	switch (m_eRank)
+	{
+	case ERank::PurpleRank:
+		m_pDevice->SetMaterial(&m_tPurpleMaterial);
+		break;
+	case ERank::RedRank:
+		m_pDevice->SetMaterial(&m_tRedMaterial);
+		break;
+	case ERank::GoldRank:
+		m_pDevice->SetMaterial(&m_tGoldMaterial);
+		break;
+	}
+
+	m_pGeoMesh->Render_Mesh();
 	if (m_bShowProduct)
 		Render_Product();
 
-	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	m_pDevice->SetMaterial(&m_tMaterial);
-	m_pGeoMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
 	
@@ -157,7 +198,15 @@ _uint CProduct::Render_GameObject()
 
 _uint CProduct::Movement(_float fDeltaTime)
 {
-	if (m_fFlyTime >= 100.f && !m_bFall)
+	if (m_bShowProduct)
+	{
+		_float3 vPos = m_pTransform->Get_State(EState::Position);
+		vPos.y = -5.f;
+		m_pTransform->Set_Position(vPos);
+		m_pTransform->Set_Rotate(_float3(D3DXToRadian(90.f), 0.f, 0.f));
+		return 0;
+	}
+	if (m_fFlyTime >= 70.f && !m_bFall)
 		m_bFall = TRUE;
 	
 	if (!m_bFall)
@@ -178,7 +227,6 @@ _uint CProduct::Movement(_float fDeltaTime)
 		m_pTransform->RotateX(fDeltaTime*10.f);
 	else
 	{
-		
 		m_bShowProduct = TRUE;
 		m_pTransform->Set_Rotate(_float3(D3DXToRadian(90.f), 0.f, 0.f));
 	}
@@ -207,10 +255,16 @@ void CProduct::Render_Product()
 {
 	
 	DWORD dwRenderState;
+	
 	m_pDevice->GetRenderState(D3DRS_CULLMODE,&dwRenderState);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_matProduct);
-	m_pProductTex->Set_Texture((_uint)m_eProduct);
+	if((_uint)m_eProduct < 6)
+		m_pProductTex->Set_Texture((_uint)m_eProduct);
+	else
+	{
+		m_pProductTex->Set_Texture((_uint)m_eProduct - 4);
+	}
 	m_pProductVIBuffer->Render_VIBuffer();
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, dwRenderState);
 	if (m_bShowProduct)
@@ -223,21 +277,31 @@ void CProduct::Get_Product()
 	switch (m_eProduct)
 	{
 	case EProduct::ATK_UP:
-			tCurUnitInfo.iAtk += 20;
+		tCurUnitInfo.iAtk += 10*((_uint)m_eRank+1);
 		break;
 	case EProduct::DEF_UP:
-			tCurUnitInfo.iDef += 20;
+		tCurUnitInfo.iDef += 10 * ((_uint)m_eRank + 1);
 		break;
 	case EProduct::MAX_HP_UP:
-			tCurUnitInfo.iMaxHp += 20;
+		tCurUnitInfo.iMaxHp += 10 * ((_uint)m_eRank + 1);
 		break;
 	case EProduct::MAX_SHIELD_UP:
-			tCurUnitInfo.iMaxShield += 20;
+		tCurUnitInfo.iMaxShield += 10 * ((_uint)m_eRank + 1);
 		break;
 	case EProduct::MONEY:
-
-		m_pLobby->Set_Money(3000);
-
+		m_pLobby->Set_Money(3000 * ((_uint)m_eRank + 1));
+		break;
+	case EProduct::Atk_Buff:
+		m_pLobby->SetAtkBuffItemCount((_uint)m_eRank + 1);
+		break;
+	case EProduct::Def_Buff:
+		m_pLobby->SetDefBuffItemCount((_uint)m_eRank + 1);
+		break;
+	case EProduct::Hp_Buff:
+		m_pLobby->SetHpBuffItemCount((_uint)m_eRank + 1);
+		break;
+	case EProduct::Energy_Buff:
+		m_pLobby->SetEnergyBuffItemCount((_uint)m_eRank + 1);
 		break;
 	}
 	m_pLobby->Set_UnitInfo(tCurUnitInfo);
@@ -265,11 +329,17 @@ void CProduct::Set_Text()
 	case EProduct::MONEY:
 		str = L"µ· È¹µæ!";
 		break;
-	case EProduct::SHIP0:
-		str = L"¸ðµ¨ 0 È¹µæ!";
+	case EProduct::Atk_Buff:
+		str = L"°ø°Ý·Â ¹öÇÁ ¾ÆÀÌÅÛ!!";
 		break;
-	case EProduct::SHIP1:
-		str = L"¸ðµ¨ 1 È¹µæ!";
+	case EProduct::Def_Buff:
+		str = L"¹æ¾î·Â ¹öÇÁ ¾ÆÀÌÅÛ!!";
+		break;
+	case EProduct::Hp_Buff:
+		str = L"Ã¼·Â ¹öÇÁ ¾ÆÀÌÅÛ!!";
+		break;
+	case EProduct::Energy_Buff:
+		str = L"¿¡³ÊÁö ¹öÇÁ ¾ÆÀÌÅÛ!!";
 		break;
 	}
 		rc.left = (WINCX >> 1) - 100;
@@ -306,7 +376,6 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
-	Safe_Release(m_pLobby);
 	Safe_Release(m_pProductTex);
 	Safe_Release(m_pProductVIBuffer);
 	Safe_Release(m_pGeoMesh);

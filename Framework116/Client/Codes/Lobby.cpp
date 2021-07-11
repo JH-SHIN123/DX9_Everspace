@@ -70,6 +70,7 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 	CScene::Update_Scene(fDeltaTime);
 
 	
+	
 	return _uint();
 }
 
@@ -141,9 +142,11 @@ HRESULT CLobby::Add_Layer_Lobby_Model(const wstring & LayerTag)
 	}
 	CLobbyModel* pModel = (CLobbyModel*)m_pManagement->Get_GameObject(LayerTag);
 	pModel->Set_Scene(this);
-	AddRef();
 
+	
 	return S_OK;
+
+
 }
 
 HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
@@ -166,7 +169,7 @@ HRESULT CLobby::Add_Layer_LobbyCam(const wstring & LayerTag)
 	}
 	CLobbyCam* pLobbyCam = (CLobbyCam*)(m_pManagement->Get_GameObject(LayerTag));
 	pLobbyCam->Set_Scene(this);
-	AddRef();
+
 	return S_OK;
 }
 
@@ -198,8 +201,10 @@ HRESULT CLobby::Add_Layer_UI(const wstring& LayerTag)
 	}
 	for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
 	{
-		static_cast<CLobbyUI*>(pDst)->Set_Scene(this);
-		AddRef();
+		if (!static_cast<CLobbyUI*>(pDst)->Get_Scene())
+		{
+			static_cast<CLobbyUI*>(pDst)->Set_Scene(this);
+		}
 	}
 	return S_OK;
 }
@@ -217,8 +222,9 @@ HRESULT CLobby::Add_Layer_GatchaBox(const wstring & LayerTag)
 	}
 	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(LayerTag));
 	pBox->Set_Scene(this);
-	AddRef();
+
 	return S_OK;
+
 }
 
 HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)
@@ -234,7 +240,6 @@ HRESULT CLobby::Add_Layer_StatusBoard(const wstring & LayerTag)
 	}
 	CStatusBoard* pBoard = (CStatusBoard*)m_pManagement->Get_GameObject(LayerTag);
 	pBoard->Set_Scene(this);
-	AddRef();
 	return S_OK;
 }
 
@@ -251,7 +256,6 @@ HRESULT CLobby::Add_Layer_Status(const wstring & LayerTag)
 	}
 	CStatus* pBoard = (CStatus*)m_pManagement->Get_GameObject(LayerTag);
 	pBoard->Set_Scene(this);
-	AddRef();
 	return S_OK;
 }
 
@@ -314,6 +318,11 @@ _bool CLobby::Get_SceneSelect() const
 	return m_bSelectScene;
 }
 
+_bool CLobby::Get_StartUnPacking() const
+{
+	return m_bStartUnPacking;
+}
+
 _uint CLobby::Get_Money() const
 {
 	return m_iMoney;
@@ -356,8 +365,7 @@ CLobby * CLobby::Create(LPDIRECT3DDEVICE9 pDevice)
 
 void CLobby::Free()
 {
-	/* 자식의 소멸자 호출 순서처럼 Free도 같은 순서로 호출해주자*/
-	/* 1.자식 리소스 먼저 정리하고난 뒤 */
+
 	Safe_Release(m_pPlayer);
-	CScene::Free(); // 2.부모 리소스 정리	
+	CScene::Free();
 }

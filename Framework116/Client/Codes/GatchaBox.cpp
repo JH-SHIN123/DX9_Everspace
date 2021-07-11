@@ -4,6 +4,7 @@
 #include"Lobby.h"
 #include"LobbyCam.h"
 #include"Product.h"
+#include"LobbyUI.h"
 CGatchaBox::CGatchaBox(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -51,7 +52,7 @@ HRESULT CGatchaBox::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 1.f;
 	TransformDesc.fRotatePerSec = 1.f;
-	TransformDesc.vPosition = _float3(-15.f, 0.f, -15.f);	
+	TransformDesc.vPosition = _float3(-20.f, 0.f, -20.f);	
 	TransformDesc.vScale = { 10.f,10.f,10.f };
 	TransformDesc.vRotate = { 0.f,0.f,0.f };
 	if (FAILED(CGameObject::Add_Component(
@@ -143,7 +144,31 @@ _bool CGatchaBox::CheckPicking()
 			m_pDevice, m_pManagement->Get_GameObjectList(L"Layer_GatchaBox"));
 		if (pObj && m_pLobby->Get_Money() >=1000)
 		{
+			UI_DESC UiDesc;
+			_float PosX = 800.f;
+			_float PosY = 450.f;
+			_float ScaleX =120.f;
+			_float ScaleY =120.f;
+			UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
+			UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
+			UiDesc.wstrTexturePrototypeTag = L"Component_Texture_X";
+			if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+				EResourceType::NonStatic, L"GameObject_LobbyUI"
+				, L"Layer_UI", &UiDesc)))
+			{
+				PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+				return false;
+			}
+			for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
+			{
+				if (dynamic_cast<CLobbyUI*>(pDst))
+				{
+					static_cast<CLobbyUI*>(pDst)->Set_Scene(m_pLobby);
+					static_cast<CLobbyUI*>(pDst)->Set_GatchaBox(this);
+				}
+			}
 			m_fUnPackingTime = 0.f;
+			m_bCancelUnPacking = FALSE;
 			m_bStartUnpacking = TRUE;
 			return true;
 		}
@@ -166,7 +191,7 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 	else
 		m_pTransform->Go_Side(-fDeltaTime*5.f);
 	
-	if (m_fUnPackingTime >= 3.f)
+	if (m_bCancelUnPacking)
 	{
 		if (!m_bBomb)
 		{
@@ -177,17 +202,44 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 		}
 		m_bBomb = TRUE;
 	}
-	if (m_fUnPackingTime >= 12.f)
+	else if (m_fUnPackingTime >= 2.f)
+	{
+		if (!m_bBomb)
+		{
+			CLobbyCam* pLobbyCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			pLobbyCam->Set_UnPacked(TRUE);
+			wstring strLayerTag = L"Layer_Product";
+			Add_Layer_Product(strLayerTag);
+			CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_TransformDesc().vPosition,
+				20.f);
+
+		}
+		m_bBomb = TRUE;
+	}
+	if (m_bCancelUnPacking)
+	{
+		if (m_fUnPackingTime >= 2.f&& !m_pManagement->Get_GameObject(L"Layer_Product"))
+		{
+			m_pLobby->Set_IsGatcha(TRUE);
+			CLobbyCam* pLobbyCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			pLobbyCam->Set_UnPacked(FALSE);
+			m_bBomb = FALSE;
+			m_pTransform->Set_Position(_float3(-20.f, 0.f, -20.f));
+			pLobbyCam->Set_CamAt(m_pTransform->Get_TransformDesc().vPosition);
+			return TRUE;
+		}
+	}
+	else if (m_fUnPackingTime >= 7.f)
 	{
 		m_pLobby->Set_IsGatcha(TRUE);
 		CLobbyCam* pLobbyCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 		pLobbyCam->Set_UnPacked(FALSE);
 		m_bBomb = FALSE;
-		m_pTransform->Set_Position(_float3(-15.f, 0.f, -15.f));
+		m_pTransform->Set_Position(_float3(-20.f, 0.f, -20.f));
 		pLobbyCam->Set_CamAt(m_pTransform->Get_TransformDesc().vPosition);
 		return TRUE;
 	}
-	
+
 	return false;
 }
 
@@ -207,7 +259,7 @@ void CGatchaBox::Add_Layer_Product(wstring & wstrLayerTag)
 	}
 	CProduct* pProduct = (CProduct*)m_pManagement->Get_GameObject(wstrLayerTag);
 	pProduct->Set_Scene(m_pLobby);
-	Safe_AddRef(m_pLobby);
+	
 }
 
 CGatchaBox * CGatchaBox::Create(LPDIRECT3DDEVICE9 pDevice)
@@ -236,7 +288,7 @@ CGameObject * CGatchaBox::Clone(void * pArg/* = nullptr*/)
 
 void CGatchaBox::Free()
 {
-	Safe_Release(m_pLobby);
+	Safe_Release(m_pCollide);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

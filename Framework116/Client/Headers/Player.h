@@ -25,6 +25,10 @@ public:
 	_uint Set_IsScript(_bool IsScript);
 	_uint Set_IsCameraMove(_bool IsCameraMove);
 
+public:
+	_uint Get_Weapon_Type() { return m_iWeapon; }
+
+
 private:
 	void	KeyProcess(_float fDeltaTime);
 	_uint	Movement(_float fDeltaTime);
@@ -59,6 +63,7 @@ private: // 플레이어가 사용하실 변수님들.
 	_float m_fLaserDelay = 0.f;
 	_float m_fMissileDelay = 0.f;
 	_bool m_IsLeft = false;
+	_bool m_IsShooting = false;
 
 	// Player Skill
 	_float m_fOverDriveTime = 20.f; // 20초 타이머
@@ -66,7 +71,7 @@ private: // 플레이어가 사용하실 변수님들.
 	_bool m_bOverDrive = false;
 
 	// enum 사용 권장
-	//무기 1번 : 기관총, 2번 : 레이저
+	//무기 1번 : 펄스 / 2번 : 기관총  / 3번 :  미사일
 	_int m_iWeapon = 1;
 	_bool m_IsLazer = false;
 	_bool m_IsMissile = false;
@@ -94,6 +99,7 @@ private: // HP, 스태미너 관련
 
 	class CStamina_Bar* m_pStamina_Bar = nullptr;
 	_float m_fStamina = 100.f;
+	_float m_fMinStamina = 10.f;
 	_float m_fFullStamina = 100.f;
 	_float m_fStaminaLength = 256.f;
 	_bool m_IsStaminaShrink = false;
@@ -102,6 +108,13 @@ private: // HP, 스태미너 관련
 private: //연출 관련
 	_bool m_IsScript = false; //대화
 	_bool m_IsCameraMove = false; // 카메라 연출
+
+private: 
+	_float3 vMissileDir1 = {};
+	_float3 vMissileDir2 = {};
+	_float3 vMissileDir3 = {};
+	_float3 vMissileDir4 = {};
+
 
 };
 

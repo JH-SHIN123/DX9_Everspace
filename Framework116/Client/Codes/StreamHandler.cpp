@@ -374,7 +374,24 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 	}
 	else if (wstrPrototypeTag == L"GameObject_Drone")
 	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Drone",
+			L"Layer_Drone",
+			&tDesc)))
+		{
+			wstring errMsg = L"Failed to Add Layer ";
+			errMsg += wstrPrototypeTag;
+			PRINT_LOG(L"Error", errMsg.c_str());
+			return E_FAIL;
+		}
 	}
 	else if (wstrPrototypeTag == L"GameObject_TargetMonster")
 	{

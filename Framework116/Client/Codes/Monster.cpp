@@ -177,7 +177,6 @@ CGameObject * CMonster::Clone(void * pArg/* = nullptr*/)
 
 void CMonster::Free()
 {
-	Safe_Release(m_pTerrainBuffer);
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pCollide);

@@ -44,7 +44,6 @@ private:
 private:
 	CModelMesh*  m_pModelMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
-	CVIBuffer_TerrainTexture* m_pTerrainBuffer = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
 };
 
