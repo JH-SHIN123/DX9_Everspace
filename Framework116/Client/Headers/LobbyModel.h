@@ -22,6 +22,7 @@ private:
 	void	KeyProcess(_float fDeltaTime);
 	_uint	Movement(_float fDeltaTime);
 	void	StartSceneChange(_float fDeltaTime);
+	void	Add_Layer_CancelButton();
 public:
 	static CLobbyModel* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -39,10 +40,13 @@ private:
 	_bool m_bGotoNextScene = false;
 	_bool m_bGo_Straight = false;
 	_float m_fDelaySceneChange = 0.f;
-	class CLobby* m_pLobby;
+
+	class CLobby* m_pLobby = nullptr;
+	_bool m_bSetCreateCancelButton = false;
 
 	//Sound
 	_float m_fSoundTiming = 0.f;
+
 };
 
 #define __LOBBYMODEL_H__

@@ -378,7 +378,7 @@ CMainApp * CMainApp::Create()
 void CMainApp::Free()
 {
 	Safe_Release(m_pDevice);
-
+	
 	if (Safe_Release(m_pManagement))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release Management");

@@ -108,6 +108,8 @@ void CGameObject::Free()
 		Safe_Release(Collide);
 	}
 	m_Collides.clear();
+	
+	_uint iRef = Safe_Release(m_pDevice);
+	_uint iCount = iRef;
 
-	Safe_Release(m_pDevice);
 }

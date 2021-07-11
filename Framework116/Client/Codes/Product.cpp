@@ -47,7 +47,7 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Texture
-	if (FAILED(CGameObject::Add_Component(
+	/*if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
 		L"Component_Texture_Ring",
 		L"Com_Texture",
@@ -55,7 +55,7 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Texture");
 		return E_FAIL;
-	}
+	}*/
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
 		L"Component_Texture_Product",
@@ -112,7 +112,20 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	m_fCountTime += fDeltaTime;
-	if (m_fCountTime >= 9.f)
+	if (m_bCancel)
+	{
+		m_fCancelCount += fDeltaTime;
+		if(m_fCancelCount >= 2.f)
+		{
+			CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			pCam->Set_StartUnPacking(TRUE);
+			pCam->Set_UnPacked(FALSE);
+			Get_Product();
+			m_pLobby->Set_Money(-1000);
+			return DEAD_OBJECT;
+		}
+	}
+	else if (m_fCountTime >= 5.f)
 	{
 		CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 		pCam->Set_StartUnPacking(TRUE);
@@ -140,13 +153,12 @@ _uint CProduct::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
+	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+	m_pDevice->SetMaterial(&m_tMaterial);
+	m_pGeoMesh->Render_Mesh();
 	if (m_bShowProduct)
 		Render_Product();
 
-	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
-	m_pDevice->SetMaterial(&m_tMaterial);
-	m_pGeoMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
 	
@@ -157,7 +169,15 @@ _uint CProduct::Render_GameObject()
 
 _uint CProduct::Movement(_float fDeltaTime)
 {
-	if (m_fFlyTime >= 100.f && !m_bFall)
+	if (m_bShowProduct)
+	{
+		_float3 vPos = m_pTransform->Get_State(EState::Position);
+		vPos.y = -5.f;
+		m_pTransform->Set_Position(vPos);
+		m_pTransform->Set_Rotate(_float3(D3DXToRadian(90.f), 0.f, 0.f));
+		return 0;
+	}
+	if (m_fFlyTime >= 70.f && !m_bFall)
 		m_bFall = TRUE;
 	
 	if (!m_bFall)
@@ -178,7 +198,6 @@ _uint CProduct::Movement(_float fDeltaTime)
 		m_pTransform->RotateX(fDeltaTime*10.f);
 	else
 	{
-		
 		m_bShowProduct = TRUE;
 		m_pTransform->Set_Rotate(_float3(D3DXToRadian(90.f), 0.f, 0.f));
 	}
@@ -207,6 +226,7 @@ void CProduct::Render_Product()
 {
 	
 	DWORD dwRenderState;
+	
 	m_pDevice->GetRenderState(D3DRS_CULLMODE,&dwRenderState);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_matProduct);
@@ -306,7 +326,6 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
-	Safe_Release(m_pLobby);
 	Safe_Release(m_pProductTex);
 	Safe_Release(m_pProductVIBuffer);
 	Safe_Release(m_pGeoMesh);

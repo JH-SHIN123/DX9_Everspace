@@ -3,11 +3,11 @@
 #include "Collision.h"
 #include"Player.h"
 #include"Lobby.h"
+#include"LobbyUI.h"
+#include"GatchaBox.h"
 CLobbyModel::CLobbyModel(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-	
-	
 }
 
 CLobbyModel::CLobbyModel(const CLobbyModel & other)
@@ -37,7 +37,7 @@ HRESULT CLobbyModel::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Transform Test
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.fSpeedPerSec = 45.f;
-	TransformDesc.vPosition = _float3(15.f, 0.f, 15.f);
+	TransformDesc.vPosition = _float3(20.f, 0.f, 20.f);
 	TransformDesc.fSpeedPerSec = 25.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 1.f,1.f,1.f };
@@ -77,9 +77,14 @@ _uint CLobbyModel::Update_GameObject(_float fDeltaTime)
 		m_pTransform->Update_Transform();
 	}
 	else
-	{
-		StartSceneChange(fDeltaTime);
 
+	{
+		if (!m_bSetCreateCancelButton)
+		{
+			m_bSetCreateCancelButton = TRUE;
+			Add_Layer_CancelButton();
+		}
+		StartSceneChange(fDeltaTime);
 	}
 	return m_pTransform->Update_Transform();;
 }
@@ -93,7 +98,7 @@ _uint CLobbyModel::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_bGo_Straight)
 	{
 		m_fDelaySceneChange += fDeltaTime;
-		if (m_fDelaySceneChange >= 5.f)
+		if (m_fDelaySceneChange >= 4.f)
 			m_pLobby->Set_SceneChange(TRUE);
 	}
 	return _uint();
@@ -149,7 +154,7 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 		m_pTransform->Go_Straight(fDeltaTime* 10.f);
 		return;
 	}
-	if (fTime < 5.f)
+	if (fTime < 3.f)
 	{
 		m_pTransform->Go_Up(0.01f*fDeltaTime);
 	}
@@ -164,8 +169,7 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 		_float fAngle = acosf(D3DXVec3Dot(&vTargetDir, &vDir));
 		m_pTransform->RotateY(fDeltaTime*D3DXToRadian(fAngle)*20.f);
 		
-
-		if (0.05>= fAngle)
+		if (0.1>= fAngle)
 		{
 			m_fSoundTiming += fDeltaTime;
 			m_pManagement->PlaySound(L"Jump_Gate.ogg", CSoundMgr::LOBBY_EFFECT);
@@ -177,12 +181,39 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 			
 			fAngle = D3DXVec3Dot(&vDir, &vTargetDir);
 			m_pTransform->RotateX(fDeltaTime*fAngle);
-			if (0.005 >= fAngle && m_fSoundTiming >= 9.f)
+		
+			if (0.1 >= fAngle&&m_fSoundTiming >= 7.f)
 			{
 				m_bGo_Straight = TRUE;
 			}
 		}
 	}
+}
+
+void CLobbyModel::Add_Layer_CancelButton()
+{
+	UI_DESC UiDesc;
+	_float PosX = 800.f;
+	_float PosY = 450.f;
+	_float ScaleX = 120.f;
+	_float ScaleY = 120.f;
+	UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
+	UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
+	UiDesc.wstrTexturePrototypeTag = L"Component_Texture_X";
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic, L"GameObject_LobbyUI"
+		, L"Layer_UI", &UiDesc)))
+	{
+		PRINT_LOG(L"Error", L"Add_GameObject_InLayerTool_Failed");
+		return;
+	}
+	_uint iCount = m_pManagement->Get_GameObjectList(L"Layer_UI")->size()-1;
+	CLobbyUI* pUi = (CLobbyUI*)m_pManagement->Get_GameObject(L"Layer_UI",iCount);
+	pUi->Set_Model(this);
+	pUi->Set_Scene(m_pLobby);
+	CGatchaBox* pBox = (CGatchaBox*)(m_pManagement->Get_GameObject(L"Layer_GatchaBox"));
+	pUi->Set_GatchaBox(pBox);
+	
 }
 
 
@@ -212,7 +243,7 @@ CGameObject * CLobbyModel::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyModel::Free()
 {
-	Safe_Release(m_pLobby);
+
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

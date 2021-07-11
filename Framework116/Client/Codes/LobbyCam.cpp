@@ -25,8 +25,8 @@ HRESULT CLobbyCam::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CCamera::Ready_GameObject(pArg);
 
-	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model", L"Com_Transform");
-	Safe_AddRef(m_pPlayerTransform);
+	m_pPlayerTransform = (CTransform*)m_pManagement->
+		Get_Component(L"Layer_Lobby_Model", L"Com_Transform");
 	if (nullptr == m_pPlayerTransform)
 	{
 		PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
@@ -43,24 +43,21 @@ _uint CLobbyCam::Update_GameObject(_float fDeltaTime)
 	{
 		if (m_pLobby->Get_GotoNextScene())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
+			m_bDir = false;
 		}
 		if (m_pLobby->Get_IsGatcha())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_GatchaBox")
 				->Get_Component(L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
+			m_bDir = true;
 		}
 		else if (m_pLobby->Get_IsSetPlayerModel())
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Lobby_Model"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
+			m_bDir = false;
 		}
 	}
 	OffSet(fDeltaTime);
@@ -94,10 +91,8 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 	{
 		if (m_bUnPacked)
 		{
-			Safe_Release(m_pPlayerTransform);
 			m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Product"
 				, L"Com_Transform");
-			Safe_AddRef(m_pPlayerTransform);
 			m_CameraDesc.vAt = m_pPlayerTransform->Get_State(EState::Position);
 			return 0;
 		}
@@ -112,18 +107,36 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 		bStart = true;
 		return 0;
 	}
+	if (m_pLobby->Get_GotoNextScene())
+	{
+		m_CameraDesc.vAt = m_pPlayerTransform->Get_State(EState::Position);
+		return 0;
+	}
 	_float3 vTargetPos = m_pPlayerTransform->Get_TransformDesc().vPosition;
-	vTargetPos.y = 0.f;
 	_float3 vAt = m_CameraDesc.vAt;
+
+	vTargetPos.y = 0.f;
 	vAt.y = 0.f;
 	if (vTargetPos != vAt)
 	{
-
 		D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 		D3DXVec3Normalize(&vAt, &vAt);
-		_float fAngle = acosf(D3DXVec3Dot(&vTargetPos, &vAt));
-		if (fAngle <= D3DXToRadian(1.f))
-			return 0;
+		_float fAngle = 0.f;
+		if (m_bDir)
+		{
+			fAngle = acosf(D3DXVec3Dot(&vAt,&vTargetPos));
+			if (fAngle <= D3DXToRadian(1.f))
+				return 0;
+		}
+		else
+		{
+			fAngle = -acosf(D3DXVec3Dot(&vAt, &vTargetPos));
+			if (fAngle >= -D3DXToRadian(1.f))
+				return 0;
+		}
+			
+		
+		
 		fAngle *= fDeltaTime;
 		vAt = m_CameraDesc.vAt;
 		_float3 vNextAim;
@@ -176,7 +189,6 @@ CGameObject * CLobbyCam::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyCam::Free()
 {
-	Safe_Release(m_pPlayerTransform);
-	Safe_Release(m_pLobby);
+	
 	CCamera::Free();
 }

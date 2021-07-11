@@ -13,7 +13,7 @@
 #include "Grass.h"
 #include "Skybox.h"
 #include "ExplosionSystem.h"
-#include "LaserSystem.h"
+#include "LaserSystem.h"	
 #include "Boss_Monster.h"
 #include"LobbyCam.h"
 #include"LobbyModel.h"
@@ -155,7 +155,6 @@ unsigned CLoading::ThreadMain(void * pArg)
 	{
 	case ESceneType::Stage:
 		hr = pLoading->Ready_StageResources();
-
 		break;
 	case ESceneType::Lobby:
 		hr = pLoading->Ready_LobbyResources();
@@ -304,6 +303,7 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Asteroid");
 		return E_FAIL;
 	}
+
 #pragma endregion
 
 #pragma region Components
@@ -485,47 +485,12 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Drone",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/drone.X", L"../../Resources/Textures/Enemy/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
-	//	return E_FAIL;
-	//}
 
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Enemy1",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Enemy2",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Delivery",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/delivery.X", L"../../Resources/Textures/Delivery/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Monster");
-	//	return E_FAIL;
-	//}
 
 	Ready_HUD_Resources();
 	Ready_StageEffect();
 #pragma endregion
 
-	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
 	return S_OK;
 }
 
@@ -614,7 +579,7 @@ HRESULT CLoading::Ready_LobbyResources()
 		return E_FAIL;
 	}
 
-	if (FAILED(m_pManagement->Add_Component_Prototype(
+	/*if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Ring",
 		CTexture::Create(m_pDevice, ETextureType::Normal,
@@ -622,7 +587,7 @@ HRESULT CLoading::Ready_LobbyResources()
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_HUD_In_Bar");
 		return E_FAIL;
-	}
+	}*/
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_VIBuffer_HexagonTex",
