@@ -67,10 +67,13 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 			&&m_wstrTexturePrototypeTag != L"Component_Texture_X")
 			return NO_EVENT;
 	}
+	if (m_bShowModelIcon)
+		m_bRenderItemMean = TRUE;
+	else
+		m_bRenderItemMean = FALSE;
 	CUI::Update_GameObject(fDeltaTime);
 	Update_Bounds();
 	Update_SceneSelect(fDeltaTime);
-
 	Check_Picking();
 	OnMouseButton();
 	Key_Check(fDeltaTime);
@@ -194,7 +197,7 @@ _uint CLobbyUI::Render_GameObject()
 			iIndex++;
 		}
 	
-		if (Get_IsPicking())
+		if (m_bRenderItemMean)
 			Render_ItemMean();
 		
 	}
@@ -428,6 +431,7 @@ void CLobbyUI::ChangeModelIcon()
 		{
 			if (PtInRect(&rc[i], pt))
 			{
+				m_bClicked = TRUE;
 				m_dwIdx += i;
 				if (m_dwIdx >= 5)
 					m_dwIdx -= 5;
@@ -443,54 +447,36 @@ void CLobbyUI::ChangeModelIcon()
 
 void CLobbyUI::Render_ItemMean()
 {
-	TCHAR str[32];
+	if (!m_bRenderItemMean)
+		return;
+	TCHAR str[5][32];
+	swprintf_s(str[0], L"");
+	swprintf_s(str[1], L"Atk Buff : %d", m_pLobby->GetAtkBuffItemCount());
+	swprintf_s(str[2], L"Def Buff : %d", m_pLobby->GetDefBuffItemCount());
+	swprintf_s(str[3], L"Hp Buff : %d", m_pLobby->GetHpBuffItemCount());
+	swprintf_s(str[4], L"Energy Buff : %d", m_pLobby->GetEnergyBuffItemCount());
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
-	
+
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
-	_float3 vPos = {0,0,0};
+	_float3 vPos = { 0,0,0 };
 	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
 	vScale.y *= 0.5f;
-	_uint  i = 1;
-
-	swprintf_s(str, L"Atk Buff : %d", m_pLobby->GetAtkBuffItemCount());
-	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = (LONG)(vPos.x + i*vScale.x);
-	rc.top = (LONG)(vPos.y - vScale.y);
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str, -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	i++;
-	swprintf_s(str, L"Def Buff : %d", m_pLobby->GetDefBuffItemCount());
-	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = (LONG)(vPos.x + i*vScale.x);
-	rc.top = (LONG)(vPos.y - vScale.y);
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str, -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-
-	i++;
-	swprintf_s(str, L"Hp Buff : %d", m_pLobby->GetHpBuffItemCount());
-	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = (LONG)(vPos.x + i*vScale.x);
-	rc.top = (LONG)(vPos.y - vScale.y);
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str, -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	i++;
-	swprintf_s(str, L"Energy Buff : %d", m_pLobby->GetEnergyBuffItemCount());
-	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	rc.left = (LONG)(vPos.x + i*vScale.x);
-	rc.top = (LONG)(vPos.y - vScale.y);
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str, -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-
-
+	_uint iFirstIndex = m_dwIdx;
+	for (int i = 0; i < 5; i++)
+	{
+		if (iFirstIndex >= 5)
+			iFirstIndex -= 5;
+		vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+		vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+		rc.left = (LONG)(vPos.x + i*vScale.x);
+		rc.top = (LONG)(vPos.y - vScale.y);
+		m_pManagement->Get_Font()->DrawText(NULL
+			, str[iFirstIndex], -1
+			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		iFirstIndex++;
+	}
+	
 
 }
 

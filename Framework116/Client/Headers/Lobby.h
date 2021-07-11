@@ -69,6 +69,12 @@ public:
 	_uint GetDefBuffItemCount() { return m_iDefBuffItem; }
 	_uint GetHpBuffItemCount() { return m_iHpBuffItem; }
 	_uint GetEnergyBuffItemCount() { return m_iEnergyBuffItem; }
+
+	void SetAtkBuffItemCount(_uint iPlus) { m_iAtkBuffItem += iPlus; }
+	void SetDefBuffItemCount(_uint iPlus) { m_iDefBuffItem += iPlus; }
+	void SetHpBuffItemCount(_uint iPlus) { m_iHpBuffItem += iPlus; }
+	void SetEnergyBuffItemCount(_uint iPlus) { m_iEnergyBuffItem += iPlus;  }
+
 public:
 	static CLobby* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
