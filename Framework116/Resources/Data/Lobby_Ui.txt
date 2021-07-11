@@ -1,6 +1,8 @@
-Component_Texture_RepairIcon|900|485|160|160
-Component_Texture_achievement|850|-455|180|180
-Component_Texture_ShopIcon|850|100|180|180
-Component_Texture_everspace_logo|-750|465|400|120
+Component_Texture_Full_Frame|0|0|5000|3750
+Component_Texture_UNDER|0|-270|600|600
+Component_Texture_Holo_Board|50|-70|725|754
+Component_Texture_RepairIcon|900|485|80|80
+Component_Texture_ShopIcon|850|100|100|100
 Component_Texture_PlaneTemplete|-400|-455|200|200
-Component_Texture_Product|-490|465|100|100
+Component_Texture_everspace_logo|0|465|600|140
+Component_Texture_achievement|850|-455|80|80

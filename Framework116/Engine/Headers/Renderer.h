@@ -7,6 +7,7 @@ BEGIN(Engine)
 enum class ERenderType
 {
 	Priority,
+	Background,
 	NonAlpha,
 	Alpha,
 	Particle,
@@ -30,6 +31,7 @@ public:
 
 private:
 	_uint Render_Priority();
+	_uint Render_Background();
 	_uint Render_NonAlpha();
 	_uint Render_Alpha();
 	_uint Render_Particle();

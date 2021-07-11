@@ -322,14 +322,7 @@ HRESULT CMainApp::Ready_StaticResources()
 	//	return E_FAIL;
 	//}
 
-	//For. Static Texture Component Prototype
-	if (FAILED(CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/StaticTexture.txt", TRUE)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Controller");
-		return E_FAIL;
-	}
 #pragma endregion
-
 	return S_OK;
 }
 

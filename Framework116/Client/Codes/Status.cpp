@@ -52,7 +52,7 @@ HRESULT CStatus::Ready_GameObject(void * pArg/* = nullptr*/)
 	CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_StatusBoard", L"Com_Transform");
 	TRANSFORM_DESC tTrans;
 	tTrans.vScale = pTransform->Get_TransformDesc().vScale;
-	tTrans.vScale *= 0.25f;
+	tTrans.vScale *= 0.5f;
 	tTrans.vPosition = pTransform->Get_TransformDesc().vPosition;
 	// For.Com_Transform
 	if (FAILED(CGameObject::Add_Component(

@@ -43,8 +43,6 @@ public:
 	HRESULT Add_Layer_StatusBoard(const wstring & LayerTag);
 	HRESULT Add_Layer_Status(const wstring & LayerTag);
 
-private:
-
 public:
 	void Set_GotoNextScene(_bool bSet);
 	void Set_IsGatcha(_bool bSet);

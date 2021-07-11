@@ -1,3 +1,0 @@
-..\..\Resources\Textures\Example\Example%d.png|Example|SINGLE|1
-..\..\Resources\Textures\Player\Player%d.png|Player|MULTI|3
-..\..\Resources\Textures\Skybox\Skybox%d.dds|Skybox|CUBE|1

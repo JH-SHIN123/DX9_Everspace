@@ -10,4 +10,6 @@
 ..\..\Resources\Textures\Ui\ShopIcon\ShopIcon%d.png|ShopIcon|SINGLE|1
 ..\..\Resources\Textures\Ui\X\X%d.png|X|SINGLE|1
 ..\..\Resources\Textures\Ui\Cursor\Cursor%d.png|Cursor|SINGLE|1
-
+..\..\Resources\Textures\Ui\Frame\full_frame.png|Full_Frame|SINGLE|1
+..\..\Resources\Textures\Ui\Frame\player_under.png|UNDER|SINGLE|1
+..\..\Resources\Textures\Ui\Frame\board.png|Holo_Board|SINGLE|1

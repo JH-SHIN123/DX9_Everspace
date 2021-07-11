@@ -127,30 +127,29 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 			m_pProduct->Set_ShowProduct(TRUE);
 		}
 	}
-	
 
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Background, this)))
 		return UPDATE_ERROR;
-	
-	
+
+
 	return _uint();
 }
 
 _uint CLobbyUI::Render_GameObject()
 {
-	if (m_bClicked && !m_pLobby->Get_SceneSelect())
-	{
-		m_fClicked += m_pManagement->Get_DeltaTime();
-		if (m_fClicked >= 0.1f)
-			m_bClicked = false;
-		if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
-			return 0;
-	}
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
-	{
-		if (m_bGotoNextScene || m_bStartUnPacking)
-			return 0;
-	}
+	//if (m_bClicked && !m_pLobby->Get_SceneSelect())
+	//{
+	//	m_fClicked += m_pManagement->Get_DeltaTime();
+	//	if (m_fClicked >= 0.1f)
+	//		m_bClicked = false;
+	//	if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
+	//		return 0;
+	//}
+	//if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
+	//{
+	//	if (m_bGotoNextScene || m_bStartUnPacking)
+	//		return 0;
+	//}
 	
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
@@ -355,13 +354,13 @@ void CLobbyUI::Set_Text()
 	}
 	if (L"Component_Texture_Product" == m_wstrTexturePrototypeTag)
 	{
-		TCHAR szMoney[MAX_PATH];
-		_itow_s(m_pLobby->Get_Money(),szMoney,10);
-		rc.left = (WINCX >> 1) - 470;
-		rc.top = (WINCY >> 1) - 465;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, szMoney, -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		//TCHAR szMoney[MAX_PATH];
+		//_itow_s(m_pLobby->Get_Money(),szMoney,10);
+		//rc.left = (WINCX >> 1) - 470;
+		//rc.top = (WINCY >> 1) - 465;
+		//m_pManagement->Get_Font()->DrawText(NULL
+		//	, szMoney, -1
+		//	, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 	}
 	if (L"Component_Texture_PlaneTemplete" == m_wstrTexturePrototypeTag)
 	{
