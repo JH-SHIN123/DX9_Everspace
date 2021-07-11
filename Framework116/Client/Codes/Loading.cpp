@@ -48,6 +48,8 @@
 #include "MissionUI.h"
 #include "BackUI.h"
 #include "NaviArrow.h"
+#include "AimAssist.h"
+#include "AimAssist2.h"
 #pragma endregion
 
 
@@ -213,6 +215,26 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	/*  HUD AimAssist 입니다 */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_AimAssist",
+		CAimAssist::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_AimAssist");
+		return E_FAIL;
+	}
+
+	/*  HUD AimAssist 입니다 */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_AimAssist2",
+		CAimAssist2::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_AimAssist2");
+		return E_FAIL;
+	}
+
 	/*  HUD LockOn 입니다 */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -304,6 +326,56 @@ HRESULT CLoading::Ready_StageResources()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Crosshair_Missile */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair_Missile",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair_Missile%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair_Missile");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Crosshair_Gatling */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair_Gatling",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair_Gatling%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair_Gatling");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Crosshair_Dot */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Crosshair_Dot",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Crosshair_Dot%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Crosshair_Dot");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_AimAssist */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_AimAssist",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/AimAssist%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AimAssist");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_AimAssist2 */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_AimAssist2",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/AimAssista%d.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AimAssist2");
 		return E_FAIL;
 	}
 
@@ -651,6 +723,15 @@ HRESULT CLoading::Ready_StageEffect()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/smoke.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Smoke");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Orange",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/Gatling.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Orange");
 		return E_FAIL;
 	}
 

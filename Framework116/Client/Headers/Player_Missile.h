@@ -54,6 +54,10 @@ private:
 	_float m_fAddSpeed = 50.f;
 	_float m_fRotateSpeed = D3DXToRadian(120.f);
 
+
+private:
+	_float3* vDir = {};
+
 };
 
 #define __PLAYER_MISSILE_H__

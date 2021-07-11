@@ -82,7 +82,8 @@ _uint CLockOn::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 
-	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0 
+		/*|| m_pManagement->Get_GameObjectList(L"Layer_Monsyer")->size() != 0*/)
 	{
 		m_pTargetCollide = (CCollideSphere*)m_pManagement->Get_Component(m_wstrLayerTag, L"Com_CollideSphere");
 

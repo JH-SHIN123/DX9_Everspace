@@ -8,8 +8,8 @@ extern HWND g_hWnd;
 #define WINCY 1080
 
 
-#define WEAPON_MACHINEGUN 1
-#define WEAPON_LAZER 2
+#define WEAPON_LAZER 1
+#define WEAPON_MACHINEGUN 2
 #define WEAPON_MISSILE 3
 
 #define __CLIENT_DEFINE_H__

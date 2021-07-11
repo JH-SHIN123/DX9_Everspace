@@ -114,6 +114,9 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	// Planet
 	// CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Planet");
 
+	// 몬스터Bullet과 플레이어의 실드배터리
+	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Monster_Bullet", L"Layer_Shield_Battery");
+
 	return _uint();
 }
 
@@ -419,6 +422,28 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Crosshair In Layer");
 		return E_FAIL;
 	}
+
+	// AimAssist
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_AimAssist",
+		L"Layer_AimAssist")))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist In Layer");
+		return E_FAIL;
+	}
+
+	// AimAssist
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_AimAssist2",
+		L"Layer_AimAssist2")))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist2 In Layer");
+		return E_FAIL;
+	}
+
+
 
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
 

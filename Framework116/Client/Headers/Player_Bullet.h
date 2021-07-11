@@ -35,7 +35,10 @@ private:
 private:
 	//CTransform* m_pTargetTransform = nullptr;
 	CTransform* m_pPlayerTransform = nullptr;
+	//Effect
 	CGameObject* m_pBulletParticle = nullptr;
+	CGameObject* m_pGatlingParticle = nullptr;
+
 
 private:
 	_float m_fLifeTime = 0.f;
