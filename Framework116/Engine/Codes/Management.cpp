@@ -124,8 +124,16 @@ LPD3DXFONT CManagement::Get_Font() const
 	return m_pDevice_Manager->Get_Font();
 }
 
+LPD3DXSPRITE CManagement::Get_Sprite() const
+{
+	if (nullptr == m_pDevice_Manager)
+	{
+		PRINT_LOG(L"Error", L"Device Manager is nullptr");
+		return nullptr;
+	}
 
-
+	return m_pDevice_Manager->Get_Sprite();
+}
 
 _float CManagement::Get_DeltaTime() const
 {

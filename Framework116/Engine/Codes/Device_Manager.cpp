@@ -6,6 +6,8 @@ IMPLEMENT_SINGLETON(CDevice_Manager)
 CDevice_Manager::CDevice_Manager()
 	: m_pDevice(nullptr)
 	, m_pSDK(nullptr)
+	, m_pSprite(nullptr)
+	, m_pFont(nullptr)
 {
 }
 LPDIRECT3DDEVICE9 CDevice_Manager::Get_Device() const
@@ -18,10 +20,10 @@ LPD3DXFONT CDevice_Manager::Get_Font() const
 	return m_pFont; 
 }
 
-//vp |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED; ÀÌ°Å ¹Ù²ãÁà¾ßÇÔ!!
-//vp |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED; ÀÌ°Å ¹Ù²ãÁà¾ßÇÔ!!
-
-
+LPD3DXSPRITE CDevice_Manager::Get_Sprite() const
+{
+	return m_pSprite;
+}
 
 void CDevice_Manager::Render_Begin()
 {
@@ -30,11 +32,11 @@ void CDevice_Manager::Render_Begin()
 		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,
 		D3DCOLOR_ARGB(255, 255, 0, 255), 1.f, 0);
 	m_pDevice->BeginScene();	
+
 }
 //vp |= D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_MULTITHREADED; ÀÌ°Å ¹Ù²ãÁà¾ßÇÔ!!
 void CDevice_Manager::Render_End(HWND hWnd/*= nullptr*/)
 {	
-
 	m_pDevice->EndScene();
 	m_pDevice->Present(nullptr, nullptr, hWnd, nullptr);
 }
@@ -119,6 +121,12 @@ HRESULT CDevice_Manager::Ready_Graphic_Device(HWND hWnd, _uint iWinCX, _uint iWi
 		return E_FAIL;
 	}
 
+	if (FAILED(D3DXCreateSprite(m_pDevice, &m_pSprite)))
+	{
+		PRINT_LOG(L"Error", L"m_pSprite's Creation Failed");
+		return E_FAIL;
+	}
+
 	if (FAILED(D3DXCreateFont(m_pDevice, 20, 0, FW_BOLD, 0,
 		FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS
 		, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("±Ã¼­"), &m_pFont)))
@@ -139,6 +147,11 @@ void CDevice_Manager::Free()
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release m_pFont");
 	}
+	if (Safe_Release(m_pSprite))
+	{
+		PRINT_LOG(L"Warning", L"Failed To Release m_pSprite");
+	}
+
 	if (Safe_Release(m_pDevice))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release m_pDevice");

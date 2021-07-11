@@ -26,8 +26,9 @@ public: /* For.General */
 	void Clear_NonStatic_Resources();
 
 public: /* For.Device Manager */
-	LPDIRECT3DDEVICE9 Get_Device() const;
-	LPD3DXFONT		  Get_Font()const;
+	LPDIRECT3DDEVICE9	Get_Device() const;
+	LPD3DXFONT			Get_Font()const;
+	LPD3DXSPRITE		Get_Sprite()const;
 
 
 public: /* For.Time Manager */

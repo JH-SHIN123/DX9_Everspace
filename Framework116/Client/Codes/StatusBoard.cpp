@@ -132,8 +132,13 @@ void CStatusBoard::Render_AxisMean()
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
-	str = L"ATK";
+	LPD3DXSPRITE pSprite = m_pManagement->Get_Sprite();
+
+
+	str = L"공격력";
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
+	vDecartPos.x -= 20.f;
+	vDecartPos.y += 3.f;
 	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
 	_float3 vPos = {0,0,0};
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
@@ -141,11 +146,21 @@ void CStatusBoard::Render_AxisMean()
 	rc.left = (LONG)vPos.x;
 	rc.top = (LONG)(vPos.y - (vScale.y/2.f));
 
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	
-	str = L"DEF";
+	_float4x4 matWorld, matTrans;
+	D3DXMatrixScaling(&matWorld, 0.5f, 0.5f, 0.5f);
+	D3DXMatrixTranslation(&matTrans, 100.f, 0.f, 0.f);
+	matWorld *= matTrans;
+	pSprite->SetTransform(&matWorld);
+
+	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
+	m_pManagement->Get_Font()->DrawTextW(pSprite
+		, str.c_str(), str.length(), nullptr, 0, D3DXCOLOR(255, 255, 255, 255));
+	//m_pManagement->Get_Font()->DrawText(nullptr
+	//	, str.c_str(), -1
+	//	, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
+	pSprite->End();
+
+	str = L"방어력";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -154,10 +169,10 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
 
-	str = L"HP";
+	str = L"체력";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -166,9 +181,9 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
-	str = L"SHIELD";
+	str = L"실드량";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -177,9 +192,9 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
-	str = L"ENERGY";
+	str = L"스태미너";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -188,10 +203,10 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
 
-	str = L"FIRE RATE";
+	str = L"공격속도";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -200,7 +215,7 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 }
 
 
