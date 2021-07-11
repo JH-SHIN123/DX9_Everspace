@@ -24,6 +24,9 @@ HRESULT CHP_Bar::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CUI::Ready_GameObject(pArg);
 
+	m_pPlayerTrasnform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player");
+	Safe_AddRef(m_pPlayerTrasnform);
+
 	return S_OK;
 }
 
@@ -58,6 +61,7 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar::Render_GameObject()
 {
+
 	CUI::Render_GameObject();
 
 	return _uint();
@@ -104,6 +108,8 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 		if (m_pTransform) {
 			m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) - 30.f, -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f));
 			m_pTransform->Update_Transform();
+
+
 		}
 	}
 	else if (m_eMakerID == MAKER_PLAYER)
@@ -119,6 +125,49 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 _uint CHP_Bar::Who_Make_Me(MAKERID _iMakerName)
 {
 	m_eMakerID = _iMakerName;
+	return _uint();
+}
+
+_uint CHP_Bar::Check_Degree()
+{
+	
+	if (m_pManagement->Get_GameObjectList(L"Layer_Player")->size() == 0
+		/*||m_pManagement->Get_GameObjectList(L"Layer_Monster")->size() == 0*/)
+		return UPDATE_ERROR;
+	
+	if (m_eMakerID != MAKER_PLAYER)
+	{
+		m_pPlayerTrasnform->Get_TransformDesc().matWorld;
+		_float3 vPlayerLook = m_pPlayerTrasnform->Get_State(EState::Look);
+
+		if (m_eMakerID == MAKER_BOSS_MONSTER)
+		{
+			m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
+			if (nullptr == m_listCheckMonsters || m_listCheckMonsters->size() == 0) return NO_EVENT;
+
+			auto& iter = m_listCheckMonsters->begin();
+
+			for (; iter != m_listCheckMonsters->end(); ++iter)
+			{
+				_float3 v1 = vPlayerLook; // ¾ê´Â ¹æÇâº¤ÅÏµ¥?
+				_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // À§Ä¡º¤ÅÍ³×?
+				_float fCeta;
+				D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
+				_float v1v2 = D3DXVec3Dot(&v1, &v2);
+				_float v1Length = D3DXVec3Length(&v1);
+				_float v2Length = D3DXVec3Length(&v2);
+				fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+				_float fDegree = D3DXToDegree(fCeta);
+
+				if (fabs(fDegree) > 90.f)
+				{
+					m_IsBack = true;
+				}
+			}
+		}
+
+	}
 	return _uint();
 }
 
@@ -148,6 +197,7 @@ CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
 
 void CHP_Bar::Free()
 {
+	Safe_Release(m_pPlayerTrasnform);
 	CUI::Free();
 }
 

@@ -27,6 +27,7 @@ public:
 	// 피깎는용도!
 	void Set_ScaleX(_float _fDamage);
 	_uint Who_Make_Me(MAKERID _iMakerName);
+	_uint Check_Degree();
 
 private:
 	_uint Movement(_float fDeltaTime);
@@ -44,6 +45,9 @@ private:
 
 private: // 뒤에있을땐 안나오게
 	_bool m_IsBack = false;
+
+private: // 플레이어 트랜스폼
+	CTransform* m_pPlayerTrasnform = nullptr;
 	
 };
 
