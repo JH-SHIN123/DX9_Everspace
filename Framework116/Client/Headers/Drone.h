@@ -28,8 +28,8 @@ private:
 private:
 	void	StateCheck();
 
-private: // Add_HP_Bar
-	_uint Add_Hp_Bar(_float fDeltaTime);
+//private: // Add_HP_Bar
+//	_uint Add_Hp_Bar(_float fDeltaTime);
 
 public:
 	static CDrone* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -44,11 +44,11 @@ private:
 	_float3 m_vCreatePosition = { 0.f,0.f,0.f };
 	_float3 m_vResearchRange = { 0.f,0.f,0.f };
 
-private: // HP Bar 추가
-	_bool m_IsHPBar = false;
-	class CHP_Bar* m_pHp_Bar = nullptr;
-	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
-	_float m_fHpLength = 64.f;
+//private: // HP Bar 추가
+//	_bool m_IsHPBar = false;
+//	class CHP_Bar* m_pHp_Bar = nullptr;
+//	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
+//	_float m_fHpLength = 64.f;
 
 private:
 	CModelMesh* m_pModelMesh = nullptr;

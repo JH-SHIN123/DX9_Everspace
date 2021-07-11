@@ -150,7 +150,6 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	m_tMaterial.Diffuse.a = m_tMaterial.Ambient.a = m_tMaterial.Specular.a = m_tMaterial.Emissive.a = 1.f;
 
 	// Add Effect
-	
 	if (iWeapon == WEAPON_LAZER)
 		CEffectHandler::Add_Layer_Effect_Bullet(this, &m_pBulletParticle);
 	else if (iWeapon == WEAPON_MACHINEGUN)
@@ -182,6 +181,12 @@ _uint CPlayer_Bullet::LateUpdate_GameObject(_float fDeltaTime)
 			m_pBulletParticle->Set_IsDead(true);
 			m_pBulletParticle = nullptr;
 		}
+
+		if (m_pGatlingParticle) {
+			m_pGatlingParticle->Set_IsDead(true);
+			m_pGatlingParticle = nullptr;
+		}
+
 		// 타격음 넣어야함!
 		return DEAD_OBJECT;
 	}
@@ -192,6 +197,11 @@ _uint CPlayer_Bullet::LateUpdate_GameObject(_float fDeltaTime)
 		if (m_pBulletParticle) {
 			m_pBulletParticle->Set_IsDead(true);
 			m_pBulletParticle = nullptr;
+		}
+
+		if (m_pGatlingParticle) {
+			m_pGatlingParticle->Set_IsDead(true);
+			m_pGatlingParticle = nullptr;
 		}
 
 		return DEAD_OBJECT;
@@ -281,6 +291,11 @@ void CPlayer_Bullet::Free()
 	if (m_pBulletParticle) {
 		m_pBulletParticle->Set_IsDead(true);
 		m_pBulletParticle = nullptr;
+	}
+
+	if (m_pGatlingParticle) {
+		m_pGatlingParticle->Set_IsDead(true);
+		m_pGatlingParticle = nullptr;
 	}
 
 	CGameObject::Free();

@@ -59,20 +59,20 @@ HRESULT CStage::Ready_Scene()
 	//	return E_FAIL;
 
 	// TEST
-	//GAMEOBJECT_DESC tDesc;
-	//tDesc.tTransformDesc.vPosition = { 0.f,0.f,50.f };
-	//tDesc.tTransformDesc.vRotate = { 0.f,90.f,0.f };
+	GAMEOBJECT_DESC tDesc;
+	tDesc.tTransformDesc.vPosition = { 0.f,0.f,50.f };
+	tDesc.tTransformDesc.vRotate = { 0.f,90.f,0.f };
 
-	//if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Drone",
-	//	L"Layer_Drone",
-	//	&tDesc)))
-	//{
-	//	wstring errMsg = L"Failed to Add Layer ";
-	//	PRINT_LOG(L"Error", errMsg.c_str());
-	//	return E_FAIL;
-	//}
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Drone",
+		L"Layer_Drone",
+		&tDesc)))
+	{
+		wstring errMsg = L"Failed to Add Layer ";
+		PRINT_LOG(L"Error", errMsg.c_str());
+		return E_FAIL;
+	}
 
 
 	return S_OK;

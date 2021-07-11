@@ -69,7 +69,6 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	}
 
 	// For.Com_Collide
-	// For.Com_Collide
 	PASSDATA_COLLIDE tCollide;
 	CStreamHandler::Load_PassData_Collide(L"drone", meshTag, tCollide);
 	m_Collides.reserve(tCollide.vecBoundingSphere.size());
@@ -114,7 +113,7 @@ _uint CDrone::Update_GameObject(_float fDeltaTime)
 	Movement(fDeltaTime);
 	StateCheck();
 
-	Add_Hp_Bar(fDeltaTime);
+	//Add_Hp_Bar(fDeltaTime);
 
 	m_pTransform->Update_Transform();
 	for (auto& p : m_Collides)
@@ -135,14 +134,14 @@ _uint CDrone::LateUpdate_GameObject(_float fDeltaTime)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
-		m_pHp_Bar->Set_IsDead(TRUE);
-		m_pHP_Bar_Border->Set_IsDead(TRUE);
+		//m_pHp_Bar->Set_IsDead(TRUE);
+		//m_pHP_Bar_Border->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
+		//m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
 		m_fHp -= 100.f;
 		m_IsCollide = false;
 	}
@@ -198,82 +197,83 @@ void CDrone::StateCheck()
 	}
 }
 
-_uint CDrone::Add_Hp_Bar(_float fDeltaTime)
-{
-	if (!m_IsHPBar) return -1;
-
-	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
-	_float3 vPlayerPos = m_pTargetTransform->Get_State(EState::Position);
-
-	_float3 vDir = vMonsterPos - vPlayerPos;
-	_float fDist = D3DXVec3Length(&vDir);
-
-	if (fDist < 300.f)
-	{
-		if (m_IsHPBar == false)
-		{
-			//////////////////3d좌표를 2d좌표로////////////////////////////
-			D3DVIEWPORT9 vp2;
-			m_pDevice->GetViewport(&vp2);
-			_float4x4 TestView2, TestProj2;
-			m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
-			m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
-			_float4x4 matCombine2 = TestView2 * TestProj2;
-			D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
-			vMonsterPos.x += 1.f;
-			vMonsterPos.y += 1.f;
-
-			vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
-			vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
-
-			_float3 ptBoss;
-			ptBoss.x = -1.f * (WINCX / 2) + vMonsterPos.x;
-			ptBoss.y = 1.f * (WINCY / 2) + vMonsterPos.y;
-			ptBoss.z = 0.f;
-			//////////////////////////////////////////////////////////////////
-			// 감지범위에 들어오게 되면 HP_Bar 생성!
-
-			CGameObject* pGameObject = nullptr;
-			UI_DESC HUD_Hp_Bar;
-			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
-			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::NonStatic,
-				L"GameObject_HP_Bar",
-				L"Layer_HP_Bar",
-				&HUD_Hp_Bar, &pGameObject)))
-			{
-				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-				return E_FAIL;
-			}
-
-			CGameObject* pGameObjectBorder = nullptr;
-			UI_DESC HUD_Hp_Bar_Border;
-			HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
-			HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::NonStatic,
-				L"GameObject_HP_Bar_Border",
-				L"Layer_HP_Bar_Border",
-				&HUD_Hp_Bar_Border, &pGameObjectBorder)))
-			{
-				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-				return E_FAIL;
-			}
-			m_IsHPBar = true;
-
-			m_pHP_Bar_Border = static_cast<CHP_Bar_Border*>(pGameObjectBorder);
-			m_pHP_Bar_Border->Who_Make_Me(m_pHP_Bar_Border->MAKER_DRONE);
-
-			m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
-			m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_DRONE);
-		}
-
-	}
-	return _uint();
-}
+//_uint CDrone::Add_Hp_Bar(_float fDeltaTime)
+//{
+//	if (m_IsHPBar) return -1;
+//
+//	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+//	_float3 vPlayerPos = m_pTargetTransform->Get_State(EState::Position);
+//
+//	_float3 vDir = vMonsterPos - vPlayerPos;
+//	_float fDist = D3DXVec3Length(&vDir);
+//
+//	if (fDist < 300.f)
+//	{
+//		if (m_IsHPBar == false)
+//		{
+//			//////////////////3d좌표를 2d좌표로////////////////////////////
+//			D3DVIEWPORT9 vp2;
+//			m_pDevice->GetViewport(&vp2);
+//			_float4x4 TestView2, TestProj2;
+//			m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+//			m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+//			_float4x4 matCombine2 = TestView2 * TestProj2;
+//			D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
+//			vMonsterPos.x += 1.f;
+//			vMonsterPos.y += 1.f;
+//
+//			vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
+//			vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
+//
+//			_float3 ptBoss;
+//			ptBoss.x = -1.f * (WINCX / 2) + vMonsterPos.x;
+//			ptBoss.y = 1.f * (WINCY / 2) + vMonsterPos.y;
+//			ptBoss.z = 0.f;
+//			//////////////////////////////////////////////////////////////////
+//			// 감지범위에 들어오게 되면 HP_Bar 생성!
+//			_float2 offset = { -64.f ,-50.f };
+//
+//			CGameObject* pGameObject = nullptr;
+//			UI_DESC HUD_Hp_Bar;
+//			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x + offset.x, ptBoss.y + offset.y , 0.f };
+//			HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+//			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
+//			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+//				EResourceType::NonStatic,
+//				L"GameObject_HP_Bar",
+//				L"Layer_HP_Bar",
+//				&HUD_Hp_Bar, &pGameObject)))
+//			{
+//				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+//				return E_FAIL;
+//			}
+//
+//			CGameObject* pGameObjectBorder = nullptr;
+//			UI_DESC HUD_Hp_Bar_Border;
+//			HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x + offset.x , ptBoss.y + offset.y, 0.f };
+//			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
+//			HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
+//			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+//				EResourceType::NonStatic,
+//				L"GameObject_HP_Bar_Border",
+//				L"Layer_HP_Bar_Border",
+//				&HUD_Hp_Bar_Border, &pGameObjectBorder)))
+//			{
+//				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+//				return E_FAIL;
+//			}
+//			m_IsHPBar = true;
+//
+//			m_pHP_Bar_Border = static_cast<CHP_Bar_Border*>(pGameObjectBorder);
+//			m_pHP_Bar_Border->Who_Make_Me(m_pHP_Bar_Border->MAKER_DRONE);
+//
+//			m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
+//			m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_DRONE);
+//		}
+//
+//	}
+//	return _uint();
+//}
 
 CDrone* CDrone::Create(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -301,8 +301,8 @@ CGameObject* CDrone::Clone(void* pArg)
 
 void CDrone::Free()
 {
-	Safe_Release(m_pHP_Bar_Border);
-	Safe_Release(m_pHp_Bar);
+	//Safe_Release(m_pHP_Bar_Border);
+	//Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pTargetTransform);
 
 	Safe_Release(m_pModelMesh);
