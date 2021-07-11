@@ -226,6 +226,9 @@
     <Filter Include="02.GameObject\08.Bullet\01.Player_Observe_Missile">
       <UniqueIdentifier>{56eed6f8-b2dc-4d38-abca-147e087c3fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\11.Shield_Battery">
+      <UniqueIdentifier>{03891a8b-bd20-404d-addc-68a478e9126b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -414,6 +417,9 @@
     <ClInclude Include="..\Headers\AimAssist2.h">
       <Filter>02.GameObject\09.HUD\10.AimAssist2</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Shield_Battery.h">
+      <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -589,6 +595,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\AimAssist2.cpp">
       <Filter>02.GameObject\09.HUD\10.AimAssist2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Shield_Battery.cpp">
+      <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

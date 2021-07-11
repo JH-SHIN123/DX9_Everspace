@@ -230,8 +230,10 @@ _uint CPlayer_Missile::Render_GameObject()
 
 _uint CPlayer_Missile::Movement(_float fDeltaTime)
 {
-
 	m_pTransform->Go_Dir(*vDir, fDeltaTime);
+	
+	_float3 vLook = m_pPlayerTransform->Get_State(EState::Look);
+	m_pTransform->Go_Dir(vLook, fDeltaTime);
 	return _uint();
 }
 

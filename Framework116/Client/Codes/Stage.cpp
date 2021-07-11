@@ -99,6 +99,9 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	// Planet
 	// CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Planet");
 
+	// 몬스터Bullet과 플레이어의 실드배터리
+	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Monster_Bullet", L"Layer_Shield_Battery");
+
 	return _uint();
 }
 

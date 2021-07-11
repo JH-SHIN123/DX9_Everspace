@@ -464,6 +464,14 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	{
 		m_pManagement->PlaySound(L"Shield_Boost.ogg", CSoundMgr::PLAYER_SKILL);
 		// 실드활성화.
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_Shield_Battery",
+			L"Layer_Player_Shield")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Shield_Battery In Layer");
+			return;
+		}
 	}
 
 	//공격
