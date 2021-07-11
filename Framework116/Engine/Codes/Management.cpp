@@ -10,17 +10,19 @@ CManagement::CManagement()
 	, m_pGameObject_Manager(CGameObject_Manager::Get_Instance())
 	, m_pRenderer(CRenderer::Get_Instance())
 	, m_pTime_Manager(CTime_Manager::Get_Instance())
+	, m_pFrame_Manager(CFrame_Manager::Get_Instance())
 {
 }
 
-HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode)
+HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayMode eMode, const float _fSPF)
 {
 	if (nullptr == m_pDevice_Manager || 
 		nullptr == m_pScene_Manager || 
 		nullptr == m_pComponent_Manager ||
 		nullptr == m_pGameObject_Manager ||
 		nullptr == m_pRenderer ||
-		nullptr == m_pTime_Manager)
+		nullptr == m_pTime_Manager ||
+		nullptr == m_pFrame_Manager)
 	{
 		PRINT_LOG(L"Error", L"One of Managers is nullptr");
 		return E_FAIL;
@@ -32,6 +34,15 @@ HRESULT CManagement::Ready_Game(HWND hWnd, _uint iWinCX, _uint iWinCY, EDisplayM
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pFrame_Manager->Ready_FrameManager(_fSPF)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Ready_FrameManager");
+		return E_FAIL;
+	}
+
+	m_iWinCX = iWinCX;
+	m_iWinCY = iWinCY;
+
 	return S_OK;
 }
 
@@ -40,7 +51,8 @@ _uint CManagement::Update_Game()
 	if (nullptr == m_pDevice_Manager || 
 		nullptr == m_pScene_Manager || 
 		nullptr == m_pGameObject_Manager ||
-		nullptr == m_pTime_Manager)
+		nullptr == m_pTime_Manager ||
+		nullptr == m_pFrame_Manager)
 	{
 		PRINT_LOG(L"Error", L"One of Managers is nullptr");
 		return UPDATE_ERROR;
@@ -103,6 +115,28 @@ _float CManagement::Get_DeltaTime() const
 	return m_pTime_Manager->Get_DeltaTime();
 }
 
+HRESULT CManagement::FrameLock()
+{
+	if (nullptr == m_pFrame_Manager)
+	{
+		PRINT_LOG(L"Error", L"Frame Manager is nullptr");
+		return E_FAIL;
+	}
+
+	return m_pFrame_Manager->FrameLock();
+}
+
+void CManagement::ShowFrame(const HWND hWnd)
+{
+	if (nullptr == m_pFrame_Manager)
+	{
+		PRINT_LOG(L"Error", L"Frame Manager is nullptr");
+		return;
+	}
+
+	return m_pFrame_Manager->ShowFrame(hWnd);
+}
+
 HRESULT CManagement::Setup_CurrentScene(_uint iNewSceneType, CScene * pNewScene)
 {
 	if (nullptr == m_pScene_Manager)
@@ -127,6 +161,7 @@ HRESULT CManagement::Add_Component_Prototype(
 
 	return m_pComponent_Manager->Add_Component_Prototype(eType, PrototypeTag, pPrototype);
 }
+
 
 CComponent * CManagement::Clone_Component(
 	EResourceType eType, 
@@ -242,6 +277,11 @@ HRESULT CManagement::Add_GameObject_InRenderer(ERenderType eType, CGameObject * 
 
 void CManagement::Free()
 {
+	if (Safe_Release(m_pFrame_Manager))
+	{
+		PRINT_LOG(L"Warning", L"Failed To Release Frame_Manager");
+	}
+
 	if (Safe_Release(m_pTime_Manager))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release Time_Manager");

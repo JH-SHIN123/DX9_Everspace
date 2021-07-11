@@ -3,10 +3,7 @@
 
 
 // CResourceTool 대화 상자입니다.
-enum class EType
-{
-	CUBE, TEXTURE
-};
+
 class CResourceTool : public CDialog
 {
 	
@@ -31,14 +28,25 @@ public:
 
 	CListBox CDropFileList;
 	CListBox CTextureIndexList;
+	PASSDATA_RESOURCE m_tPicturePathInfo={};
 	list<PASSDATA_RESOURCE*> m_ListResource;
-
+	CVIBuffer_RectTexture* m_pVIBuffer = nullptr;
+	CTexture* m_pTex = nullptr;
+	CVIBuffer_CubeTexture* m_pCube = nullptr;
+	CManagement* m_pManagement = nullptr;
+	LPDIRECT3DDEVICE9 m_pDevice = nullptr;
 private:
 	void MultiTextureInfo_Extraction(const wstring wstrFilePath, list<PASSDATA_RESOURCE*>& listPathInfo);
 	DWORD MultiTextureCount(const wstring wstrFilePath);
 	CString ConvertRelativePath(const CString & wstrabsPath);
 
-
+	void Render_Texture();
+	void Render_Cube();
 public:
 	afx_msg void OnLbnSelchangeDropfilelist();
+	CStatic m_Picture;
+	afx_msg void OnLbnSelchangeIndexList();
+	afx_msg void OnBnClickedSaveButton();
+	afx_msg void OnBnClickedLoadButton();
+	CString m_strPassFileName;
 };

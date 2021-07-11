@@ -31,7 +31,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-public:  // 컨트롤 모음이 포함된 멤버입니다.
+protected:  // 컨트롤 모음이 포함된 멤버입니다.
 	CSplitterWnd m_tMainSplitterWnd;
 	CSplitterWnd m_tSecondSplitterWnd;
 

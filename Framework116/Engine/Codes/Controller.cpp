@@ -25,7 +25,26 @@ void CController::Update_Controller()
         m_dwKey |= KEY_DOWN;
     if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
         m_dwKey |= KEY_LBUTTON;
-
+    if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+        m_dwKey |= KEY_SPACE;
+    if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+        m_dwKey |= KEY_ENTER;
+    if (GetAsyncKeyState('1') & 0x8000)
+        m_dwKey |= KEY_1;
+    if (GetAsyncKeyState('2') & 0x8000)
+        m_dwKey |= KEY_2;
+    if (GetAsyncKeyState('3') & 0x8000)
+        m_dwKey |= KEY_3;
+    if (GetAsyncKeyState(VK_F1) & 0x8000)
+        m_dwKey |= KEY_F1;
+    if (GetAsyncKeyState(VK_F2) & 0x8000)
+        m_dwKey |= KEY_F2;
+    if (GetAsyncKeyState(VK_F3) & 0x8000)
+        m_dwKey |= KEY_F3;
+    if (GetAsyncKeyState('R') & 0x8000)
+        m_dwKey |= KEY_R;
+    if (GetAsyncKeyState('P') & 0x8000)
+        m_dwKey |= KEY_P;
 }
 
 bool CController::Key_Up(DWORD dwKey)

@@ -10,6 +10,8 @@
 #include "Monster.h"
 #include "Grass.h"
 #include "Skybox.h"
+#include "ExplosionSystem.h"
+#include "LaserSystem.h"
 #pragma endregion
 
 CLoading::CLoading(LPDIRECT3DDEVICE9 pDevice, ESceneType eNextSceneID)
@@ -172,6 +174,26 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Skybox");
 		return E_FAIL;
 	}
+
+	/* For.GameObject_ExplosionSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		CExplosionSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ExplosionSystem");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_Particle_Laser */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LaserSystem",
+		CLaserSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LaserSystem");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region Components
@@ -189,7 +211,8 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_VIBuffer_TerrainTexture",
-		CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129))))
+		CVIBuffer_TerrainTexture::Create(m_pDevice, 129, 129,
+			1.f, L"../../Resources/Textures/Terrain/Height.bmp"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_VIBuffer_TerrainTexture");
 		return E_FAIL;
@@ -199,7 +222,8 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Terrain",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../Resources/Terrain/Terrain%d.png"))))
+
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../../Resources/Textures/Terrain/Terrain%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Terrain");
 		return E_FAIL;
@@ -209,7 +233,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Monster",
-		CTexture::Create(m_pDevice, ETextureType::Cube, L"../Resources/Monster%d.dds", 2))))
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Monster%d.dds", 2))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Monster");
 		return E_FAIL;
@@ -219,7 +243,7 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Grass",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../Resources/BillboardGrass%d.png"))))
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../../Resources/Textures/BillboardGrass%d.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Grass");
 		return E_FAIL;
@@ -229,12 +253,15 @@ HRESULT CLoading::Ready_StageResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Skybox",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Skybox%d.dds",1))))
+		CTexture::Create(m_pDevice, ETextureType::SINGLE, L"../../Resources/Textures/Skybox%d.dds",1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox");
 		return E_FAIL;
 	}
 #pragma endregion
+	//CStreamHandler::Load_PassData_Object(L"../../Data/PrototypeData/TestSaveFile.object");
+	CStreamHandler::Load_PassData_Resource(L"PathInfo");
+	CStreamHandler::Load_PassData_Ui(L"Ui");
 
 	return S_OK;
 }

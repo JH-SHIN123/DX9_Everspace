@@ -11,7 +11,7 @@ END
 USING(Engine)
 class CSkybox final : public CGameObject
 {
-public:
+private:
 	explicit CSkybox(LPDIRECT3DDEVICE9 pDevice);
 	explicit CSkybox(const CSkybox& other);
 	virtual ~CSkybox() = default;

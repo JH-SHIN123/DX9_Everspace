@@ -19,7 +19,7 @@ const _uint FVF_VTX_COLOR = D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX0;
 typedef struct tagVertexTexture
 {
 	_float3 vPosition = _float3(0.f, 0.f, 0.f);
-	_float2 vUV = _float2(0.f, 0.f);
+	_float2 vUV = _float2(0.f, 0.f);	
 }VTX_TEXTURE;
 
 const _uint FVF_VTX_TEXTURE = D3DFVF_XYZ | D3DFVF_TEX1/* | D3DFVF_TEXCOORDSIZE2(0)*/;
@@ -56,7 +56,7 @@ typedef struct tagBoundingSphere : public BASE_DESC
 	}
 
 	const _float3 Get_Position() const {
-		return{ matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z };
+		return {matWorld._41 + vCenter.x, matWorld._42 + vCenter.y, matWorld._43 + vCenter.z};
 	};
 
 	// World

@@ -60,10 +60,21 @@ _uint CLayer::Update_Layer(_float fDeltaTime)
 {
 	_uint iEvent = NO_EVENT;
 
-	for (auto& pObject : m_GameObjects)
+	for (auto& iter = m_GameObjects.begin(); iter != m_GameObjects.end();)
 	{
-		if (iEvent = pObject->Update_GameObject(fDeltaTime))
-			return iEvent;
+		if (iEvent = (*iter)->Update_GameObject(fDeltaTime))
+		{
+			switch (iEvent)
+			{
+			case DEAD_OBJECT:
+				Safe_Release(*iter);
+				iter = m_GameObjects.erase(iter);
+				break;
+			case CHANGE_SCENE:
+				return iEvent;
+			}
+		}
+		else ++iter;
 	}
 
 	return iEvent;
@@ -73,10 +84,21 @@ _uint CLayer::LateUpdate_Layer(_float fDeltaTime)
 {
 	_uint iEvent = NO_EVENT;
 
-	for (auto& pObject : m_GameObjects)
+	for (auto& iter = m_GameObjects.begin(); iter != m_GameObjects.end();)
 	{
-		if (iEvent = pObject->LateUpdate_GameObject(fDeltaTime))
-			return iEvent;
+		if (iEvent = (*iter)->LateUpdate_GameObject(fDeltaTime))
+		{
+			switch (iEvent)
+			{
+			case DEAD_OBJECT:
+				Safe_Release(*iter);
+				iter = m_GameObjects.erase(iter);
+				break;
+			case CHANGE_SCENE:
+				return iEvent;
+			}
+		}
+		else ++iter;
 	}
 
 	return iEvent;

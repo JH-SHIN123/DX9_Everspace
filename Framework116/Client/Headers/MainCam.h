@@ -17,7 +17,9 @@ public:
 	virtual _uint Update_GameObject(_float fDeltaTime) override;
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
-
+public:
+	void Set_DistanceFromTarget(_float fDist) { m_fDistanceFromTarget = fDist; }
+	void Set_CamAngle(_float fRadian) { m_fCamAngle = fRadian; }
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint KeyInput(_float fDeltaTime);

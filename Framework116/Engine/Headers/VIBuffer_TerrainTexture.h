@@ -7,7 +7,8 @@ BEGIN(Engine)
 class ENGINE_DLL CVIBuffer_TerrainTexture final : public CVIBuffer
 {
 private:
-	explicit CVIBuffer_TerrainTexture(LPDIRECT3DDEVICE9 pDevice, _uint iVertexCountX, _uint iVertexCountZ, _float fVertexInterval = 1.f);
+	explicit CVIBuffer_TerrainTexture(LPDIRECT3DDEVICE9 pDevice, _uint iVertexCountX, _uint iVertexCountZ, _float fVertexInterval = 1.f,
+		const wstring& wstrHeightmapPath = L"");
 	explicit CVIBuffer_TerrainTexture(const CVIBuffer_TerrainTexture& other);
 	virtual ~CVIBuffer_TerrainTexture() = default;
 
@@ -23,7 +24,9 @@ private:
 	_uint* Load_Heightmap(const TCHAR* pFilePath);
 
 public:
-	static CVIBuffer_TerrainTexture* Create(LPDIRECT3DDEVICE9 pDevice, _uint iVertexCountX, _uint iVertexCountZ, _float fVertexInterval = 1.f);
+	static CVIBuffer_TerrainTexture* Create(LPDIRECT3DDEVICE9 pDevice,
+		_uint iVertexCountX, _uint iVertexCountZ, _float fVertexInterval = 1.f,
+		const wstring& wstrHeightmapPath = L"");
 	virtual CComponent * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -31,6 +34,7 @@ private:
 	_uint m_iVertexCountX = 0;
 	_uint m_iVertexCountZ = 0;
 	_float m_fVertexInterval = 1.f;
+	wstring m_wstrHeightmapPath = L"";
 };
 END
 

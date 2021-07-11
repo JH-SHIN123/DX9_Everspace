@@ -64,6 +64,8 @@ CComponent * CComponent_Manager::Clone_Component(
 	return iter_find->second->Clone(pArg);
 }
 
+
+
 void CComponent_Manager::Clear_NonStatic_Resources()
 {
 	for (auto& Pair : m_Components[(_uint)EResourceType::NonStatic])

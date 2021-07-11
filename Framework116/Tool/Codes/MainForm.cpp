@@ -25,7 +25,6 @@ void CMainForm::DoDataExchange(CDataExchange* pDX)
 	CFormView::DoDataExchange(pDX);
 }
 
-<<<<<<< HEAD
 void CMainForm::OnBnClickedResourceToolButton()
 {
 	if (nullptr == m_tResourceTool.GetSafeHwnd())
@@ -33,19 +32,18 @@ void CMainForm::OnBnClickedResourceToolButton()
 	m_tResourceTool.ShowWindow(SW_SHOW);
 }
 
-BEGIN_MESSAGE_MAP(CMainForm, CFormView)
-	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnBnClickedResourceToolButton)
-=======
-void CMainForm::OnBnClickedMapTool()
+void CMainForm::OnBnClickedUiToolButton()
 {
-	if (nullptr == m_tMapTool.GetSafeHwnd())
-		m_tMapTool.Create(IDD_MAPTOOL);
-	m_tMapTool.ShowWindow(SW_SHOW);
+	if (nullptr == m_tUiTool.GetSafeHwnd())
+		m_tUiTool.Create(IDD_UITOOL);
+	m_tUiTool.m_pListResource = &m_tResourceTool.m_ListResource;
+	m_tUiTool.ShowWindow(SW_SHOW);
+	
 }
 
 BEGIN_MESSAGE_MAP(CMainForm, CFormView)
-	ON_BN_CLICKED(IDC_BUTTON1, &CMainForm::OnBnClickedMapTool)
->>>>>>> origin/New_YoonYoung
+	ON_BN_CLICKED(IDC_BUTTON2, &CMainForm::OnBnClickedResourceToolButton)
+	ON_BN_CLICKED(IDC_BUTTON1, &CMainForm::OnBnClickedUiToolButton)
 END_MESSAGE_MAP()
 
 

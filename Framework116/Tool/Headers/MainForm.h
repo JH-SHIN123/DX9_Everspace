@@ -1,9 +1,10 @@
 ﻿#pragma once
-#include "MapTool.h"
+
 
 
 // CMainForm 폼 보기
 #include"ResourceTool.h"
+#include"UiTool.h"
 class CMainForm : public CFormView
 {
 	DECLARE_DYNCREATE(CMainForm)
@@ -23,23 +24,15 @@ public:
 #endif
 #endif
 public:
-<<<<<<< HEAD
 	CResourceTool m_tResourceTool;
-=======
-	CMapTool m_tMapTool;
-
->>>>>>> origin/New_YoonYoung
+	CUiTool m_tUiTool;
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 	DECLARE_MESSAGE_MAP()
-<<<<<<< HEAD
 
 public:
 	afx_msg void OnBnClickedResourceToolButton();
-=======
-public:
-	afx_msg void OnBnClickedMapTool();
->>>>>>> origin/New_YoonYoung
+	afx_msg void OnBnClickedUiToolButton();
 };
 
 

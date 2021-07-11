@@ -46,6 +46,21 @@
     <Filter Include="02.GameObject\05.Skybox">
       <UniqueIdentifier>{3ca2e3df-4489-45bc-9137-32396005b4bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Particle">
+      <UniqueIdentifier>{a6b351e6-cf62-4ed3-8e3d-a6c496e62870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Particle\Explosion">
+      <UniqueIdentifier>{2140617a-e811-4c98-b10a-b70367b5472f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\06.Particle\Lazer">
+      <UniqueIdentifier>{40052efc-ffe1-4198-bb04-69d57a9b6437}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities">
+      <UniqueIdentifier>{c6f4541d-07c8-4477-b121-e55238fbdd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.Utilities\00.Stream">
+      <UniqueIdentifier>{0b98e40e-ea2c-4187-b358-a0cf4aca9f68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -96,6 +111,15 @@
     <ClInclude Include="..\Headers\Skybox.h">
       <Filter>02.GameObject\05.Skybox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\ExplosionSystem.h">
+      <Filter>02.GameObject\06.Particle\Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LaserSystem.h">
+      <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\StreamHandler.h">
+      <Filter>97.Utilities\00.Stream</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -133,6 +157,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Skybox.cpp">
       <Filter>02.GameObject\05.Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\ExplosionSystem.cpp">
+      <Filter>02.GameObject\06.Particle\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LaserSystem.cpp">
+      <Filter>02.GameObject\06.Particle\Lazer</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamHandler.cpp">
+      <Filter>97.Utilities\00.Stream</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

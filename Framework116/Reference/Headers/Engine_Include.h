@@ -12,7 +12,6 @@
 #include <string>
 #include <random>
 #include <ctime>
-#include <map>
 
 using namespace std;
 #pragma endregion
@@ -28,6 +27,7 @@ using namespace std;
 #include "Engine_Enum.h"
 #include "Engine_Struct.h"
 #include "Engine_Function.h"
+#include "../../Protocol.h"
 #pragma endregion
 
 #define __ENGINE_INCLUDE_H__

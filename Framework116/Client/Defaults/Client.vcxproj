@@ -49,6 +49,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -89,6 +90,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\cjh\Documents\sr_everspace\Framework116\Reference\Headers;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -165,7 +168,9 @@
   <ItemGroup>
     <ClInclude Include="..\Headers\Client_Define.h" />
     <ClInclude Include="..\Headers\Client_Enum.h" />
+    <ClInclude Include="..\Headers\ExplosionSystem.h" />
     <ClInclude Include="..\Headers\Grass.h" />
+    <ClInclude Include="..\Headers\LaserSystem.h" />
     <ClInclude Include="..\Headers\Loading.h" />
     <ClInclude Include="..\Headers\Logo.h" />
     <ClInclude Include="..\Headers\MainApp.h" />
@@ -174,6 +179,7 @@
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
     <ClInclude Include="..\Headers\Stage.h" />
+    <ClInclude Include="..\Headers\StreamHandler.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -181,7 +187,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Codes\ExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\Grass.cpp" />
+    <ClCompile Include="..\Codes\LaserSystem.cpp" />
     <ClCompile Include="..\Codes\Loading.cpp" />
     <ClCompile Include="..\Codes\Logo.cpp" />
     <ClCompile Include="..\Codes\MainApp.cpp" />
@@ -192,6 +200,7 @@
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="StreamHandler.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

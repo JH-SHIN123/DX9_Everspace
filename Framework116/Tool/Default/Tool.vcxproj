@@ -128,11 +128,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\cjh\Documents\sr_everspace\Framework116\Tool\Default;C:\Users\cjh\Documents\sr_everspace\Framework116\Tool\Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Headers;./;../Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\cjh\Documents\sr_everspace\Framework116\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../x64/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
@@ -184,13 +184,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\cjh\Documents\sr_everspace\Framework116\Tool\Default;C:\Users\cjh\Documents\sr_everspace\Framework116\Tool\Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Headers;./;../Headers/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\cjh\Documents\sr_everspace\Framework116\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../x64/Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
@@ -211,26 +211,25 @@
     <ClInclude Include="..\Headers\MainFrm.h" />
     <ClInclude Include="..\Headers\MainScene.h" />
     <ClInclude Include="..\Headers\MainView.h" />
-    <ClInclude Include="..\Headers\MapTool.h" />
     <ClInclude Include="..\Headers\MiniView.h" />
     <ClInclude Include="..\Headers\Player.h" />
     <ClInclude Include="..\Headers\ResourceTool.h" />
     <ClInclude Include="..\Headers\Skybox.h" />
     <ClInclude Include="..\Headers\Tool_Define.h" />
     <ClInclude Include="..\Headers\Tool_Enum.h" />
+    <ClInclude Include="..\Headers\UiTool.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tool.h" />
-    <ClInclude Include="Tool_Struct.h" />
+    <ClInclude Include="ToolUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Axis.cpp" />
     <ClCompile Include="..\Codes\MainCam.cpp" />
     <ClCompile Include="..\Codes\MainScene.cpp" />
-    <ClCompile Include="..\Codes\MapTool.cpp" />
     <ClCompile Include="..\Codes\MiniView.cpp" />
     <ClCompile Include="..\Codes\MainForm.cpp" />
     <ClCompile Include="..\Codes\MainFrm.cpp" />
@@ -238,7 +237,7 @@
     <ClCompile Include="..\Codes\Player.cpp" />
     <ClCompile Include="..\Codes\ResourceTool.cpp" />
     <ClCompile Include="..\Codes\Skybox.cpp" />
-    <ClCompile Include="..\HEADERS\RESOURCETOOL.CPP" />
+    <ClCompile Include="..\Codes\UiTool.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -246,6 +245,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tool.cpp" />
+    <ClCompile Include="ToolUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tool.rc" />

@@ -2,7 +2,9 @@
 #ifndef __PLAYER_H__
 
 #include "GameObject.h"
-
+BEGIN(Engine)
+class CCamera;
+END
 USING(Engine)
 class CPlayer final : public CGameObject
 {
@@ -19,6 +21,7 @@ public:
 	virtual _uint Render_GameObject() override;
 
 private:
+	void OffSet();
 	_uint Movement(_float fDeltaTime);
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -30,6 +33,9 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CCollideSphere*	m_pCollide = nullptr;
 	CController* m_pController = nullptr;
+	CCamera* m_pCam = nullptr;
+
+	_float m_fCameraDist = 5.f;
 
 };
 

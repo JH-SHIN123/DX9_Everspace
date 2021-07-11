@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "MainCam.h"
 #include "Axis.h"
+#include"ToolUI.h"
 
 // CMainView
 HWND g_hWnd;
@@ -34,8 +35,6 @@ CMainView::~CMainView()
 
 
 BEGIN_MESSAGE_MAP(CMainView, CScrollView)
-	ON_WM_KEYDOWN()
-	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -131,6 +130,14 @@ HRESULT CMainView::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Axis");
 		return E_FAIL;
 	}
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_UI",
+		CToolUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Axis");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region Components
@@ -188,7 +195,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_BigShip",
-		CMesh::Create(m_pDevice, L"../../Resources/ship.X", L"../../Resources/"))))
+		CMesh::Create(m_pDevice, L"../../Resources/Models/ship.X", L"../../Resources/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 		return E_FAIL;
@@ -198,7 +205,7 @@ HRESULT CMainView::Ready_StaticResources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Mesh_Axis",
-		CMesh::Create(m_pDevice, L"../../Resources/axis.X", L"../../Resources/"))))
+		CMesh::Create(m_pDevice, L"../../Resources/Models/axis.X", L"../../Resources/"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_Axis");
 		return E_FAIL;
@@ -233,7 +240,6 @@ HRESULT CMainView::Setup_DefaultSetting()
 	D3DCULL_NONE: 후면추려내기 안함.
 	*/
 	if (FAILED(m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW)))
-
 	{
 		PRINT_LOG(L"Error", L"Failed To Set D3DRS_CULLMODE");
 		return E_FAIL;
@@ -242,23 +248,20 @@ HRESULT CMainView::Setup_DefaultSetting()
 	return S_OK;
 }
 
-
 void CMainView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
 	// TODO: 여기에 그리기 코드를 추가합니다.
 
 	// 툴별로 씬을 나누자.
+	if (FAILED(m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Set Lighting false");
+	}
+	m_pManagement->Get_Device()->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pManagement->Update_Game();
-	
-	/*Invalidate(FALSE);*/
-}
 
-void CMainView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-{
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	Invalidate(FALSE);
-	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 

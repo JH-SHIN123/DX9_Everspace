@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Player.h"
 #include "Collision.h"
-
+#include"MainCam.h"
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -92,13 +92,14 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().vPosition);
+	OffSet();
 	return NO_EVENT;
 }
 
 _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
-
+	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
@@ -119,29 +120,16 @@ _uint CPlayer::Render_GameObject()
 	return _uint();
 }
 
+void CPlayer::OffSet()
+{
+	m_pCam = (CCamera*)(m_pManagement->Get_GameObject(L"Layer_Cam"));
+	static_cast<CMainCam*>(m_pCam)->Set_DistanceFromTarget(m_fCameraDist);
+	//static_cast<CMainCam*>(m_pCam)->Set_CamAngle(D3DXToRadian(55.f));
+}
+
 _uint CPlayer::Movement(_float fDeltaTime)
 {
-	//// Mouse Rotate
-	//GetCursorPos(&m_tCurCursorPos);
-	//ScreenToClient(g_hWnd, &m_tCurCursorPos);
-
-	//// 이전 프레임과 현재프레임의 마우스 이동거리 구하기
-	//_float2 tCenter = { WINCX / 2.f,WINCY / 2.f};
-	//_float2 vGap = { float(m_tCurCursorPos.x - tCenter.x) ,
-	//	float(m_tCurCursorPos.y - tCenter.y) };
-
-	//m_tPrevCursorPos = m_tCurCursorPos;
-
-	//float dps = 100.f;
-
-	/*m_pTransform->RotateX(D3DXToRadian(vGap.y) * fDeltaTime * dps);
-	m_pTransform->RotateY(D3DXToRadian(vGap.x) * fDeltaTime * dps);*/
-
-	//// 마우스 중앙 고정
-	//POINT ptMouse = { WINCX >> 1, WINCY >> 1 };
-	//ClientToScreen(g_hWnd, &ptMouse);
-	//SetCursorPos(ptMouse.x, ptMouse.y);
-
+	
 	POINT pt;
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
@@ -161,12 +149,16 @@ _uint CPlayer::Movement(_float fDeltaTime)
 
 	if(fRotX >= -D3DXToRadian(90.f) && !bRotYDir)
 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
-	else if (fRotX < D3DXToRadian(90.f) && bRotYDir)
+	else if (fRotX < D3DXToRadian(65.f) && bRotYDir)
 	{
-		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
+ 		m_pTransform->RotateX(D3DXToRadian(vGap.y)*fDeltaTime*fSpeed);
 	}
 
 	m_pTransform->RotateY(D3DXToRadian(vGap.x)*fDeltaTime*fSpeed);
+	POINT ptMouse = { WINCX >> 1, WINCY >> 1 };
+	ClientToScreen(g_hWnd, &ptMouse);
+	SetCursorPos(ptMouse.x, ptMouse.y);
+
 	// Move
 	_float3 vOutPos = m_pTransform->Get_State(EState::Position);
 	if (GetAsyncKeyState('W') & 0x8000)
@@ -208,15 +200,11 @@ _uint CPlayer::Movement(_float fDeltaTime)
 			m_pManagement->Get_GameObjectList(L"Layer_Monster"))) {
 			PRINT_LOG(L"", L"Pick!");
 		}
-
-		//float fDist_Player = 0.f;
-		//CCollision::PickingObject(fDist_Player, g_hWnd, WINCX, WINCY, m_pDevice,
-		//	m_pManagement->Get_GameObjectList(L"Layer_Player"));
 	}
+
 
 	return _uint();
 }
-
 
 CPlayer * CPlayer::Create(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -251,3 +239,4 @@ void CPlayer::Free()
 
 	CGameObject::Free();
 }
+

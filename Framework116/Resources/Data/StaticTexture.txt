@@ -1,0 +1,1 @@
+..\..\Resources\Textures\LobbySkybox\LobbySkybox%d.dds|LobbySkybox|CUBE|1

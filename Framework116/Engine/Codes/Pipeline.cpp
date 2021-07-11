@@ -28,20 +28,9 @@ void CPipeline::Setup_WorldMatrix(
 	vUp.y *= pScale->y;
 	vLook.z *= pScale->z;
 
-	/* 자전 */
-	//RotateX(&vRight, vRight, pRotate->x);
-	//RotateY(&vRight, vRight, pRotate->y);
-	//RotateZ(&vRight, vRight, pRotate->z);
-
-	//RotateX(&vUp, vUp, pRotate->x);
-	//RotateY(&vUp, vUp, pRotate->y);
-	//RotateZ(&vUp, vUp, pRotate->z);
-
-	//RotateX(&vLook, vLook, pRotate->x);
-	//RotateY(&vLook, vLook, pRotate->y);
-	//RotateZ(&vLook, vLook, pRotate->z);
 
 	D3DXQUATERNION Quaternion;
+	//단위 사원수로 만들기
 	D3DXQuaternionNormalize(&Quaternion, &Quaternion);
 	_float4x4 matRot,matScale;
 	D3DXMatrixIdentity(&matScale);
@@ -49,12 +38,19 @@ void CPipeline::Setup_WorldMatrix(
 	matScale._11 = pScale->x;
 	matScale._22 = pScale->y;
 	matScale._33 = pScale->z;
+	//Yaw Y(Up)축회전 pitch X(Right)축 회전	roll Z(Look벡터)축 회전.
+	//쿼터니언 회전은 세축을 한번에 계산하기 때문에 따로 나누어져있지 않다
+	//짐벌락이 일어나지 않음.
 	D3DXQuaternionRotationYawPitchRoll(&Quaternion, pRotate->y,pRotate->x,pRotate->z);
+	//나온 쿼터니언을 회전행렬로 바꿔줌
 	D3DXMatrixRotationQuaternion(&matRot, &Quaternion);
+	//스*자
 	matScale *= matRot;
 	*pOut = matScale;
+	//이동
 	memcpy(&pOut->_41, pPosition, sizeof(_float3));
-	//Setup_StateMatrix(pOut, &vRight, &vUp, &vLook, pPosition);
+
+	
 
 }
 
@@ -136,6 +132,29 @@ void CPipeline::Setup_ProjectionMatrix(
 	pOut->_44 = 0.f;
 }
 
+void CPipeline::Setup_OrthoMatrix(_float4x4* pOut, _float fWidth, _float fHeight, _float fNear, _float fFar)
+{
+	//원근투영과는 다르게 월드의 Z 를 반영하지
+	//않습니다. (Far와 Near을 0,1 의 범위로
+	//변환하는 과정은 없다는 뜻입니다.)
+
+	//때문에 Z 는 고정값으로 
+	//Far = 1
+	//Near = 0 
+	//으로 삼도록 합니다.
+	D3DXMatrixIdentity(pOut);
+
+	float w = 2.f / fWidth;
+	float h = 2.f / fHeight;
+	float a = 1.f; //1.f / (fFar - fNear);
+	float b = 0.f; //-fNear * a;
+
+	pOut->_11 = w;
+	pOut->_22 = h;
+	pOut->_33 = a;
+	pOut->_43 = b;
+}
+
 void CPipeline::Setup_StateMatrix(
 	_float4x4 * pOut, 
 	const _float3 * pRight, 
@@ -187,7 +206,130 @@ void CPipeline::RotateZ(_float3 * pOut, _float3 vIn, _float fRadian)
 	pOut->y = vIn.x * sinf(fRadian) + vIn.y * cosf(fRadian);
 }
 
+void CPipeline::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice)
+{
+	if (nullptr == pDevice) {
+		PRINT_LOG(L"Error", L"CreatePickingRay - pDevice is nullptr");
+		return;
+	}
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	/* 뷰포트 -> 투영스페이스 */
+	_float3 vMouse = _float3(0.f, 0.f, 0.f);
+	vMouse.x = ptMouse.x / (iWinCX * 0.5f) - 1.f;
+	vMouse.y = 1.f - ptMouse.y / (iWinCY * 0.5f);
+
+	/* 투영스페이스 -> 뷰스페이스 */
+	_float4x4 matProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, 0, &matProj);
+	D3DXVec3TransformCoord(&vMouse, &vMouse, &matProj);
+
+	/* 뷰스페이스 상에서 광선의 출발점과 방향을 구해준다. */
+	pOutRay.vPos = { 0.f, 0.f, 0.f };
+	pOutRay.vDirection = vMouse - pOutRay.vPos;
+}
+
+void CPipeline::CreatePickingRay(RAY& pOutRay, const HWND hWnd, const int iWinCX, const int iWinCY, const LPDIRECT3DDEVICE9 pDevice, _float3 vSubjPos, _float3 vCamPos)
+{
+	if (nullptr == pDevice) {
+		PRINT_LOG(L"Error", L"CreatePickingRay - pDevice is nullptr");
+		return;
+	}
+
+	POINT ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(hWnd, &ptMouse);
+
+	/* 뷰포트 -> 투영스페이스 */
+	_float3 vMouse = _float3(0.f, 0.f, 0.f);
+	vMouse.x = ptMouse.x / (iWinCX * 0.5f) - 1.f;
+	vMouse.y = 1.f - ptMouse.y / (iWinCY * 0.5f);
+
+	/* 투영스페이스 -> 뷰스페이스 */
+	_float4x4 matProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+	D3DXMatrixInverse(&matProj, 0, &matProj);
+	D3DXVec3TransformCoord(&vMouse, &vMouse, &matProj);
+
+	/* 뷰스페이스 상에서 광선의 출발점과 방향을 구해준다. */
+	pOutRay.vPos = { 0.f, 0.f, 0.f };
+	pOutRay.vDirection = vMouse - pOutRay.vPos;
+
+	_float4x4 invMatView;
+	pDevice->GetTransform(D3DTS_VIEW, &invMatView);
+	CPipeline::TransformRay(pOutRay, invMatView);
+
+	// C Vector : Camera -> Mouse
+	// A Vector : Camera -> Player
+	_float3 cVector = pOutRay.vDirection;
+	_float3 aVector = vSubjPos - vCamPos;
+	D3DXVec3Normalize(&cVector, &cVector);
+	D3DXVec3Normalize(&aVector, &aVector);
+
+	_float3 bVector = cVector - aVector;
+	D3DXVec3Normalize(&bVector, &bVector);
+
+	pOutRay.vPos = vSubjPos;
+	pOutRay.vDirection = bVector;
+}
+
+void CPipeline::TransformRay(RAY& pOutRay, _float4x4& matrix)
+{
+	_float4x4 InvMatrix;
+	D3DXMatrixInverse(&InvMatrix, 0, &matrix);
+
+	// transform the ray's origin, w = 1.
+	D3DXVec3TransformCoord(
+		&pOutRay.vPos,
+		&pOutRay.vPos,
+		&InvMatrix);
+
+	// transform the ray's direction, w = 0.
+	D3DXVec3TransformNormal(
+		&pOutRay.vDirection,
+		&pOutRay.vDirection,
+		&InvMatrix);
+
+	// normalize the direction
+	D3DXVec3Normalize(&pOutRay.vDirection, &pOutRay.vDirection);
+}
+
 float CPipeline::Get_Distance(const _float3& vPos1, const _float3& vPos2)
 {
 	return sqrtf((vPos1.x - vPos2.x) * (vPos1.x - vPos2.x) + (vPos1.y - vPos2.y) * (vPos1.y - vPos2.y) + (vPos1.z - vPos2.z) * (vPos1.z - vPos2.z));
+}
+
+float CPipeline::GetRandomFloat(float lowBound, float highBound)
+{
+	if (lowBound >= highBound) // bad input
+		return lowBound;
+
+	// get random float in [0, 1] interval
+	float f = (rand() % 10000) * 0.0001f;
+
+	// return float in [lowBound, highBound] interval. 
+	return (f * (highBound - lowBound)) + lowBound;
+}
+
+float CPipeline::GetRandomFloat(_float2& vBounds)
+{
+	if (vBounds.x >= vBounds.y) // bad input
+		return vBounds.x;
+
+	// get random float in [0, 1] interval
+	float f = (rand() % 10000) * 0.0001f;
+
+	// return float in [lowBound, highBound] interval. 
+	return (f * (vBounds.y - vBounds.x)) + vBounds.x;
+}
+
+void CPipeline::GetRandomVector(_float3* out, _float3* min, _float3* max)
+{
+	out->x = GetRandomFloat(min->x, max->x);
+	out->y = GetRandomFloat(min->y, max->y);
+	out->z = GetRandomFloat(min->z, max->z);
 }

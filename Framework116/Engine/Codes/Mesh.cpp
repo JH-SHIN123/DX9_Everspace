@@ -130,6 +130,14 @@ _uint CMesh::Render_Mesh()
 	for (size_t i = 0; i < m_vecMaterials.size(); i++)
 	{
 		m_pDevice->SetMaterial(&m_vecMaterials[i]);
+		//D3DMATERIAL9 mat;
+		//mat.Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		//mat.Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		//mat.Specular = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+		//mat.Emissive = D3DXCOLOR(0.f, 0.f, 0.f, 0.f);
+		//mat.Power = 5.f;
+		//m_pDevice->SetMaterial(&mat);
+
 		m_pDevice->SetTexture(0, m_vecTextures[i]);
 		m_pMesh->DrawSubset(i);
 	}

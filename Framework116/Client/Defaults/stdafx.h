@@ -18,7 +18,13 @@
 #include <tchar.h>
 #include <process.h>
 
+// C++ 런타임 헤더 파일입니다.
+#include <fstream>
+
 // TODO: 프로그램에 필요한 추가 헤더는 여기에서 참조합니다.
 #include "Client_Define.h"
 #include "Client_Enum.h"
 #include "Management.h"
+#include "../../Protocol.h"
+
+#include "StreamHandler.h"

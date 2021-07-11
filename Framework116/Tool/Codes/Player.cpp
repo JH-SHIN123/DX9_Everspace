@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "..\Headers\Player.h"
-#include <MainFrm.h>
-#include "MainView.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -118,7 +116,6 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	if (GetAsyncKeyState('S') & 0x8000)
 	{
 		m_pTransform->Go_Straight(-fDeltaTime);
-		m_pTransform->Go_Straight(fDeltaTime);
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000)

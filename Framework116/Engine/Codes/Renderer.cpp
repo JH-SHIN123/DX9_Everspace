@@ -1,6 +1,8 @@
 #include "..\Headers\Renderer.h"
 #include "GameObject.h"
 #include "Management.h"
+#include "Camera.h"
+#include "Pipeline.h"
 
 USING(Engine)
 IMPLEMENT_SINGLETON(CRenderer)
@@ -42,6 +44,9 @@ _uint CRenderer::Render_GameObject()
 		return iEvent;
 
 	if (iEvent = Render_Alpha())
+		return iEvent;
+
+	if (iEvent = Render_Particle())
 		return iEvent;
 
 	if (iEvent = Render_UI())
@@ -98,7 +103,7 @@ _uint CRenderer::Render_Alpha()
 	_uint iEvent = NO_EVENT;	
 
 	///////////////// 알파 테스팅 ///////////////////////////////////////////////
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);	
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
 
@@ -151,13 +156,40 @@ _uint CRenderer::Render_Alpha()
 	return iEvent;
 }
 
-_uint CRenderer::Render_UI()
+_uint CRenderer::Render_Particle()
 {
-	_uint iRenderIndex = (_uint)ERenderType::UI;
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
+	_uint iRenderIndex = (_uint)ERenderType::Particle;
 	_uint iEvent = NO_EVENT;
 
-	// 직교투영행렬 세팅
+	// 조명 Off
+	pDevice->SetRenderState(D3DRS_LIGHTING, false);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, true);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, true);
 
+	// Set PointSize Min
+	pDevice->SetRenderState(D3DRS_POINTSIZE_MIN, CPipeline::FtoDw(0.0f));
+
+	// control the size of the particle relative to distance
+	pDevice->SetRenderState(D3DRS_POINTSCALE_A, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_B, CPipeline::FtoDw(0.0f));
+	pDevice->SetRenderState(D3DRS_POINTSCALE_C, CPipeline::FtoDw(1.0f));
+
+	// use alpha from texture
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+
+	// 알파테스팅 + 알파블랜딩
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
+
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	for (auto& pObject : m_GameObjects[iRenderIndex])
 	{
@@ -169,6 +201,68 @@ _uint CRenderer::Render_UI()
 	}
 
 	m_GameObjects[iRenderIndex].clear();
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, true);
+	pDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, false);
+	pDevice->SetRenderState(D3DRS_POINTSCALEENABLE, false);
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+
+	return iEvent;
+}
+
+_uint CRenderer::Render_UI()
+{
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
+	_uint iRenderIndex = (_uint)ERenderType::UI;
+	_uint iEvent = NO_EVENT;
+
+	// UI 조명 off
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	///////////////// 알파 테스팅 ///////////////////////////////////////////////
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 1); /* 알파 기준 값 설정 */
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER); /* 위에서 설정한 기준값보다 작은 것들 */
+
+	// UI Render 후 기존으로 세팅하기 위한 변수들
+	_float4x4 matPrevView;
+	pDevice->GetTransform(D3DTS_VIEW, &matPrevView);
+	_float4x4 matPrevProj;
+	pDevice->GetTransform(D3DTS_PROJECTION, &matPrevProj);
+
+	// World 항등행렬 세팅
+	_float4x4 matWorld;
+	D3DXMatrixIdentity(&matWorld);
+	pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+	// 직교투영행렬 세팅
+	_float2 winSize = CManagement::Get_Instance()->Get_WindowSize();
+	_float4x4 matOrtho;
+	D3DXMatrixOrthoLH(&matOrtho, winSize.x, winSize.y, 0.f, 1.f);
+	pDevice->SetTransform(D3DTS_PROJECTION, &matOrtho);
+
+	for (auto& pObject : m_GameObjects[iRenderIndex])
+	{
+		iEvent = pObject->Render_GameObject();
+		Safe_Release(pObject);
+
+		if (iEvent)
+			return iEvent;
+	}
+
+	m_GameObjects[iRenderIndex].clear();
+
+	// 기존 세팅으로 돌려놓기
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	pDevice->SetTransform(D3DTS_VIEW, &matPrevView);
+	pDevice->SetTransform(D3DTS_PROJECTION, &matPrevProj);
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	return iEvent;
 }
