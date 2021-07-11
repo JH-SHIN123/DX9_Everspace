@@ -24,9 +24,6 @@ HRESULT CHP_Bar::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CUI::Ready_GameObject(pArg);
 
-	m_pPlayerTrasnform = (CTransform*)m_pManagement->Get_GameObject(L"Layer_Player");
-	Safe_AddRef(m_pPlayerTrasnform);
-
 	return S_OK;
 }
 
@@ -61,8 +58,9 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar::Render_GameObject()
 {
-
-	CUI::Render_GameObject();
+	Check_Degree();
+	if(!m_IsBack)
+		CUI::Render_GameObject();
 
 	return _uint();
 }
@@ -88,8 +86,6 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 		if (m_pTransform) {
 			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 132.5f, WINCY / 2.f - 84.f, 0.f));
 			m_pTransform->Update_Transform();
-
-
 		}
 		return _uint();
 	case CHP_Bar::MAKER_BOSS_MONSTER:
@@ -151,11 +147,23 @@ _uint CHP_Bar::Check_Degree()
 	if (m_pManagement->Get_GameObjectList(L"Layer_Player")->size() == 0
 		/*||m_pManagement->Get_GameObjectList(L"Layer_Monster")->size() == 0*/)
 		return UPDATE_ERROR;
+
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	if (!m_IsRef)
+	{
+		Safe_AddRef(m_pPlayerTransform);
+		m_IsRef = true;
+	}
+	if (nullptr == m_pPlayerTransform)
+	{
+		PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
+		return E_FAIL;
+	}
 	
 	if (m_eMakerID != MAKER_PLAYER)
 	{
-		m_pPlayerTrasnform->Get_TransformDesc().matWorld;
-		_float3 vPlayerLook = m_pPlayerTrasnform->Get_State(EState::Look);
+		m_pPlayerTransform->Get_TransformDesc().matWorld;
+		_float3 vPlayerLook = m_pPlayerTransform->Get_State(EState::Look);
 
 		if (m_eMakerID == MAKER_BOSS_MONSTER)
 		{
@@ -180,6 +188,10 @@ _uint CHP_Bar::Check_Degree()
 				if (fabs(fDegree) > 90.f)
 				{
 					m_IsBack = true;
+				}
+				else if (fabs(fDegree) <= 90.f) 
+				{
+					m_IsBack = false;
 				}
 			}
 		}
@@ -214,7 +226,7 @@ CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
 
 void CHP_Bar::Free()
 {
-	Safe_Release(m_pPlayerTrasnform);
+	Safe_Release(m_pPlayerTransform);
 	CUI::Free();
 }
 

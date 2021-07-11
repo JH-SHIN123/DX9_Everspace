@@ -47,7 +47,9 @@ private: // 뒤에있을땐 안나오게
 	_bool m_IsBack = false;
 
 private: // 플레이어 트랜스폼
-	CTransform* m_pPlayerTrasnform = nullptr;
+	CTransform* m_pPlayerTransform = nullptr;
+	// 최초참조시에 AddRef
+	_bool m_IsRef = false;
 	
 };
 
