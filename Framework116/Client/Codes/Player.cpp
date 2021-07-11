@@ -8,6 +8,7 @@
 #include "Stamina_Bar.h"
 #include "CollisionHandler.h"
 #include "ScriptUI.h"
+#include "MainCam.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -465,15 +466,19 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	}
 	if (m_pController->Key_Down(KEY_F3))
 	{
-		m_pManagement->PlaySound(L"Shield_Boost.ogg", CSoundMgr::PLAYER_SKILL);
-		// 실드활성화.
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_Shield_Battery",
-			L"Layer_Player_Shield")))
+		if (!m_IsShield)
 		{
-			PRINT_LOG(L"Error", L"Failed To Add Shield_Battery In Layer");
-			return;
+			m_pManagement->PlaySound(L"Shield_Boost.ogg", CSoundMgr::PLAYER_SKILL);
+			// 실드활성화.
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_Shield_Battery",
+				L"Layer_Player_Shield")))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Shield_Battery In Layer");
+				return;
+			}
+			m_IsShield = true;
 		}
 	}
 
@@ -485,6 +490,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_fMachinegunFireDelay += fDeltaTime * m_fOverDrive;
 			if (m_fMachinegunFireDelay > 0.25f)
 			{
+				m_IsFire = true;
+
 				if (m_IsLeft)
 					m_IsLeft = false;
 				else
@@ -503,12 +510,17 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 				m_pManagement->PlaySound(L"Pulse_Laser.ogg", CSoundMgr::PLAYER_WEAPON);
 				m_fMachinegunFireDelay = 0.f;
 			}
+			else
+			{
+				m_IsFire = false;
+			}
 		}
 		else if (m_iWeapon == WEAPON_MACHINEGUN)
 		{
 			//총열돌리는시간
 			if (m_IsShooting == false)
 			{
+				m_IsFire = false;
 				m_fMachinegunDelay += fDeltaTime;
 				m_pManagement->PlaySound(L"Gatling_StartUp.ogg", CSoundMgr::PLAYER_GATLING);
 			}
@@ -518,6 +530,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 				m_fMachinegunFireDelay += fDeltaTime * m_fOverDrive;
 				if (m_fMachinegunFireDelay > 0.10f)
 				{
+					m_IsFire = true;
 					if (m_IsLeft)
 						m_IsLeft = false;
 					else
@@ -536,6 +549,10 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 					m_pManagement->PlaySound(L"Gatling_Fire_Loop.ogg", CSoundMgr::PLAYER_WEAPON);
 					m_fMachinegunFireDelay = 0.f;
 				}
+			}
+			else
+			{
+				m_IsFire = false;
 			}
 		}
 		else if (m_iWeapon == WEAPON_MISSILE)

@@ -174,11 +174,28 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 			m_IsFPS = false;
 	}
 	
-	// 카메라 쉐이킹
-	//if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-	//{
-	//	CameraShakingStart(fDeltaTime);
-	//}
+	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	{
+		_int iWeapon = ((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_Weapon_Type();
+		_bool IsFire = ((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_Is_Fire();
+
+		if (IsFire)
+		{
+			switch (iWeapon)
+			{
+			case WEAPON_LAZER:
+
+				CameraShakingStart(fDeltaTime, 5.f);
+				break;
+			case WEAPON_MACHINEGUN:
+				CameraShakingStart(fDeltaTime, 4.f);
+				break;
+			case WEAPON_MISSILE:
+				CameraShakingStart(fDeltaTime, 9.f);
+				break;
+			}
+		}
+	}
 
 
 	return _uint();
@@ -493,11 +510,11 @@ const ESoloMoveMode CMainCam::Get_SoloMoveMode()
 	return m_eSoloMoveMode;
 }
 
-_uint CMainCam::CameraShakingStart(_float fDeltaTime)
+_uint CMainCam::CameraShakingStart(_float fDeltaTime, _float Range)
 {
-	_float3 Shake = { (_float)(rand() % 6), (_float)(rand() % 6), 0.f };
+	_float3 Shake = { (_float)(rand() % 3), (_float)(rand() % 3), 0.f };
 
-	m_CameraDesc.vEye += Shake * fDeltaTime * 5.f;
+	m_CameraDesc.vEye += Shake * fDeltaTime * Range;
 
 	return _uint();
 }
