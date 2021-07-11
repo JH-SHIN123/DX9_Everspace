@@ -11,6 +11,8 @@ CDrone::CDrone(LPDIRECT3DDEVICE9 pDevice)
 
 CDrone::CDrone(const CDrone& other)
 	: CGameObject(other)
+	, m_fDis(other.m_fDis)
+	, m_fTurnSec(other.m_fTurnSec)
 {
 }
 
@@ -53,10 +55,11 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
 	TransformDesc.vScale = _float3(2.f, 2.f, 2.f);
+	m_vSpawnPos = pDesc->tTransformDesc.vPosition;
 
 	//float randRotateSpeed = rand() % 5 + 10.f;
-	//TransformDesc.fRotatePerSec = D3DXToRadian(randRotateSpeed);
-	//TransformDesc.fSpeedPerSec = 4.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(30.f);
+	TransformDesc.fSpeedPerSec = 7.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -97,19 +100,31 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	}
 
 	// Init
-	m_eNextState = State::Research;
-	m_vCreatePosition = TransformDesc.vPosition;
-	m_vResearchRange = { 50.f,50.f,50.f };
+	//m_eNextState = State::Research;
+	//m_vCreatePosition = TransformDesc.vPosition;
+	//m_vResearchRange = { 50.f,50.f,50.f };
 
 	m_fHp = 900.f;
 	m_fFullHp = m_fHp; 
 
 	m_fAngle = CPipeline::GetRandomFloat(0.1f, 1.f);
 	_float Check = CPipeline::GetRandomFloat(0.f, 1.f);
-	m_bAnglePlus = false;
-	if (Check > 0.5f)
-		m_bAnglePlus = true;
 	
+	// 상하운동 
+	if (Check > 0.5f)
+	{
+		m_eNextState = Idle;
+		Check = CPipeline::GetRandomFloat(0.f, 1.f);
+
+		m_bAnglePlus = false; // 아래부터? 위부터?
+		if (Check > 0.5f)
+			m_bAnglePlus = true;
+	}
+	
+	else // 랜덤 이동
+	{
+		m_eNextState = Turn;
+	}
 
 	return S_OK;
 }
@@ -118,9 +133,8 @@ _uint CDrone::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
-	Movement_Common(fDeltaTime);
-	Movement(fDeltaTime);
 	StateCheck();
+	Movement(fDeltaTime);
 
 	//Add_Hp_Bar(fDeltaTime);
 
@@ -176,27 +190,128 @@ _uint CDrone::Render_GameObject()
 
 _uint CDrone::State_Idle(_float fDelataTime)
 {
+	_float3 vUp = m_pTransform->Get_State(EState::Up);
+	_float3 vPos = m_pTransform->Get_State(EState::Position);
+	D3DXVec3Normalize(&vUp, &vUp);
+	m_fAngle -= 2.f;
+	if (m_bAnglePlus == true)
+		m_fAngle += 4.f;
+
+	_float fSin = (sinf(D3DXToRadian(m_fAngle)) * 0.1f);
+	vUp *= fSin;
+	vPos += vUp;
+
+	m_pTransform->Set_Position(vPos);
+
+	return _uint();
+}
+
+_uint CDrone::State_Turn(_float fDelataTime)
+{
+	if (m_fTurnSec == 0.f)
+		m_fTurnSec = CPipeline::GetRandomFloat(0.2f, 2.f);
+
+	m_fTurnSec -= fDelataTime;
+	m_pTransform->RotateY(fDelataTime);
+
+	if (m_fTurnSec <= 0.f)
+	{
+		m_fTurnSec = 0.f;
+		m_eNextState = Move;
+	}
+
+	return _uint();
+}
+
+_uint CDrone::State_Move(_float fDelataTime)
+{
+	_float3 vPos = m_pTransform->Get_State(EState::Position);
+	m_pTransform->Go_Straight(fDelataTime);
+
+	_float fDis = D3DXVec3Length(&(m_vSpawnPos - vPos));
+
+	if (fDis >= m_fDis)
+		m_eNextState = BackTurn;
+
+	return _uint();
+}
+
+_uint CDrone::State_BackTurn(_float fDelataTime)
+{
+	m_pTransform->Go_Straight(fDelataTime);
+
+	// 각을 구함
+	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
+
+	_float3 vTargetDir = m_vSpawnPos - vMyPos;
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
+
+	_float3 vMyLook = m_pTransform->Get_State(EState::Look);
+	_float3 vMyUp = m_pTransform->Get_State(EState::Up);
+	D3DXVec3Normalize(&vMyLook, &vMyLook);
+
+	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
+	_float fRadianMax = D3DXToRadian(95.f);
+	_float fRadianMin = D3DXToRadian(85.f);
+
+	_float3 vMyRight, vMyLeft;
+	D3DXVec3Cross(&vMyRight, &vMyUp, &vMyLook);
+	D3DXVec3Cross(&vMyLeft, &vMyLook, &vMyUp);
+
+	D3DXVec3Normalize(&vMyRight, &vMyRight);
+	D3DXVec3Normalize(&vMyLeft, &vMyLeft);
+
+	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
+	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
+
+	//if (fCeta < fRadianMin)
+	//{
+	if (fRight < fLeft)
+		m_pTransform->RotateY(-fDelataTime);
+
+	else
+		m_pTransform->RotateY(fDelataTime);
+	//}
+
+
+
+	if (D3DXVec3Length(&vTargetDir) <= 0.5f)
+	{
+		m_pTransform->Set_Position(m_vSpawnPos);
+		m_eNextState = Turn;
+	}
+
+	return _uint();
+}
+
+_uint CDrone::State_BackMove(_float fDelataTime)
+{
 	return _uint();
 }
 
 _uint CDrone::Movement(_float fDeltaTime)
 {
-
 	switch (m_eCurState)
 	{
-	case State::Idle:
+	case CDrone::Idle:
+		State_Idle(fDeltaTime);
 		break;
-	case State::Move:
+	case CDrone::Turn:
+		State_Turn(fDeltaTime);
 		break;
-	case State::Research:
-		Researching(fDeltaTime);
+	case CDrone::Move:
+		State_Move(fDeltaTime);
 		break;
-	case State::Die:
+	case CDrone::BackTurn:
+		State_BackTurn(fDeltaTime);
 		break;
+	case CDrone::BackMove:
+		State_BackMove(fDeltaTime);
+		break;
+
 	default:
 		break;
 	}
-
 
 
 	return _uint();
@@ -210,32 +325,14 @@ _uint CDrone::Researching(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CDrone::Movement_Common(_float fDeltaTime)
-{
-	_float3 vUp = m_pTransform->Get_State(EState::Up);
-	_float3 vPos = m_pTransform->Get_State(EState::Position);
-
-	m_fAngle -= 2.f;
-	if(m_bAnglePlus == true)
-		m_fAngle += 4.f;
-
-	_float fSin = (sinf(D3DXToRadian(m_fAngle)) * 0.5f);
-	vUp *= fSin;
-	vPos += vUp;
-
-	m_pTransform->Set_Position(vPos);
-
-	return _uint();
-}
-
 void CDrone::StateCheck()
 {
 	if (m_eCurState != m_eNextState)
 	{
 		switch (m_eNextState)
 		{
-		case State::Research:
-			break;
+		//case State::Research:
+		//	break;
 		case State::Die:
 			break;
 		}
