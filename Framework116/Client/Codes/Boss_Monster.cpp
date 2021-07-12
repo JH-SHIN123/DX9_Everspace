@@ -17,6 +17,8 @@ CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	, m_fEmpBomb_CoolTime(other.m_fEmpBomb_CoolTime)
 	, m_fCannonLength(other.m_fCannonLength)
 	, m_fLaser_Degree(other.m_fLaser_Degree)
+	, m_IsLaserAlert(other.m_IsLaserAlert)
+	, m_IsLaserTarget(other.m_IsLaserTarget)
 {
 }
 
@@ -102,16 +104,10 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
-
-
-
-
+	Transform_Check();
 	Move_AI(fDeltaTime);
 	Attack_AI(fDeltaTime);
 
-	//Spawn_Monster(fDeltaTime);
-
-	//Movement(fDeltaTime);
 
 	if (!m_IsHPBar)
 		Add_Hp_Bar(fDeltaTime);
@@ -232,7 +228,7 @@ _uint CBoss_Monster::Move_Far(_float fDeltaTime)
 _uint CBoss_Monster::EnergyBallCannon_Target_Search(_float fDeltaTime)
 {
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-	_float3 vPos = m_pTransform->Get_State(EState::Position);
+	_float3 vMyPos = m_vMyPos;
 	_float3 vUp = m_pTransform->Get_State(EState::Up);
 	_float3 vLook = m_pTransform->Get_State(EState::Look);
 	_float3 vRight;
@@ -243,10 +239,10 @@ _uint CBoss_Monster::EnergyBallCannon_Target_Search(_float fDeltaTime)
 	D3DXVec3Cross(&vRight, &vUp, &vLook);
 	D3DXVec3Normalize(&vRight, &vRight);
 
-	vPos += vLook * 6.f;
+	vMyPos += vLook * 6.f;
 
-	m_vRight_EnergyBallCannon_Position = vPos - (vRight * 70.f);
-	m_vLeft_EnergyBallCannon_Position = vPos + (vRight * 70.f);
+	m_vRight_EnergyBallCannon_Position = vMyPos - (vRight * 70.f);
+	m_vLeft_EnergyBallCannon_Position = vMyPos + (vRight * 70.f);
 
 	_float fRightCannonToTarget_Length = D3DXVec3Length(&(vTargetPos - m_vRight_EnergyBallCannon_Position));
 	_float fLeftCannonToTarget_Length = D3DXVec3Length(&(vTargetPos - m_vLeft_EnergyBallCannon_Position));
@@ -336,43 +332,135 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 
 	// 3초의 사이클
 	if (m_fLaser_CoolTime >= 3.f)
-		m_fLaser_CoolTime = 0.f;
-
-	// 2초가 넘어가면 발사
-	// 2초의 쿨타임으로 1초동안 발사
-	if (m_fLaser_CoolTime >= 2.7f)
 	{
-		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+		m_fLaser_CoolTime = 0.f;
+		m_IsLaserAlert = true;
+	}
 
-		_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-		_float3 vPos = m_pTransform->Get_State(EState::Position);
-
-		_float3 vDir = vTargetPos - vPos;
-		D3DXVec3Normalize(&vDir, &vDir);
-
-		_float3 vUp = m_pTransform->Get_State(EState::Up);
-		_float3 vLook = m_pTransform->Get_State(EState::Look);
-		D3DXVec3Normalize(&vUp, &vUp);
-		D3DXVec3Normalize(&vLook, &vLook);
-
-		_float fTheta = D3DXVec3Dot(&vDir, &vLook);
-		_float fDegree = D3DXToDegree(fTheta);
-
-		if (m_fLaser_Degree <= fDegree)
+	if (m_fLaser_CoolTime >= 2.2f)
+	{
+		if (m_IsLaserAlert == true)
 		{
-			pArg->vPosition = vPos + (vLook * 130.f);
+			m_IsLaserAlert = false;
+			m_IsLaserTarget = false;
+			m_IsLaserAttack = false;
 
+			_float3 vMyPos = m_vMyPos;
+			_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
 
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::NonStatic,
-				L"GameObject_Bullet_Laser",
-				L"Layer_Bullet_Laser", pArg)))
+			_float3 vDir = vTargetPos - vMyPos;
+			D3DXVec3Normalize(&vDir, &vDir);
+
+			_float3 vUp = m_pTransform->Get_State(EState::Up);
+			_float3 vLook = m_pTransform->Get_State(EState::Look);
+			D3DXVec3Normalize(&vUp, &vUp);
+			D3DXVec3Normalize(&vLook, &vLook);
+
+			// Look 방향으로 1이 정면
+			_float fTheta_Z = D3DXVec3Dot(&vDir, &vLook);
+			_float fLaser_Radian_Z = D3DXToRadian(m_fLaser_Degree);
+			_float fRadian_Min_Z = 1.f - fLaser_Radian_Z;
+			_float fRadian_Max_Z = fLaser_Radian_Z + 1.f;
+
+			// 위 아래로 한번 더 걸러야 함
+			// 기준이 Z축이니 Y와의 내적은 0이 나옴(법선 일때)
+			_float fTheta_Y = D3DXVec3Dot(&vDir, &vUp);
+			_float fLaser_Radian_Y = D3DXToRadian(m_fLaser_Degree);
+			_float fRadian_Max_Y = 1.f - fLaser_Radian_Y;
+			_float fRadian_Min_Y = fLaser_Radian_Y - 1.f;
+
+			if (0.1f >= fTheta_Y &&
+				fTheta_Y >= -0.45f)
 			{
-				PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
-				return E_FAIL;
+				if (fRadian_Min_Z <= fTheta_Z &&
+					fTheta_Z <= fRadian_Max_Z)
+				{
+					m_IsLaserAttack = true;
+					m_IsLaserTarget = true;
+
+				}
+			}
+
+
+			if (m_IsLaserAttack == true &&
+				m_IsLaserTarget == true)
+			{
+				m_IsLaserTarget = false;
+				m_iLaserCount = 0;
+
+				_float3 vMyPos = m_vMyPos;
+				_float3 vUp = m_pTransform->Get_State(EState::Up);
+				_float3 vLook = m_pTransform->Get_State(EState::Look);
+				D3DXVec3Normalize(&vUp, &vUp);
+				D3DXVec3Normalize(&vLook, &vLook);
+
+				vMyPos -= vUp * 20.f;
+				m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				_float3 vEffectPos = m_vLaserCannon_Position + (vLook * 3.f);
+
+				CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(vEffectPos, 1.f);
 			}
 		}
-		
+	}
+
+
+	// 2초가 넘어가면 발사
+	// 2초의 쿨타임으로 1초동안 발사!
+	if (m_fLaser_CoolTime >= 2.7f)
+	{
+		if (m_IsLaserAttack == true)
+		{
+			if (m_iLaserCount <= 1)
+			{
+				//m_IsLaserAttack = false;
+				//m_fLaser_CoolTime = 0.f;
+				TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+				_float3 vMyPos = m_vMyPos;
+				_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+				_float3 vRight = m_pTransform->Get_State(EState::Right);
+				_float3 vUp = m_pTransform->Get_State(EState::Up);
+				_float3 vLook = m_pTransform->Get_State(EState::Look);
+
+				_float3 vDir = vTargetPos - vMyPos;
+				D3DXVec3Normalize(&vDir, &vDir);
+
+				//_float3 vTheta	=	{ 1.f, 1.f, 1.f };
+				//_float2 vThetaXY_Z = { 1.f, 0.f };
+				//_float2 vDirXY = { vDir.x, vDir.y };
+				//_float2 vThetaYZ_X = { 1.f, 0.f };
+				//_float2 vDirYZ = { vDir.y, vDir.z };
+				//_float2 vThetaZX_Y = { 1.f, 0.f };
+				//_float2 vDirZX = { vDir.z, vDir.x };
+				////vTheta.z = D3DXVec2Dot(&vThetaXY_Z, &vDirXY);
+				////vTheta.x = D3DXVec2Dot(&vThetaYZ_X, &vDirYZ);
+				////vTheta.y = D3DXVec2Dot(&vThetaZX_Y, &vDirZX);
+				////vTheta.x = (D3DXVec3Dot(&vDir, &vRight));
+				//vTheta.y = (D3DXVec3Dot(&vDir, &vUp));
+				////vTheta.z = (D3DXVec3Dot(&vDir, &vLook));
+				//pArg->vRotate = vTheta;
+
+				//if (m_iLaserCount < 1)
+				//{
+					vMyPos -= vUp * 20.f;
+					m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				//}
+
+				pArg->vPosition = m_vLaserCannon_Position;
+
+				++m_iLaserCount;
+
+
+				if (FAILED(m_pManagement->Add_GameObject_InLayer(
+					EResourceType::NonStatic,
+					L"GameObject_Bullet_Laser",
+					L"Layer_Bullet_Laser", pArg)))
+				{
+					PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
+					return E_FAIL;
+				}
+			}
+		}
 	}
 
 	return _uint();
@@ -419,7 +507,7 @@ _uint CBoss_Monster::Spawn_Monster(_float fDeltaTime)
 		m_fSpawnCoolTime = 0.f;
 
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
-		_float3 vPos = m_pTransform->Get_State(EState::Position);
+		_float3 vMyPos = m_vMyPos;
 		_float3 vUp = m_pTransform->Get_State(EState::Up);
 		_float3 vLook = m_pTransform->Get_State(EState::Look);
 
@@ -431,9 +519,9 @@ _uint CBoss_Monster::Spawn_Monster(_float fDeltaTime)
 		D3DXVec3Cross(&vRight, &vUp, &vLook);
 		D3DXVec3Normalize(&vRight, &vRight);
 
-		vPos -= vLook * 8.f;
+		vMyPos -= vLook * 8.f;
 
-		pArg->vPosition = vPos;
+		pArg->vPosition = vMyPos;
 		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
 
 
@@ -452,6 +540,13 @@ _uint CBoss_Monster::Spawn_Monster(_float fDeltaTime)
 
 _uint CBoss_Monster::Spawn_Wormhole(_float fDeltaTime)
 {
+	return _uint();
+}
+
+_uint CBoss_Monster::Transform_Check()
+{
+	m_vMyPos = m_pTransform->Get_State(EState::Position);
+
 	return _uint();
 }
 
@@ -718,3 +813,4 @@ HRESULT CBoss_Monster::Add_InLayer_MyParts()
 
 	return S_OK;
 }
+

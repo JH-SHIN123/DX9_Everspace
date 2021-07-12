@@ -372,7 +372,6 @@ void CProduct::Add_Font_InLayer(wstring strLayerTag, CGameObject *& pFont, wstri
 
 	if (pFont)
 		return;
-
 	MYFONT_DESC tFontDesc;
 
 	tFontDesc.wstrText = str;
@@ -420,7 +419,11 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> main
 	Safe_Release(m_pProductTex);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pProductVIBuffer);

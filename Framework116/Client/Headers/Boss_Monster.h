@@ -16,7 +16,7 @@ public:
 	virtual ~CBoss_Monster() = default;
 
 public:
-	enum ActionMode {Near, Middle, Far, SpecialAction, End };
+	enum ActionMode { Near, Middle, Far, SpecialAction, End };
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -26,6 +26,7 @@ public:
 	virtual _uint Render_GameObject() override;
 
 private: // Update 함수에 쓸 최상위 함수
+	_uint Transform_Check();
 	_uint Move_AI(_float fDeltaTime);
 	_uint Attack_AI(_float fDeltaTime);
 
@@ -34,7 +35,7 @@ private: // Move_AI
 	_uint Move_Near(_float fDeltaTime);
 	_uint Move_Middle(_float fDeltaTime);
 	_uint Move_Far(_float fDeltaTime);
-	
+
 private: // EnergyBall
 	_uint EnergyBallCannon_Target_Search(_float fDeltaTime);
 	_uint Left_EnergyBall(_float fDeltaTime);
@@ -69,7 +70,7 @@ private:
 
 
 private: /* AI */
-	// 거리에 따라 행동을 다르게
+		 // 거리에 따라 행동을 다르게
 	ActionMode m_eActionMode = End;
 	_bool m_IsSpecialAction = false;
 	_float3 m_vMyPos;
@@ -85,7 +86,10 @@ private: // laser
 	_float3 m_vLaserCannon_Position;
 	_float m_fLaser_CoolTime = 0.f;
 	_float m_fLaser_Degree = 10.f;
-
+	_bool m_IsLaserAlert = false;
+	_bool m_IsLaserAttack = false;
+	_bool m_IsLaserTarget = false;
+	_uint m_iLaserCount = 0;
 
 
 private:
