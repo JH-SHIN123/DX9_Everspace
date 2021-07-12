@@ -50,6 +50,9 @@
 #include "NaviArrow.h"
 #include "AimAssist.h"
 #include "AimAssist2.h"
+
+// 3Stage필요
+#include "Sniper.h"
 #pragma endregion
 
 
@@ -191,6 +194,16 @@ HRESULT CLoading::Ready_StageResources()
 		return E_FAIL;
 	}
 
+	/* For.GameObject_Sniper */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Sniper",
+		CSniper::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper");
+		return E_FAIL;
+	}
+
 	/* For.GameObject_Skybox */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -204,7 +217,7 @@ HRESULT CLoading::Ready_StageResources()
 	/* 임시 보스 몬스터 입니다. */
 	Ready_BossAndOthers();
 
-
+	//////////////////////////////3스테이지에도 필요!!/////////////////////////////////////////////////////////////////////////////////
 	/*  HUD Crosshair 입니다 */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
@@ -294,6 +307,8 @@ HRESULT CLoading::Ready_StageResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Stamina_Bar");
 		return E_FAIL;
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/* For.GameObject_Planet */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(

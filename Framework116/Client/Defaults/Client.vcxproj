@@ -171,6 +171,7 @@
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\Shield_Battery.h" />
+    <ClInclude Include="..\Headers\Sniper.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\StatusBoard.h" />
     <ClInclude Include="..\Headers\Asteroid.h" />
@@ -236,6 +237,7 @@
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\Shield_Battery.cpp" />
+    <ClCompile Include="..\Codes\Sniper.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\StatusBoard.cpp" />
     <ClCompile Include="..\Codes\Asteroid.cpp" />
