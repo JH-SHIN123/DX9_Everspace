@@ -50,7 +50,8 @@
 #include "NaviArrow.h"
 #include "AimAssist.h"
 #include "AimAssist2.h"
-#include"PlayerUnder.h"
+#include"LobbyBackUI.h"
+#include"LobbyScriptUI.h"
 #pragma endregion
 
 
@@ -650,18 +651,45 @@ HRESULT CLoading::Ready_LobbyResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_WingBoostSystem");
 		return E_FAIL;
 	}
+	// 스크립트 UI
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
-		L"GameObject_PlayerUnder",
-		CPlayerUnder::Create(m_pDevice))))
+		L"GameObject_LobbyScriptUI",
+		CLobbyScriptUI::Create(m_pDevice))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_PlayerUnder");
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_ScriptUI");
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LobbyBackUI",
+		CLobbyBackUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
+		return E_FAIL;
+	}
 #pragma endregion
 	
 #pragma region Components
+	// Script_UI blackbar
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_ScriptUI_BlackBar",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Script/BlackBar.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_ScriptUI_BlackBar");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_ScriptUI_Script",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Script/Script.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_ScriptUI_BlackBar");
+		return E_FAIL;
+	}
+
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_GeoMesh_Ring",

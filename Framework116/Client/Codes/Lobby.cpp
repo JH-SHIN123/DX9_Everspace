@@ -9,6 +9,7 @@
 #include"GatchaBox.h"
 #include"StatusBoard.h"
 #include"Status.h"
+#include"LobbyScriptUI.h"
 CLobby::CLobby(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -39,9 +40,7 @@ HRESULT CLobby::Ready_Scene()
 		return E_FAIL;
 	if (FAILED(Add_Layer_Status(L"Layer_Status")))
 		return E_FAIL;
-	if (FAILED(Add_Layer_PlayerUnder(L"Layer_PlayerUnder")))
-		return E_FAIL;
-
+	
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	lightDesc.vLightDir = { 1.0f, -0.0f, 0.25f };
@@ -68,7 +67,20 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 		}
 		return CHANGE_SCENE;
 	}
-
+	if (m_bIsGatcha)
+	{
+		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))
+		{
+			Add_Layer_ScriptUI(L"Layer_ScriptUI");
+		}
+		else
+		{
+			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+			{
+				Add_Layer_ScriptUI(L"Layer_ScriptUI");
+			}
+		}
+	}
 	CScene::Update_Scene(fDeltaTime);
 
 	
@@ -261,18 +273,26 @@ HRESULT CLobby::Add_Layer_Status(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CLobby::Add_Layer_PlayerUnder(const wstring & LayerTag)
+HRESULT CLobby::Add_Layer_ScriptUI(const wstring & LayerTag)
 {
+	UI_DESC Desc;
+	Desc.tTransformDesc.vPosition = { 0.f, 0.f ,0.f };
+	Desc.tTransformDesc.vScale = { 1.f, 1.f,0.f };
+	Desc.wstrTexturePrototypeTag = L"Component_Texture_ScriptUI_Script";
+	
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
-		L"GameObject_PlayerUnder",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add StatusBoard In Layer");
-		return E_FAIL;
-	}
+		L"GameObject_LobbyScriptUI",
+		LayerTag, &Desc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add ScriptUI In Layer");
+			return E_FAIL;
+		}
+	CLobbyScriptUI* pUI = (CLobbyScriptUI*)m_pManagement->Get_GameObject(LayerTag);
+	pUI->Set_Scene(this);
 	return S_OK;
 }
+
 
 
 

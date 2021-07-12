@@ -1,22 +1,15 @@
+..\..\Resources\Textures\Ui\Cursor\Cursor%d.png|Cursor|SINGLE|1
+..\..\Resources\Textures\Ui\Frame\full_frame.png|Full_Frame|SINGLE|1
+..\..\Resources\Textures\Ui\Frame\player_under.png|UNDER|SINGLE|1
+..\..\Resources\Textures\Ui\Frame\board.png|Holo_Board|SINGLE|1
 ..\..\Resources\Textures\Ui\achievement\achievement%d.png|achievement|MULTI|2
 ..\..\Resources\Textures\Ui\everspace_logo\everspace_logo%d.png|everspace_logo|SINGLE|1
 ..\..\Resources\Textures\Ui\GatchaBox\GatchaBox%d.dds|GatchaBox|CUBE|1
-..\..\Resources\Textures\Ui\PlayerUnder\PlayerUnder%d.png|PlayerUnder|SINGLE|1
 ..\..\Resources\Textures\Ui\LobbySkybox\LobbySkybox%d.dds|LobbySkybox|CUBE|1
 ..\..\Resources\Textures\Ui\PlaneTemplete\PlaneTemplete%d.png|PlaneTemplete|MULTI|5
 ..\..\Resources\Textures\Ui\SceneSelect\SceneSelect%d.png|SceneSelect|MULTI|6
 ..\..\Resources\Textures\Ui\Product\Product%d.png|Product|MULTI|5
 ..\..\Resources\Textures\Ui\StatusBoard\StatusBoard%d.png|StatusBoard|MULTI|2
 ..\..\Resources\Textures\Ui\RepairIcon\RepairIcon%d.png|RepairIcon|SINGLE|1
-..\..\Resources\Textures\Ui\DecorationA\DecorationA%d.png|DecorationA|SINGLE|1
-..\..\Resources\Textures\Ui\DecorationB\DecorationB%d.png|DecorationB|SINGLE|1
 ..\..\Resources\Textures\Ui\ShopIcon\ShopIcon%d.png|ShopIcon|SINGLE|1
 ..\..\Resources\Textures\Ui\X\X%d.png|X|SINGLE|1
-<<<<<<< HEAD
-..\..\Resources\Textures\Ui\Cursor\Cursor%d.png|Cursor|SINGLE|1
-=======
-..\..\Resources\Textures\Ui\Cursor\Cursor%d.png|Cursor|SINGLE|1
-..\..\Resources\Textures\Ui\Frame\full_frame.png|Full_Frame|SINGLE|1
-..\..\Resources\Textures\Ui\Frame\player_under.png|UNDER|SINGLE|1
-..\..\Resources\Textures\Ui\Frame\board.png|Holo_Board|SINGLE|1
->>>>>>> origin/main

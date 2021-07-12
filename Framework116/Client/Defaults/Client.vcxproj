@@ -170,7 +170,8 @@
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
-    <ClInclude Include="..\Headers\PlayerUnder.h" />
+    <ClInclude Include="..\Headers\LobbyBackUI.h" />
+    <ClInclude Include="..\Headers\LobbyScriptUI.h" />
     <ClInclude Include="..\Headers\Shield_Battery.h" />
     <ClInclude Include="..\Headers\Status.h" />
     <ClInclude Include="..\Headers\StatusBoard.h" />
@@ -236,7 +237,8 @@
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
-    <ClCompile Include="..\Codes\PlayerUnder.cpp" />
+    <ClCompile Include="..\Codes\LobbyBackUI.cpp" />
+    <ClCompile Include="..\Codes\LobbyScriptUI.cpp" />
     <ClCompile Include="..\Codes\Shield_Battery.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
     <ClCompile Include="..\Codes\StatusBoard.cpp" />

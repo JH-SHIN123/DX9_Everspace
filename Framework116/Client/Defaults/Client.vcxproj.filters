@@ -214,8 +214,11 @@
     <Filter Include="02.GameObject\03.Monster\Drone">
       <UniqueIdentifier>{c789007c-3e5b-4ee8-bc5e-c5f9ab10baaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Scene\02.Lobby\01.LobbyUI\04.PlayerUnder">
-      <UniqueIdentifier>{8d4c2fed-c14e-4109-8f7b-46db32174791}</UniqueIdentifier>
+    <Filter Include="01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI">
+      <UniqueIdentifier>{7045d708-1c24-4c70-a703-b2c96c8f4899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI\00.LobbyBackUI">
+      <UniqueIdentifier>{f8099ca6-272f-4edc-a003-d51ca795e50b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -411,8 +414,11 @@
     <ClInclude Include="..\Headers\Shield_Battery.h">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\PlayerUnder.h">
-      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.PlayerUnder</Filter>
+    <ClInclude Include="..\Headers\LobbyScriptUI.h">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LobbyBackUI.h">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI\00.LobbyBackUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -596,8 +602,11 @@
     <ClCompile Include="..\Codes\Shield_Battery.cpp">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\PlayerUnder.cpp">
-      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.PlayerUnder</Filter>
+    <ClCompile Include="..\Codes\LobbyScriptUI.cpp">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LobbyBackUI.cpp">
+      <Filter>01.Scene\02.Lobby\01.LobbyUI\04.LobbyScriptUI\00.LobbyBackUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

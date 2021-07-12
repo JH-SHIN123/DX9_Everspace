@@ -6,7 +6,7 @@
 #include"Lobby.h"
 #include"GatchaBox.h"
 #include"Product.h"
-
+#include"LobbyCam.h"
 USING(Engine)
 
 CLobbyUI::CLobbyUI(LPDIRECT3DDEVICE9 pDevice)
@@ -128,11 +128,7 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 		}
 	}
 
-<<<<<<< HEAD
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
-=======
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Background, this)))
->>>>>>> origin/main
 		return UPDATE_ERROR;
 
 
@@ -140,9 +136,27 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 }
 
 _uint CLobbyUI::Render_GameObject()
-
 {
-<<<<<<< HEAD
+	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+	if (m_pLobby->Get_IsGatcha())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Full_Frame")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_UNDER")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
+			return 0;
+	}
+	else if (!pCam->Get_Stop())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Full_Frame")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_UNDER")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
+			return 0;
+	}
+
 	/*if (m_bClicked && !m_pLobby->Get_SceneSelect())
 	{
 
@@ -152,31 +166,7 @@ _uint CLobbyUI::Render_GameObject()
 		if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
 			return 0;
 	}*/
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
-	{
-		if (m_bGotoNextScene || m_bStartUnPacking)
-			return 0;
-	}
-	if (m_wstrTexturePrototypeTag == L"Component_Texture_DecorationB")
-	{
-		m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	}
-=======
-	//if (m_bClicked && !m_pLobby->Get_SceneSelect())
-	//{
-	//	m_fClicked += m_pManagement->Get_DeltaTime();
-	//	if (m_fClicked >= 0.1f)
-	//		m_bClicked = false;
-	//	if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
-	//		return 0;
-	//}
-	//if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
-	//{
-	//	if (m_bGotoNextScene || m_bStartUnPacking)
-	//		return 0;
-	//}
-	
->>>>>>> origin/main
+
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 
@@ -193,10 +183,6 @@ _uint CLobbyUI::Render_GameObject()
 	m_pVIBuffer->Render_VIBuffer();
 	/////////////////////////////////////////////////////////////////
 
-	if (m_wstrTexturePrototypeTag == L"Component_Texture_DecorationB")
-	{
-		m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-	}
 
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{

@@ -28,6 +28,8 @@ public:
 
 	void Set_CamAt(_float3 vAt) { m_CameraDesc.vAt = vAt; }
 	void Set_Scene(class CLobby* pLobby) { m_pLobby = pLobby; }
+
+	_bool Get_Stop() { return m_bStop; }
 private:
 	_uint OffSet(_float fDeltaTime);
 	void StartChangeScene(_float fDeltaTime);
@@ -49,6 +51,7 @@ private:
 	_bool m_bUnPacked = false;
 	class CLobby* m_pLobby = nullptr;
 	_bool m_bDir = false;
+	_bool m_bStop = false;
 
 };
 
