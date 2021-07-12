@@ -34,7 +34,8 @@ public:
 private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;	
+	CTexture*	m_pTexture = nullptr;
+	CTexture* m_pStage3Texture = nullptr;
 	CCamera* m_pCamera = nullptr;
 
 private:

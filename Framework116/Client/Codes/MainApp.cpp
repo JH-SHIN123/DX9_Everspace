@@ -69,7 +69,8 @@ _uint CMainApp::Update_MainApp()
 HRESULT CMainApp::Ready_StaticResources()
 {
 #pragma region GameObjects
-	/* For.GameObject_Player */
+	/* For.GameObject
+	*/
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
 		L"GameObject_Player",

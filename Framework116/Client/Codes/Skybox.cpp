@@ -60,6 +60,18 @@ HRESULT CSkybox::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	// 스테이지3 텍스처
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage3",
+		L"Com_Texture",
+		(CComponent**)&m_pStage3Texture)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Texture_Skybox_Stage3");
+		return E_FAIL;
+	}
+
+
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vScale = _float3(50.f, 50.f, 50.f);
@@ -122,7 +134,17 @@ _uint CSkybox::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pTexture->Set_Texture(0);
+	_uint iStage = m_pManagement->Get_Current_Scene_Type();
+	switch(iStage)
+	{
+	case (_uint)ESceneType::Stage:
+		m_pTexture->Set_Texture(0);
+		break;
+	case (_uint)ESceneType::Stage3:
+		m_pStage3Texture->Set_Texture();
+		break;
+	}
+	
 	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
 
@@ -171,6 +193,7 @@ void CSkybox::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pStage3Texture);
 
 	CGameObject::Free();
 }

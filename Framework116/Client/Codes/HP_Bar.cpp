@@ -58,7 +58,9 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar::Render_GameObject()
 {
-	CUI::Render_GameObject();
+	Check_Degree();
+	if(!m_IsBack)
+		CUI::Render_GameObject();
 
 	return _uint();
 }
@@ -139,6 +141,65 @@ _uint CHP_Bar::Who_Make_Me(MAKERID _iMakerName)
 	return _uint();
 }
 
+_uint CHP_Bar::Check_Degree()
+{
+	
+	if (m_pManagement->Get_GameObjectList(L"Layer_Player")->size() == 0
+		/*||m_pManagement->Get_GameObjectList(L"Layer_Monster")->size() == 0*/)
+		return UPDATE_ERROR;
+
+	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	if (!m_IsRef)
+	{
+		Safe_AddRef(m_pPlayerTransform);
+		m_IsRef = true;
+	}
+	if (nullptr == m_pPlayerTransform)
+	{
+		PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
+		return E_FAIL;
+	}
+	
+	if (m_eMakerID != MAKER_PLAYER)
+	{
+		m_pPlayerTransform->Get_TransformDesc().matWorld;
+		_float3 vPlayerLook = m_pPlayerTransform->Get_State(EState::Look);
+
+		if (m_eMakerID == MAKER_BOSS_MONSTER)
+		{
+			m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
+			if (nullptr == m_listCheckMonsters || m_listCheckMonsters->size() == 0) return NO_EVENT;
+
+			auto& iter = m_listCheckMonsters->begin();
+
+			for (; iter != m_listCheckMonsters->end(); ++iter)
+			{
+				_float3 v1 = vPlayerLook; // ¾ê´Â ¹æÇâº¤ÅÏµ¥?
+				_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // À§Ä¡º¤ÅÍ³×?
+				_float fCeta;
+				D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
+				_float v1v2 = D3DXVec3Dot(&v1, &v2);
+				_float v1Length = D3DXVec3Length(&v1);
+				_float v2Length = D3DXVec3Length(&v2);
+				fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+				_float fDegree = D3DXToDegree(fCeta);
+
+				if (fabs(fDegree) > 90.f)
+				{
+					m_IsBack = true;
+				}
+				else if (fabs(fDegree) <= 90.f) 
+				{
+					m_IsBack = false;
+				}
+			}
+		}
+
+	}
+	return _uint();
+}
+
 CHP_Bar * CHP_Bar::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	CHP_Bar* pInstance = new CHP_Bar(pDevice);
@@ -165,6 +226,7 @@ CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
 
 void CHP_Bar::Free()
 {
+	Safe_Release(m_pPlayerTransform);
 	CUI::Free();
 }
 

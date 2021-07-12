@@ -157,6 +157,8 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
 			Homing(fDeltaTime);
 		}
+		else if (m_pTargetTransform == nullptr)
+			Movement(fDeltaTime);
 	}
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -240,6 +242,7 @@ _uint CPlayer_Missile::Movement(_float fDeltaTime)
 _uint CPlayer_Missile::Homing(_float fDeltaTime)
 {
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+	
 	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
 
 	_float3 vTargetDir = vTargetPos - vMyPos;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Shield_Battery.h"
 #include "MaterialHandler.h"
+#include "Player.h"
 
 CShield_Battery::CShield_Battery(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -116,7 +117,11 @@ _uint CShield_Battery::Update_GameObject(_float fDeltaTime)
 		m_fLifeTime += fDeltaTime;
 
 		if (m_fLifeTime > 3.6f)
+		{
+			// IsShield¸¦ False·Î!
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsShield(false);
 			return DEAD_OBJECT;
+		}
 	}
 
 

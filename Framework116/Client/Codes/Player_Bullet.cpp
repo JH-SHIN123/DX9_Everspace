@@ -60,7 +60,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	else if (iWeapon == WEAPON_MACHINEGUN)
 	{
 		TRANSFORM_DESC TransformDesc;
-		TransformDesc.fSpeedPerSec = 800.f;
+		TransformDesc.fSpeedPerSec = 1800.f;
 		TransformDesc.vScale = { 0.2f, 0.2f, 1.f };
 
 		if (FAILED(CGameObject::Add_Component(
@@ -186,7 +186,6 @@ _uint CPlayer_Bullet::LateUpdate_GameObject(_float fDeltaTime)
 			m_pGatlingParticle->Set_IsDead(true);
 			m_pGatlingParticle = nullptr;
 		}
-
 		// 타격음 넣어야함!
 		return DEAD_OBJECT;
 	}
@@ -198,12 +197,10 @@ _uint CPlayer_Bullet::LateUpdate_GameObject(_float fDeltaTime)
 			m_pBulletParticle->Set_IsDead(true);
 			m_pBulletParticle = nullptr;
 		}
-
 		if (m_pGatlingParticle) {
 			m_pGatlingParticle->Set_IsDead(true);
 			m_pGatlingParticle = nullptr;
 		}
-
 		return DEAD_OBJECT;
 	}
 

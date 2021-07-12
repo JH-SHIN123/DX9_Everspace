@@ -41,6 +41,7 @@ public:  /* For.Frame Manager */
 
 public: /* For.Scene Manager */
 	HRESULT Setup_CurrentScene(_uint iNewSceneType, class CScene* pNewScene);
+	_uint Get_Current_Scene_Type() { return CScene_Manager::Get_Instance()->Get_Current_Scene_Type(); }
 
 public: /* For.Component Manager */
 	HRESULT Add_Component_Prototype(EResourceType eType, const wstring& PrototypeTag, class CComponent* pPrototype);

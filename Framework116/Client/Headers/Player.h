@@ -24,9 +24,11 @@ public:
 public:
 	_uint Set_IsScript(_bool IsScript);
 	_uint Set_IsCameraMove(_bool IsCameraMove);
+	void Set_IsShield(_bool IsShield) { m_IsShield = IsShield; }
 
 public:
 	_uint Get_Weapon_Type() { return m_iWeapon; }
+	_bool Get_Is_Fire() { return m_IsFire; }
 
 
 private:
@@ -58,6 +60,9 @@ private: // 플레이어가 사용하실 변수님들.
 	// 발사속도
 	_float m_fMachinegunFireDelay = 0.f;
 
+	// 쏘는중임?
+	_bool m_IsFire = false;
+
 	//총열돌리는 시간
 	_float m_fMachinegunDelay = 0.f;
 	_float m_fLaserDelay = 0.f;
@@ -69,6 +74,9 @@ private: // 플레이어가 사용하실 변수님들.
 	_float m_fOverDriveTime = 20.f; // 20초 타이머
 	_float m_fOverDrive = 1.f; // OverDrive 활성화 시엔 2.f;
 	_bool m_bOverDrive = false;
+
+	// 실드
+	_bool m_IsShield = false;
 
 	// enum 사용 권장
 	//무기 1번 : 펄스 / 2번 : 기관총  / 3번 :  미사일
@@ -109,11 +117,19 @@ private: //연출 관련
 	_bool m_IsScript = false; //대화
 	_bool m_IsCameraMove = false; // 카메라 연출
 
-private: 
+private:
+	//4방향 미사일
 	_float3 vMissileDir1 = {};
 	_float3 vMissileDir2 = {};
 	_float3 vMissileDir3 = {};
 	_float3 vMissileDir4 = {};
+
+private:
+	//충돌후 밀려날 거리
+	_float m_fAfterCollisionDist = 0.f;
+	_float m_fSpeed = 5.f;
+	
+
 
 
 };

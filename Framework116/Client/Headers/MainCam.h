@@ -39,7 +39,7 @@ public:
 	const ESoloMoveMode Get_SoloMoveMode();
 
 	// 카메라 쉐이킹
-	_uint CameraShakingStart(_float fDeltaTime);
+	_uint CameraShakingStart(_float fDeltaTime, _float Range);
 
 private:
 	_uint Movement(_float fDeltaTime);

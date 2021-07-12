@@ -17,6 +17,10 @@ public:
 	_uint Update_Scene(_float fDeltaTime);
 	_uint LateUpdate_Scene(_float fDeltaTime);
 
+	//스카이박스에서 현재씬 알아오도록
+public:
+	_uint Get_Current_Scene_Type() { return m_iCurrentSceneType;}
+
 public:
 	virtual void Free() override;
 

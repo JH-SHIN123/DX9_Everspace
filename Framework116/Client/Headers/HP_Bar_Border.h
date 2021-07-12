@@ -26,6 +26,8 @@ public:
 	void Set_ScaleX(_float _fDamage);
 	_uint Who_Make_Me(MAKERID _iMakerName);
 
+	_uint Check_Degree();
+
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Adjust_Pos(_float fDeltaTime);
@@ -39,6 +41,14 @@ private:
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
 	_float3 vTargetPos = {};
 	MAKERID m_eMakerID = MAKER_END;
+
+private: // 뒤에있을땐 안나오게
+	_bool m_IsBack = false;
+
+private: // 플레이어 트랜스폼
+	CTransform* m_pPlayerTransform = nullptr;
+	// 최초참조시에 AddRef
+	_bool m_IsRef = false;
 	
 };
 
