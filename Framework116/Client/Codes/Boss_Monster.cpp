@@ -405,7 +405,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 
 
 	// 2초가 넘어가면 발사
-	// 2초의 쿨타임으로 1초동안 발사
+	// 2초의 쿨타임으로 1초동안 발사!
 	if (m_fLaser_CoolTime >= 2.7f)
 	{
 		if (m_IsLaserAttack == true)
