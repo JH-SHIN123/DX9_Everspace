@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "HUD_Effect_Damage.h"
-#include "MaterialHandler.h"
 
 CHUD_Effect_Damage::CHUD_Effect_Damage(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
