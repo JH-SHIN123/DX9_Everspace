@@ -43,8 +43,6 @@ public:
 	HRESULT Add_Layer_StatusBoard(const wstring & LayerTag);
 	HRESULT Add_Layer_Status(const wstring & LayerTag);
 
-private:
-
 public:
 	void Set_GotoNextScene(_bool bSet);
 	void Set_IsGatcha(_bool bSet);
@@ -92,7 +90,7 @@ private:
 	_bool m_bSceneChange = false;
 	_bool m_bStartUnPacking = false;
 
-	_uint m_iMoney = 3000;
+	_uint m_iMoney = 300000;
 	UNIT_INFO m_tUnitInfo;
 
 	_uint m_iAtkBuffItem = 0;

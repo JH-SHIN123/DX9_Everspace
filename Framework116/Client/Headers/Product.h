@@ -45,12 +45,11 @@ public:
 	void  Set_Cancel(_bool bSet) { m_bCancel = bSet; }
 private:
 	CTexture*	m_pTexture = nullptr;
-	CTexture* m_pProductTex = nullptr;
+	CTexture*	m_pProductTex = nullptr;
 	CVIBuffer_RectTexture* m_pProductVIBuffer = nullptr;
 
 	CTransform* m_pTransform = nullptr;
 	CGeoMesh_Torus* m_pGeoMesh = nullptr;
-
 
 private:
 	D3DMATERIAL9 m_tPurpleMaterial,m_tGoldMaterial,m_tRedMaterial;

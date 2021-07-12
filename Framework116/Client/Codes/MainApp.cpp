@@ -13,7 +13,7 @@
 #include "Loading.h"
 #include "Shield_Battery.h"
 
-CMainApp::CMainApp() //glhf
+CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
 {
 }
@@ -96,6 +96,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		CUI::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_Font */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_MyFont",
+		CMyFont::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_MyFont");
 		return E_FAIL;
 	}
 
@@ -312,14 +322,7 @@ HRESULT CMainApp::Ready_StaticResources()
 	//	return E_FAIL;
 	//}
 
-	//For. Static Texture Component Prototype
-	if (FAILED(CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/StaticTexture.txt", TRUE)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Controller");
-		return E_FAIL;
-	}
 #pragma endregion
-
 	return S_OK;
 }
 

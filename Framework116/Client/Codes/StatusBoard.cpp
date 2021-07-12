@@ -49,8 +49,8 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	TRANSFORM_DESC tTrans;
-	tTrans.vScale = { 200.f,200.f,0.f };
-	tTrans.vPosition = _float3(-750.f, -100.f, 0.f);
+	tTrans.vScale = { 280.f,280.f,0.f };
+	tTrans.vPosition = _float3(650.f, 60.f, 0.f);
 	// For.Com_Transform
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -63,6 +63,31 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	//// For.Font - Atk
+	//MYFONT_DESC tFontDesc;
+	//tFontDesc.wstrText = L"공격력";
+	//tFontDesc.tTextColor = D3DXCOLOR(255, 255, 255, 255);
+
+	//tFontDesc.tTransformDesc.vPosition = { 100.f,100.f,0.f };
+	//tFontDesc.tTransformDesc.vScale = { 2.f,2.f,2.f };
+
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::Static,
+	//	L"GameObject_MyFont",
+	//	L"Layer_Font_Status",
+	//	(void*)&tFontDesc,
+	//	(CGameObject**)&m_pFont_Atk)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add StatusBoard In Layer");
+	//	return E_FAIL;
+	//}
+
+#ifdef _DEBUG
+	WritePrivateProfileString(L"Section_1", L"Key_1", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_2", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_3", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_4", L"0", L"../test.ini");
+#endif // _DEBUG
 
 	return S_OK;
 }
@@ -73,6 +98,8 @@ _uint CStatusBoard::Update_GameObject(_float fDeltaTime)
 
 	Movement(fDeltaTime);	
 	
+
+
 	return m_pTransform->Update_Transform();
 	
 }
@@ -132,7 +159,7 @@ void CStatusBoard::Render_AxisMean()
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 
-	str = L"ATK";
+	str = L"공격력";
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
 	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
 	_float3 vPos = {0,0,0};
@@ -143,9 +170,9 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 	
-	str = L"DEF";
+	str = L"방어력";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -154,10 +181,10 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
 
-	str = L"HP";
+	str = L"체력";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -166,9 +193,9 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
-	str = L"SHIELD";
+	str = L"실드량";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -177,9 +204,9 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
-	str = L"ENERGY";
+	str = L"스태미너";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -188,10 +215,10 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 
 
-	str = L"FIRE RATE";
+	str = L"공격속도";
 	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 
@@ -200,7 +227,7 @@ void CStatusBoard::Render_AxisMean()
 
 	m_pManagement->Get_Font()->DrawText(NULL
 		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
 }
 
 
@@ -231,6 +258,8 @@ CGameObject * CStatusBoard::Clone(void * pArg/* = nullptr*/)
 
 void CStatusBoard::Free()
 {
+	Safe_Release(m_pFont_Atk);
+
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

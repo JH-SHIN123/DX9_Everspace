@@ -50,9 +50,10 @@ public:
 	void Set_Model(class CLobbyModel* pModel) { m_pModel = pModel; }
 	
 private:
-	
+
+	CController* m_pController = nullptr;
+
 	//for KeyCheck
-	_float m_fDelayCheck = 0;
 	_float m_fDeltaTime = 0;
 	DWORD m_dwIdx = 0;
 	class CLobby* m_pLobby = nullptr;
@@ -75,8 +76,6 @@ private:
 	_float3 m_vSecondNode = { 0.f,0.f,0.f };
 	_float3 m_vThirdNode = { 0.f,0.f,0.f };
 	_uint m_iSelect = 0;
-	_float m_fDelaySceneSelectCheck = 0.f;
-	
 	_float m_fClicked = 0.f;
 	_bool m_bClicked = false;
 

@@ -33,6 +33,9 @@ private:
 	CVIBuffer*  m_pVIBuffer = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
+
+private:
+	CMyFont* m_pFont_Atk = nullptr;
 };
 
 #define __STATUSBOARD_H__

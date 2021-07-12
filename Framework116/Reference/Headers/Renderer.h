@@ -7,11 +7,13 @@ BEGIN(Engine)
 enum class ERenderType
 {
 	Priority,
+	Background,
 	NonAlpha,
 	Alpha,
 	Particle,
 	AlphaUI,
 	UI,
+	Font,
 	End
 };
 
@@ -29,11 +31,13 @@ public:
 
 private:
 	_uint Render_Priority();
+	_uint Render_Background();
 	_uint Render_NonAlpha();
 	_uint Render_Alpha();
 	_uint Render_Particle();
 	_uint Render_UI();
 	_uint Render_AlphaUI();
+	_uint Render_Font();
 
 public:
 	virtual void Free() override;	

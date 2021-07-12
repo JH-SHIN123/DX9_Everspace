@@ -215,6 +215,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Management.h" />
     <ClInclude Include="..\Headers\Mesh.h" />
     <ClInclude Include="..\Headers\ModelMesh.h" />
+    <ClInclude Include="..\Headers\MyFont.h" />
     <ClInclude Include="..\Headers\ParticleSystem.h" />
     <ClInclude Include="..\Headers\Pipeline.h" />
     <ClInclude Include="..\Headers\Renderer.h" />
@@ -261,6 +262,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Management.cpp" />
     <ClCompile Include="..\Codes\Mesh.cpp" />
     <ClCompile Include="..\Codes\ModelMesh.cpp" />
+    <ClCompile Include="..\Codes\MyFont.cpp" />
     <ClCompile Include="..\Codes\ParticleSystem.cpp" />
     <ClCompile Include="..\Codes\Pipeline.cpp" />
     <ClCompile Include="..\Codes\Renderer.cpp" />

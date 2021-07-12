@@ -5,6 +5,7 @@
 #include "UI.h"
 #include "Light.h"
 #include "ParticleSystem.h"
+#include "MyFont.h"
 
 BEGIN(Engine)
 class CGameObject_Manager final : public CBase
