@@ -226,6 +226,12 @@
     <Filter Include="02.GameObject\03.Monster\01.Sniper">
       <UniqueIdentifier>{e01bd318-fd70-46f8-aa3a-23506b2434b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\10.HUD_Effect\00.Boost">
+      <UniqueIdentifier>{2994f8c5-a28e-4b75-a40d-4e6c10fb8a97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\10.HUD_Effect\01.Damage">
+      <UniqueIdentifier>{5cde8739-5cf1-4a99-8007-50fed94964c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -432,6 +438,9 @@
     <ClInclude Include="..\Headers\Sniper.h">
       <Filter>02.GameObject\03.Monster\01.Sniper</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\HUD_Effect_Damage.h">
+      <Filter>02.GameObject\10.HUD_Effect\01.Damage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -625,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Sniper.cpp">
       <Filter>02.GameObject\03.Monster\01.Sniper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HUD_Effect_Damage.cpp">
+      <Filter>02.GameObject\10.HUD_Effect\01.Damage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

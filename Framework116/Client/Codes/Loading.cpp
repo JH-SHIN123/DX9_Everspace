@@ -914,6 +914,17 @@ HRESULT CLoading::Ready_StageEffect()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Particle_Yellow");
 		return E_FAIL;
 	}
+
+	/* For.Component_Texture_Effect_Warp */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Effect_Damage",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD_Effect/damage.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Warp");
+		return E_FAIL;
+	}
+
 #pragma endregion
 	return S_OK;
 }

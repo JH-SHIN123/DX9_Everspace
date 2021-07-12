@@ -61,6 +61,7 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
 		if (!m_bCancelSceneChange)
 		{
+<<<<<<< HEAD
 			if (m_pTransform->Get_TransformDesc().vPosition.x > 0.f)
 			{
 				vPos.x -= fDeltaTime *1000.f;
@@ -70,6 +71,12 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 				vPos.y = 0.f;
 				vPos.x = 0.f;
 			}
+=======
+				if (m_pTransform->Get_TransformDesc().vPosition.x > 0.f)
+			{
+				vPos.x -= fDeltaTime *1000.f;
+			}
+>>>>>>> origin/main
 			m_pTransform->Set_Position(vPos);
 		}
 		else
@@ -166,10 +173,13 @@ _uint CLobbyUI::Render_GameObject()
 			return 0;
 		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
 			return 0;
+<<<<<<< HEAD
 		if (m_wstrTexturePrototypeTag == L"Component_Texture_Stat_Frame")
 			return 0;
 		if (m_wstrTexturePrototypeTag == L"Component_Texture_Stat_Back")
 			return 0;
+=======
+>>>>>>> origin/main
 	}
 	else if (!pCam->Get_Stop())
 	{
@@ -670,12 +680,16 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 void CLobbyUI::Free()
 {
 	Safe_Release(m_pController);
+<<<<<<< HEAD
 	Safe_Release(m_pFontAtkUpCount);
 	Safe_Release(m_pFontDefUpCount);
 	Safe_Release(m_pFontHpUpCount);
 	Safe_Release(m_pFontEnergyUpCount);
 	Safe_Release(m_pFontMissileCount);
 	Safe_Release(m_pFontVMaxCount);
+=======
+	
+>>>>>>> origin/main
 	CUI::Free();
 }
 

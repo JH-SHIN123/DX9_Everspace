@@ -474,6 +474,16 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	{
 		m_fHp -= 10.f;
 		m_pHp_Bar->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+
+		// HIT Effect
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_HUD_Effect_Damage",
+			L"Layer_HUD_Effect_TEST")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_Effect_Damage In Layer");
+			return;
+		}
 	}
 	if (m_pController->Key_Down(KEY_F2))
 	{

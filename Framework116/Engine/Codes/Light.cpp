@@ -19,8 +19,8 @@ void CLight::InitDirectionalLight(_float3* direction, D3DXCOLOR* color)
 	::ZeroMemory(&m_tLight, sizeof(m_tLight));
 
 	m_tLight.Type = D3DLIGHT_DIRECTIONAL;
-	m_tLight.Ambient = *color * 0.6f;
 	m_tLight.Diffuse = *color;
+	m_tLight.Ambient = *color * 0.2f;
 	m_tLight.Specular = *color * 0.6f;
 	m_tLight.Direction = *direction;
 }
@@ -124,8 +124,9 @@ HRESULT CLight::Ready_GameObject(void* pArg)
 	// 일단 조명 한개만 설치할거임
 	m_pDevice->SetLight(s_iLightIndex, &m_tLight);
 	m_pDevice->LightEnable(s_iLightIndex, true);
-	//m_pDevice->SetRenderState(D3DRS_SPECULARENABLE, true);
-	//m_pDevice->SetRenderState(D3DRS_DIF, 0x00202020);
+
+	m_pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, true);
+	m_pDevice->SetRenderState(D3DRS_SPECULARENABLE, true);
 
 	return S_OK;
 }

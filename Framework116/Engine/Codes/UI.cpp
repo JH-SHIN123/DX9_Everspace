@@ -61,6 +61,7 @@ HRESULT CUI::Ready_GameObject(void* pArg)
 			return E_FAIL;
 		}
 	}
+
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,

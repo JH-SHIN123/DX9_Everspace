@@ -105,6 +105,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Engine\Bin;C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>fmodex_vc.lib;d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,6 +142,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Engine\Bin;C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>fmodex_vc.lib;d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -170,6 +172,10 @@
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="..\Headers\HUD_Effect_Damage.h" />
+>>>>>>> origin/main
     <ClInclude Include="..\Headers\LobbyBackUI.h" />
     <ClInclude Include="..\Headers\LobbyCursor.h" />
     <ClInclude Include="..\Headers\LobbyScriptUI.h" />
@@ -239,6 +245,10 @@
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="..\Codes\HUD_Effect_Damage.cpp" />
+>>>>>>> origin/main
     <ClCompile Include="..\Codes\LobbyBackUI.cpp" />
     <ClCompile Include="..\Codes\LobbyCursor.cpp" />
     <ClCompile Include="..\Codes\LobbyScriptUI.cpp" />

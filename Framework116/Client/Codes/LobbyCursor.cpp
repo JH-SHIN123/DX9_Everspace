@@ -57,8 +57,12 @@ HRESULT CLobbyCursor::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	ShowCursor(FALSE);
+<<<<<<< HEAD
 	m_pTransform->Set_Scale(_float3(30.f, 30.f, 0));
 	
+=======
+	m_pTransform->Set_Scale(_float3(10.f, 10.f, 0));
+>>>>>>> origin/main
 	return S_OK;
 }
 
@@ -74,7 +78,11 @@ _uint CLobbyCursor::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
+<<<<<<< HEAD
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Font, this)))
+=======
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::UI, this)))
+>>>>>>> origin/main
 		return UPDATE_ERROR;
 
 
@@ -85,12 +93,28 @@ _uint CLobbyCursor::Render_GameObject()
 {
 
 	CGameObject::Render_GameObject();
+<<<<<<< HEAD
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 	m_pTexture->Set_Texture(0);
 	m_pVIBuffer->Render_VIBuffer();
 	_float4x4 matWorld;
 	D3DXMatrixIdentity(&matWorld);
 	m_pDevice->SetTransform(D3DTS_WORLD, &matWorld);
+=======
+	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
+
+	_float4x4 matView;
+	D3DXMatrixIdentity(&matView);
+	matView._11 = transformDesc.vScale.x;
+	matView._22 = transformDesc.vScale.y;
+	matView._41 = transformDesc.vPosition.x;
+	matView._42 = transformDesc.vPosition.y;
+	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
+	////////////////////////////////////////
+	/////////////////////////
+	m_pTexture->Set_Texture(0);
+	m_pVIBuffer->Render_VIBuffer();
+>>>>>>> origin/main
 	return _uint();
 }
 
@@ -99,6 +123,7 @@ _uint CLobbyCursor::Movement(_float fDeltaTime)
 	POINT pt;
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
+<<<<<<< HEAD
 	_float3 vPos = { (_float)pt.x,(_float)pt.y,0.f };
 	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 	_float3 vRot = { 0,0,D3DXToRadian(90.f) };
@@ -106,6 +131,15 @@ _uint CLobbyCursor::Movement(_float fDeltaTime)
 	m_pTransform->Set_Rotate(vRot);
 	m_pTransform->Set_Position(vPos);
 	return m_pTransform->Update_Transform();
+=======
+	_float3 vDecartPos = { (_float)pt.x,(_float)pt.y,0.f };
+	_float3 vPos;
+	vPos.x = vDecartPos.x - _float(WINCX / 2.f);
+	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+	vPos.z = 1.f;
+	m_pTransform->Set_Position(vPos);
+	return _uint();
+>>>>>>> origin/main
 }
 
 

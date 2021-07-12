@@ -370,6 +370,12 @@ void CProduct::Set_Text()
 
 void CProduct::Add_Font_InLayer(wstring strLayerTag, CGameObject *& pFont, wstring str, _float3 vPos, _float3 vScale, D3DXCOLOR tColor)
 {
+<<<<<<< HEAD
+=======
+	if (pFont)
+		return;
+
+>>>>>>> origin/main
 	MYFONT_DESC tFontDesc;
 
 	tFontDesc.wstrText = str;
