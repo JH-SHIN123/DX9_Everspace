@@ -259,7 +259,6 @@ void CGatchaBox::Add_Layer_Product(wstring & wstrLayerTag)
 	}
 	CProduct* pProduct = (CProduct*)m_pManagement->Get_GameObject(wstrLayerTag);
 	pProduct->Set_Scene(m_pLobby);
-	
 }
 
 CGatchaBox * CGatchaBox::Create(LPDIRECT3DDEVICE9 pDevice)

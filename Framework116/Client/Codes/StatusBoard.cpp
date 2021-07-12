@@ -49,10 +49,15 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	TRANSFORM_DESC tTrans;
+<<<<<<< HEAD
 
 	tTrans.vScale = { 350.f,350.f,0.f };
 	tTrans.vPosition = _float3(-650.f, 50.f, 0.f);
 
+=======
+	tTrans.vScale = { 280.f,280.f,0.f };
+	tTrans.vPosition = _float3(650.f, 60.f, 0.f);
+>>>>>>> origin/Main_Font
 	// For.Com_Transform
 
 
@@ -89,6 +94,13 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	//	return E_FAIL;
 	//}
 
+#ifdef _DEBUG
+	WritePrivateProfileString(L"Section_1", L"Key_1", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_2", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_3", L"0", L"../test.ini");
+	WritePrivateProfileString(L"Section_1", L"Key_4", L"0", L"../test.ini");
+#endif // _DEBUG
+
 	return S_OK;
 }
 
@@ -98,6 +110,27 @@ _uint CStatusBoard::Update_GameObject(_float fDeltaTime)
 
 	Movement(fDeltaTime);	
 	
+
+
+//#ifdef _DEBUG
+//    TCHAR szBuff[256] = L"";
+//    GetPrivateProfileString(L"Section_1", L"Key_1", L"650", szBuff, 256, L"../test.ini");
+//    float x = _ttof(szBuff);
+//	GetPrivateProfileString(L"Section_1", L"Key_2", L"70", szBuff, 256, L"../test.ini");
+//	float y = _ttof(szBuff);
+//	_float3 vPos = { x ,y,0.f };
+//
+//	//GetPrivateProfileString(L"Section_1", L"Key_3", L"0", szBuff, 256, L"../test.ini");
+//	//x = _ttof(szBuff);
+//	//GetPrivateProfileString(L"Section_1", L"Key_4", L"0", szBuff, 256, L"../test.ini");
+//	//y = _ttof(szBuff);
+//	//_float3 vScale = { x ,y, 1.f };
+//
+//	m_pTransform->Set_Position(vPos);
+//	//m_pTransform->Set_Scale(vScale);
+//#endif // _DEBUG
+
+
 	return m_pTransform->Update_Transform();
 	
 }

@@ -108,7 +108,6 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 			m_bDead = TRUE;
 	}
 	
-
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 	if(!m_pLobby->Get_IsSetPlayerModel())
 	{
