@@ -443,7 +443,7 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(const _float3 & 
 	pSystemDesc.tResetAttribute.fParticleSize = 5.f * _fSize;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 2.f;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.5f;
-	pSystemDesc.tResetAttribute.fLifeTime = 0.25f;
+	pSystemDesc.tResetAttribute.fLifeTime = 0.75f;
 	pSystemDesc.tTransformDesc.vPosition = _vPos;
 	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
 	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
@@ -457,6 +457,37 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(const _float3 & 
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
 	}
+
+	return S_OK;
+}
+
+HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Trail(CGameObject * pTarget, CGameObject ** ppGameObject)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossLaser_Trail";
+	pSystemDesc.iNumParticles = 1;
+	pSystemDesc.tResetAttribute.fParticleSize = 3.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 3.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f, 1.f };
+	pSystemDesc.pTarget = pTarget;
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_FollowSystem",
+		L"Layer_FollowSystem",
+		(void*)&pSystemDesc,
+		(CGameObject**)ppGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Follow In Layer");
+	}
+
+	CGameObject* pGameObject = *ppGameObject;
+	Safe_Release(pGameObject);
 
 	return S_OK;
 }

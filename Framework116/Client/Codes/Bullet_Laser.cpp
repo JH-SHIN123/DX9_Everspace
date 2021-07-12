@@ -1,16 +1,20 @@
 #include "stdafx.h"
 #include "..\Headers\Bullet_Laser.h"
+#include "MaterialHandler.h"
+#include "EffectHandler.h"
 
 CBullet_Laser::CBullet_Laser(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
-
+	_float4 vMaterial = { 1.f,1.f,1.f,1.f };
+	CMaterialHandler::Set_RGBA(vMaterial, &m_tMaterial);
 }
 
 CBullet_Laser::CBullet_Laser(const CBullet_Laser & other)
 	: CGameObject(other)
 	, m_fLiveTime(other.m_fLiveTime)
 	, m_IsTracking(other.m_IsTracking)
+	, m_tMaterial(other.m_tMaterial)
 {
 }
 
@@ -21,8 +25,8 @@ HRESULT CBullet_Laser::Ready_GameObject_Prototype()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-		L"Component_GeoMesh_Boss_Bullet_Laser",
-		CGeoMesh_Cylinder::Create(m_pDevice, 1.f, 1.f, 10.f))))
+		L"Component_VIBuffer_RectTexture_BossLaser",
+		CVIBuffer_RectTexture::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet_EnergyBall");
 		return E_FAIL;
@@ -39,9 +43,9 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_GeoMesh_Boss_Bullet_Laser",
-		L"Com_Cylinder",
-		(CComponent**)&m_pMesh)))
+		L"Component_VIBuffer_RectTexture_BossLaser",
+		L"Com_RectTexture",
+		(CComponent**)&m_pRectTexure)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Cylinder");
 		return E_FAIL;
@@ -50,7 +54,7 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
-		L"Component_Texture_TestCube",
+		L"Component_Texture_BossLaser",
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
 	{
@@ -62,9 +66,9 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	TRANSFORM_DESC TransformDesc = *((TRANSFORM_DESC*)pArg);
 	//TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
-	TransformDesc.fSpeedPerSec = 20.f;
 	//TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
-	TransformDesc.vScale = { 1.f, 1.f, 1.f };
+	TransformDesc.fSpeedPerSec = 300.f;
+	TransformDesc.vScale = { 3.f, 3.f, 3.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -110,6 +114,7 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 	//	return E_FAIL;
 	//}
 
+	CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Trail(this, (CGameObject**)&m_pEffect);
 
 	return S_OK;
 }
@@ -130,8 +135,10 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
-	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Alpha, this)))
 		return UPDATE_ERROR;
+
+	BillBoard();
 
 	m_fLiveTime -= fDeltaTime;
 	if (m_fLiveTime <= 0.f)
@@ -145,11 +152,13 @@ _uint CBullet_Laser::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pTexture->Set_Texture(0);
-	m_pMesh->Render_Mesh();
+	m_pRectTexure->Render_VIBuffer();
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -161,30 +170,60 @@ _uint CBullet_Laser::Movement(_float fDeltaTime)
 
 	if (m_fLiveTime <= 0.f)
 	{
+		if (m_pEffect)
+		{
+			m_pEffect->Set_IsDead(true);
+			m_pEffect = nullptr;
+		}
+
+
 		return DEAD_OBJECT;
 	}
 
-	//if (m_IsTracking == false)
-	//{
-	//	m_pTransform->Update_Transform();
+	if (m_IsTracking == false)
+	{
+		m_pTransform->Update_Transform();
 
-	//	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-	//	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
-	//	m_vMoveDir = vTargetPos - vMyPos;
-	//	D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
-	//	//m_pTransform->Set_Rotate(m_vMoveDir);
-	//	m_IsTracking = true;
-	//}
+		_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+		_float3 vMyPos = m_pTransform->Get_State(EState::Position);
+		m_vMoveDir = vTargetPos - vMyPos;
+		D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
+		//m_pTransform->Set_Rotate(m_vMoveDir);
+		m_IsTracking = true;
+	}
 
-	m_pTransform->Go_Straight(fDeltaTime);
+	m_pTransform->Go_Dir(m_vMoveDir, fDeltaTime);
 
 
 
 	return _uint();
 }
 
-_uint CBullet_Laser::Fire_Triger(_float fDeltaTime)
+_uint CBullet_Laser::BillBoard()
 {
+	_float4x4 matView;
+	D3DXMatrixIdentity(&matView);
+	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
+	ZeroMemory(&matView._41, sizeof(_float3));
+	D3DXMatrixInverse(&matView, 0, &matView);
+
+	_float3 vBillPos = m_pTransform->Get_State(EState::Position);
+
+	_float fScale[3];
+	fScale[0] = m_pTransform->Get_State(EState::Right).x;
+	fScale[1] = m_pTransform->Get_State(EState::Up).y;
+	fScale[2] = m_pTransform->Get_State(EState::Look).z;
+
+	memcpy(&matView._41, &vBillPos, sizeof(_float3));
+
+	for (_uint i = 0; i < 3; ++i)
+	{
+		for (_uint j = 0; j < 4; ++j)
+			matView(i, j) *= fScale[i];
+	}
+
+	m_pTransform->Set_WorldMatrix(matView);
+
 	return _uint();
 }
 
@@ -216,10 +255,17 @@ void CBullet_Laser::Free()
 {
 	Safe_Release(m_pTargetTransform);
 
-	Safe_Release(m_pMesh);
+	Safe_Release(m_pRectTexure);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+
+	if (m_pEffect)
+	{
+		m_pEffect->Set_IsDead(true);
+		m_pEffect = nullptr;
+	}
+
 
 	CGameObject::Free();
 }

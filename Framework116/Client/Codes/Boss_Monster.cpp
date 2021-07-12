@@ -18,6 +18,7 @@ CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	, m_fCannonLength(other.m_fCannonLength)
 	, m_fLaser_Degree(other.m_fLaser_Degree)
 	, m_IsLaserAlert(other.m_IsLaserAlert)
+	, m_IsLaserTarget(other.m_IsLaserTarget)
 {
 }
 
@@ -331,67 +332,75 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 
 	// 3초의 사이클
 	if (m_fLaser_CoolTime >= 3.f)
+	{
 		m_fLaser_CoolTime = 0.f;
+		m_IsLaserAlert = true;
+	}
 
 	if (m_fLaser_CoolTime >= 2.2f)
-		m_IsLaserAlert = true;
-
-	if (m_IsLaserAlert == true)
 	{
-		m_IsLaserAttack = false;
-		m_IsLaserAlert = false;
-
-		_float3 vMyPos = m_vMyPos;
-		_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-
-		_float3 vDir = vTargetPos - vMyPos;
-		D3DXVec3Normalize(&vDir, &vDir);
-
-		_float3 vUp = m_pTransform->Get_State(EState::Up);
-		_float3 vLook = m_pTransform->Get_State(EState::Look);
-		D3DXVec3Normalize(&vUp, &vUp);
-		D3DXVec3Normalize(&vLook, &vLook);
-
-		// Look 방향으로 1이 정면
-		_float fTheta_Z = D3DXVec3Dot(&vDir, &vLook);
-		_float fLaser_Radian_Z = D3DXToRadian(m_fLaser_Degree);
-		_float fRadian_Min_Z = 1.f - fLaser_Radian_Z;
-		_float fRadian_Max_Z = fLaser_Radian_Z + 1.f;
-
-		// 위 아래로 한번 더 걸러야 함
-		// 기준이 Z축이니 Y와의 내적은 0이 나옴(법선 일때)
-		_float fTheta_Y = D3DXVec3Dot(&vDir, &vUp);
-		_float fLaser_Radian_Y = D3DXToRadian(m_fLaser_Degree);
-		_float fRadian_Max_Y = 1.f - fLaser_Radian_Y;
-		_float fRadian_Min_Y = fLaser_Radian_Y - 1.f;
-
-		if (0.1f >= fTheta_Y &&
-			fTheta_Y >= -0.45f)
+		if (m_IsLaserAlert == true)
 		{
-			if (fRadian_Min_Z <= fTheta_Z &&
-				fTheta_Z <= fRadian_Max_Z)
-			{
-				m_IsLaserAttack = true;
-			}
-		}
+			m_IsLaserAlert = false;
+			m_IsLaserTarget = false;
+			m_IsLaserAttack = false;
 
-
-		if (m_IsLaserAttack == true)
-		{
 			_float3 vMyPos = m_vMyPos;
+			_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+
+			_float3 vDir = vTargetPos - vMyPos;
+			D3DXVec3Normalize(&vDir, &vDir);
+
 			_float3 vUp = m_pTransform->Get_State(EState::Up);
 			_float3 vLook = m_pTransform->Get_State(EState::Look);
 			D3DXVec3Normalize(&vUp, &vUp);
 			D3DXVec3Normalize(&vLook, &vLook);
 
-			vMyPos -= vUp * 20.f;
-			m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
-			_float3 vEffectPos = m_vLaserCannon_Position + (vLook * 3.f);
+			// Look 방향으로 1이 정면
+			_float fTheta_Z = D3DXVec3Dot(&vDir, &vLook);
+			_float fLaser_Radian_Z = D3DXToRadian(m_fLaser_Degree);
+			_float fRadian_Min_Z = 1.f - fLaser_Radian_Z;
+			_float fRadian_Max_Z = fLaser_Radian_Z + 1.f;
 
-			CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(vEffectPos, 1.f);
+			// 위 아래로 한번 더 걸러야 함
+			// 기준이 Z축이니 Y와의 내적은 0이 나옴(법선 일때)
+			_float fTheta_Y = D3DXVec3Dot(&vDir, &vUp);
+			_float fLaser_Radian_Y = D3DXToRadian(m_fLaser_Degree);
+			_float fRadian_Max_Y = 1.f - fLaser_Radian_Y;
+			_float fRadian_Min_Y = fLaser_Radian_Y - 1.f;
+
+			if (0.1f >= fTheta_Y &&
+				fTheta_Y >= -0.45f)
+			{
+				if (fRadian_Min_Z <= fTheta_Z &&
+					fTheta_Z <= fRadian_Max_Z)
+				{
+					m_IsLaserAttack = true;
+					m_IsLaserTarget = true;
+
+				}
+			}
+
+
+			if (m_IsLaserAttack == true &&
+				m_IsLaserTarget == true)
+			{
+				m_IsLaserTarget = false;
+				m_iLaserCount = 0;
+
+				_float3 vMyPos = m_vMyPos;
+				_float3 vUp = m_pTransform->Get_State(EState::Up);
+				_float3 vLook = m_pTransform->Get_State(EState::Look);
+				D3DXVec3Normalize(&vUp, &vUp);
+				D3DXVec3Normalize(&vLook, &vLook);
+
+				vMyPos -= vUp * 20.f;
+				m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				_float3 vEffectPos = m_vLaserCannon_Position + (vLook * 3.f);
+
+				CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(vEffectPos, 1.f);
+			}
 		}
-
-
 	}
 
 
@@ -401,35 +410,55 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 	{
 		if (m_IsLaserAttack == true)
 		{
-			TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
-
-			_float3 vMyPos = m_vMyPos;
-			_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
-
-			_float3 vDir = vTargetPos - vMyPos;
-			D3DXVec3Normalize(&vDir, &vDir);
-
-			_float3 vRight	=	{ 1.f, 0.f, 0.f };
-			_float3 vUp		=	{ 0.f, 1.f, 0.f };
-			_float3 vLook	=	{ 0.f, 0.f, 1.f };
-
-			vMyPos -= vUp * 20.f;
-			m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
-			_float3 vTheta;
-			//vTheta.x = (D3DXVec3Dot(&vRight, &vDir));
-			//vTheta.y = (D3DXVec3Dot(&vUp, &vDir));
-			//vTheta.z = (D3DXVec3Dot(&vLook, &vDir));
-			// 어차피 쏘는건 보스가 결정하니 레이저는 방향만 잡는다?
-			pArg->vPosition = m_vLaserCannon_Position;
-			pArg->vRotate = vTheta;
-			
-   			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::NonStatic,
-				L"GameObject_Bullet_Laser",
-				L"Layer_Bullet_Laser", pArg)))
+			if (m_iLaserCount <= 1)
 			{
-				PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
-				return E_FAIL;
+				//m_IsLaserAttack = false;
+				//m_fLaser_CoolTime = 0.f;
+				TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+				_float3 vMyPos = m_vMyPos;
+				_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+				_float3 vRight = m_pTransform->Get_State(EState::Right);
+				_float3 vUp = m_pTransform->Get_State(EState::Up);
+				_float3 vLook = m_pTransform->Get_State(EState::Look);
+
+				_float3 vDir = vTargetPos - vMyPos;
+				D3DXVec3Normalize(&vDir, &vDir);
+
+				//_float3 vTheta	=	{ 1.f, 1.f, 1.f };
+				//_float2 vThetaXY_Z = { 1.f, 0.f };
+				//_float2 vDirXY = { vDir.x, vDir.y };
+				//_float2 vThetaYZ_X = { 1.f, 0.f };
+				//_float2 vDirYZ = { vDir.y, vDir.z };
+				//_float2 vThetaZX_Y = { 1.f, 0.f };
+				//_float2 vDirZX = { vDir.z, vDir.x };
+				////vTheta.z = D3DXVec2Dot(&vThetaXY_Z, &vDirXY);
+				////vTheta.x = D3DXVec2Dot(&vThetaYZ_X, &vDirYZ);
+				////vTheta.y = D3DXVec2Dot(&vThetaZX_Y, &vDirZX);
+				////vTheta.x = (D3DXVec3Dot(&vDir, &vRight));
+				//vTheta.y = (D3DXVec3Dot(&vDir, &vUp));
+				////vTheta.z = (D3DXVec3Dot(&vDir, &vLook));
+				//pArg->vRotate = vTheta;
+
+				//if (m_iLaserCount < 1)
+				//{
+					vMyPos -= vUp * 20.f;
+					m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				//}
+
+				pArg->vPosition = m_vLaserCannon_Position;
+
+				++m_iLaserCount;
+
+
+				if (FAILED(m_pManagement->Add_GameObject_InLayer(
+					EResourceType::NonStatic,
+					L"GameObject_Bullet_Laser",
+					L"Layer_Bullet_Laser", pArg)))
+				{
+					PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
+					return E_FAIL;
+				}
 			}
 		}
 	}

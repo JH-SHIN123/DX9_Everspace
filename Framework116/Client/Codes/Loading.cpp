@@ -1235,6 +1235,24 @@ HRESULT CLoading::Ready_BossAndOthers()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
+		L"Component_Texture_BossLaser_Trail",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossLaser_Trail.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossLaser_Trail");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossLaser",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossLaser.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossLaser");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
 		L"Component_Texture_BossLaserAlert",
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossLaserAlert.png"))))
 	{
@@ -1295,4 +1313,5 @@ HRESULT CLoading::Ready_BossAndOthers()
 
 #pragma endregion
 
+	return S_OK;
 }

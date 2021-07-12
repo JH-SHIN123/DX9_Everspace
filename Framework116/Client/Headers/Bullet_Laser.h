@@ -20,7 +20,7 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-	_uint Fire_Triger(_float fDeltaTime);
+	_uint BillBoard();
 
 public:
 	static CBullet_Laser* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -28,7 +28,7 @@ public:
 	virtual void Free() override;
 
 private:
-	CGeoMesh_Cylinder*  m_pMesh = nullptr;
+	CVIBuffer_RectTexture*  m_pRectTexure = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
@@ -40,6 +40,9 @@ private:
 	_bool m_IsTracking = false;
 	_float m_fLiveTime = 5.f;
 	_float3 m_vMoveDir = {};
+	D3DMATERIAL9 m_tMaterial;
+	class CGameObject* m_pEffect = nullptr;
+
 
 
 };

@@ -88,6 +88,8 @@ private: // laser
 	_float m_fLaser_Degree = 10.f;
 	_bool m_IsLaserAlert = false;
 	_bool m_IsLaserAttack = false;
+	_bool m_IsLaserTarget = false;
+	_uint m_iLaserCount = 0;
 
 
 private:
