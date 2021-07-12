@@ -267,7 +267,7 @@ void CProduct::Render_Product()
 	m_pDevice->GetRenderState(D3DRS_CULLMODE,&dwRenderState);
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_matProduct);
-	if((_uint)m_eProduct < 6)
+	if((_uint)m_eProduct < 5)
 		m_pProductTex->Set_Texture((_uint)m_eProduct);
 	else
 	{
@@ -323,6 +323,8 @@ void CProduct::Get_Product()
 
 void CProduct::Set_Text()
 {
+	if (m_pFont)
+		return;
 	wstring str;
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
@@ -368,9 +370,9 @@ void CProduct::Set_Text()
 
 void CProduct::Add_Font_InLayer(wstring strLayerTag, CGameObject *& pFont, wstring str, _float3 vPos, _float3 vScale, D3DXCOLOR tColor)
 {
+
 	if (pFont)
 		return;
-
 	MYFONT_DESC tFontDesc;
 
 	tFontDesc.wstrText = str;
@@ -418,6 +420,7 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
+
 	Safe_Release(m_pProductTex);
 	Safe_Release(m_pProductVIBuffer);
 	Safe_Release(m_pGeoMesh);

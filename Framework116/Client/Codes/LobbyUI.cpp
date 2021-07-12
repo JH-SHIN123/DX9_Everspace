@@ -37,15 +37,16 @@ HRESULT CLobbyUI::Ready_GameObject(void* pArg)
 		L"Com_Controller",
 		(CComponent**)&m_pController)))
 	{
+
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Controller");
 		return E_FAIL;
 	}
 
 	 m_vNodeScale = { 50.f,50.f,0.f };
-	 m_vCursorPos = { -400.f,-100.f,0.f };
-	 m_vFirstNode = { -400.f,-100.f,0.f };
-	 m_vSecondNode = { 100.f,100.f,0.f };
-	 m_vThirdNode = { 300.f,200.f,0.f };
+	 m_vFirstNode = { -379.f,124.f,0.f };
+	 m_vCursorPos = m_vFirstNode;
+	 m_vSecondNode = { -206.f,-123.f,0.f };
+	 m_vThirdNode = { 167.f,30.f,0.f };
 
 	
 	return S_OK;
@@ -60,10 +61,17 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
 		if (!m_bCancelSceneChange)
 		{
-				if (m_pTransform->Get_TransformDesc().vPosition.x > 0.f)
+
+			if (m_pTransform->Get_TransformDesc().vPosition.x > 0.f)
 			{
 				vPos.x -= fDeltaTime *1000.f;
 			}
+			else
+			{
+				vPos.y = 0.f;
+				vPos.x = 0.f;
+			}
+
 			m_pTransform->Set_Position(vPos);
 		}
 		else
@@ -160,6 +168,11 @@ _uint CLobbyUI::Render_GameObject()
 			return 0;
 		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
 			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Stat_Frame")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Stat_Back")
+			return 0;
+
 	}
 	else if (!pCam->Get_Stop())
 	{
@@ -660,7 +673,14 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 void CLobbyUI::Free()
 {
 	Safe_Release(m_pController);
-	
+
+	Safe_Release(m_pFontAtkUpCount);
+	Safe_Release(m_pFontDefUpCount);
+	Safe_Release(m_pFontHpUpCount);
+	Safe_Release(m_pFontEnergyUpCount);
+	Safe_Release(m_pFontMissileCount);
+	Safe_Release(m_pFontVMaxCount);
+
 	CUI::Free();
 }
 

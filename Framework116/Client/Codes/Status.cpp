@@ -125,7 +125,8 @@ _uint CStatus::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CStatus::Render_GameObject()
 {
-
+	if (m_pLobby->Get_IsGatcha())
+		return 0;
 	if (m_pLobby->Get_GotoNextScene())
 		return 0;
 
