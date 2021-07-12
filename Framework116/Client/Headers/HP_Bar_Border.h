@@ -7,7 +7,7 @@ USING(Engine)
 class CHP_Bar_Border final : public CUI
 {
 public:
-	enum MAKERID {MAKER_PLAYER, MAKER_BOSS_MONSTER, MAKER_MONSTER,MAKER_DRONE, MAKER_END};
+	enum MAKERID {MAKER_PLAYER, MAKER_BOSS_MONSTER, MAKER_MONSTER, MAKER_SNIPER, MAKER_DRONE, MAKER_END};
 
 public:
 	explicit CHP_Bar_Border(LPDIRECT3DDEVICE9 pDevice);
@@ -22,9 +22,13 @@ public:
 	virtual _uint Render_GameObject() override;
 
 public:
+	// 뒤야 앞이야!
+	void Set_IsBack(_bool bCheck) { m_IsBack = bCheck; }
 	// 피깎는용도!
 	void Set_ScaleX(_float _fDamage);
+	void Set_Pos(_float3 _vPos) { m_pTransform->Set_Position(_vPos); }
 	_uint Who_Make_Me(MAKERID _iMakerName);
+	_float3 Get_Pos() { return m_pTransform->Get_State(EState::Position); }
 
 	_uint Check_Degree();
 

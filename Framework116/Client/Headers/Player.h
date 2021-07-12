@@ -101,6 +101,7 @@ private: // AlertArrow 관련
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
 	const list<class CGameObject*>* m_listCheckSnipers = nullptr;
 	_bool IsArrow = false;
+	_bool IsArrow2 = false;
 
 private: // HP, 스태미너 관련
 	class CHP_Bar* m_pHp_Bar = nullptr;

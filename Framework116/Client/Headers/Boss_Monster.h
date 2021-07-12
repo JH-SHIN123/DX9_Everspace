@@ -53,6 +53,7 @@ private: // Move_Mode
 
 private: // Add_HP_Bar
 	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
 
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -100,6 +101,8 @@ private:
 	class CHP_Bar* m_pHp_Bar = nullptr;
 	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
 	_float m_fHpLength = 64.f;
+	
+	_uint Check_Degree();
 };
 
 #define __BOSS_MONSTER_H__

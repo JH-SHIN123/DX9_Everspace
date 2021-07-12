@@ -2,6 +2,7 @@
 #include "..\Headers\HP_Bar.h"
 #include "Pipeline.h"
 #include "Collision.h"
+#include "Sniper.h"
 
 CHP_Bar::CHP_Bar(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
@@ -31,7 +32,7 @@ _uint CHP_Bar::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 	
-	Adjust_Pos(fDeltaTime);
+	//Adjust_Pos(fDeltaTime);
 	
 	//여기서 하지말고 몬스터 내부에서 직접 뿌려줘야 할 것 같은데.
 	//if (m_listCheckMonsters->front()->Get_IsCollide() == true)
@@ -58,7 +59,7 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar::Render_GameObject()
 {
-	Check_Degree();
+	//Check_Degree();
 	if(!m_IsBack)
 		CUI::Render_GameObject();
 
@@ -88,49 +89,51 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 			m_pTransform->Update_Transform();
 		}
 		return _uint();
-	case CHP_Bar::MAKER_BOSS_MONSTER:
-		dstLayerTag = L"Layer_Boss_Monster";
-		vHpOffset = {-30.f, 30.f};
-		break;
-	case CHP_Bar::MAKER_MONSTER:
-		break;
-	case CHP_Bar::MAKER_DRONE:
-		dstLayerTag = L"Layer_Drone";
-		break;
+	//case CHP_Bar::MAKER_BOSS_MONSTER:
+	//	dstLayerTag = L"Layer_Boss_Monster";
+	//	vHpOffset = {-30.f, 30.f};
+	//	break;
+	//case CHP_Bar::MAKER_SNIPER:
+	//	//dstLayerTag = L"Layer_Sniper";
+	//	//vHpOffset = { -30.f, 30.f };
+	//	break;
+	//case CHP_Bar::MAKER_DRONE:
+	//	dstLayerTag = L"Layer_Drone";
+	//	break;
 	}
 
-	if (dstLayerTag == L"") return -1;
+	//if (dstLayerTag == L"") return -1;
 
-	const list<class CGameObject*>* dstObjList = m_pManagement->Get_GameObjectList(dstLayerTag);
-	if (nullptr == dstObjList) return -1;
+	//const list<class CGameObject*>* dstObjList = m_pManagement->Get_GameObjectList(dstLayerTag);
+	//if (nullptr == dstObjList) return -1;
 
-	if (dstObjList->size() != 0)
-	{
-		vTargetPos = dstObjList->front()->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
-	}
-	//////////////////3d좌표를 2d좌표로////////////////////////////
-	D3DVIEWPORT9 vp2;
-	m_pDevice->GetViewport(&vp2);
-	_float4x4 TestView2, TestProj2;
-	m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
-	m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
-	_float4x4 matCombine2 = TestView2 * TestProj2;
-	D3DXVec3TransformCoord(&vTargetPos, &vTargetPos, &matCombine2);
-	vTargetPos.x += 1.f;
-	vTargetPos.y += 1.f;
+	//if (dstObjList->size() != 0)
+	//{
+	//	vTargetPos = dstObjList->front()->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
+	//}
+	////////////////////3d좌표를 2d좌표로////////////////////////////
+	//D3DVIEWPORT9 vp2;
+	//m_pDevice->GetViewport(&vp2);
+	//_float4x4 TestView2, TestProj2;
+	//m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+	//m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+	//_float4x4 matCombine2 = TestView2 * TestProj2;
+	//D3DXVec3TransformCoord(&vTargetPos, &vTargetPos, &matCombine2);
+	//vTargetPos.x += 1.f;
+	//vTargetPos.y += 1.f;
 
-	vTargetPos.x = (vp2.Width * (vTargetPos.x)) / 2.f + vp2.X;
-	vTargetPos.y = (vp2.Height * (2.f - vTargetPos.y) / 2.f + vp2.Y);
+	//vTargetPos.x = (vp2.Width * (vTargetPos.x)) / 2.f + vp2.X;
+	//vTargetPos.y = (vp2.Height * (2.f - vTargetPos.y) / 2.f + vp2.Y);
 
-	_float3 ptBoss;
-	ptBoss.x = vTargetPos.x;
-	ptBoss.y = vTargetPos.y;
-	ptBoss.z = 0.f;
-	//////////////////////////////////////////////////////////////////
-	if (m_pTransform) {
-		m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) + vHpOffset.x, -ptBoss.y + (WINCY / 2.f) + vHpOffset.y, 0.f));
-		m_pTransform->Update_Transform();
-	}
+	//_float3 ptBoss;
+	//ptBoss.x = vTargetPos.x;
+	//ptBoss.y = vTargetPos.y;
+	//ptBoss.z = 0.f;
+	////////////////////////////////////////////////////////////////////
+	//if (m_pTransform) {
+	//	m_pTransform->Set_Position(_float3(ptBoss.x - (WINCX / 2.f) + vHpOffset.x, -ptBoss.y + (WINCY / 2.f) + vHpOffset.y, 0.f));
+	//	m_pTransform->Update_Transform();
+	//}
 
 	return _uint();
 }
@@ -194,6 +197,31 @@ _uint CHP_Bar::Check_Degree()
 					m_IsBack = false;
 				}
 			}
+		}
+
+		if (m_eMakerID == MAKER_SNIPER)
+		{
+			//const list<class CGameObject*>* ListSniper = m_pManagement->Get_GameObjectList(L"Layer_Sniper");
+			//if (nullptr == ListSniper)
+			//{
+			//	PRINT_LOG(L"Error", L"ListSniper is nullptr");
+			//	return NO_EVENT;
+			//}
+			//for (auto& pList : *ListSniper)
+			//{
+			//	//hp바가 이미있으면 넘겨라
+			//	if (dynamic_cast<CSniper*>(pList)->Get_Is_Hp_Bar() == true)
+			//	{
+			//		continue;
+			//	}
+			//	else
+			//	{
+			//		// 그게 아니라면 hp바 생성.
+			//		
+			//	}
+
+			//	
+			//}
 		}
 
 	}

@@ -28,6 +28,11 @@ public:
 	_uint Sniper_Battle(_float fDeltaTime);
 	_uint Lock_On(_float fDeltaTime);
 
+public: // Add_HP_Bar
+	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
+	_bool Get_Is_Hp_Bar() { return m_IsHPBar; }
+
 public:
 	static CSniper* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -55,6 +60,14 @@ private:
 
 	// 락온 -> 발사 까지의 딜레이.
 	_float m_fSniperShootDelay = 0.f;
+
+	// HP Bar 추가
+	_bool m_IsHPBar = false;
+	class CHP_Bar* m_pHp_Bar = nullptr;
+	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
+	_float m_fHpLength = 64.f;
+
+	_uint Check_Degree();
 };
 
 #define __SNIPER_H__
