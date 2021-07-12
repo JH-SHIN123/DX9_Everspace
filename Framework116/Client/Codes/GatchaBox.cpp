@@ -17,6 +17,7 @@ CGatchaBox::CGatchaBox(const CGatchaBox & other)
 
 HRESULT CGatchaBox::Ready_GameObject_Prototype()
 {
+
 	CGameObject::Ready_GameObject_Prototype();
 
 	return S_OK;
@@ -224,6 +225,7 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 
 		}
 		m_bBomb = TRUE;
+
 	}
 	if (m_bCancelUnPacking)
 	{

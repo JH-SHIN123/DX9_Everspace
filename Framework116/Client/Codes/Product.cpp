@@ -29,7 +29,6 @@ CProduct::CProduct(const CProduct & other)
 	, m_tPurpleMaterial(other.m_tPurpleMaterial)
 	,m_tRedMaterial(other.m_tRedMaterial)
 	, m_tGoldMaterial(other.m_tGoldMaterial)
-	, vColorRGBA(other.vColorRGBA)
 {
 
 }
@@ -154,7 +153,7 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 		if (m_pFont)
 		{
 			m_pFont->Set_IsDead(TRUE);
-			m_pFont = nullptr;
+			Safe_Release(m_pFont);
 		}
 		return DEAD_OBJECT;
 	}
@@ -420,12 +419,11 @@ CGameObject * CProduct::Clone(void * pArg/* = nullptr*/)
 
 void CProduct::Free()
 {
-
 	Safe_Release(m_pProductTex);
+	Safe_Release(m_pTexture);
 	Safe_Release(m_pProductVIBuffer);
 	Safe_Release(m_pGeoMesh);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pTexture);
-	
+	Safe_Release(m_pFont);
 	CGameObject::Free();
 }

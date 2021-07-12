@@ -49,13 +49,11 @@ private:
 	CTexture*	m_pTexture = nullptr;
 	CTexture*	m_pProductTex = nullptr;
 	CVIBuffer_RectTexture* m_pProductVIBuffer = nullptr;
-
 	CTransform* m_pTransform = nullptr;
 	CGeoMesh_Torus* m_pGeoMesh = nullptr;
 
 private:
 	D3DMATERIAL9 m_tPurpleMaterial,m_tGoldMaterial,m_tRedMaterial;
-	_float4 vColorRGBA = { 0.004f, 0.002f, 0.005f, 0.f };
 	_bool m_bHitRing = false;
 
 	class CLobby* m_pLobby = nullptr;

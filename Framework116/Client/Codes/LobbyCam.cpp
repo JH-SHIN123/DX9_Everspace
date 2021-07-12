@@ -202,6 +202,5 @@ CGameObject * CLobbyCam::Clone(void * pArg/* = nullptr*/)
 
 void CLobbyCam::Free()
 {
-	
 	CCamera::Free();
 }

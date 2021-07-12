@@ -472,45 +472,44 @@ void CLobbyUI::Update_SceneSelect(_float fDeltaTime)
 
 _bool CLobbyUI::Render_ItemSlot()
 {
-	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect())
+	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+
+	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect()
+		|| !pCam->Get_Stop()|| m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
 	{
 		if (m_pFontAtkUpCount)
 		{
 			m_pFontAtkUpCount->Set_IsDead(TRUE);
-			m_pFontAtkUpCount = nullptr;
+			Safe_Release(m_pFontAtkUpCount);
 		}
 		if (m_pFontDefUpCount)
 		{
 			m_pFontDefUpCount->Set_IsDead(TRUE);
-			m_pFontDefUpCount = nullptr;
+			Safe_Release(m_pFontDefUpCount);
 		}
 		if (m_pFontHpUpCount)
 		{
 			m_pFontHpUpCount->Set_IsDead(TRUE);
-			m_pFontHpUpCount = nullptr;
+			Safe_Release(m_pFontHpUpCount);
 		}
 		if (m_pFontEnergyUpCount)
 		{
 			m_pFontEnergyUpCount->Set_IsDead(TRUE);
-			m_pFontEnergyUpCount = nullptr;
+			Safe_Release(m_pFontEnergyUpCount);
 		}
 		if (m_pFontMissileCount)
 		{
 			m_pFontMissileCount->Set_IsDead(TRUE);
-			m_pFontMissileCount = nullptr;
+			Safe_Release(m_pFontMissileCount);
 		}
 		if (m_pFontVMaxCount)
 		{
 			m_pFontVMaxCount->Set_IsDead(TRUE);
-			m_pFontVMaxCount = nullptr;
+			Safe_Release(m_pFontVMaxCount);
 		}
 		return FALSE;
 	}
-	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
-	if (!pCam->Get_Stop())
-		return FALSE;
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
-		return FALSE;
+
 	CGameObject::Render_GameObject();
 
 	_float4x4 matView;
@@ -672,6 +671,7 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 
 void CLobbyUI::Free()
 {
+	
 	Safe_Release(m_pController);
 
 	Safe_Release(m_pFontAtkUpCount);
@@ -687,6 +687,8 @@ void CLobbyUI::Free()
 void CLobbyUI::Set_Scene(CLobby * _pUI)
 {
 	m_pLobby = _pUI;
+
+
 }
 
 
