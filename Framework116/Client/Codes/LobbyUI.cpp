@@ -472,7 +472,10 @@ void CLobbyUI::Update_SceneSelect(_float fDeltaTime)
 
 _bool CLobbyUI::Render_ItemSlot()
 {
-	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect())
+	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+
+	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect()
+		|| !pCam->Get_Stop()|| m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
 	{
 		if (m_pFontAtkUpCount)
 		{
@@ -506,11 +509,7 @@ _bool CLobbyUI::Render_ItemSlot()
 		}
 		return FALSE;
 	}
-	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
-	if (!pCam->Get_Stop())
-		return FALSE;
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
-		return FALSE;
+
 	CGameObject::Render_GameObject();
 
 	_float4x4 matView;
@@ -672,14 +671,22 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 
 void CLobbyUI::Free()
 {
+	
 	Safe_Release(m_pController);
-
+	Safe_Release(m_pFontAtkUpCount);
+	Safe_Release(m_pFontDefUpCount);
+	Safe_Release(m_pFontHpUpCount);
+	Safe_Release(m_pFontEnergyUpCount);
+	Safe_Release(m_pFontMissileCount);
+	Safe_Release(m_pFontVMaxCount);
 	CUI::Free();
 }
 
 void CLobbyUI::Set_Scene(CLobby * _pUI)
 {
 	m_pLobby = _pUI;
+
+
 }
 
 
