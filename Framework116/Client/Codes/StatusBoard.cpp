@@ -51,14 +51,20 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC tTrans;
 	tTrans.vScale = { 280.f,280.f,0.f };
 	tTrans.vPosition = _float3(650.f, 60.f, 0.f);
+
 	// For.Com_Transform
+
+
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Transform",
 		L"Com_Transform",
 		(CComponent**)&m_pTransform,
 		&tTrans)))
+
 	{
+
+
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
@@ -131,7 +137,7 @@ _uint CStatusBoard::Render_GameObject()
 
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
-
+	
 	_float4x4 matView;
 	D3DXMatrixIdentity(&matView);
 	matView._11 = transformDesc.vScale.x;
@@ -259,7 +265,6 @@ CGameObject * CStatusBoard::Clone(void * pArg/* = nullptr*/)
 void CStatusBoard::Free()
 {
 	Safe_Release(m_pFont_Atk);
-
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);

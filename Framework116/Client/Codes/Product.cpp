@@ -91,7 +91,7 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 	
-	_uint iProduct =(_uint)CPipeline::GetRandomFloat(0,9);
+	_uint iProduct = (_uint)CPipeline::GetRandomFloat(0,10);
 	m_eProduct = (EProduct)iProduct;
 	_uint iRank = (_uint)CPipeline::GetRandomFloat(0, 2);
 	m_eRank = (ERank)iRank;
@@ -136,6 +136,11 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 			pCam->Set_UnPacked(FALSE);
 			Get_Product();
 			m_pLobby->Set_Money(-1000);
+			if (m_pFont)
+			{
+				m_pFont->Set_IsDead(TRUE);
+				m_pFont = nullptr;
+			}
 			return DEAD_OBJECT;
 		}
 	}
@@ -146,6 +151,11 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 		pCam->Set_UnPacked(FALSE);
 		Get_Product();
 		m_pLobby->Set_Money(-1000);
+		if (m_pFont)
+		{
+			m_pFont->Set_IsDead(TRUE);
+			m_pFont = nullptr;
+		}
 		return DEAD_OBJECT;
 	}
 	Movement(fDeltaTime);
@@ -301,6 +311,12 @@ void CProduct::Get_Product()
 	case EProduct::Energy_Buff:
 		m_pLobby->SetEnergyBuffItemCount((_uint)m_eRank + 1);
 		break;
+	case EProduct::Missile:
+		m_pLobby->SetMissileCount((_uint)m_eRank + 1);
+		break;
+	case EProduct::VMax_Buff:
+		m_pLobby->SetVMaxBuffItemCount((_uint)m_eRank + 1);
+		break;
 	}
 	m_pLobby->Set_UnitInfo(tCurUnitInfo);
 }
@@ -339,12 +355,40 @@ void CProduct::Set_Text()
 	case EProduct::Energy_Buff:
 		str = L"에너지 버프 아이템!!";
 		break;
+	case EProduct::Missile:
+		str = L"미사일 획득!";
+		break;
+	case EProduct::VMax_Buff:
+		str = L"VMax버프 아이템!";
+		break;
 	}
-		rc.left = (WINCX >> 1) - 100;
-		rc.top = (WINCY >> 1) - 400;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, str.c_str(), -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
+	Add_Font_InLayer(L"Layer_Font_Product", m_pFont, str, 
+		_float3(WINCX/2.f - 50.f, 200, 0), _float3(2,2, 0), D3DXCOLOR(255, 255, 255,255));
+}
+
+void CProduct::Add_Font_InLayer(wstring strLayerTag, CGameObject *& pFont, wstring str, _float3 vPos, _float3 vScale, D3DXCOLOR tColor)
+{
+	if (pFont)
+		return;
+
+	MYFONT_DESC tFontDesc;
+
+	tFontDesc.wstrText = str;
+	tFontDesc.tTextColor = tColor;
+
+	tFontDesc.tTransformDesc.vPosition = vPos;
+	tFontDesc.tTransformDesc.vScale = vScale;
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_MyFont",
+		strLayerTag,
+		(void*)&tFontDesc,
+		(CGameObject**)&pFont)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add StatusBoard In Layer");
+		return;
+	}
 }
 
 

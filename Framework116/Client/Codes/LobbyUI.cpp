@@ -6,6 +6,7 @@
 #include"Lobby.h"
 #include"GatchaBox.h"
 #include"Product.h"
+#include"LobbyCam.h"
 
 USING(Engine)
 
@@ -56,18 +57,31 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 		return DEAD_OBJECT;
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
-		_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
-		if (m_pTransform->Get_TransformDesc().vScale.x < 1171.f)
+		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
+		if (!m_bCancelSceneChange)
 		{
-			vScale.x += fDeltaTime * 1171.f;
+				if (m_pTransform->Get_TransformDesc().vPosition.x > 0.f)
+			{
+				vPos.x -= fDeltaTime *1000.f;
+			}
+			m_pTransform->Set_Position(vPos);
 		}
-		if (m_pTransform->Get_TransformDesc().vScale.y < 683.f)
+		else
 		{
-			vScale.y += fDeltaTime* 683.f;
+			if (m_pTransform->Get_TransformDesc().vPosition.x < 1756.f)
+			{
+				vPos.x += fDeltaTime *1000.f;
+			}
+			else
+			{
+				m_bDead = TRUE;
+				m_pLobby->Set_SceneSelect(FALSE);
+			}
+			m_pTransform->Set_Position(vPos);
 		}
-		m_pTransform->Set_Scale(vScale);
 	}
-	else if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
+	else if (m_wstrTexturePrototypeTag != L"Component_Texture_X"
+		&& m_wstrTexturePrototypeTag != L"Component_Texture_achievement")
 	{
 		if (m_pLobby->Get_SceneSelect())
 			return NO_EVENT;
@@ -77,21 +91,26 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	else if (m_pLobby->Get_SceneSelect())
 	{
 		if (m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect"
-			&&m_wstrTexturePrototypeTag != L"Component_Texture_X")
+			&&m_wstrTexturePrototypeTag != L"Component_Texture_X"
+			&& m_wstrTexturePrototypeTag != L"Component_Texture_achievement")
+		{
 			return NO_EVENT;
+		}
 	}
-	if (m_bShowModelIcon)
-		m_bRenderItemMean = TRUE;
-	else
-		m_bRenderItemMean = FALSE;
 	CUI::Update_GameObject(fDeltaTime);
-	Update_Bounds();
+	Update_ItemFrame(fDeltaTime);
+	if (m_pLobby->Get_StartUnPacking())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_X")
+			Update_Bounds();
+	}
+	else
+		Update_Bounds();
 	m_pController->Update_Controller();
 	Update_SceneSelect(fDeltaTime);
 	Check_Picking();
 	OnMouseButton();
 	Key_Check(fDeltaTime);
-	ChangeModelIcon();
 	return NO_EVENT;
 }
 
@@ -109,10 +128,6 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 	}
 	
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
-	if(!m_pLobby->Get_IsSetPlayerModel())
-	{
-		m_bShowModelIcon = false;
-	}
 
 	if (m_bCancel)
 	{
@@ -136,20 +151,37 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLobbyUI::Render_GameObject()
 {
-	//if (m_bClicked && !m_pLobby->Get_SceneSelect())
-	//{
-	//	m_fClicked += m_pManagement->Get_DeltaTime();
-	//	if (m_fClicked >= 0.1f)
-	//		m_bClicked = false;
-	//	if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
-	//		return 0;
-	//}
-	//if (m_wstrTexturePrototypeTag != L"Component_Texture_X")
-	//{
-	//	if (m_bGotoNextScene || m_bStartUnPacking)
-	//		return 0;
-	//}
-	
+	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+	if (m_pLobby->Get_IsGatcha())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Full_Frame")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_UNDER")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
+			return 0;
+	}
+	else if (!pCam->Get_Stop())
+	{
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Full_Frame")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_UNDER")
+			return 0;
+		if (m_wstrTexturePrototypeTag == L"Component_Texture_Holo_Board")
+			return 0;
+	}
+
+	/*if (m_bClicked && !m_pLobby->Get_SceneSelect())
+	{
+
+		m_fClicked += m_pManagement->Get_DeltaTime();
+		if (m_fClicked >= 0.1f)
+			m_bClicked = false;
+		if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
+			return 0;
+	}*/
+	if (!Render_ItemSlot())
+	{
 	CGameObject::Render_GameObject();
 	TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 
@@ -160,17 +192,19 @@ _uint CLobbyUI::Render_GameObject()
 	matView._41 = transformDesc.vPosition.x;
 	matView._42 = transformDesc.vPosition.y;
 	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
-	/////////////////////////////////////////////////////////////////
+	////////////////////////////////////////
+	/////////////////////////
 	m_pTexture->Set_Texture(m_dwIdx);
 	m_pVIBuffer->Render_VIBuffer();
 	/////////////////////////////////////////////////////////////////
-
+	}
 
 
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
 		_float4x4 matView;
 		D3DXMatrixIdentity(&matView);
+		TRANSFORM_DESC transformDesc = m_pTransform->Get_TransformDesc();
 		matView._11 = transformDesc.vScale.x + 100.f;
 		matView._22 = transformDesc.vScale.y + 100.f;
 		matView._41 = transformDesc.vPosition.x;
@@ -179,10 +213,7 @@ _uint CLobbyUI::Render_GameObject()
 		m_pTexture->Set_Texture(5);
 		m_pVIBuffer->Render_VIBuffer();
 		
-		_float3 vScale = { 1000.f,600.f,0.f };
-		if (m_pTransform->Get_TransformDesc().vScale.x >= vScale.x
-			&&m_pTransform->Get_TransformDesc().vScale.y >= vScale
-			.y)
+		if (m_pTransform->Get_TransformDesc().vPosition.x <= 0.f)
 		{
 			Render_Cursor();
 			Render_Nodes();
@@ -190,35 +221,9 @@ _uint CLobbyUI::Render_GameObject()
 
 	}
 
-	if (m_bShowModelIcon)
-	{
-		if(m_fDeltaTime < 1.f)
-		m_fDeltaTime += m_pManagement->Get_DeltaTime();
-		int iIndex = m_dwIdx;
-		for (int i = 0; i <5; i++)
-		{	
-			if (iIndex >= 5)
-				iIndex = 0;
-			matView._11 = transformDesc.vScale.x;
-			matView._22 = transformDesc.vScale.y;
-			matView._41 = transformDesc.vPosition.x +i*transformDesc.vScale.x;
-			matView._42 = transformDesc.vPosition.y;
-			m_pDevice->SetTransform(D3DTS_VIEW, &matView);
-			m_pTexture->Set_Texture(iIndex);
-			m_pVIBuffer->Render_VIBuffer();
-			iIndex++;
-		}
 	
 
-		if (m_bRenderItemMean)
-			Render_ItemMean();
-		
-	}
 
-	if (Get_IsPicking())
-		Set_Text();
-	else if (m_wstrTexturePrototypeTag == L"Component_Texture_Product")
-		Set_Text();
 
 
 	return _uint();
@@ -231,10 +236,10 @@ void CLobbyUI::Update_Bounds()
 	
 	_float3 vPos = _float3(0.f,0.f,0.f);
 	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
-
+	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
 	vPos.x = vDecartPos.x + _float(WINCX/2.f);
 	vPos.y = _float(WINCY/2.f)- vDecartPos.y;
-	vPos.y -= 50.f;
+	vPos.y -= 30.f;
 	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 
 
@@ -262,10 +267,6 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 {
 	if(m_pController->Key_Down(KEY_LBUTTON))
 	{
-		if (m_bShowModelIcon)
-		{
-			m_bChangeModelIcon = TRUE;
-		}
 		if (Get_IsPicking())
 		{
 			m_bClicked = TRUE;
@@ -283,23 +284,27 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 			{
 				if (!m_pLobby->Get_IsSetPlayerModel())
 					m_pLobby->Set_IsSetPlayerModel(TRUE);
-				if (!m_bShowModelIcon)
-				{
-					m_bShowModelIcon = TRUE;
-				}
-				
 			}
 			else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 			{
-
+				for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_UI"))
+				{
+					if (static_cast<CLobbyUI*>(pDst)->m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
+					{
+						_bool bSet = static_cast<CLobbyUI*>(pDst)->Get_CancelSceneSelect();
+						static_cast<CLobbyUI*>(pDst)->Set_CancelSceneSelect(!bSet);
+						return;
+					}
+				}
 				if (m_pLobby->Get_SceneSelect())
 					return;
+				if (m_pLobby->Get_IsGatcha())
+					return;
 				UI_DESC UiDesc;
-				_float PosX = 0.f;
+				_float PosX = 1171.f;
 				_float PosY = 0.f;
-				_float ScaleX = 0;
-				_float ScaleY = 0;
-
+				_float ScaleX = 1171;
+				_float ScaleY = 683;
 
 				UiDesc.tTransformDesc.vPosition = { PosX,PosY,0 };
 				UiDesc.tTransformDesc.vScale = { ScaleX,ScaleY,0.f };
@@ -335,63 +340,7 @@ void CLobbyUI::Key_Check(_float fDeltaTime)
 	}
 }
 
-void CLobbyUI::Set_Text()
-{
-#ifdef _DEBUG
-	wstring str;
-	RECT rc;
-	GetClientRect(g_hWnd, &rc);
 
-	if (L"Component_Texture_achievement" == m_wstrTexturePrototypeTag)
-	{
-		str = L"스테이지 선택!";
-		rc.left = (WINCX>>1) + 500;
-		rc.top = (WINCY >> 1) + 200;
-		m_pManagement->Get_Font()->DrawText(NULL
-		, str.c_str(), -1
-		, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	}
-	if (L"Component_Texture_Product" == m_wstrTexturePrototypeTag)
-	{
-		//TCHAR szMoney[MAX_PATH];
-		//_itow_s(m_pLobby->Get_Money(),szMoney,10);
-		//rc.left = (WINCX >> 1) - 470;
-		//rc.top = (WINCY >> 1) - 465;
-		//m_pManagement->Get_Font()->DrawText(NULL
-		//	, szMoney, -1
-		//	, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 255, 255, 255));
-	}
-	if (L"Component_Texture_PlaneTemplete" == m_wstrTexturePrototypeTag)
-	{
-		str = L"아이템 슬롯";
-		rc.left = (WINCX >> 1) + 500;
-		rc.top = (WINCY >> 1) + 200;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, str.c_str(), -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	}
-	if (L"Component_Texture_ShopIcon" == m_wstrTexturePrototypeTag)
-	{
-		str = L"상자 개봉";
-		rc.left = (WINCX >> 1) + 500;
-		rc.top = (WINCY >> 1) + 200;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, str.c_str(), -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	}
-	if (L"Component_Texture_RepairIcon" == m_wstrTexturePrototypeTag)
-	{
-		str = L"설정";
-		rc.left = (WINCX >> 1) + 500;
-		rc.top = (WINCY >> 1) + 200;
-		m_pManagement->Get_Font()->DrawText(NULL
-			, str.c_str(), -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-	}
-#elif _DEBUG
-	 
-#endif
-}
 
 void CLobbyUI::OnMouseButton()
 {
@@ -399,9 +348,11 @@ void CLobbyUI::OnMouseButton()
 	{
 		if (m_wstrTexturePrototypeTag == L"Component_Texture_RepairIcon")
 		{
+			m_dwIdx = 1;
 		}
 		else if (m_wstrTexturePrototypeTag == L"Component_Texture_ShopIcon")
 		{
+			m_dwIdx = 1;
 		}
 		else if (m_wstrTexturePrototypeTag == L"Component_Texture_achievement")
 		{
@@ -414,87 +365,6 @@ void CLobbyUI::OnMouseButton()
 		m_dwIdx = 0;
 }
 
-void CLobbyUI::ChangeModelIcon()
-{
-	if (!m_bChangeModelIcon)
-		return;
-	RECT rc[5] = {};
-	POINT pt = {};
-	GetCursorPos(&pt);
-	ScreenToClient(g_hWnd, &pt);
-
-	for (int i = 0; i < 5; i++)
-	{
-	_float3 vPos = _float3(0.f, 0.f, 0.f);
-	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
-
-	vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-	vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-	vPos.y -= 50.f;
-	_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
-
-
-	rc[i].left = (LONG)(vPos.x - (vSize.x *0.5f)+(vSize.x*(i)));
-	rc[i].top = (LONG)(vPos.y - (vSize.y*0.5f));
-	rc[i].right = (LONG)(vPos.x + (vSize.x*0.5f)+(vSize.x*(i)));
-	rc[i].bottom = (LONG)(vPos.y + (vSize.y*0.5f));
-
-
-		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
-		{
-			if (PtInRect(&rc[i], pt))
-			{
-				m_bClicked = TRUE;
-				m_dwIdx += i;
-				if (m_dwIdx >= 5)
-					m_dwIdx -= 5;
-			
-				m_bShowModelIcon = FALSE;
-				m_bChangeModelIcon = FALSE;
-				break;
-			}
-		}
-	}
-}
-
-
-void CLobbyUI::Render_ItemMean()
-{
-
-	if (!m_bRenderItemMean)
-		return;
-	TCHAR str[5][32];
-	swprintf_s(str[0], L"");
-	swprintf_s(str[1], L"Atk Buff : %d", m_pLobby->GetAtkBuffItemCount());
-	swprintf_s(str[2], L"Def Buff : %d", m_pLobby->GetDefBuffItemCount());
-	swprintf_s(str[3], L"Hp Buff : %d", m_pLobby->GetHpBuffItemCount());
-	swprintf_s(str[4], L"Energy Buff : %d", m_pLobby->GetEnergyBuffItemCount());
-	RECT rc;
-	GetClientRect(g_hWnd, &rc);
-
-	_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
-	_float3 vPos = { 0,0,0 };
-	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
-	vScale.y *= 0.5f;
-	_uint iFirstIndex = m_dwIdx;
-	for (int i = 0; i < 5; i++)
-	{
-		if (iFirstIndex >= 5)
-			iFirstIndex -= 5;
-		vPos.x = vDecartPos.x + _float(WINCX / 2.f);
-		vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
-		rc.left = (LONG)(vPos.x + i*vScale.x);
-		rc.top = (LONG)(vPos.y - vScale.y);
-		m_pManagement->Get_Font()->DrawText(NULL
-			, str[iFirstIndex], -1
-			, &rc, DT_LEFT | DT_TOP, D3DXCOLOR(255, 0, 0, 255));
-		iFirstIndex++;
-	}
-	
-
-
-
-}
 
 
 void CLobbyUI::Render_Cursor()
@@ -524,6 +394,7 @@ void CLobbyUI::Render_Nodes()
 			vPos = m_vSecondNode;
 		else if (i == 2)
 			vPos = m_vThirdNode;
+		_bool bIsLock = m_pLobby->GetStageLock(i);
 
 		matView._11 = m_vNodeScale.x;
 		matView._22 = m_vNodeScale.y;
@@ -533,6 +404,11 @@ void CLobbyUI::Render_Nodes()
 		/////////////////////////////////////////////////////////////////
 		m_pTexture->Set_Texture(i+2);
 		m_pVIBuffer->Render_VIBuffer();
+		if (bIsLock)
+		{
+			m_pTexture->Set_Texture(6);
+			m_pVIBuffer->Render_VIBuffer();
+		}
 	}
 }
 
@@ -551,8 +427,16 @@ void CLobbyUI::Update_SceneSelect(_float fDeltaTime)
 	else if (m_pController->Key_Down(KEY_RIGHT))
 			m_iSelect++;
 	else if (m_pController->Key_Down(KEY_ENTER))
+	{
+		if (!m_pLobby->GetStageLock(m_iSelect))
 			m_pLobby->Set_GotoNextScene(TRUE);
-	
+	}
+	else if (m_pController->Key_Down(KEY_P))
+	{
+		m_pLobby->Set_SceneChange(FALSE);
+		m_bCancelSceneChange = TRUE;
+		return;
+	}
 	if (m_iSelect > 2)
 			m_iSelect = 0;
 	
@@ -573,6 +457,181 @@ void CLobbyUI::Update_SceneSelect(_float fDeltaTime)
 	}
 }
 
+_bool CLobbyUI::Render_ItemSlot()
+{
+	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect())
+	{
+		if (m_pFontAtkUpCount)
+		{
+			m_pFontAtkUpCount->Set_IsDead(TRUE);
+			m_pFontAtkUpCount = nullptr;
+		}
+		if (m_pFontDefUpCount)
+		{
+			m_pFontDefUpCount->Set_IsDead(TRUE);
+			m_pFontDefUpCount = nullptr;
+		}
+		if (m_pFontHpUpCount)
+		{
+			m_pFontHpUpCount->Set_IsDead(TRUE);
+			m_pFontHpUpCount = nullptr;
+		}
+		if (m_pFontEnergyUpCount)
+		{
+			m_pFontEnergyUpCount->Set_IsDead(TRUE);
+			m_pFontEnergyUpCount = nullptr;
+		}
+		if (m_pFontMissileCount)
+		{
+			m_pFontMissileCount->Set_IsDead(TRUE);
+			m_pFontMissileCount = nullptr;
+		}
+		if (m_pFontVMaxCount)
+		{
+			m_pFontVMaxCount->Set_IsDead(TRUE);
+			m_pFontVMaxCount = nullptr;
+		}
+		return FALSE;
+	}
+	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+	if (!pCam->Get_Stop())
+		return FALSE;
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
+		return FALSE;
+	CGameObject::Render_GameObject();
+
+	_float4x4 matView;
+	D3DXMatrixIdentity(&matView);
+
+	_float3 vFirstPos = m_pTransform->Get_TransformDesc().vPosition;
+	_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+	_float3 vPos = { 0,0,0 };
+	TCHAR szBuf[32] = L"";
+	
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			int iIndex = i * 3 + j;
+			if (iIndex > 6)
+				continue;
+			vPos.x = vFirstPos.x + j * 160;
+			vPos.y = vFirstPos.y - i * 160;
+
+			_float3 vDecartFontPos = vPos;
+			_float3 vFontPos = {0,0,0};
+			vFontPos.x = vDecartFontPos.x + _float(WINCX / 2.f);
+			vFontPos.y = _float(WINCY / 2.f) - vDecartFontPos.y;
+			vFontPos.x += 40.f;
+			vFontPos.y -= 60.f;
+			switch (iIndex)
+			{
+			case 1:
+				_itow_s(m_pLobby->GetAtkBuffItemCount(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });
+				break;
+			case 2:
+				_itow_s(m_pLobby->GetDefBuffItemCount(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });
+				break;
+			case 3:
+				_itow_s(m_pLobby->GetHpBuffItemCount(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });
+				break;
+			case 4:	
+				_itow_s(m_pLobby->GetEnergyBuffItemCount(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });
+				break;
+			case 5:
+				_itow_s(m_pLobby->GetMissileCount(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });		
+				break;
+			case 6:
+				_itow_s(m_pLobby->GetVMaxBuffItem(), szBuf, 10);
+				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
+				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, D3DXCOLOR{ 255,255,255,255 });
+				break;
+				}
+			matView._11 = vScale.x;
+			matView._22 = vScale.y;
+			matView._41 = vPos.x;
+			matView._42 = vPos.y;
+			m_pDevice->SetTransform(D3DTS_VIEW, &matView);
+			/////////////////////////////////////////////////////////////////
+			m_pTexture->Set_Texture(iIndex);
+			m_pVIBuffer->Render_VIBuffer();
+		}
+	}
+	return TRUE;
+}
+
+void CLobbyUI::Add_Font_InLayer(wstring strLayerTag, CGameObject*& pFont, wstring str, _float3 vPos, _float3 vScale, D3DXCOLOR tColor)
+{
+	if (pFont)
+		return;
+
+	MYFONT_DESC tFontDesc;
+
+	tFontDesc.wstrText =str;
+	tFontDesc.tTextColor = tColor;
+
+	tFontDesc.tTransformDesc.vPosition = vPos;
+	tFontDesc.tTransformDesc.vScale = vScale;
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_MyFont",
+		strLayerTag,
+		(void*)&tFontDesc,
+		(CGameObject**)&pFont)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add StatusBoard In Layer");
+		return;
+	}
+}
+
+
+void CLobbyUI::Update_ItemFrame(_float fDeltaTime)
+{
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_Item_Frame")
+		return;
+	if (!m_bStart)
+	{
+		m_vStartPos = m_pTransform->Get_TransformDesc().vPosition;
+		m_bStart = true;
+	}
+	//모으기
+	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect())
+	{
+		_float3 vTargetPos = { -810,190,0 };
+		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
+		if (vTargetPos.x < vPos.x)
+			vPos.x -= fDeltaTime*100.f;
+		if (vTargetPos.y > vPos.y)
+			vPos.y += fDeltaTime*100.f;
+		m_pTransform->Set_Position(vPos);
+	}//헤치기
+	else if (m_pLobby->Get_IsSetPlayerModel())
+	{
+		_float3 vPos = m_pTransform->Get_TransformDesc().vPosition;
+		if (m_vStartPos.x > vPos.x)
+			vPos.x += fDeltaTime*100.f;
+		if (m_vStartPos.y < vPos.y)
+			vPos.y -= fDeltaTime*100.f;
+		m_pTransform->Set_Position(vPos);
+	}
+}
 
 CLobbyUI* CLobbyUI::Create(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -601,7 +660,7 @@ CGameObject* CLobbyUI::Clone(void* pArg)
 void CLobbyUI::Free()
 {
 	Safe_Release(m_pController);
-
+	
 	CUI::Free();
 }
 

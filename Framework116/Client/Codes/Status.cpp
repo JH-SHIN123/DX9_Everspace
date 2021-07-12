@@ -52,7 +52,7 @@ HRESULT CStatus::Ready_GameObject(void * pArg/* = nullptr*/)
 	CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_StatusBoard", L"Com_Transform");
 	TRANSFORM_DESC tTrans;
 	tTrans.vScale = pTransform->Get_TransformDesc().vScale;
-	tTrans.vScale *= 0.5f;
+	tTrans.vScale *= 0.25f;
 	tTrans.vPosition = pTransform->Get_TransformDesc().vPosition;
 	// For.Com_Transform
 	if (FAILED(CGameObject::Add_Component(
@@ -84,22 +84,23 @@ _uint CStatus::Update_GameObject(_float fDeltaTime)
 	Movement(fDeltaTime);
 	if (UpdateHexagon(fDeltaTime))
 	{
-		_float fSqurtf = 1.f/sqrtf(2);
+		_float fInc = 2.f/3.f;
+		
 		_float3 vAtk = {0,((_float)m_tPreUnitInfo.iAtk/100.f),0.f};
 
-		_float3 vDef = { ((_float)m_tPreUnitInfo.iDef / 100.f) * fSqurtf,
-			(((_float)m_tPreUnitInfo.iDef / 100.f) * fSqurtf),0.f };
+		_float3 vDef = { ((_float)m_tPreUnitInfo.iDef / 100.f),
+			(((_float)m_tPreUnitInfo.iDef / 100.f) * fInc),0.f };
 
-		_float3 vHp = { (_float)(m_tPreUnitInfo.iMaxHp / 100.f) * fSqurtf
-		,-((_float)m_tPreUnitInfo.iMaxHp / 100.f) * fSqurtf,0.f };
+		_float3 vHp = { (_float)(m_tPreUnitInfo.iMaxHp / 100.f)
+		,-((_float)m_tPreUnitInfo.iMaxHp / 100.f) *fInc,0.f };
 
 		_float3 vShield = { 0,-((_float)m_tPreUnitInfo.iMaxShield / 100.f),0.f };
 
-		_float3 vEnergy = { -((_float)m_tPreUnitInfo.iMaxEnergy / 100.f*fSqurtf)
-			,-((_float)m_tPreUnitInfo.iMaxEnergy / 100.f)*fSqurtf,0.f };
+		_float3 vEnergy = { -((_float)m_tPreUnitInfo.iMaxEnergy / 100.f)
+					,((_float)m_tPreUnitInfo.iMaxEnergy / 100.f)*-fInc,0.f };
 
-		_float3 vFireRate = { -((_float)m_tPreUnitInfo.iFireRate / 100.f)*fSqurtf
-			,((_float)m_tPreUnitInfo.iFireRate / 100.f)*fSqurtf,0.f };
+		_float3 vFireRate = { -((_float)m_tPreUnitInfo.iFireRate / 100.f)
+			,((_float)m_tPreUnitInfo.iFireRate / 100.f)*fInc,0.f };
 
 		static_cast<CVIBuffer_HexagonTex*>(m_pVIBuffer)->SetVB(vAtk, vDef, vHp, vShield, vEnergy, vFireRate);
 	}
@@ -161,7 +162,10 @@ _bool CStatus::UpdateHexagon(_float fDeltaTime)
 	m_pUnitInfo = m_pLobby->Get_UnitInfo();
 	if (!m_pUnitInfo)
 		return FALSE;
-
+	static _float fUpdateTime = 0;
+	fUpdateTime+=fDeltaTime;
+	if (fUpdateTime <= 0.1f)
+		return FALSE;
 	UNIT_INFO m_tCurUnitInfo = *m_pUnitInfo;
 	_bool bUpdate = FALSE;
 	if (m_tCurUnitInfo.iAtk != m_tPreUnitInfo.iAtk)
@@ -212,7 +216,7 @@ _bool CStatus::UpdateHexagon(_float fDeltaTime)
 			m_tPreUnitInfo.iFireRate--;
 		bUpdate = TRUE;
 	}
-	
+	fUpdateTime = 0.f;
 	return bUpdate;
 
 }

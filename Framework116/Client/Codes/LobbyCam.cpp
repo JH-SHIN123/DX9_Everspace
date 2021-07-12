@@ -104,7 +104,8 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 	{
 		m_CameraDesc.vAt = m_pPlayerTransform->Get_TransformDesc().vPosition;
 		m_CameraDesc.vEye.y += m_fDistanceFromTarget / 2.f;
-		m_bStart = true;
+		m_bStart = TRUE;
+		m_bStop = TRUE;
 		return 0;
 	}
 	if (m_pLobby->Get_GotoNextScene())
@@ -124,23 +125,30 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 	vAt.y = 0.f;
 	if (vTargetPos != vAt)
 	{
+		m_bStop = false;
 		D3DXVec3Normalize(&vTargetPos, &vTargetPos);
 		D3DXVec3Normalize(&vAt, &vAt);
 		_float fAngle = 0.f;
 		if (m_bDir)
 		{
-			fAngle = acosf(D3DXVec3Dot(&vAt,&vTargetPos));
+			fAngle = acosf(D3DXVec3Dot(&vAt, &vTargetPos));
 			if (fAngle <= D3DXToRadian(1.f))
+			{
+				m_bStop = TRUE;
 				return 0;
+			}
 		}
 		else
 		{
 			fAngle = -acosf(D3DXVec3Dot(&vAt, &vTargetPos));
 			if (fAngle >= -D3DXToRadian(1.f))
+			{
+				m_bStop = TRUE;
 				return 0;
+			}
 		}
-			
-		
+
+
 		fAngle *= fDeltaTime;
 		vAt = m_CameraDesc.vAt;
 		_float3 vNextAim;
@@ -150,6 +158,7 @@ _uint CLobbyCam::OffSet(_float fDeltaTime)
 
 		m_CameraDesc.vAt = vNextAim;
 	}
+
 	
 	return 0;
 }

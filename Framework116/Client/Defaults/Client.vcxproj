@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Engine\Bin;C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>fmodex_vc.lib;d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Engine\Bin;C:\Users\cjh\Desktop\새 폴더 %282%29\Framework116\Reference\Libraries;../../Reference/Libraries/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>fmodex_vc.lib;d3d9.lib;d3dx9.lib;Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -170,6 +170,9 @@
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
+    <ClInclude Include="..\Headers\LobbyBackUI.h" />
+    <ClInclude Include="..\Headers\LobbyCursor.h" />
+    <ClInclude Include="..\Headers\LobbyScriptUI.h" />
     <ClInclude Include="..\Headers\Shield_Battery.h" />
     <ClInclude Include="..\Headers\Sniper.h" />
     <ClInclude Include="..\Headers\Status.h" />
@@ -236,6 +239,9 @@
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
+    <ClCompile Include="..\Codes\LobbyBackUI.cpp" />
+    <ClCompile Include="..\Codes\LobbyCursor.cpp" />
+    <ClCompile Include="..\Codes\LobbyScriptUI.cpp" />
     <ClCompile Include="..\Codes\Shield_Battery.cpp" />
     <ClCompile Include="..\Codes\Sniper.cpp" />
     <ClCompile Include="..\Codes\Status.cpp" />
