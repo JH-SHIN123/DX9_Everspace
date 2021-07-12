@@ -23,6 +23,7 @@ public:
 private:
 	class CScene*	m_pCurrentScene = nullptr;
 	_uint			m_iCurrentSceneType = 4294967295;
+
 };
 END
 

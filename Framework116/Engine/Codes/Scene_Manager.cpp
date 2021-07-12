@@ -54,3 +54,4 @@ void CScene_Manager::Free()
 {
 	Safe_Release(m_pCurrentScene);
 }
+
