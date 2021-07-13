@@ -60,7 +60,6 @@ protected:
 	_bool m_IsAstroidCollide = false;
 	_float m_fHp = 0.f;
 	_float m_fFullHp = 0.f;
-	_float m_fAtt = 0.f;
 
 protected:
 	LPDIRECT3DDEVICE9 m_pDevice = nullptr;

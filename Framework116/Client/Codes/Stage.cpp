@@ -63,8 +63,6 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 	
-	//SetCursorPos(WINCX >> 1, (WINCY >> 1));
-
 	//Stage_Flow(fDeltaTime);
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);

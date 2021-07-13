@@ -73,7 +73,6 @@ typedef struct tagRay
 	_float3 vDirection = { 0.f, 0.f, 0.f };
 }RAY;
 
-
 END
 
 #define __ENGINE_STRUCT_H__

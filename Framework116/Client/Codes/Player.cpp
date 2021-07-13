@@ -405,7 +405,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pTransform->Go_Straight(fDeltaTime * 1.5f);
 			//Stamina
 			m_IsStaminaShrink = true;
-			//m_fStamina -= 0.2f;
+			m_fStamina -= 0.2f;
 			m_pStamina_Bar->Set_ScaleX(-0.2f / m_fFullStamina * m_fStaminaLength);
 
 			if (m_pHUD_Effect_Boost && (m_fStamina > m_fMinStamina * 2.f)) {
