@@ -8,6 +8,8 @@
 #include "Ring.h"
 #include "ScriptUI.h"
 #include"Pipeline.h"
+#include"Player.h"
+#include"HP_Bar.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -46,11 +48,8 @@ HRESULT CStage::Ready_Scene()
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
-	GAMEOBJECT_DESC tDesc;
-	tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
-	if (FAILED(Add_Layer_Asteroid(L"Layer_Asteriod",tDesc)))
-		return E_FAIL;
 
+	
 	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		//return E_FAIL;
 
@@ -70,8 +69,10 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 	CQuestHandler::Get_Instance()->Update_Quest();
 	
 	//Stage_Flow(fDeltaTime);
-	CTransform* pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
-	if (AsteroidFlyingAway(fDeltaTime, 100.f, 100.f, 200.f, 200.f, pPlayerTransform,30,100.f,300.f))
+	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
+	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
+	
+	if (AsteroidFlyingAway(fDeltaTime, 200.f, 100.f, 200.f, 200.f, pPlayerTransform,30,70.f,300.f))
 	{
 		
 		//스크립트
@@ -187,7 +188,7 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 		PRINT_LOG(L"Err", L"pTargetTransform is nullptr");
 		return FALSE;
 	}
-	_float fFinishTime = 300.f;
+	_float fFinishTime = 60.f;
 	m_fFlyingAsteroidTime += fDeltaTime;
 	if (m_fFlyingAsteroidTime >= fFinishTime)
 		return TRUE;
@@ -197,6 +198,7 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 		_float3 vRockPos = pTargetTransform->Get_TransformDesc().vPosition;
 		GAMEOBJECT_DESC tDesc;
 		tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
+		tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
 		tDesc.tTransformDesc.fSpeedPerSec = 1.f;
 		for (int i = 0; i < iRockAmount; i++)
 		{
@@ -204,38 +206,42 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 			vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
 			vRockPos.y += CPipeline::GetRandomFloat(0, fMaxYDist/2.f);
 			vRockPos.y -= CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+
 			vRockPos.z += CPipeline::GetRandomFloat(0, fMaxZDist)+fMinZDist;
 			tDesc.tTransformDesc.vPosition = vRockPos;
-			Add_Layer_Asteroid(L"Layer_Asteriod", tDesc);
-			if (iRockAmount < m_pManagement->Get_GameObjectList(L"Layer_Asteriod")->size())
+			Add_Layer_Asteroid(L"Layer_Asteroid", tDesc);
+			if (iRockAmount < m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
 				break;
 		}
 		m_bStartFlyAway = TRUE;
 		return FALSE;
 	}
-	
-
-	
-	
+	_float fLongLange = fMaxZDist + fMinZDist + fDistFromTarget;
+	_float fNeedToFinishTime = fLongLange / fRockSpeed;
 	_float3 vTargetPos =pTargetTransform->Get_TransformDesc().vPosition;
 	_float3 vDir = { 0,0,-1 };
 	CTransform* pTransform = nullptr;
-	for (auto& pObj : *m_pManagement->Get_GameObjectList(L"Layer_Asteriod"))
+	for (auto& pObj : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
 	{
 		_float3 vRockPos = vTargetPos;
 		pTransform = (CTransform*)pObj->Get_Component(L"Com_Transform");
 		pTransform->Go_Dir(vDir, fRockSpeed * fDeltaTime);
-		if (pTransform->Get_TransformDesc().vPosition.z
-			<= vTargetPos.z - fDistFromTarget)
+		//다지나가는데 필요한 시간
+		
+		if (m_fFlyingAsteroidTime <= fFinishTime - fNeedToFinishTime)
 		{
-			vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
-			vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+			if (pTransform->Get_TransformDesc().vPosition.z
+				<= vTargetPos.z - fDistFromTarget)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+				vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
 
-			vRockPos.y += CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
-			vRockPos.y -= CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+				vRockPos.y += CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+				vRockPos.y -= CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
 
-			vRockPos.z += CPipeline::GetRandomFloat(0,fMaxZDist)+fMinZDist;
-			pTransform->Set_Position(vRockPos);
+				vRockPos.z += CPipeline::GetRandomFloat(fMaxZDist*0.5f ,fMaxZDist)+fMinZDist;
+				pTransform->Set_Position(vRockPos);
+			}
 		}
 		
 		

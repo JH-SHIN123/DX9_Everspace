@@ -30,7 +30,7 @@ public:
 public:
 	_uint Get_Weapon_Type() { return m_iWeapon; }
 	_bool Get_Is_Fire() { return m_IsFire; }
-
+	class CHP_Bar* Get_HpBar() { return m_pHp_Bar; }
 
 private:
 	void	KeyProcess(_float fDeltaTime);

@@ -281,6 +281,7 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 
 		m_IsDead = true;
 	}
+	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
@@ -808,10 +809,19 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
+	if (m_IsAstroidCollide)
+		m_IsAstroidCollide = FALSE;
 	// 1.Planet
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
-
+	static _float fDelayTime = 0.f;
+	fDelayTime += fDeltaTime;
+	if (m_IsAstroidCollide&& fDelayTime > 2.f)
+	{
+		Set_Damage(10.f);
+		Get_HpBar()->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+		fDelayTime = 0.f;
+	}
 	// 일반이동 충돌
 	if (m_IsBoost == false && m_IsAstroidCollide == true)
 	{

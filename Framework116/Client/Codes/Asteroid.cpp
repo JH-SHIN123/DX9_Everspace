@@ -133,7 +133,7 @@ _uint CAsteroid::Render_GameObject()
 	// Test
 
 #ifdef _DEBUG // Render Collide
-	//if(m_pCollide) m_pCollide->Render_Collide();
+	if(m_pCollide) m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
