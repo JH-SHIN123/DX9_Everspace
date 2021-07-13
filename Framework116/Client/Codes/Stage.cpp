@@ -159,6 +159,14 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
+	case 5:
+	{
+		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+		if (Check == true)
+		{
+			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_1);
+		}
+	}
 	default:
 		return E_FAIL;
 	}
@@ -402,7 +410,6 @@ void CStage::Free()
 	/* 자식의 소멸자 호출 순서처럼 Free도 같은 순서로 호출해주자*/
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
 
-	CQuestHandler::Get_Instance()->Release_Ref();
 
 	CScene::Free(); // 2.부모 리소스 정리	
 }
@@ -533,42 +540,6 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
 
-
-	return S_OK;
-}
-
-HRESULT CStage::Add_Layer_TutorialUI(const wstring & LayerTag)
-{
-	wstring TargetLayerTag = L"Layer_Ring";
-
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_TutorialUI",
-		LayerTag, &TargetLayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add TutorialUI In Layer");
-		return E_FAIL;
-	}
-
-	//// Mission HUD
-	//UI_DESC HUD_Mission;
-	//HUD_Mission.tTransformDesc.vPosition = { 860.f, 500.f, 0.f };
-	//HUD_Mission.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
-	//HUD_Mission.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
-	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Mission)))
-	//	return E_FAIL;
-
-	/*
-	#define WINCX 1920
-	#define WINCY 1080
-	*/
-
-	//UI_DESC HUD_TutorialUI;
-	//HUD_TutorialUI.tTransformDesc.vPosition = { -700.f, 424.f, 0.f };
-	//HUD_TutorialUI.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
-	//HUD_TutorialUI.wstrTexturePrototypeTag = L"Component_Texture_Tutorial_Nevi";
-	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_TutorialUI)))
-	//	return E_FAIL;
 
 	return S_OK;
 }

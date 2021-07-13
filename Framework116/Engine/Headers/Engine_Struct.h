@@ -73,6 +73,19 @@ typedef struct tagRay
 	_float3 vDirection = { 0.f, 0.f, 0.f };
 }RAY;
 
+typedef struct tagStatusInfo
+{
+	_uint iAtk = 0;
+	_uint iDef = 0;
+	_uint iHp = 0;
+	_uint iMaxHp = 0;
+	_uint iShield = 0;
+	_uint iMaxShield = 0;
+	_uint iEnergy = 0;
+	_uint iMaxEnergy = 0;
+	_uint iFireRate = 0;
+}STAT_INFO;
+
 END
 
 #define __ENGINE_STRUCT_H__

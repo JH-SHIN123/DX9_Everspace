@@ -14,6 +14,8 @@
 #include "Shield_Battery.h"
 #include "HUD_Effect_Damage.h"
 #include "HUD_Effect_Boost.h"
+#include "QuestHandler.h"
+#include "Status_Info.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -334,6 +336,17 @@ HRESULT CMainApp::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AlertArrow");
 		return E_FAIL;
 	}
+
+	// m_tInfo
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		CStatus_Info::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Status_Info");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return S_OK;
@@ -393,6 +406,8 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+	CQuestHandler::Get_Instance()->Release_Ref();
+	
 	Safe_Release(m_pDevice);
 	
 	if (Safe_Release(m_pManagement))

@@ -38,7 +38,6 @@ private:
 
 	// HUD
 	HRESULT Add_Layer_HUD(const wstring& LayerTag);
-	HRESULT Add_Layer_TutorialUI(const wstring& LayerTag);
 
 	// InGame
 	HRESULT Add_Layer_ScriptUI(const wstring& LayerTag, EScript eScript);
