@@ -814,12 +814,21 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 	// 1.Planet
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
+
 	static _float fDelayTime = 0.f;
 	fDelayTime += fDeltaTime;
-	if (m_IsAstroidCollide&& fDelayTime > 2.f)
+	if (m_IsAstroidCollide&& fDelayTime > 1.f)
 	{
 		Set_Damage(10.f);
 		Get_HpBar()->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_HUD_Effect_Damage",
+			L"Layer_HUD_Effect")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_Effect_Damage In Layer");
+			return 0;
+		}
 		fDelayTime = 0.f;
 	}
 	// 일반이동 충돌
