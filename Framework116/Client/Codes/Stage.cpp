@@ -43,6 +43,44 @@ HRESULT CStage::Ready_Scene()
 	lightDesc.eLightType = ELightType::Directional;
 	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
 	//lightDesc.tLightColor = D3DCOLOR_XRGB(160, 160, 160);
+	GAMEOBJECT_DESC tDesc;
+	tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
+	tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
+	tDesc.tTransformDesc.fSpeedPerSec = 1.f;
+	CTransform* pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	_uint iRockCount = 10;
+	for (int i = 0; i < iRockCount; i++)
+	{
+		_float3 vRockPos = pPlayerTransform->Get_TransformDesc().vPosition;
+		if (i != iRockCount - 1)
+		{
+
+			if (i % 4 == 0)
+			{
+				vRockPos.x -= CPipeline::GetRandomFloat(20, 40);
+				vRockPos.y -= CPipeline::GetRandomFloat(20, 40);
+			}
+			else if (i % 4 == 1)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(20, 40);
+				vRockPos.y += CPipeline::GetRandomFloat(20, 40);
+			}
+			else if(i%4 ==2)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(20, 40);
+				vRockPos.y -= CPipeline::GetRandomFloat(20, 40);
+
+			}
+			else
+			{
+				vRockPos.x -= CPipeline::GetRandomFloat(20, 40);
+				vRockPos.y += CPipeline::GetRandomFloat(20, 40);
+			}
+		}
+		vRockPos.z = 300+((i+1)*10);
+		tDesc.tTransformDesc.vPosition = vRockPos;
+		Add_Layer_Asteroid(L"Layer_Asteroid", tDesc);
+	}
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -68,15 +106,19 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 	
-	//Stage_Flow(fDeltaTime);
+	
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
-	
-	if (AsteroidFlyingAway(fDeltaTime, 200.f, 100.f, 200.f, 200.f, pPlayerTransform,30,70.f,300.f))
+	switch (Stage2_Flow(fDeltaTime))
 	{
-		
-		//스크립트
+	case 3:
+		if (AsteroidFlyingAway(fDeltaTime, 200.f, 100.f, 200.f, 200.f, pPlayerTransform, 30, 70.f, 300.f))
+		{
+			//스크립트
+		}
+		break;
 	}
+	
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
 	return _uint();
@@ -173,6 +215,44 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 	}
 	default:
 		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+_uint CStage::Stage2_Flow(_float fDeltaTime)
+{
+	switch (m_iFlowCount)
+	{
+	case 0: // 스크립트 시작
+		if (m_fFlowTime >= 0)
+		{
+			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+
+			m_fFlowTime -= fDeltaTime;
+
+			if (m_fFlowTime <= 0)
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Begin)))
+					return -1;
+				++m_iFlowCount;
+			}
+		}
+		return 1;
+	case 1: // 스크립트 시작
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_AfterCamProduction)))
+				return -1;
+			++m_iFlowCount;
+		}
+		return 1;
+	case 2:
+		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+			++m_iFlowCount;
+		return 1;
+	case 3:
+		return 3;
 	}
 
 	return S_OK;

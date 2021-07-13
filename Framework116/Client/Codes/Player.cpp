@@ -809,8 +809,7 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
-	if (m_IsAstroidCollide)
-		m_IsAstroidCollide = FALSE;
+	m_IsAstroidCollide = FALSE;
 	// 1.Planet
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");

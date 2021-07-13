@@ -11,6 +11,7 @@ enum class EScript {
 	Tutorial,
 	Tutorial_Ring_Clear,
 	Tutorial_Target_Clear,
+	Stg2_Begin,Stg2_AfterCamProduction,
 	End
 };
 
@@ -51,7 +52,8 @@ private: //대화
 	void Script_Tutorial();
 	void Script_Tutorial_Ring_Clear();
 	void Script_Tutorial_Target_Clear();
-
+	void Script_Stg2_Begin();
+	void Script_Stg2_AfterCamProduction();
 private: // 기타
 	void Lock_Cursor();
 	void Portrait_Check();

@@ -218,6 +218,9 @@ void CMainCam::Check_SoloMoveMode(_float fDeltaTime)
 	case ESoloMoveMode::Lock:
 		Solo_Lock(fDeltaTime);
 		break;
+	case ESoloMoveMode::Stage2_Asteroid:
+		Solo_Stage2_Asteroid(fDeltaTime);
+		break;
 	default:
 		m_eSoloMoveMode = ESoloMoveMode::End;
 		break;
@@ -449,6 +452,106 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 	}
 	break;
 
+	default:
+		Safe_Release(m_pTargetTransform);
+		m_IsMoveCountCheck = false;
+		// 플레이어 무빙 허용
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+		m_eSoloMoveMode = ESoloMoveMode::End;
+		break;
+	}
+
+	return _uint();
+}
+
+_uint CMainCam::Solo_Stage2_Asteroid(_float fDeltaTime)
+{
+	if (m_IsMoveCountCheck == false)
+	{
+		m_byMoveCount = 0;
+		m_IsMoveCountCheck = true;
+		_uint iCount = m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size();
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Asteroid", L"Com_Transform",iCount-1);
+		Safe_AddRef(m_pTargetTransform);
+		if (m_pTargetTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
+			return UPDATE_ERROR;
+		}
+	}
+	_float fSpeedPerSec = 120.f;
+	switch (m_byMoveCount)
+	{
+	case 0:
+		{// at을 플레이어 > 행성
+		_float3 vCameraDir = { 0.f,0.f, -1.f };
+
+		// 0.05f 민감도
+		D3DXQuaternionSlerp(&m_qCameraRot, &m_qCameraRot, &m_pPlayerTransform->Get_TransformDesc().qRot, 0.05f);
+
+		_float4x4 matCameraRot;
+		D3DXMatrixRotationQuaternion(&matCameraRot, &m_qCameraRot);
+
+		// Camera Pos
+		_float4x4 matInitCameraRot;
+		D3DXMatrixRotationX(&matInitCameraRot, D3DXToRadian(m_fCamAngle));
+
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matInitCameraRot);
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matCameraRot);
+		_float3 vCameraPos = m_pPlayerTransform->Get_State(EState::Position) + vCameraDir * m_fDistanceFromTarget;
+
+		// Up
+		_float3 vCameraUp = { 0.f,1.f,0.f };
+		D3DXVec3TransformNormal(&vCameraUp, &vCameraUp, &matCameraRot);
+
+		// LookAt
+		_float3 vCameraLookAt = _float3(0.f, 10.f, 0.f);
+		memcpy(&matCameraRot._41, &m_pTargetTransform->Get_State(EState::Position), sizeof(_float3));
+		D3DXVec3TransformCoord(&vCameraLookAt, &vCameraLookAt, &matCameraRot);
+
+		vCameraPos.x += 20.f;
+		vCameraPos.y += 20.f;
+		vCameraPos.z += 20.f;
+
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_pPlayerTransform->Get_State(EState::Position));
+		_float3 vLen = (m_pPlayerTransform->Get_State(EState::Position) - m_CameraDesc.vEye);
+
+		m_CameraDesc.vEye = vCameraPos;
+		m_CameraDesc.vUp = vCameraUp;
+		m_CameraDesc.vAt = vCameraLookAt;
+		++m_byMoveCount;
+
+		D3DXVec3Normalize(&vDir, &vDir);
+
+		m_CameraDesc.vEye += fSpeedPerSec * fDeltaTime * vDir;
+		m_CameraDesc.vAt += fSpeedPerSec * fDeltaTime * vDir;
+		}
+	break;
+	case 1:
+	{
+		//_float3 vTargetPos = ((CTransform*)(m_pManagement->Get_GameObject(L"Layer_Ring", 4)->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
+		_float3 vTargetPos =m_pTargetTransform->Get_TransformDesc().vPosition;
+		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
+		_float vLength = D3DXVec3Length(&vDir);
+		D3DXVec3Normalize(&vDir, &vDir);
+
+		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeltaTime;
+
+		if (vLength <= 20.f)
+			++m_byMoveCount;
+	}
+	break;
+	case 2:
+	{
+		Safe_Release(m_pTargetTransform);
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+		_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
+		vTargetPos -= m_pTargetTransform->Get_State(EState::Look) * 10;
+		m_CameraDesc.vEye = vTargetPos;
+			++m_byMoveCount;
+	}
+		break;
 	default:
 		Safe_Release(m_pTargetTransform);
 		m_IsMoveCountCheck = false;
