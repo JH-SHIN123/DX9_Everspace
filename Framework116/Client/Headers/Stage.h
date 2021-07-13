@@ -20,7 +20,7 @@ public:
 
 private:
 	_uint Stage_Flow(_float fDeltaTime);
-
+	
 private:
 	HRESULT Add_Layer_Player(const wstring& LayerTag);
 	HRESULT Add_Layer_Terrain(const wstring& LayerTag);
@@ -47,6 +47,14 @@ private:
 	//Sniper
 	HRESULT Add_Layer_Sniper(const wstring& LayerTag);
 
+	//Asteroid
+	HRESULT Add_Layer_Asteroid(const wstring& LayerTag,GAMEOBJECT_DESC tDesc);
+private:
+	//For.FlyingAsteroid
+	_bool AsteroidFlyingAway(_float fDeltaTime,_float fMaxXDist, _float fMaxYDist, _float fMaxZDist,_float fMinZDist,
+		CTransform* pTargetTransform,_uint iRockAmount,_float fRockSpeed,_float fDistFromTarget);
+	_float m_fFlyingAsteroidTime = 1.f;
+	_bool m_bStartFlyAway = FALSE;
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
