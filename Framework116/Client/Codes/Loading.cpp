@@ -72,7 +72,7 @@ HRESULT CLoading::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Loading");
 
-	m_pManagement->StopSound(CSoundMgr::BGM);
+	m_pManagement->PlaySound(L"Loading_Ambience.ogg", CSoundMgr::BGM);
 
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -91,7 +91,7 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 	
-	if (m_bChangeScene)
+	if (m_bEnterScene)
 	{
 		m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
 		if (nullptr == m_hLoadingThread)
@@ -100,38 +100,55 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 			return E_FAIL;
 		}
 		InitializeCriticalSection(&m_CriticalSection);
-		m_bChangeScene = false;
+		m_bEnterScene = false;
 		return NO_EVENT;
 	}
 
-	m_pManagement->PlaySound(L"Loading_Ambience.ogg", CSoundMgr::BGM);
+	// 로딩 끝
 	if (m_IsFinished)
 	{
-		//
-		CScene* pNextScene = nullptr;
-		switch (m_eNextSceneID)
-		{
-		case ESceneType::Lobby:
-			pNextScene = CLobby::Create(m_pDevice);
-			break;
-		case ESceneType::Stage:
-			pNextScene = CStage::Create(m_pDevice);
-			break;
-		case ESceneType::Stage2:
-			pNextScene = CStage2::Create(m_pDevice);
-			break;
-		case ESceneType::Stage3:
-			pNextScene = CStage3::Create(m_pDevice);
-			break;
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return E_FAIL;
+			}
+			m_bFadeIn = true;
+			return NO_EVENT;
 		}
 
-		if (FAILED(m_pManagement->Setup_CurrentScene((_uint)m_eNextSceneID, pNextScene)))
+		if (m_bLeaveScene)
 		{
-			PRINT_LOG(L"Error", L"Failed To Setup Next Scene");
-			return UPDATE_ERROR;
-		}
+			CScene* pNextScene = nullptr;
+			switch (m_eNextSceneID)
+			{
+			case ESceneType::Lobby:
+				pNextScene = CLobby::Create(m_pDevice);
+				break;
+			case ESceneType::Stage:
+				pNextScene = CStage::Create(m_pDevice);
+				break;
+			case ESceneType::Stage2:
+				pNextScene = CStage2::Create(m_pDevice);
+				break;
+			case ESceneType::Stage3:
+				pNextScene = CStage3::Create(m_pDevice);
+				break;
+			}
 
-		return CHANGE_SCENE;
+			if (FAILED(m_pManagement->Setup_CurrentScene((_uint)m_eNextSceneID, pNextScene)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Setup Next Scene");
+				return UPDATE_ERROR;
+			}
+
+			return CHANGE_SCENE;
+			m_bLeaveScene = false;
+		}
 	}
 
 	return _uint();
@@ -168,6 +185,8 @@ void CLoading::Free()
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
 	CloseHandle(m_hLoadingThread);
 	DeleteCriticalSection(&m_CriticalSection);
+
+	m_pManagement->StopSound(CSoundMgr::BGM);
 
 	CScene::Free(); // 2.부모 리소스 정리
 

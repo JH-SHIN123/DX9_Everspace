@@ -80,7 +80,7 @@ _uint CFadeIn::Update_GameObject(_float fDeltaTime)
 	{
 		m_fAlpha = 255.f;
 		m_bFadeIn = true;
-		m_pScene->Set_ChangeScene();
+		m_pScene->Set_bLeaveScene();
 		return DEAD_OBJECT;
 	}
 	else 

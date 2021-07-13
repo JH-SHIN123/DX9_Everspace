@@ -14,26 +14,7 @@ HRESULT CLogo::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Logo");
 
-	// Fade In / Out
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::Static,
-	//	L"GameObject_FadeIn",
-	//	L"Layer_Fade",
-	//	this)))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::Static,
-	//	L"GameObject_FadeOut",
-	//	L"Layer_Fade")))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-	//	return E_FAIL;
-	//}
-
+	// 동영상 재생
 
 	return S_OK;
 }
@@ -60,7 +41,7 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 	}
 
 	// FadeIn이 끝났을때 씬전환
-	if (m_bChangeScene)
+	if (m_bLeaveScene)
 	{
 		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 			CLoading::Create(m_pDevice, ESceneType::Stage))))
@@ -69,6 +50,7 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 			return E_FAIL;
 		}
 
+		m_bLeaveScene = false;
 		return CHANGE_SCENE;
 	}
 

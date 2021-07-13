@@ -20,7 +20,18 @@ HRESULT CStage::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Stage");
 
-	m_pManagement->StopSound(CSoundMgr::BGM);
+	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
+
+	// Fade Out
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_FadeOut",
+		L"Layer_Fade",
+		this)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
+		return E_FAIL;
+	}
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
 	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
@@ -68,19 +79,24 @@ HRESULT CStage::Ready_Scene()
 
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
+	if (false == m_bEnterScene)
+		return _uint();
+
 	CScene::Update_Scene(fDeltaTime);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 	
 	//Stage_Flow(fDeltaTime);
 
-	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
 	return _uint();
 }
 
 _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 {
+	if (false == m_bEnterScene)
+		return _uint();
+
 	CScene::LateUpdate_Scene(fDeltaTime);
 	
 	// Monster
@@ -406,9 +422,8 @@ void CStage::Free()
 {
 	/* 자식의 소멸자 호출 순서처럼 Free도 같은 순서로 호출해주자*/
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
-
+	m_pManagement->StopSound(CSoundMgr::BGM);
 	CQuestHandler::Get_Instance()->Release_Ref();
-
 	CScene::Free(); // 2.부모 리소스 정리	
 }
 

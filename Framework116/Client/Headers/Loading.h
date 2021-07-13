@@ -34,11 +34,14 @@ public: /* For.Loading Thread */
 	HRESULT Ready_Map_Effect_Resources();
 	
 private:
+	_bool m_IsFinished = false;
+	_bool m_bFadeIn = false;
+
+private:
 	ESceneType m_eNextSceneID = ESceneType::None;
 
 	HANDLE m_hLoadingThread = nullptr;
 	CRITICAL_SECTION m_CriticalSection;
-	_bool m_IsFinished = false;
 };
 
 #define __LOADING_H__

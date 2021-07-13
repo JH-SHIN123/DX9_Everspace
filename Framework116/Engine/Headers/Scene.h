@@ -11,7 +11,8 @@ public:
 	virtual ~CScene() = default;
 
 public:
-	void Set_ChangeScene() { m_bChangeScene = true; }
+	void Set_bEnterScene() { m_bEnterScene = true; }
+	void Set_bLeaveScene() { m_bLeaveScene = true; }
 
 public:
 	virtual HRESULT Ready_Scene() = 0;
@@ -26,7 +27,8 @@ protected:
 	class CManagement* m_pManagement = nullptr;
 
 protected:
-	_bool m_bChangeScene = false;
+	_bool m_bEnterScene = false;
+	_bool m_bLeaveScene = false;
 };
 END
 
