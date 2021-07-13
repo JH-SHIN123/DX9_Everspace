@@ -306,13 +306,18 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 		return NO_EVENT;
 	}
 
+
 	for (auto& pObj : *m_listCheckBoss)
 	{
 		_float3 vTargetPos = pObj->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
 		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
 		_float3 vDir = vTargetPos - vMissilePos;
-		
-		m_fDistToBoss = D3DXVec3Length(&vDir);
+
+		_float Test = D3DXVec3Length(&vDir);
+		if (Test > 1.f)
+			m_fDistToBoss = D3DXVec3Length(&vDir);
+		else
+			m_fDistToBoss = 9999.f;
 	}
 
 	for (auto& pObj : *m_listCheckDrone)
@@ -321,7 +326,11 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
 		_float3 vDir = vTargetPos - vMissilePos;
 
-		m_fDistToDrone = D3DXVec3Length(&vDir);
+		_float Test = D3DXVec3Length(&vDir);
+		if (Test > 1.f)
+			m_fDistToDrone = D3DXVec3Length(&vDir);
+		else
+			m_fDistToDrone = 9999.f;
 	}
 
 	for (auto& pObj : *m_listCheckSniper)
@@ -330,23 +339,34 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
 		_float3 vDir = vTargetPos - vMissilePos;
 
-		 m_fDistToSniper = D3DXVec3Length(&vDir);
+		_float Test = D3DXVec3Length(&vDir);
+		if (Test > 1.f)
+			m_fDistToSniper = D3DXVec3Length(&vDir);
+		else
+			m_fDistToSniper = 9999.f;
+
 	}
-	if (m_fDistToBoss != 0.f && m_fDistToDrone != 0.f && m_fDistToSniper != 0.f)
+	if (m_listCheckBoss->size() == 0)
+		m_fDistToBoss = 9999.f;
+	if (m_listCheckDrone->size() == 0)
+		m_fDistToDrone = 9999.f;
+	if (m_listCheckSniper->size() == 0)
+		m_fDistToSniper = 9999.f;
+
+
+	if (m_fDistToBoss < m_fDistToDrone && m_fDistToBoss < m_fDistToSniper)
 	{
-		if (m_fDistToBoss < m_fDistToDrone && m_fDistToBoss < m_fDistToSniper)
-		{
-			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
-		}
-		else if (m_fDistToDrone < m_fDistToBoss && m_fDistToDrone < m_fDistToSniper)
-		{
-			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Drone", L"Com_Transform");
-		}
-		else if (m_fDistToSniper < m_fDistToBoss && m_fDistToSniper < m_fDistToDrone)
-		{
-			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Sniper", L"Com_Transform");
-		}
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
 	}
+	else if (m_fDistToDrone < m_fDistToBoss && m_fDistToDrone < m_fDistToSniper)
+	{
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Drone", L"Com_Transform");
+	}
+	else if (m_fDistToSniper < m_fDistToBoss && m_fDistToSniper < m_fDistToDrone)
+	{
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Sniper", L"Com_Transform");
+	}
+
 	return _uint();
 }
 
@@ -379,7 +399,7 @@ void CPlayer_Missile::Free()
 	if (m_IsClone)
 		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
 
-	Safe_Release(m_pTargetTransform);
+	//Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
