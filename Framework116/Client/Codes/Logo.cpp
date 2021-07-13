@@ -14,16 +14,25 @@ HRESULT CLogo::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Logo");
 
-	// TEST
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::Static,
-		L"GameObject_FadeIn",
-		L"Layer_Fade")))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-		return E_FAIL;
-	}
+	// Fade In / Out
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::Static,
+	//	L"GameObject_FadeIn",
+	//	L"Layer_Fade",
+	//	this)))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+	//	return E_FAIL;
+	//}
 
+	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//	EResourceType::Static,
+	//	L"GameObject_FadeOut",
+	//	L"Layer_Fade")))
+	//{
+	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+	//	return E_FAIL;
+	//}
 
 
 	return S_OK;
@@ -35,7 +44,25 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
-		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading, 
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return E_FAIL;
+			}
+			m_bFadeIn = true;
+			return NO_EVENT;
+		}
+	}
+
+	// FadeInÀÌ ³¡³µÀ»¶§ ¾ÀÀüÈ¯
+	if (m_bChangeScene)
+	{
+		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 			CLoading::Create(m_pDevice, ESceneType::Stage))))
 		{
 			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");

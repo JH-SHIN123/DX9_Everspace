@@ -203,6 +203,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Engine_Struct.h" />
     <ClInclude Include="..\Headers\Engine_Typedef.h" />
     <ClInclude Include="..\Headers\FadeIn.h" />
+    <ClInclude Include="..\Headers\FadeOut.h" />
     <ClInclude Include="..\Headers\Frame_Manager.h" />
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\GameObject_Manager.h" />
@@ -251,6 +252,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Controller.cpp" />
     <ClCompile Include="..\Codes\Device_Manager.cpp" />
     <ClCompile Include="..\Codes\FadeIn.cpp" />
+    <ClCompile Include="..\Codes\FadeOut.cpp" />
     <ClCompile Include="..\Codes\Frame_Manager.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GameObject_Manager.cpp" />

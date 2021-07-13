@@ -30,7 +30,10 @@ public:
 private:
 	_bool m_bFadeIn = false;
 	_float m_fAlpha = 0.f;
-	_float m_fAlphaSpeed = 1.f;
+	_float m_fAlphaSpeed = 1.5f;
+
+private:
+	class CScene* m_pScene = nullptr;
 };
 
 END

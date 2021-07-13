@@ -151,6 +151,12 @@
     <Filter Include="01.Utilities\03.GameObject\05.Fade">
       <UniqueIdentifier>{5de53852-d3da-4fd6-a9aa-2dcb0e308410}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\03.GameObject\05.Fade\In">
+      <UniqueIdentifier>{3fa7b5c4-4ec9-4441-9997-e9013d8b1dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\05.Fade\Out">
+      <UniqueIdentifier>{c9f5b3a5-4cf2-4d5b-9537-cc93f1f4f8c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -298,7 +304,10 @@
       <Filter>01.Utilities\03.GameObject\04.Font</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\FadeIn.h">
-      <Filter>01.Utilities\03.GameObject\05.Fade</Filter>
+      <Filter>01.Utilities\03.GameObject\05.Fade\In</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FadeOut.h">
+      <Filter>01.Utilities\03.GameObject\05.Fade\Out</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -429,7 +438,10 @@
       <Filter>01.Utilities\03.GameObject\04.Font</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\FadeIn.cpp">
-      <Filter>01.Utilities\03.GameObject\05.Fade</Filter>
+      <Filter>01.Utilities\03.GameObject\05.Fade\In</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FadeOut.cpp">
+      <Filter>01.Utilities\03.GameObject\05.Fade\Out</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

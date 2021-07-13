@@ -72,14 +72,17 @@ HRESULT CLoading::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Loading");
 
-	m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
-	if (nullptr == m_hLoadingThread)
+	m_pManagement->StopSound(CSoundMgr::BGM);
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_FadeOut",
+		L"Layer_Fade",
+		this)))
 	{
-		PRINT_LOG(L"Error", L"Failed To _beginthreadex");
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
 		return E_FAIL;
 	}
-	m_pManagement->StopSound(CSoundMgr::BGM);
-	InitializeCriticalSection(&m_CriticalSection);
 
 	return S_OK;
 }
@@ -88,6 +91,19 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 	
+	if (m_bChangeScene)
+	{
+		m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
+		if (nullptr == m_hLoadingThread)
+		{
+			PRINT_LOG(L"Error", L"Failed To _beginthreadex");
+			return E_FAIL;
+		}
+		InitializeCriticalSection(&m_CriticalSection);
+		m_bChangeScene = false;
+		return NO_EVENT;
+	}
+
 	m_pManagement->PlaySound(L"Loading_Ambience.ogg", CSoundMgr::BGM);
 	if (m_IsFinished)
 	{

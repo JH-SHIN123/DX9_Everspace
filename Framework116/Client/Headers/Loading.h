@@ -33,7 +33,6 @@ public: /* For.Loading Thread */
 	HRESULT Ready_Stage1();
 	HRESULT Ready_Map_Effect_Resources();
 	
-
 private:
 	ESceneType m_eNextSceneID = ESceneType::None;
 

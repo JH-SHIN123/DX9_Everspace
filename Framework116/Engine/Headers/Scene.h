@@ -11,6 +11,9 @@ public:
 	virtual ~CScene() = default;
 
 public:
+	void Set_ChangeScene() { m_bChangeScene = true; }
+
+public:
 	virtual HRESULT Ready_Scene() = 0;
 	virtual _uint Update_Scene(_float fDeltaTime) = 0;
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) = 0;
@@ -21,6 +24,9 @@ public:
 protected:
 	LPDIRECT3DDEVICE9	m_pDevice = nullptr;
 	class CManagement* m_pManagement = nullptr;
+
+protected:
+	_bool m_bChangeScene = false;
 };
 END
 

@@ -1,19 +1,19 @@
 #pragma once
 
-#ifndef __FADE_IN_H__
+#ifndef __FADE_OUT_H__
 #include "UI.h"
 
 BEGIN(Engine)
 
-class ENGINE_DLL CFadeIn final : public CUI
+class ENGINE_DLL CFadeOut final : public CUI
 {
 private:
-	explicit CFadeIn(LPDIRECT3DDEVICE9 pDevice);
-	explicit CFadeIn(const CFadeIn& other);
-	virtual ~CFadeIn() = default;
-	
+	explicit CFadeOut(LPDIRECT3DDEVICE9 pDevice);
+	explicit CFadeOut(const CFadeOut& other);
+	virtual ~CFadeOut() = default;
+
 public:
-	_bool Fade_In();
+	_bool Fade_Out();
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -23,13 +23,13 @@ public:
 	virtual _uint Render_GameObject() override;
 
 public:
-	static CFadeIn* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CFadeOut* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
 
 private:
-	_bool m_bFadeIn = false;
-	_float m_fAlpha = 0.f;
+	_bool m_bFadeOut = false;
+	_float m_fAlpha = 255.f;
 	_float m_fAlphaSpeed = 1.5f;
 
 private:
@@ -38,5 +38,5 @@ private:
 
 END
 
-#define __FADE_IN_H__
+#define __FADE_OUT_H__
 #endif

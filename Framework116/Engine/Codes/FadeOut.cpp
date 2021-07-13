@@ -1,32 +1,32 @@
-#include "FadeIn.h"
+#include "..\Headers\FadeOut.h"
 #include "Management.h"
 #include "Scene.h"
 
 USING(Engine)
 
-CFadeIn::CFadeIn(LPDIRECT3DDEVICE9 pDevice)
+CFadeOut::CFadeOut(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
 {
 }
 
-CFadeIn::CFadeIn(const CFadeIn& other)
+CFadeOut::CFadeOut(const CFadeOut& other)
 	: CUI(other)
 {
 }
 
-_bool CFadeIn::Fade_In()
+_bool CFadeOut::Fade_Out()
 {
-	return m_bFadeIn;
+	return m_bFadeOut;
 }
 
-HRESULT CFadeIn::Ready_GameObject_Prototype()
+HRESULT CFadeOut::Ready_GameObject_Prototype()
 {
 	CUI::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CFadeIn::Ready_GameObject(void* pArg)
+HRESULT CFadeOut::Ready_GameObject(void* pArg)
 {
 	CGameObject::Ready_GameObject(pArg);
 
@@ -54,7 +54,7 @@ HRESULT CFadeIn::Ready_GameObject(void* pArg)
 
 	// For.Com_Transform
 	_float2 vWinSize = CManagement::Get_Instance()->Get_WindowSize();
-	m_tTransformDesc.vPosition = {0.f, 0.f, 0.f };
+	m_tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
 	m_tTransformDesc.vScale = { vWinSize.x, vWinSize.y, 0.f };
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -72,26 +72,27 @@ HRESULT CFadeIn::Ready_GameObject(void* pArg)
 	return S_OK;
 }
 
-_uint CFadeIn::Update_GameObject(_float fDeltaTime)
+_uint CFadeOut::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 
-	if (m_fAlpha >= 255)
+	if (m_fAlpha <= 0)
 	{
-		m_fAlpha = 255.f;
-		m_bFadeIn = true;
+		m_fAlpha = 0.f;
+		m_bFadeOut = true;
 		m_pScene->Set_ChangeScene();
 		return DEAD_OBJECT;
 	}
-	else 
-		m_fAlpha += m_fAlphaSpeed;
+	else
+		m_fAlpha -= m_fAlphaSpeed;
 
 	return NO_EVENT;
 }
 
-
-_uint CFadeIn::LateUpdate_GameObject(_float fDeltaTime)
+_uint CFadeOut::LateUpdate_GameObject(_float fDeltaTime)
 {
+	if (m_bFadeOut) return DEAD_OBJECT;
+
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
@@ -100,7 +101,7 @@ _uint CFadeIn::LateUpdate_GameObject(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CFadeIn::Render_GameObject()
+_uint CFadeOut::Render_GameObject()
 {
 	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
 	m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
@@ -112,9 +113,9 @@ _uint CFadeIn::Render_GameObject()
 	return _uint();
 }
 
-CFadeIn* CFadeIn::Create(LPDIRECT3DDEVICE9 pDevice)
+CFadeOut* CFadeOut::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CFadeIn* pInstance = new CFadeIn(pDevice);
+	CFadeOut* pInstance = new CFadeOut(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player");
@@ -124,9 +125,9 @@ CFadeIn* CFadeIn::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject* CFadeIn::Clone(void* pArg)
+CGameObject* CFadeOut::Clone(void* pArg)
 {
-	CFadeIn* pClone = new CFadeIn(*this); /* 복사 생성자 호출 */
+	CFadeOut* pClone = new CFadeOut(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone Player");
@@ -136,7 +137,7 @@ CGameObject* CFadeIn::Clone(void* pArg)
 	return pClone;
 }
 
-void CFadeIn::Free()
+void CFadeOut::Free()
 {
 	CUI::Free();
 }
