@@ -60,6 +60,8 @@ private:
 
 	// 락온 -> 발사 까지의 딜레이.
 	_float m_fSniperShootDelay = 0.f;
+	// 락온까지의 딜레이!
+	_float m_fLockOnDelay = 0.f;
 
 	// HP Bar 추가
 	_bool m_IsHPBar = false;

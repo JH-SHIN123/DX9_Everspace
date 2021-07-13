@@ -220,6 +220,9 @@
     <Filter Include="02.GameObject\08.Bullet\04.Sniper_Bullet">
       <UniqueIdentifier>{0181d743-2a18-46ba-8d2c-b332a7caeef6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\12.LockOnAlert">
+      <UniqueIdentifier>{e3af8796-db79-4dca-9d5b-0e52e859d017}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -420,6 +423,9 @@
     <ClInclude Include="..\Headers\Sniper_Bullet.h">
       <Filter>02.GameObject\08.Bullet\04.Sniper_Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\LockOnAlert.h">
+      <Filter>02.GameObject\09.HUD\12.LockOnAlert</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -607,6 +613,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Sniper_Bullet.cpp">
       <Filter>02.GameObject\08.Bullet\04.Sniper_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LockOnAlert.cpp">
+      <Filter>02.GameObject\09.HUD\12.LockOnAlert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

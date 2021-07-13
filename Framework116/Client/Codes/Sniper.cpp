@@ -2,6 +2,7 @@
 #include "..\Headers\Sniper.h"
 #include "HP_Bar.h"
 #include "HP_Bar_Border.h"
+#include "Player.h"
 
 CSniper::CSniper(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -165,8 +166,11 @@ _uint CSniper::Sniper_Battle(_float fDeltaTime)
 	RotateToPlayer(fDeltaTime);
 
 	// 플레이어쪽을 바라보고 있으면 락온시작! 그게아니면 계속 회전이나 하렴
+	
 	if (m_IsLookingPlayer)
+	{
 		Lock_On(fDeltaTime);
+	}
 	else
 		return _uint();
 
@@ -179,6 +183,7 @@ _uint CSniper::Lock_On(_float fDeltaTime)
 	// 락온 시작하면 락온 되었다는걸 알리기 위해서 플레이어로 향하는 레이저를 발사해야 할까?..
 	// 아니면 플레이어 HUD에서 퉁쳐야하나?
 	m_IsLockOn = true;
+	((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(true);
 
 	m_fSniperShootDelay += fDeltaTime;
 	// 락온을 4초동안 한다음에 투사체 하나 발사하자
@@ -198,6 +203,7 @@ _uint CSniper::Lock_On(_float fDeltaTime)
 			return E_FAIL;
 		}
 		m_fSniperShootDelay = 0.f;
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
 	}
 
 	return _uint();

@@ -9,6 +9,7 @@
 #include "CollisionHandler.h"
 #include "ScriptUI.h"
 #include "MainCam.h"
+#include "LockOnAlert.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -226,6 +227,8 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	TimeOperation(fDeltaTime);
 	
 	Make_Arrow();
+
+	Make_LockOn_Alert(fDeltaTime);
 
 
 	// 월드행렬 업데이트
@@ -731,6 +734,45 @@ void CPlayer::Increase_Stamina(const _float fDeltaTime)
 	}
 }
 
+void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
+{
+	if (m_bLockOn)
+	{
+		if (!m_bFirstLocked)
+		{
+			CGameObject* pGameObject = nullptr;
+			//알림생성
+   			UI_DESC LockOnAlert;
+			LockOnAlert.tTransformDesc.vPosition = { 400.f, 300.f, 0.f };
+			LockOnAlert.tTransformDesc.vScale = { 100.f, 100.f, 0.f };
+			LockOnAlert.wstrTexturePrototypeTag = L"Component_Texture_LockOnAlert";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_LockOnAlert",
+				L"Layer_LockOnAlert",
+				&LockOnAlert, &pGameObject)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
+
+			m_pLockOnAlert = static_cast<CLockOnAlert*>(pGameObject);
+			m_bFirstLocked = true;
+		}
+	}
+	else
+	{
+		if (m_bFirstLocked && !m_bLockOn)
+		{
+			m_pManagement->Get_GameObjectList(L"Layer_LockOnAlert")->front()->Set_IsDead(true);
+			m_bFirstLocked = false;
+		}
+	}
+
+
+
+}
+
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
 	// 1.Planet
@@ -854,6 +896,7 @@ void CPlayer::Free()
 		m_pLeftWingBoost = nullptr;
 	}
 
+	Safe_Release(m_pLockOnAlert);
 	Safe_Release(m_pStamina_Bar);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pMesh);
