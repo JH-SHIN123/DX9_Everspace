@@ -351,11 +351,6 @@ void CManagement::StopAll()
 
 void CManagement::Free()
 {
-	if (Safe_Release(m_pSound_Manager))
-	{
-		PRINT_LOG(L"Warning", L"Failed To Release Sound_Manager");
-	}
-
 	if (Safe_Release(m_pFrame_Manager))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release Frame_Manager");
@@ -384,6 +379,11 @@ void CManagement::Free()
 	if (Safe_Release(m_pScene_Manager))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release Scene_Manager");
+	}
+
+	if (Safe_Release(m_pSound_Manager))
+	{
+		PRINT_LOG(L"Warning", L"Failed To Release Sound_Manager");
 	}
 
 	if (Safe_Release(m_pDevice_Manager))
