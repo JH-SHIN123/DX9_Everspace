@@ -65,6 +65,9 @@ HRESULT CNaviArrow::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
+	CMaterialHandler::Set_RGBA(0.f, 0.9f, 0.f, 0.7f, &m_tMaterial);
+	m_tMaterial.Power = 10.f;
+
 	return S_OK;
 }
 
@@ -95,6 +98,7 @@ _uint CNaviArrow::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pMesh->Render_Mesh();
 
 	return _uint();

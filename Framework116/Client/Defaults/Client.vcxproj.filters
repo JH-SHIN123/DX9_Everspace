@@ -441,6 +441,9 @@
     <ClInclude Include="..\Headers\HUD_Effect_Damage.h">
       <Filter>02.GameObject\10.HUD_Effect\01.Damage</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\HUD_Effect_Boost.h">
+      <Filter>02.GameObject\10.HUD_Effect\00.Boost</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -637,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\HUD_Effect_Damage.cpp">
       <Filter>02.GameObject\10.HUD_Effect\01.Damage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\HUD_Effect_Boost.cpp">
+      <Filter>02.GameObject\10.HUD_Effect\00.Boost</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

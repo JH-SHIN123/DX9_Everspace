@@ -172,6 +172,7 @@
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
+    <ClInclude Include="..\Headers\HUD_Effect_Boost.h" />
     <ClInclude Include="..\Headers\HUD_Effect_Damage.h" />
     <ClInclude Include="..\Headers\LobbyBackUI.h" />
     <ClInclude Include="..\Headers\LobbyCursor.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
+    <ClCompile Include="..\Codes\HUD_Effect_Boost.cpp" />
     <ClCompile Include="..\Codes\HUD_Effect_Damage.cpp" />
     <ClCompile Include="..\Codes\LobbyBackUI.cpp" />
     <ClCompile Include="..\Codes\LobbyCursor.cpp" />

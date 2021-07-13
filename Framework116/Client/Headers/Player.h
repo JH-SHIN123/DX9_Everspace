@@ -129,7 +129,8 @@ private:
 	_float m_fAfterCollisionDist = 0.f;
 	_float m_fSpeed = 5.f;
 	
-
+private:
+	class CHUD_Effect_Boost* m_pHUD_Effect_Boost = nullptr;
 
 
 };

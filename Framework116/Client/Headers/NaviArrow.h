@@ -35,6 +35,8 @@ public:
 private:
 	CTransform*		m_pTransform = nullptr;
 	CMesh*			m_pMesh = nullptr;
+	D3DMATERIAL9	m_tMaterial;
+
 };
 
 #define __NAVI_ARROW_H__ 

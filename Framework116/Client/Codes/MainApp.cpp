@@ -13,6 +13,7 @@
 #include "Loading.h"
 #include "Shield_Battery.h"
 #include "HUD_Effect_Damage.h"
+#include "HUD_Effect_Boost.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -176,6 +177,16 @@ HRESULT CMainApp::Ready_StaticResources()
 		EResourceType::Static,
 		L"GameObject_HUD_Effect_Damage",
 		CHUD_Effect_Damage::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_HUD_Effect_Damage */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_HUD_Effect_Boost",
+		CHUD_Effect_Boost::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_UI");
 		return E_FAIL;
