@@ -24,8 +24,8 @@ private:
 	void	StartSceneChange(_float fDeltaTime);
 	void	Add_Layer_CancelButton();
 
-	void Update_Effect();
-
+	void	Update_Effect();
+	void	PlayStgClearProduction(_float fDeltaTime);
 
 public:
 	static CLobbyModel* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -50,7 +50,10 @@ private:
 
 	//Sound
 	_float m_fSoundTiming = 0.f;
-
+	//StgClearProduction
+	_bool m_bPlayStgClearProduction = FALSE;
+	_bool m_bStartStgClearProduction = FALSE;
+	_float m_fPlayProductionTime = 0.f;
 private: // Engine Effect
 	_bool m_IsBoost = FALSE;
 

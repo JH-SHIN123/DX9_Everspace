@@ -138,7 +138,7 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 			if (m_pFont)
 			{
 				m_pFont->Set_IsDead(TRUE);
-				m_pFont = nullptr;
+				Safe_Release(m_pFont);
 			}
 			return DEAD_OBJECT;
 		}

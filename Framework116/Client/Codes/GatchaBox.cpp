@@ -256,6 +256,11 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 
 void CGatchaBox::Add_Layer_Product(wstring & wstrLayerTag)
 {
+	if (m_pManagement->Get_GameObjectList(wstrLayerTag))
+	{
+		if (m_pManagement->Get_GameObjectList(wstrLayerTag)->size())
+			return;
+	}
 	TRANSFORM_DESC TransformDesc;
 	
 	TransformDesc.vPosition = m_pTransform->Get_State(EState::Position);
