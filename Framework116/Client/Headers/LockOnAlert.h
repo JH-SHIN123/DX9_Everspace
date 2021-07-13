@@ -39,6 +39,10 @@ private:
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
 	_float3 vTargetPos = {};
 	MAKERID m_eMakerID = MAKER_END;
+
+	_float m_fScaleX = 0.f;
+	_float m_fScaleY = 0.f;
+	_bool m_bAddScale = true;
 	
 };
 

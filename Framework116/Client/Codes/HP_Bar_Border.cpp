@@ -58,7 +58,7 @@ _uint CHP_Bar_Border::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar_Border::Render_GameObject()
 {
-	Check_Degree();
+	//Check_Degree();
 	if (!m_IsBack)
 		CUI::Render_GameObject();
 

@@ -56,7 +56,7 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	BoundingSphere.fRadius = 10.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -81,7 +81,7 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// HP 세팅
-	m_fHp = 100.f;
+	m_fHp = 1000.f;
 	m_fFullHp = m_fHp;
 
 	return S_OK;
@@ -115,8 +115,20 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_IsCollide) {
+	if (m_fHp <= 0.f)
+	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_IsDead = true;
+		m_pHp_Bar->Set_IsDead(TRUE);
+		m_pHP_Bar_Border->Set_IsDead(TRUE);
+		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
+		return DEAD_OBJECT;
+	}
+	if (m_IsCollide) {
+		// Bullet 데미지 만큼.
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
+		m_fHp -= 100.f;
 		m_IsCollide = false;
 	}
 
@@ -151,7 +163,7 @@ _uint CSniper::Movement(_float fDeltaTime)
 	_float vDist = D3DXVec3Length(&vDir);
 
 	// 배틀 상태 On
-	if (vDist <= 200.f && vDist != 0.f)
+	if (vDist <= 400.f && vDist != 0.f)
 	{
 		m_IsBattle = true;
 		Add_Hp_Bar(fDeltaTime);
@@ -183,27 +195,32 @@ _uint CSniper::Lock_On(_float fDeltaTime)
 	// 락온 시작하면 락온 되었다는걸 알리기 위해서 플레이어로 향하는 레이저를 발사해야 할까?..
 	// 아니면 플레이어 HUD에서 퉁쳐야하나?
 	m_IsLockOn = true;
-	((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(true);
-
-	m_fSniperShootDelay += fDeltaTime;
-	// 락온을 4초동안 한다음에 투사체 하나 발사하자
-	if (m_fSniperShootDelay >= 4.f)
+	m_fLockOnDelay += fDeltaTime;
+	if (m_fLockOnDelay >= 2.f)
 	{
-		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(true);
 
-		pArg->vPosition = m_pTransform->Get_State(EState::Position);
-		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
-
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::NonStatic,
-			L"GameObject_Sniper_Bullet",
-			L"Layer_Sniper_Bullet", pArg)))
+		m_fSniperShootDelay += fDeltaTime;
+		// 락온을 4초동안 한다음에 투사체 하나 발사하자
+		if (m_fSniperShootDelay >= 4.f)
 		{
-			PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet In Layer");
-			return E_FAIL;
+			TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+			pArg->vPosition = m_pTransform->Get_State(EState::Position);
+			pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_Sniper_Bullet",
+				L"Layer_Sniper_Bullet", pArg)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet In Layer");
+				return E_FAIL;
+			}
+			m_fSniperShootDelay = 0.f;
+			m_fLockOnDelay = 0.f;
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
 		}
-		m_fSniperShootDelay = 0.f;
-		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
 	}
 
 	return _uint();

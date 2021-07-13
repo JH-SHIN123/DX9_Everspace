@@ -104,9 +104,6 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	//m_vCreatePosition = TransformDesc.vPosition;
 	//m_vResearchRange = { 50.f,50.f,50.f };
 
-	m_fHp = 900.f;
-	m_fFullHp = m_fHp; 
-
 	m_fAngle = CPipeline::GetRandomFloat(0.1f, 1.f);
 	_float Check = CPipeline::GetRandomFloat(0.f, 1.f);
 	
@@ -126,6 +123,10 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 		m_eNextState = Turn;
 	}
 
+	// HP 세팅
+	m_fHp = 100.f;
+	m_fFullHp = m_fHp;
+
 	return S_OK;
 }
 
@@ -135,8 +136,24 @@ _uint CDrone::Update_GameObject(_float fDeltaTime)
 
 	StateCheck();
 	Movement(fDeltaTime);
+	
+	_float3 vDir = m_pTargetTransform->Get_State(EState::Position) - m_pTransform->Get_State(EState::Position);
+	_float fDist = D3DXVec3Length(&vDir);
+	
+	if (fDist < 400.f)
+	{
+		if (!m_IsHPBar)
+		{
+			Add_Hp_Bar(fDeltaTime);
+			m_IsHPBar = true;
+		}
+	}
+	if (m_pHp_Bar != nullptr && m_pHP_Bar_Border != nullptr)
+	{
 
-	//Add_Hp_Bar(fDeltaTime);
+		Set_Hp_Pos();
+		Check_Degree();
+	}
 
 	m_pTransform->Update_Transform();
 	for (auto& p : m_Collides)
@@ -157,17 +174,18 @@ _uint CDrone::LateUpdate_GameObject(_float fDeltaTime)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
-		//m_pHp_Bar->Set_IsDead(TRUE);
-		//m_pHP_Bar_Border->Set_IsDead(TRUE);
+		m_pHp_Bar->Set_IsDead(TRUE);
+		m_pHP_Bar_Border->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		//m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
-		m_fHp -= 100.f;
+		m_pHp_Bar->Set_ScaleX(-30.f / m_fFullHp * m_fHpLength);
+		m_fHp -= 30.f;
 		m_IsCollide = false;
 	}
+
 
 	return _uint();
 }
@@ -231,7 +249,9 @@ _uint CDrone::State_Move(_float fDelataTime)
 	_float fDis = D3DXVec3Length(&(m_vSpawnPos - vPos));
 
 	if (fDis >= m_fDis)
+	{
 		m_eNextState = BackTurn;
+	}
 
 	return _uint();
 }
@@ -444,12 +464,162 @@ CGameObject* CDrone::Clone(void* pArg)
 
 void CDrone::Free()
 {
-	//Safe_Release(m_pHP_Bar_Border);
-	//Safe_Release(m_pHp_Bar);
+	Safe_Release(m_pHP_Bar_Border);
+	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pTargetTransform);
 
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pTransform);
 
 	CGameObject::Free();
+}
+
+_uint CDrone::Add_Hp_Bar(_float fDeltaTime)
+{
+	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+	_float3 vPlayerPos = m_pTargetTransform->Get_State(EState::Position);
+
+	_float3 vDir = vMonsterPos - vPlayerPos;
+	_float fDist = D3DXVec3Length(&vDir);
+
+
+	if (m_IsHPBar == false)
+	{
+		//////////////////3d좌표를 2d좌표로////////////////////////////
+		D3DVIEWPORT9 vp2;
+		m_pDevice->GetViewport(&vp2);
+		_float4x4 TestView2, TestProj2;
+		m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+		m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+		_float4x4 matCombine2 = TestView2 * TestProj2;
+		D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
+		vMonsterPos.x += 1.f;
+		vMonsterPos.y += 1.f;
+
+		vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
+		vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
+
+		_float3 ptBoss;
+		ptBoss.x = -1.f * (WINCX / 2) + vMonsterPos.x;
+		ptBoss.y = 1.f * (WINCY / 2) + vMonsterPos.y;
+		ptBoss.z = 0.f;
+		//////////////////////////////////////////////////////////////////
+		// 감지범위에 들어오게 되면 HP_Bar 생성!
+
+		CGameObject* pGameObject = nullptr;
+		UI_DESC HUD_Hp_Bar;
+		HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
+		HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+		HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_HP_Bar",
+			L"Layer_HP_Bar",
+			&HUD_Hp_Bar, &pGameObject)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return E_FAIL;
+		}
+
+		CGameObject* pGameObjectBorder = nullptr;
+		UI_DESC HUD_Hp_Bar_Border;
+		HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
+		HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
+		HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_HP_Bar_Border",
+			L"Layer_HP_Bar_Border",
+			&HUD_Hp_Bar_Border, &pGameObjectBorder)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return E_FAIL;
+		}
+		m_IsHPBar = true;
+
+		m_pHP_Bar_Border = static_cast<CHP_Bar_Border*>(pGameObjectBorder);
+		m_pHP_Bar_Border->Who_Make_Me(m_pHP_Bar_Border->MAKER_SNIPER);
+
+		m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
+		m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_SNIPER);
+
+	}
+	return _uint();
+}
+
+void CDrone::Set_Hp_Pos()
+{
+	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+	_float3 vPlayerPos = m_pTargetTransform->Get_State(EState::Position);
+
+	_float3 vDir = vMonsterPos - vPlayerPos;
+	_float fDist = D3DXVec3Length(&vDir);
+
+	D3DVIEWPORT9 vp2;
+	m_pDevice->GetViewport(&vp2);
+	_float4x4 TestView2, TestProj2;
+	m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+	m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+	_float4x4 matCombine2 = TestView2 * TestProj2;
+	D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
+	vMonsterPos.x += 1.f;
+	vMonsterPos.y += 1.f;
+
+	vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
+	vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
+
+	_float3 ptBoss;
+	ptBoss.x = vMonsterPos.x;
+	ptBoss.y = vMonsterPos.y;
+	ptBoss.z = 0.f;
+	//////////////////////////////////////////////////////////////////
+
+	_float3 vPosition = { ptBoss.x - (WINCX / 2.f) - 29.f, -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f };
+	//_float3 vPosition = { 0.f, 0.f, 0.f };
+
+	m_pHp_Bar->Set_Pos(vPosition);
+	m_pHP_Bar_Border->Set_Pos(vPosition);
+}
+
+_uint CDrone::Check_Degree()
+{
+	_float3 vPlayerLook = m_pTargetTransform->Get_State(EState::Look);
+	_float3 v1 = vPlayerLook;
+	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position);
+	_float fCeta;
+	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
+	_float v1v2 = D3DXVec3Dot(&v1, &v2);
+	_float v1Length = D3DXVec3Length(&v1);
+	_float v2Length = D3DXVec3Length(&v2);
+	fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+	_float fDegree = D3DXToDegree(fCeta);
+
+	if (v2.x < 0)
+	{
+		if (fDegree > 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(true);
+			m_pHP_Bar_Border->Set_IsBack(true);
+		}
+		else if (fDegree <= 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(false);
+			m_pHP_Bar_Border->Set_IsBack(false);
+		}
+	}
+	else
+	{
+		if (fDegree > 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(true);
+			m_pHP_Bar_Border->Set_IsBack(true);
+		}
+		else if (fDegree <= 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(false);
+			m_pHP_Bar_Border->Set_IsBack(false);
+		}
+	}
+	return _uint();
 }

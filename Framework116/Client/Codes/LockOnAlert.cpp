@@ -32,6 +32,30 @@ _uint CLockOnAlert::Update_GameObject(_float fDeltaTime)
 	
 	Adjust_Pos(fDeltaTime);
 
+	if (m_fScaleX > 20.f)
+	{
+		m_bAddScale = false;
+	}
+	if (m_fScaleX < 0.f)
+	{
+		m_bAddScale = true;
+	}
+
+	if (m_bAddScale)
+	{
+		m_fScaleX += 2.0f;
+		m_fScaleY += 2.0f;
+	}
+	else
+	{
+		m_fScaleX -= 2.f;
+		m_fScaleY -= 2.f;
+	}
+
+
+	_float3 vScale = { m_fScaleX, m_fScaleY, 0.f };
+	m_pTransform->Set_Scale(vScale);
+
 	return NO_EVENT;
 }
 
@@ -54,7 +78,7 @@ _uint CLockOnAlert::Render_GameObject()
 
 void CLockOnAlert::Set_ScaleX(_float _fDamage)
 {
-	m_pTransform->Set_ScaleX(m_pTransform->Get_TransformDesc().vScale.x + _fDamage);
+
 }
 
 _uint CLockOnAlert::Movement(_float fDeltaTime)
@@ -65,7 +89,7 @@ _uint CLockOnAlert::Movement(_float fDeltaTime)
 _uint CLockOnAlert::Adjust_Pos(_float fDeltaTime)
 {
 		if (m_pTransform) {
-			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 132.f, WINCY / 2.f - 120.f , 0.f));
+			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 1500.f, WINCY / 2.f - 120.f , 0.f));
 			m_pTransform->Update_Transform();
 		}
 

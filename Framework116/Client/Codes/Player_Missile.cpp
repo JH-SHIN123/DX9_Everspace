@@ -93,16 +93,16 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// 유도할 타겟.
-	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
-	{
-		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
-		Safe_AddRef(m_pTargetTransform);
-		if (nullptr == m_pTargetTransform)
-		{
-			PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
-			return E_FAIL;
-		}
-	}
+	//if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() != 0)
+	//{
+	//	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
+	//	Safe_AddRef(m_pTargetTransform);
+	//	if (nullptr == m_pTargetTransform)
+	//	{
+	//		PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
+	//		return E_FAIL;
+	//	}
+	//}
 
 
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
@@ -144,6 +144,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 	// 발사되자 마자 유도안되게.
 	m_fBeforeHoming += fDeltaTime;
+	Search_Shortest_Target(fDeltaTime);
 
 	if (m_fBeforeHoming < 1.f)
 		Movement(fDeltaTime);
@@ -290,6 +291,62 @@ _uint CPlayer_Missile::Homing(_float fDeltaTime)
 _uint CPlayer_Missile::Searching_Target(_float fDeltaTime)
 {
 
+	return _uint();
+}
+
+_uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
+{
+	const list<class CGameObject*>* m_listCheckBoss = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
+	const list<class CGameObject*>* m_listCheckDrone = m_pManagement->Get_GameObjectList(L"Layer_Drone");
+	const list<class CGameObject*>* m_listCheckSniper = m_pManagement->Get_GameObjectList(L"Layer_Sniper");
+
+	if (nullptr == m_listCheckBoss || nullptr == m_listCheckDrone || nullptr == m_listCheckSniper)
+	{
+		PRINT_LOG(L"Error", L"One of list is nullptr");
+		return NO_EVENT;
+	}
+
+	for (auto& pObj : *m_listCheckBoss)
+	{
+		_float3 vTargetPos = pObj->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
+		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
+		_float3 vDir = vTargetPos - vMissilePos;
+		
+		m_fDistToBoss = D3DXVec3Length(&vDir);
+	}
+
+	for (auto& pObj : *m_listCheckDrone)
+	{
+		_float3 vTargetPos = pObj->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
+		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
+		_float3 vDir = vTargetPos - vMissilePos;
+
+		m_fDistToDrone = D3DXVec3Length(&vDir);
+	}
+
+	for (auto& pObj : *m_listCheckSniper)
+	{
+		_float3 vTargetPos = pObj->Get_Collides()->front()->Get_BoundingSphere().Get_Position();
+		_float3 vMissilePos = m_pTransform->Get_State(EState::Position);
+		_float3 vDir = vTargetPos - vMissilePos;
+
+		 m_fDistToSniper = D3DXVec3Length(&vDir);
+	}
+	if (m_fDistToBoss != 0.f && m_fDistToDrone != 0.f && m_fDistToSniper != 0.f)
+	{
+		if (m_fDistToBoss < m_fDistToDrone && m_fDistToBoss < m_fDistToSniper)
+		{
+			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
+		}
+		else if (m_fDistToDrone < m_fDistToBoss && m_fDistToDrone < m_fDistToSniper)
+		{
+			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Drone", L"Com_Transform");
+		}
+		else if (m_fDistToSniper < m_fDistToBoss && m_fDistToSniper < m_fDistToDrone)
+		{
+			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Sniper", L"Com_Transform");
+		}
+	}
 	return _uint();
 }
 

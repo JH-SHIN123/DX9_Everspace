@@ -608,7 +608,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 	_float3 vDir = vMonsterPos - vPlayerPos;
 	_float fDist = D3DXVec3Length(&vDir);
 
-	if (fDist < 100.f && fDist != 0.f)
+	if (fDist < 800.f && fDist != 0.f)
 	{
 		if (m_IsHPBar == false)
 		{

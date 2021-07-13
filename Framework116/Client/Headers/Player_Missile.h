@@ -22,6 +22,7 @@ private:
 	_uint Movement(_float fDeltaTime);
 	_uint Homing(_float fDeltaTime);
 	_uint Searching_Target(_float fDeltaTime);
+	_uint Search_Shortest_Target(_float fDeltaTime);
 
 public:
 	static CPlayer_Missile* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -57,6 +58,13 @@ private:
 
 private:
 	_float3* vDir = {};
+
+
+	// 가장 가까운 애 찾아갈 변수들
+private:
+	_float m_fDistToBoss = 0.f;
+	_float m_fDistToDrone = 0.f;
+	_float m_fDistToSniper = 0.f;
 
 };
 
