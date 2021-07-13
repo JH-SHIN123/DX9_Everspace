@@ -53,11 +53,11 @@ private:
 	_float3 m_vCreatePosition = { 0.f,0.f,0.f };
 	_float3 m_vResearchRange = { 0.f,0.f,0.f };
 
-//private: // HP Bar 추가
-//	_bool m_IsHPBar = false;
-//	class CHP_Bar* m_pHp_Bar = nullptr;
-//	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
-//	_float m_fHpLength = 64.f;
+public: // Add_HP_Bar
+	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
+	_bool Get_Is_Hp_Bar() { return m_IsHPBar; }
+	_uint Check_Degree();
 
 private:
 	CModelMesh* m_pModelMesh = nullptr;
@@ -72,6 +72,13 @@ private:
 	_bool m_bAnglePlus = true;
 
 	// 왔다리 > 돌아왔다리 > 랜덤 값 만큼 회전 > 왔다리 > 돌아 왔다리....
+
+	// HP Bar 추가
+	_bool m_IsHPBar = false;
+	class CHP_Bar* m_pHp_Bar = nullptr;
+	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
+	_float m_fHpLength = 32.f;
+
 };
 
 #define __DRONE_H__

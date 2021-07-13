@@ -31,7 +31,7 @@ _uint CHP_Bar_Border::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 	
-	Adjust_Pos(fDeltaTime);
+	//Adjust_Pos(fDeltaTime);
 	
 	//여기서 하지말고 몬스터 내부에서 직접 뿌려줘야 할 것 같은데.
 	//if (m_listCheckMonsters->front()->Get_IsCollide() == true)
@@ -58,7 +58,7 @@ _uint CHP_Bar_Border::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar_Border::Render_GameObject()
 {
-	Check_Degree();
+	//Check_Degree();
 	if (!m_IsBack)
 		CUI::Render_GameObject();
 
@@ -87,7 +87,8 @@ _uint CHP_Bar_Border::Adjust_Pos(_float fDeltaTime)
 		dstLayerTag = L"Layer_Boss_Monster";
 		vHpOffset = { -31.5f , 29.f };
 		break;
-	case CHP_Bar_Border::MAKER_MONSTER:
+	case CHP_Bar_Border::MAKER_SNIPER:
+		dstLayerTag = L"Layer_Sniper";
 		break;
 	case CHP_Bar_Border::MAKER_DRONE:
 		dstLayerTag = L"Layer_Drone";

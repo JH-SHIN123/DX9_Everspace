@@ -54,6 +54,7 @@ private: // Move_Mode
 
 private: // Add_HP_Bar
 	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
 
 public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -71,30 +72,30 @@ private:
 
 private: /* AI */
 		 // 거리에 따라 행동을 다르게
-	ActionMode m_eActionMode = End;
-	_bool m_IsSpecialAction = false;
-	_float3 m_vMyPos;
+	ActionMode	m_eActionMode = End;
+	_bool		m_IsSpecialAction = false;
+	_float3		m_vMyPos;
 
 private: // EnergyBall
 	_float3 m_vRight_EnergyBallCannon_Position;
 	_float3 m_vLeft_EnergyBallCannon_Position;
-	_float m_fCannonLength = 26.f;
-	_float m_fLeftCannonCoolTime = 0.f;
-	_float m_fRightCannonCoolTime = 0.f;
+	_float	m_fCannonLength = 26.f;
+	_float	m_fLeftCannonCoolTime = 0.f;
+	_float	m_fRightCannonCoolTime = 0.f;
 
 private: // laser
 	_float3 m_vLaserCannon_Position;
-	_float m_fLaser_CoolTime = 0.f;
-	_float m_fLaser_Degree = 10.f;
-	_bool m_IsLaserAlert = false;
-	_bool m_IsLaserAttack = false;
-	_bool m_IsLaserTarget = false;
-	_uint m_iLaserCount = 0;
+	_float	m_fLaser_CoolTime = 0.f;
+	_float	m_fLaser_Degree = 10.f;
+	_bool	m_IsLaserAlert = false;
+	_bool	m_IsLaserAttack = false;
+	_bool	m_IsLaserTarget = false;
+	_uint	m_iLaserCount = 0;
 
 
-private:
-	// emp bomb
-	_float m_fEmpBomb_CoolTime = 0.f;
+private: // emp bomb
+	_float3 m_vEmpBomb_Position;
+	_float	m_fEmpBomb_CoolTime = 0.f;
 
 	// Spawn Monster
 	_float m_fSpawnCoolTime = 0.f;
@@ -104,6 +105,8 @@ private:
 	class CHP_Bar* m_pHp_Bar = nullptr;
 	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
 	_float m_fHpLength = 64.f;
+	
+	_uint Check_Degree();
 };
 
 #define __BOSS_MONSTER_H__

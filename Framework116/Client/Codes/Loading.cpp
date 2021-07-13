@@ -56,6 +56,8 @@
 
 // 3StageÇÊ¿ä
 #include "Sniper.h"
+#include "Sniper_Bullet.h"
+#include "LockOnAlert.h"
 #pragma endregion
 
 
@@ -346,6 +348,16 @@ HRESULT CLoading::Ready_StageResources()
 		CHP_Bar::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_HP_Bar");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_LockOnAlert */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LockOnAlert",
+		CLockOnAlert::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LockOnAlert");
 		return E_FAIL;
 	}
 
@@ -1160,6 +1172,16 @@ HRESULT CLoading::Ready_HUD_Resources()
 		return E_FAIL;
 	}
 
+	/* For.Component_Texture_LockOnAlert */ 
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_LockOnAlert",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/LockOnAlert.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_LockOnAlert");
+		return E_FAIL;
+	}
+
 	Ready_ScriptUI_Resources();
 
 	return S_OK;
@@ -1367,6 +1389,16 @@ HRESULT CLoading::Ready_BossAndOthers()
 		return E_FAIL;
 	}
 
+	// For Sniper Bullet
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Sniper_Bullet",
+		CSniper_Bullet::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet");
+		return E_FAIL;
+	}
+
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::NonStatic,
 		L"GameObject_Bullet_Laser",
@@ -1416,6 +1448,42 @@ HRESULT CLoading::Ready_BossAndOthers()
 #pragma endregion
 
 #pragma region Textures
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossEMP_Explosion",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP_Explosion.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossEMP_Explosion");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossEMP_2",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP_2.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossEMP_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossEMP",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossEMP");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossLaser_Fire",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossLaser_Fire.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossLaser_Fire");
+		return E_FAIL;
+	}
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -1486,6 +1554,24 @@ HRESULT CLoading::Ready_BossAndOthers()
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Bullet/Boss_EnergyBall.png"))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet_EnergyBall");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Sniper_Bullet",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Bullet/Sniper_Bullet.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Sniper_Bullet");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Sniper_Bullet_Trail",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/Sniper_Bullet_Trail.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Sniper_Bullet_Trail");
 		return E_FAIL;
 	}
 

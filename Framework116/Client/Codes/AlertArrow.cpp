@@ -181,6 +181,7 @@ _uint CAlertArrow::Render_GameObject()
 	if (vDir.y > 0)
 		fCeta = -1.f * fCeta/* + D3DXToRadian(180.f)*/;
 	//////////////////////////////////////////////////////////
+
 	_float4x4 matView;
 	m_pDevice->GetTransform(D3DTS_VIEW, &matView);
 	D3DXMatrixIdentity(&matView);

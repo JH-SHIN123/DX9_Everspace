@@ -25,6 +25,7 @@ public:
 	_uint Set_IsScript(_bool IsScript);
 	_uint Set_IsCameraMove(_bool IsCameraMove);
 	void Set_IsShield(_bool IsShield) { m_IsShield = IsShield; }
+	void Someone_Try_To_Kill_Me(_bool _bLockOn) { m_bLockOn = _bLockOn; }
 
 public:
 	_uint Get_Weapon_Type() { return m_iWeapon; }
@@ -36,6 +37,7 @@ private:
 	_uint	Movement(_float fDeltaTime);
 	void	TimeOperation(const _float fDeltaTime);
 	void	Increase_Stamina(const _float fDeltaTime);
+	void	Make_LockOn_Alert(_float fDeltaTime);
 	
 	_uint	Collide_Planet_Or_Astroid(const _float fDeltaTime);
 
@@ -99,7 +101,9 @@ private: // Wing Effect
 private: // AlertArrow 관련
 	_uint Make_Arrow();
 	const list<class CGameObject*>* m_listCheckMonsters = nullptr;
+	const list<class CGameObject*>* m_listCheckSnipers = nullptr;
 	_bool IsArrow = false;
+	_bool IsArrow2 = false;
 
 private: // HP, 스태미너 관련
 	class CHP_Bar* m_pHp_Bar = nullptr;
@@ -128,6 +132,12 @@ private:
 	//충돌후 밀려날 거리
 	_float m_fAfterCollisionDist = 0.f;
 	_float m_fSpeed = 5.f;
+
+	// 락온표시 관련
+private:
+	class CLockOnAlert* m_pLockOnAlert = nullptr;
+	_bool m_bFirstLocked = false;
+	_bool  m_bLockOn = false;
 	
 private:
 	class CHUD_Effect_Boost* m_pHUD_Effect_Boost = nullptr;

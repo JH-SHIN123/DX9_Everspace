@@ -435,15 +435,45 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Dead(const _float
 	return S_OK;
 }
 
+HRESULT CEffectHandler::Add_Layer_Effect_Sniper_Bullet_Trail(CGameObject * pTarget, CGameObject ** ppGameObject)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Sniper_Bullet_Trail";
+	pSystemDesc.iNumParticles = 1;
+	pSystemDesc.tResetAttribute.fParticleSize = 3.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 3.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f, 1.f };
+	pSystemDesc.pTarget = pTarget;
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_FollowSystem",
+		L"Layer_FollowSystem",
+		(void*)&pSystemDesc,
+		(CGameObject**)ppGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Follow In Layer");
+	}
+
+	CGameObject* pGameObject = *ppGameObject;
+	Safe_Release(pGameObject);
+
+	return S_OK;
+}
 HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(const _float3 & _vPos, const _float _fSize)
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
-	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossLaserAlert";
-	pSystemDesc.iNumParticles = 1;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossLaser_Fire";
+	pSystemDesc.iNumParticles = 3;
 	pSystemDesc.tResetAttribute.fParticleSize = 5.f * _fSize;
 	pSystemDesc.tResetAttribute.fParticleSpeed = 2.f;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.5f;
-	pSystemDesc.tResetAttribute.fLifeTime = 0.75f;
+	pSystemDesc.tResetAttribute.fLifeTime = 0.8f;
 	pSystemDesc.tTransformDesc.vPosition = _vPos;
 	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
 	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
@@ -488,6 +518,89 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Trail(CGameObject * pT
 
 	CGameObject* pGameObject = *ppGameObject;
 	Safe_Release(pGameObject);
+
+	return S_OK;
+}
+
+HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Fire(const _float3 & _vPos, const _float _fSize)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossLaser_Fire";
+	pSystemDesc.iNumParticles = 5;
+	pSystemDesc.tResetAttribute.fParticleSize = 10.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 2.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.5f;
+	pSystemDesc.tResetAttribute.fLifeTime = 0.75f;
+	pSystemDesc.tTransformDesc.vPosition = _vPos;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
+	}
+
+	return S_OK;
+}
+
+HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Trail(CGameObject * pTarget, CGameObject ** ppGameObject)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP_2";
+	pSystemDesc.iNumParticles = 2;
+	pSystemDesc.tResetAttribute.fParticleSize = 5.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 3.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f, 1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f, 1.f };
+	pSystemDesc.pTarget = pTarget;
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_FollowSystem",
+		L"Layer_FollowSystem",
+		(void*)&pSystemDesc,
+		(CGameObject**)ppGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Follow In Layer");
+	}
+
+	CGameObject* pGameObject = *ppGameObject;
+	Safe_Release(pGameObject);
+
+	return S_OK;
+}
+
+HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(const _float3 & _vPos, const _float _fSize)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP";
+	pSystemDesc.iNumParticles = 5;
+	pSystemDesc.tResetAttribute.fParticleSize = 40.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 20.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
+	pSystemDesc.tTransformDesc.vPosition = _vPos;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
+	}
 
 	return S_OK;
 }

@@ -17,7 +17,7 @@ CBullet_EnergyBall::CBullet_EnergyBall(const CBullet_EnergyBall & other)
 
 HRESULT CBullet_EnergyBall::Ready_GameObject_Prototype()
 {
-	CGameObject::Ready_GameObject_Prototype();
+	CGameObject::Ready_GameObject_Prototype();//¾Ó±â¸ð¶ì
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,

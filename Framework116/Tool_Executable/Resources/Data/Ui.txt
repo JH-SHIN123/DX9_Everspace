@@ -1,0 +1,4 @@
+Component_Texture_Player|-300|40|30|30
+Component_Texture_Example|190|90|90|90
+Component_Texture_Player|200|20|90|90
+Component_Texture_Player|-100|-200|60|30

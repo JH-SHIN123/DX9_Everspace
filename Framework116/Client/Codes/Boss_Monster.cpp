@@ -91,11 +91,9 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-
 	// HP 세팅
 	m_fHp = 900.f;
 	m_fFullHp = m_fHp;
-
 
 	return S_OK;
 }
@@ -108,10 +106,14 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	Move_AI(fDeltaTime);
 	Attack_AI(fDeltaTime);
 
-
 	if (!m_IsHPBar)
 		Add_Hp_Bar(fDeltaTime);
 
+	if (m_pHp_Bar != nullptr && m_pHP_Bar_Border != nullptr)
+	{
+		Set_Hp_Pos();
+		Check_Degree();
+	}
 	m_pTransform->Update_Transform();
 	// 충돌박스 업데이트
 	for (auto& collide : m_Collides)
@@ -208,7 +210,7 @@ _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Middle(_float fDeltaTime)
 {
-
+	RotateMy_Y(fDeltaTime);
 
 
 	return _uint();
@@ -337,6 +339,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		m_IsLaserAlert = true;
 	}
 
+	// 경고 이펙트 / 조준
 	if (m_fLaser_CoolTime >= 2.2f)
 	{
 		if (m_IsLaserAlert == true)
@@ -403,9 +406,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		}
 	}
 
-
-	// 2초가 넘어가면 발사
-	// 2초의 쿨타임으로 1초동안 발사!
+	// 레이저 발사 2개
 	if (m_fLaser_CoolTime >= 2.7f)
 	{
 		if (m_IsLaserAttack == true)
@@ -459,6 +460,9 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 					PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
 					return E_FAIL;
 				}
+				_float3 vEffectPos = m_vLaserCannon_Position + (vLook * 5.f);
+
+				CEffectHandler::Add_Layer_Effect_Boss_FireBullet(vEffectPos, 1.f);
 			}
 		}
 	}
@@ -470,8 +474,6 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 {
 	m_fEmpBomb_CoolTime += fDeltaTime;
 
-
-
 	if (m_fEmpBomb_CoolTime >= 5.f)
 	{
 		m_fEmpBomb_CoolTime = 0.f;
@@ -479,9 +481,14 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
 
 		_float3 vUp = m_pTransform->Get_State(EState::Up);
+		_float3 vLook = m_pTransform->Get_State(EState::Look);
 		D3DXVec3Normalize(&vUp, &vUp);
+		D3DXVec3Normalize(&vLook, &vLook);
 
-		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
+		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * -25.f) + (vLook * 40.f);
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+		m_vEmpBomb_Position;
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
@@ -491,6 +498,9 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_EMP_Bomb In Layer");
 			return E_FAIL;
 		}
+
+		CEffectHandler::Add_Layer_Effect_Boss_FireBullet(pArg->vPosition, 1.f);
+
 	}
 
 
@@ -572,29 +582,22 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 		m_eActionMode = SpecialAction;
 
 
-	//switch (m_eActionMode)
-	//{
-	//case CBoss_Monster::Near:
-	//	Move_Near(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::Middle:
-	//	Move_Middle(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::Far:
-	//	Move_Far(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::SpecialAction:
-	//	break;
-
-	//default:
-	//	return UPDATE_ERROR;
-	//	break;
-	//}
-
-
+	switch (m_eActionMode)
+	{
+	case CBoss_Monster::Near:
+		Move_Near(fDeltaTime);
+		break;
+	case CBoss_Monster::Middle:
+		Move_Middle(fDeltaTime);
+		break;
+	case CBoss_Monster::Far:
+		Move_Far(fDeltaTime);
+		break;
+	case CBoss_Monster::SpecialAction:
+		break;
+	default:
+		break;
+	}
 
 	return _uint();
 }
@@ -704,7 +707,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 	_float3 vDir = vMonsterPos - vPlayerPos;
 	_float fDist = D3DXVec3Length(&vDir);
 
-	if (fDist < 300.f)
+	if (fDist < 800.f && fDist != 0.f)
 	{
 		if (m_IsHPBar == false)
 		{
@@ -771,6 +774,39 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 	return _uint();
 }
 
+void CBoss_Monster::Set_Hp_Pos()
+{
+	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+	_float3 vPlayerPos = m_pTargetTransform->Get_State(EState::Position);
+
+	_float3 vDir = vMonsterPos - vPlayerPos;
+	_float fDist = D3DXVec3Length(&vDir);
+
+	D3DVIEWPORT9 vp2;
+	m_pDevice->GetViewport(&vp2);
+	_float4x4 TestView2, TestProj2;
+	m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+	m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+	_float4x4 matCombine2 = TestView2 * TestProj2;
+	D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
+	vMonsterPos.x += 1.f;
+	vMonsterPos.y += 1.f;
+
+	vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
+	vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
+
+	_float3 ptBoss;
+	ptBoss.x = vMonsterPos.x;
+	ptBoss.y = vMonsterPos.y;
+	ptBoss.z = 0.f;
+	//////////////////////////////////////////////////////////////////
+
+	_float3 vPosition = { ptBoss.x - (WINCX / 2.f) - 30.f, -ptBoss.y + (WINCY / 2.f) + 30.f, 0.f };
+
+	m_pHp_Bar->Set_Pos(vPosition);
+	m_pHP_Bar_Border->Set_Pos(vPosition);
+}
+
 CBoss_Monster* CBoss_Monster::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	CBoss_Monster* pInstance = new CBoss_Monster(pDevice);
@@ -809,8 +845,48 @@ void CBoss_Monster::Free()
 HRESULT CBoss_Monster::Add_InLayer_MyParts()
 {
 
-
-
 	return S_OK;
 }
 
+_uint CBoss_Monster::Check_Degree()
+{
+	_float3 vPlayerLook = m_pTargetTransform->Get_State(EState::Look);
+	_float3 v1 = vPlayerLook;
+	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position); 
+	_float fCeta;
+	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
+	_float v1v2 = D3DXVec3Dot(&v1, &v2);
+	_float v1Length = D3DXVec3Length(&v1);
+	_float v2Length = D3DXVec3Length(&v2);
+	fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+	_float fDegree = D3DXToDegree(fCeta);
+
+	if (v2.x < 0)
+	{
+		if (fDegree > 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(true);
+			m_pHP_Bar_Border->Set_IsBack(true);
+		}
+		else if (fDegree <= 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(false);
+			m_pHP_Bar_Border->Set_IsBack(false);
+		}
+	}
+	else
+	{
+		if (fDegree > 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(true);
+			m_pHP_Bar_Border->Set_IsBack(true);
+		}
+		else if (fDegree <= 90.f)
+		{
+			m_pHp_Bar->Set_IsBack(false);
+			m_pHP_Bar_Border->Set_IsBack(false);
+		}
+	}
+	return _uint();
+}

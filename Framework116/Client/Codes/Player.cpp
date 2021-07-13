@@ -9,6 +9,7 @@
 #include "CollisionHandler.h"
 #include "ScriptUI.h"
 #include "MainCam.h"
+#include "LockOnAlert.h"
 #include "HUD_Effect_Boost.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
@@ -146,7 +147,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	CGameObject* pGameObject = nullptr;
 	UI_DESC HUD_Hp_Bar;
-	HUD_Hp_Bar.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	HUD_Hp_Bar.tTransformDesc.vPosition = { -828.5f, 455.f, 0.f };
 	HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
 	HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -239,6 +240,8 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	TimeOperation(fDeltaTime);
 	
 	Make_Arrow();
+
+	Make_LockOn_Alert(fDeltaTime);
 
 
 	// 월드행렬 업데이트
@@ -764,6 +767,45 @@ void CPlayer::Increase_Stamina(const _float fDeltaTime)
 	}
 }
 
+void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
+{
+	if (m_bLockOn)
+	{
+		if (!m_bFirstLocked)
+		{
+			CGameObject* pGameObject = nullptr;
+			//알림생성
+   			UI_DESC LockOnAlert;
+			LockOnAlert.tTransformDesc.vPosition = { 800.f, 300.f, 0.f };
+			LockOnAlert.tTransformDesc.vScale = { 100.f, 100.f, 0.f };
+			LockOnAlert.wstrTexturePrototypeTag = L"Component_Texture_LockOnAlert";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_LockOnAlert",
+				L"Layer_LockOnAlert",
+				&LockOnAlert, &pGameObject)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
+
+			m_pLockOnAlert = static_cast<CLockOnAlert*>(pGameObject);
+			m_bFirstLocked = true;
+		}
+	}
+	else
+	{
+		if (m_bFirstLocked && !m_bLockOn)
+		{
+			m_pManagement->Get_GameObjectList(L"Layer_LockOnAlert")->front()->Set_IsDead(true);
+			m_bFirstLocked = false;
+		}
+	}
+
+
+
+}
+
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
 	// 1.Planet
@@ -887,12 +929,12 @@ void CPlayer::Free()
 		m_pLeftWingBoost = nullptr;
 	}
 
+	Safe_Release(m_pLockOnAlert);
 	if (m_pHUD_Effect_Boost)
 	{
 		m_pHUD_Effect_Boost->Set_IsDead(true);
 		Safe_Release(m_pHUD_Effect_Boost);
 	}
-
 	Safe_Release(m_pStamina_Bar);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pMesh);
@@ -907,23 +949,29 @@ _uint CPlayer::Make_Arrow()
 	// 나중에는 모든 몬스터 순회하면서 검사해야함.
 	// 몬스터 pos - 플레이어 pos. => 
 	// 각도로 비교하자~
+
 	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() == 0 
-		/*||m_pManagement->Get_GameObjectList(L"Layer_Monster")->size() == 0*/)
-		return UPDATE_ERROR;
+		||m_pManagement->Get_GameObjectList(L"Layer_Sniper")->size() == 0)
+		return NO_EVENT;
 
 	//Test
 	m_pTransform->Get_TransformDesc().matWorld;
 	_float3 vPlayerLook = m_pTransform->Get_State(EState::Look);
 
 	m_listCheckMonsters = m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster");
-	if (nullptr == m_listCheckMonsters || m_listCheckMonsters->size() == 0) return NO_EVENT;
+	m_listCheckSnipers = m_pManagement->Get_GameObjectList(L"Layer_Sniper");
+	if (nullptr == m_listCheckMonsters 
+		|| nullptr == m_listCheckSnipers 
+		|| m_listCheckMonsters->size() == 0 
+		|| m_listCheckSnipers->size() == 0) return NO_EVENT;
 
+	// Boss_Monster
 	auto& iter = m_listCheckMonsters->begin();
 
 	for (; iter != m_listCheckMonsters->end(); ++iter)
 	{
-		_float3 v1 = vPlayerLook; // 얘는 방향벡턴데?
-		_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); // 위치벡터네?
+		_float3 v1 = vPlayerLook; 
+		_float3 v2 = (*iter)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position); 
 		_float fCeta;
 		D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 		_float v1v2 = D3DXVec3Dot(&v1, &v2);
@@ -949,6 +997,42 @@ _uint CPlayer::Make_Arrow()
 			{
 				m_pManagement->Get_GameObjectList(L"Layer_AlertArrow")->front()->Set_IsDead(TRUE);
 				IsArrow = false;
+			}
+		}
+	}
+	// Snipers 
+	auto& iter2 = m_listCheckSnipers->begin();
+
+	for (; iter2 != m_listCheckSnipers->end(); ++iter2)
+	{
+		_float3 v1 = vPlayerLook; 
+		_float3 v2 = (*iter2)->Get_Collides()->front()->Get_BoundingSphere().Get_Position() - m_pTransform->Get_State(EState::Position);
+		_float fCeta;
+		D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
+		_float v1v2 = D3DXVec3Dot(&v1, &v2);
+		_float v1Length = D3DXVec3Length(&v1);
+		_float v2Length = D3DXVec3Length(&v2);
+		fCeta = acosf(v1v2 / (v1Length * v2Length));
+
+		_float fDegree = D3DXToDegree(fCeta);
+
+		// 각도가 이만큼 넘으면 화면밖에있음
+		if (fabs(fDegree) > 90.f)
+		{
+			if (IsArrow2 == false)
+			{
+				//wstring abc = to_wstring(fDegree);
+				//PRINT_LOG(L"", abc.c_str());
+				m_pManagement->Add_GameObject_InLayer(EResourceType::Static, L"GameObject_AlertArrow", L"Layer_AlertArrow", (void*)(*iter2));
+				IsArrow2 = true;
+			}
+		}
+		else if (fabs(fDegree) < 70.f)
+		{
+			if (IsArrow2 && m_pManagement->Get_GameObjectList(L"Layer_AlertArrow")->size() != 0)
+			{
+				m_pManagement->Get_GameObjectList(L"Layer_AlertArrow")->front()->Set_IsDead(TRUE);
+				IsArrow2 = false;
 			}
 		}
 	}
