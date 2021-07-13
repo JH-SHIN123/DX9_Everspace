@@ -5,9 +5,9 @@ USING(Engine)
 typedef struct tagUnitInfo
 {
 	tagUnitInfo() {};
-	tagUnitInfo(_uint _iAtk, _uint _iDef,_uint _iMaxHp,_uint _iMaxShield,_uint _iMaxEnergy,_uint _iFireRate)
-		:iAtk(_iAtk),iDef(_iDef),iHp(_iMaxHp),iMaxHp(_iMaxHp),iShield(_iMaxShield),iMaxShield(_iMaxShield)
-		,iEnergy(_iMaxEnergy),iMaxEnergy(_iMaxEnergy),iFireRate(_iFireRate)
+	tagUnitInfo(_uint _iAtk, _uint _iDef, _uint _iMaxHp, _uint _iMaxShield, _uint _iMaxEnergy, _uint _iFireRate)
+		:iAtk(_iAtk), iDef(_iDef), iHp(_iMaxHp), iMaxHp(_iMaxHp), iShield(_iMaxShield), iMaxShield(_iMaxShield)
+		, iEnergy(_iMaxEnergy), iMaxEnergy(_iMaxEnergy), iFireRate(_iFireRate)
 	{
 	}
 
@@ -16,8 +16,8 @@ typedef struct tagUnitInfo
 	_uint iHp = 0;
 	_uint iMaxHp = 0;
 	_uint iShield = 0;
-	_uint iMaxShield= 0;
-	_uint iEnergy= 0;
+	_uint iMaxShield = 0;
+	_uint iEnergy = 0;
 	_uint iMaxEnergy = 0;
 	_uint iFireRate = 0;
 }UNIT_INFO;
