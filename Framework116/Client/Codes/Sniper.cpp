@@ -28,7 +28,7 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Mesh_Axis",
+		L"Component_Mesh_Enemy2",
 		L"Com_Mesh",
 		(CComponent**)&m_pModelMesh)))
 	{
@@ -56,7 +56,7 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 10.f;
+	BoundingSphere.fRadius = 4.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,

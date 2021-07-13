@@ -602,22 +602,22 @@ HRESULT CLoading::Ready_StageResources()
 	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 	//	return E_FAIL;
 	//}
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Enemy1",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
-	//	return E_FAIL;
-	//}
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Enemy2",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
-	//	return E_FAIL;
-	//}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Enemy1",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Mesh_Enemy2",
+		CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
+		return E_FAIL;
+	}
 
 	Ready_HUD_Resources();
 	Ready_StageEffect();

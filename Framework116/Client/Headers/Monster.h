@@ -24,6 +24,7 @@ public:
 private:
 	_uint	Movement(_float fDeltaTime);
 	_uint	Researching(_float fDeltaTime);
+	_uint	Dog_Fight(_float fDeltaTime);
 
 private:
 	void	StateCheck();
@@ -45,6 +46,8 @@ private:
 	CModelMesh*  m_pModelMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
+
+	CTransform* m_pTargetTransform = nullptr;
 };
 
 #define __MONSTER_H__

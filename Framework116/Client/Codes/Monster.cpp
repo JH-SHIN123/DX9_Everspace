@@ -25,7 +25,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Mesh_Monster",
+		L"Component_Mesh_Enemy1",
 		L"Com_Mesh",
 		(CComponent**)&m_pModelMesh)))
 	{
@@ -51,7 +51,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	BoundingSphere.fRadius = 6.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -69,6 +69,13 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	m_eNextState = State::Research;
 	m_vCreatePosition = TransformDesc.vPosition;
 	m_vResearchRange = { 50.f,50.f,50.f };
+
+	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	if (nullptr == m_pTargetTransform)
+	{
+		PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -129,6 +136,13 @@ _uint CMonster::Researching(_float fDeltaTime)
 {
 	// if 범위보다 벗어났다. -> Create Pos로 돌아가기
 
+
+	return _uint();
+}
+
+_uint CMonster::Dog_Fight(_float fDeltaTime)
+{
+	// 뒤잡기
 
 	return _uint();
 }
