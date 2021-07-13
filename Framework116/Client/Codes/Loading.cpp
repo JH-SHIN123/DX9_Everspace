@@ -1321,6 +1321,24 @@ HRESULT CLoading::Ready_BossAndOthers()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
+		L"Component_Texture_BossEMP_Explosion",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP_Explosion.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossEMP_Explosion");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_BossEMP_2",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP_2.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_BossEMP_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
 		L"Component_Texture_BossEMP",
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/BossEMP.png"))))
 	{
