@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Logo.h"
 #include "Loading.h"
-
+#include "MainCam.h"
 
 CLogo::CLogo(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -13,6 +13,18 @@ HRESULT CLogo::Ready_Scene()
 	CScene::Ready_Scene();
 
 	::SetWindowText(g_hWnd, L"Logo");
+
+	// TEST
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_FadeIn",
+		L"Layer_Fade")))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+		return E_FAIL;
+	}
+
+
 
 	return S_OK;
 }

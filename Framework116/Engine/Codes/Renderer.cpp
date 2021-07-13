@@ -408,7 +408,10 @@ _uint CRenderer::Render_AlphaUI()
 
 _uint CRenderer::Render_Font()
 {
-	//m_pS
+	LPDIRECT3DDEVICE9 pDevice = CManagement::Get_Instance()->Get_Device();
+	if (nullptr == pDevice)
+		return RENDER_ERROR;
+
 	LPD3DXSPRITE pSprite = CManagement::Get_Instance()->Get_Sprite();
 	if (nullptr == pSprite)
 		return RENDER_ERROR;

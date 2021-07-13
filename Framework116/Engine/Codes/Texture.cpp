@@ -104,6 +104,17 @@ _uint CTexture::Set_Texture(_uint iIndex)
 	return _uint();
 }
 
+const IDirect3DBaseTexture9* CTexture::Get_Texture(_uint iIndex)
+{
+	if (m_Textures.size() <= iIndex)
+	{
+		PRINT_LOG(L"Error", L"Out of range m_Textures");
+		return nullptr;
+	}
+
+	return m_Textures[iIndex];
+}
+
 CTexture* CTexture::Create(
 	LPDIRECT3DDEVICE9 pDevice, 
 	ETextureType eType,

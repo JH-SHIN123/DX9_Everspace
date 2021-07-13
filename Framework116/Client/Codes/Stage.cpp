@@ -53,6 +53,7 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
