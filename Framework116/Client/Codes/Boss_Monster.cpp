@@ -106,7 +106,6 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	Move_AI(fDeltaTime);
 	Attack_AI(fDeltaTime);
 
-
 	if (!m_IsHPBar)
 		Add_Hp_Bar(fDeltaTime);
 
