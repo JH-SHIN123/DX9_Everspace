@@ -489,6 +489,11 @@ _uint CSniper::Make_LockOn()
 			m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->front()->Set_IsDead(true);
 			m_IsHUDLockOn = false;
 		}
+		else if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
+			&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 0)
+		{
+			m_IsHUDLockOn = false;
+		}
 		if (!m_IsHUDLockOn)
 		{
 

@@ -985,6 +985,11 @@ _uint CBoss_Monster::Make_LockOn()
 			m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->front()->Set_IsDead(true);
 			m_IsLockOn = false;
 		}
+		else if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
+			&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 0)
+		{
+			m_IsLockOn = false;
+		}
 		if (!m_IsLockOn)
 		{
 
