@@ -62,9 +62,6 @@ public:
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
-public:
-	HRESULT Add_InLayer_MyParts();
-
 private:
 	CModelMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;

@@ -139,7 +139,7 @@ _uint CMonster::Update_GameObject(_float fDeltaTime)
 		m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 		//순서중요!
 		Make_LockOn();
-		Update_Effect();
+		//Update_Effect();
 	}
 	return NO_EVENT;
 }

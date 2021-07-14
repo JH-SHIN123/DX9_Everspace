@@ -339,14 +339,34 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			return E_FAIL;
 		}
 	}
-	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B" ||
-		wstrPrototypeTag == L"GameObject_Asteroid_C" || wstrPrototypeTag == L"GameObject_Asteroid_D")
+	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B")
 	{
 		GAMEOBJECT_DESC tDesc;
 		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
 		tDesc.tTransformDesc.vPosition = pPassData->Pos;
 		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
 		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
+
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Asteroid",
+			L"Layer_Asteroid",
+			&tDesc)))
+		{
+			wstring errMsg = L"Failed to Add Layer ";
+			errMsg += wstrPrototypeTag;
+			PRINT_LOG(L"Error", errMsg.c_str());
+			return E_FAIL;
+		}
+	}
+	else if (wstrPrototypeTag == L"GameObject_Asteroid_C" || wstrPrototypeTag == L"GameObject_Asteroid_D")
+	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale * 0.1f;
 		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
 		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
@@ -424,11 +444,41 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 	}
 	else if (wstrPrototypeTag == L"GameObject_Sniper")
 	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			wstrPrototypeTag,
+			L"Layer_Sniper",
+			&tDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
+			return E_FAIL;
+		}
 	}
 	else if (wstrPrototypeTag == L"GameObject_Boss")
 	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Boss_Monster",
+			L"Layer_Boss_Monster",
+			&tDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
+			return E_FAIL;
+		}
 	}
 	else if (wstrPrototypeTag == L"GameObject_Broken_Plane")
 	{

@@ -20,7 +20,6 @@ public:
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) override;
 
 public:
-	HRESULT Add_Layer_Player(const wstring& LayerTag);
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
 
 	HRESULT Add_Layer_ExplosionSystem(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc);

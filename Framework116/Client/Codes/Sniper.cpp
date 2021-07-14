@@ -28,6 +28,19 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{
+		}
+		else
+		{
+			PRINT_LOG(L"Error", L"CMonster is nullptr");
+			return E_FAIL;
+		}
+	}
+
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -40,8 +53,8 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(600.5f, 0.f, 600.5f);	
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	//TransformDesc.vPosition = _float3(600.5f, 0.f, 600.5f);	
 	TransformDesc.vScale = _float3(5.f, 5.f, 5.f);
 	TransformDesc.fSpeedPerSec = 40.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(60.f);

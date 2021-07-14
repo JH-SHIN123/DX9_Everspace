@@ -468,7 +468,6 @@
     <ClInclude Include="..\Headers\Shield_Battery.h">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\BrokenPlane.h">
       <Filter>02.GameObject\12.EventObject\Broken</Filter>
     </ClInclude>
@@ -487,6 +486,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Delivery.h">
       <Filter>02.GameObject\12.EventObject\Delivery</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

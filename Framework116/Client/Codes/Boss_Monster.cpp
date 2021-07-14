@@ -35,9 +35,20 @@ HRESULT CBoss_Monster::Ready_GameObject_Prototype()
 
 HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 {
-	Add_InLayer_MyParts();
-
 	CGameObject::Ready_GameObject(pArg);
+
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{
+		}
+		else
+		{
+			PRINT_LOG(L"Error", L"CMonster is nullptr");
+			return E_FAIL;
+		}
+	}
 
 	// For.Com_VIBuffer
 	wstring meshTag = L"Component_Mesh_Boss";
@@ -52,8 +63,8 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	//TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
 	TransformDesc.fSpeedPerSec = 10.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(30.f);
 
@@ -911,12 +922,6 @@ void CBoss_Monster::Free()
 	Safe_Release(m_pTransform);
 
 	CGameObject::Free();
-}
-
-HRESULT CBoss_Monster::Add_InLayer_MyParts()
-{
-
-	return S_OK;
 }
 
 _uint CBoss_Monster::Check_Degree()
