@@ -46,17 +46,12 @@ HRESULT CStage3::Ready_Scene()
 
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(200, 200, 200);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(135, 135, 135);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
-
-	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
-		return E_FAIL;
-
-
 
 	return S_OK;
 }
