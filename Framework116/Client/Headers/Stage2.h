@@ -23,7 +23,7 @@ public:
 	HRESULT Add_Layer_HUD(const wstring& LayerTag);
 	HRESULT Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc);
 
-	HRESULT Add_Layer_Monster(const wstring& LayerTag);
+	//HRESULT Add_Layer_Monster(const wstring& LayerTag);
 	HRESULT Add_Layer_Sniper(const wstring& LayerTag);
 
 

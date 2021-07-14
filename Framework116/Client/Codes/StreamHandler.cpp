@@ -405,7 +405,22 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 	}
 	else if (wstrPrototypeTag == L"GameObject_Monster")
 	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			wstrPrototypeTag,
+			L"Layer_Monster",
+			&tDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
+			return E_FAIL;
+		}
 	}
 	else if (wstrPrototypeTag == L"GameObject_Sniper")
 	{

@@ -22,10 +22,23 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{
+		}
+		else
+		{
+			PRINT_LOG(L"Error", L"CMonster is nullptr");
+			return E_FAIL;
+		}
+	}
+
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
-		L"Component_Mesh_Enemy1",
+		pDesc->wstrMeshName,
 		L"Com_Mesh",
 		(CComponent**)&m_pModelMesh)))
 	{
@@ -34,8 +47,8 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(300.f, 0.f, 300.f);	
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	//TransformDesc.vPosition = _float3(300.f, 0.f, 300.f);	
 	TransformDesc.vScale = _float3(5.f, 5.f, 5.f);
 	TransformDesc.fSpeedPerSec = 60.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(45.f);

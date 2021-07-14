@@ -35,7 +35,7 @@ HRESULT CStage2::Ready_Scene()
 
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(105, 105, 105);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -57,8 +57,8 @@ HRESULT CStage2::Ready_Scene()
 	//	return E_FAIL;
 	//}
 
-	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-		return E_FAIL;
+	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
+	//	return E_FAIL;
 
 	/*if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
 		return E_FAIL;*/
@@ -275,19 +275,19 @@ HRESULT CStage2::Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc)
 	return S_OK;
 }
 
-HRESULT CStage2::Add_Layer_Monster(const wstring & LayerTag)
-{
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Monster",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
-		return E_FAIL;
-	}
-
-	return S_OK;
-}
+//HRESULT CStage2::Add_Layer_Monster(const wstring & LayerTag)
+//{
+//	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+//		EResourceType::NonStatic,
+//		L"GameObject_Monster",
+//		LayerTag)))
+//	{
+//		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
+//		return E_FAIL;
+//	}
+//
+//	return S_OK;
+//}
 
 HRESULT CStage2::Add_Layer_Sniper(const wstring & LayerTag)
 {

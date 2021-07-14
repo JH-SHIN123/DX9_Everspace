@@ -51,7 +51,7 @@ void CPlayer::Update_Effect()
 			vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
 			vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z;
 			m_pLeftWingBoost->Set_WingOffset(vWingPos);
-			m_pLeftWingBoost->Set_IsBoost(m_IsBoost);
+			m_pLeftWingBoost->Set_IsBoost(m_IsMove);
 		}
 		if (m_pRightWingBoost) {
 			_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
@@ -59,7 +59,7 @@ void CPlayer::Update_Effect()
 			vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
 			vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z;
 			m_pRightWingBoost->Set_WingOffset(vWingPos);
-			m_pRightWingBoost->Set_IsBoost(m_IsBoost);
+			m_pRightWingBoost->Set_IsBoost(m_IsMove);
 		}
 	}
 }
@@ -410,6 +410,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	{
 		m_pTransform->Go_Straight(fDeltaTime);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+		m_IsMove = true;
 	}
 
 	
@@ -417,18 +418,21 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	{
 		m_pTransform->Go_Straight(-fDeltaTime);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+		m_IsMove = true;
 	}
 
 	if (GetAsyncKeyState('D') & 0x8000)
 	{
 		m_pTransform->Go_Side(fDeltaTime);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+		m_IsMove = true;
 	}
 
 	if (GetAsyncKeyState('A') & 0x8000)
 	{
 		m_pTransform->Go_Side(-fDeltaTime);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
+		m_IsMove = true;
 	}
 
 	if ((!GetAsyncKeyState('W') && 0x8000)
@@ -437,6 +441,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		&& (!GetAsyncKeyState('D') && 0x8000))
 	{
 		m_pManagement->StopSound(CSoundMgr::PLAYER_MOVE);
+		m_IsMove = false;
 	}
 
 	// Booster

@@ -48,6 +48,7 @@ public:
 
 private:
 	_bool m_IsBoost = false;
+	_bool m_IsMove = false;
 
 private: // For.Components
 	CMesh*  m_pMesh = nullptr;
