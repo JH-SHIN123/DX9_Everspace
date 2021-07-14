@@ -72,6 +72,7 @@ public:
 	_uint GetVMaxBuffItem() { return m_iVMaxBuffItem; }
 	_bool GetStageLock(_uint iStageIdx);
 	_bool GetIsStgClear() { return m_bIsStgClear; }
+	_bool Get_EnterScene() { return m_bEnterScene; }
 
 	void SetAtkBuffItemCount(_uint iPlus) { m_iAtkBuffItem += iPlus; }
 	void SetDefBuffItemCount(_uint iPlus) { m_iDefBuffItem += iPlus; }

@@ -59,6 +59,8 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	{
 	case -1:
 		return UPDATE_ERROR;
+	case TRUE:
+		break;
 	case UPDATE_FLYAWAY:
 		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 300.f);
 		break;
@@ -405,6 +407,8 @@ void CStage2::Ready_Asteroid()
 }
 _uint CStage2::Stage2_Flow(_float fDeltaTime)
 {
+	if (!m_bEnterScene)
+		return TRUE;
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	if (pPlayer)
 	{

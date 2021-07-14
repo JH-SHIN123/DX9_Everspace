@@ -104,8 +104,6 @@ _uint CStatusBoard::Update_GameObject(_float fDeltaTime)
 
 	Movement(fDeltaTime);	
 	
-
-
 	return m_pTransform->Update_Transform();
 	
 }
@@ -124,6 +122,8 @@ _uint CStatusBoard::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CStatusBoard::Render_GameObject()
 {
+	if (!m_pLobby->Get_EnterScene())
+		return 0;
 	if (m_pLobby->Get_IsGatcha())
 		return 0;
 	CGatchaBox* pBox = (CGatchaBox*)m_pManagement->Get_GameObject(L"Layer_GatchaBox");

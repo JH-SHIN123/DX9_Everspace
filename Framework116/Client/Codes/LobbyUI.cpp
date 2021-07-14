@@ -159,6 +159,8 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CLobbyUI::Render_GameObject()
 {
+	if (!m_pLobby->Get_EnterScene())
+		return 0;
 	CLobbyCam* pCam = (CLobbyCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
 	if (m_pLobby->Get_IsGatcha())
 	{
@@ -212,7 +214,6 @@ _uint CLobbyUI::Render_GameObject()
 	/////////////////////////////////////////////////////////////////
 	}
 
-
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_SceneSelect")
 	{
 		_float4x4 matView;
@@ -233,12 +234,6 @@ _uint CLobbyUI::Render_GameObject()
 		}
 
 	}
-
-	
-
-
-
-
 	return _uint();
 }
 

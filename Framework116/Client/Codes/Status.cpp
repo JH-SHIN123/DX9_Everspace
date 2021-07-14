@@ -66,13 +66,14 @@ HRESULT CStatus::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	
 
 	return S_OK;
 }
 
 _uint CStatus::Update_GameObject(_float fDeltaTime)
 {
+	if (!m_pLobby->Get_EnterScene())
+		return 0;
 	CGatchaBox* pBox = (CGatchaBox*)m_pManagement->Get_GameObject(L"Layer_GatchaBox");
 	if (pBox)
 	{
@@ -115,7 +116,6 @@ _uint CStatus::LateUpdate_GameObject(_float fDeltaTime)
 
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
-
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
 		return UPDATE_ERROR;
 
@@ -125,6 +125,8 @@ _uint CStatus::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CStatus::Render_GameObject()
 {
+	if (!m_pLobby->Get_EnterScene())
+		return 0;
 	if (m_pLobby->Get_IsGatcha())
 		return 0;
 	if (m_pLobby->Get_GotoNextScene())
