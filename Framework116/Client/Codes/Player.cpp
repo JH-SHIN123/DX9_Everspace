@@ -233,7 +233,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	KeyProcess(fDeltaTime);
-
+	
 	
 	Movement(fDeltaTime);
 
