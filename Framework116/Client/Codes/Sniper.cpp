@@ -122,6 +122,7 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 		m_pHp_Bar->Set_IsDead(TRUE);
 		m_pHP_Bar_Border->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {

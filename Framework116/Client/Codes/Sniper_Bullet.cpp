@@ -66,7 +66,7 @@ HRESULT CSniper_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
 	TransformDesc.fSpeedPerSec = 1200.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(300.f);
-	TransformDesc.vScale = { 2.f, 2.f, 2.f };
+	TransformDesc.vScale = { 1.f, 1.f, 1.f };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,

@@ -22,6 +22,7 @@ private:
 	_uint	Movement(_float fDeltaTime);
 	_uint	Search_Target(_float fDeltaTime);
 	_uint	Monster_Battle(_float fDeltaTime);
+	_bool	RotateToPlayer(_float fDeltaTime);
 
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -42,6 +43,8 @@ private:
 	//
 	_bool	m_bBattle = false;
 	_float	m_fMoveDist = 0.f;
+	_float  m_fAttackDelay = 0.f;
+	_bool m_IsLookingPlayer = false;
 };
 
 #define __MONSTER_H__

@@ -35,9 +35,9 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(150.f, 0.f, 150.f);	
-	TransformDesc.vScale = _float3(20.f, 20.f, 20.f);
-	TransformDesc.fSpeedPerSec = 30.f;
+	TransformDesc.vPosition = _float3(300.f, 0.f, 300.f);	
+	TransformDesc.vScale = _float3(5.f, 5.f, 5.f);
+	TransformDesc.fSpeedPerSec = 60.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(45.f);
 
 	if (FAILED(CGameObject::Add_Component(
@@ -69,7 +69,6 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// Init
 	m_vCreatePosition = TransformDesc.vPosition;
-	m_vResearchRange = { 50.f,50.f,50.f };
 
 	m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
 	if (nullptr == m_pTargetTransform)
@@ -87,9 +86,10 @@ _uint CMonster::Update_GameObject(_float fDeltaTime)
 	
 	Search_Target(fDeltaTime);
 
-	if(!m_bBattle)
+	if (!m_bBattle)
 		Movement(fDeltaTime);
 	else
+		Monster_Battle(fDeltaTime);
 		
 		
 
@@ -122,7 +122,7 @@ _uint CMonster::Render_GameObject()
 	// Test
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -159,11 +159,108 @@ _uint CMonster::Search_Target(_float fDeltaTime)
 	_float fDist = D3DXVec3Length(&vDir);
 
 		// 배틀상태 On
-	if (fDist <= 50.f && fDist != 0.f)
+	if (fDist <= 200.f && fDist != 0.f)
 	{
 		m_bBattle = true;
 	}
 	return _uint();
+}
+
+_uint CMonster::Monster_Battle(_float fDeltaTime)
+{
+	// 배틀상태가 On일때 뭐할랭
+	// 플레이어 공전하면서 공격?
+	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+
+	_float3 vDir = vTargetPos - vMonsterPos;
+	_float fDist = D3DXVec3Length(&vDir);
+	D3DXVec3Normalize(&vDir, &vDir);
+
+	m_fAttackDelay += fDeltaTime;
+
+	RotateToPlayer(fDeltaTime * 3.f);
+
+	if (fDist > 200.f)
+	{
+		m_pTransform->Go_Dir(vDir, fDeltaTime * 4.f);
+	}
+
+	m_pTransform->Go_Side(fDeltaTime * 2.f);
+	
+	if (m_fAttackDelay > 1.f)
+	{
+		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+		pArg->vPosition = m_pTransform->Get_State(EState::Position);
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Sniper_Bullet",
+			L"Layer_Sniper_Bullet", pArg)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet In Layer");
+			return E_FAIL;
+		}
+		m_fAttackDelay = 0.f;
+	}
+
+
+	return _uint();
+}
+
+_bool CMonster::RotateToPlayer(_float fDeltaTime)
+{
+	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+	_float3 vSniperPos = m_pTransform->Get_State(EState::Position);
+
+	_float3 vTargetDir = vTargetPos - vSniperPos;
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
+
+	_float3 vSniperLook = m_pTransform->Get_State(EState::Look);
+	_float3 vSniperUp = m_pTransform->Get_State(EState::Up);
+	D3DXVec3Normalize(&vSniperLook, &vSniperLook);
+
+	_float fCeta = D3DXVec3Dot(&vTargetDir, &vSniperLook);
+	_float fRadianMax = D3DXToRadian(95.f);
+	_float fRadianMin = D3DXToRadian(85.f);
+
+	_float3 vMyRight, vMyLeft, vMissileUp, vMissileDown;
+	D3DXVec3Cross(&vMyRight, &vSniperUp, &vSniperLook);
+	D3DXVec3Cross(&vMyLeft, &vSniperLook, &vSniperUp);
+	D3DXVec3Cross(&vMissileUp, &vMyRight, &vSniperLook);
+	D3DXVec3Cross(&vMissileDown, &vSniperLook, &vMyRight);
+
+	D3DXVec3Normalize(&vMyRight, &vMyRight);
+	D3DXVec3Normalize(&vMyLeft, &vMyLeft);
+	D3DXVec3Normalize(&vMissileUp, &vMissileUp);
+	D3DXVec3Normalize(&vMissileDown, &vMissileDown);
+
+	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
+	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
+	_float fUp = D3DXVec3Dot(&vTargetDir, &vMissileUp);
+	_float fDown = D3DXVec3Dot(&vTargetDir, &vMissileDown);
+
+
+	if (fRight < fLeft)
+		m_pTransform->RotateY(-fDeltaTime);
+	else
+		m_pTransform->RotateY(fDeltaTime);
+
+	if (fUp < fDown)
+		m_pTransform->RotateX(-fDeltaTime);
+	else
+		m_pTransform->RotateX(fDeltaTime);
+
+	if (fabs(fRight - fLeft) < 10.f || fabs(fUp - fDown) < 10.f)
+	{
+		m_IsLookingPlayer = true;
+	}
+	else
+		m_IsLookingPlayer = false;
+
+	return m_IsLookingPlayer;
 }
 
 
