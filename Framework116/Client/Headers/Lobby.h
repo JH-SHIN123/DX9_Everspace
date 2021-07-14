@@ -72,6 +72,7 @@ public:
 	_uint GetVMaxBuffItem() { return m_iVMaxBuffItem; }
 	_bool GetStageLock(_uint iStageIdx);
 	_bool GetIsStgClear() { return m_bIsStgClear; }
+	_bool Get_EnterScene() { return m_bEnterScene; }
 
 	void SetAtkBuffItemCount(_uint iPlus) { m_iAtkBuffItem += iPlus; }
 	void SetDefBuffItemCount(_uint iPlus) { m_iDefBuffItem += iPlus; }
@@ -79,7 +80,7 @@ public:
 	void SetEnergyBuffItemCount(_uint iPlus) { m_iEnergyBuffItem += iPlus;  }
 	void SetMissileCount(_uint iPlus) { m_iMissileCount += iPlus; }
 	void SetVMaxBuffItemCount(_uint iPlus) { m_iVMaxBuffItem += iPlus; }
-
+	void SetNextScene(_uint iNextScene) { m_iNextScene = iNextScene; }
 	
 
 public:
@@ -110,9 +111,11 @@ private:
 	_uint m_iMissileCount = 0;
 	_uint m_iVMaxBuffItem = 0;
 
-	_bool m_bStageLock[3] = { 0,1,1 };
+	_bool m_bStageLock[3] = { 0,0,1 };
 	//for.StgClearProduction
 	_bool m_bIsStgClear = FALSE;
+
+	_uint m_iNextScene = 0;
 };
 
 #define __LOBBY_H__

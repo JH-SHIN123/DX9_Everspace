@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Headers\Stage.h"
+#include"Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
 #include "Asteroid.h"
@@ -7,7 +7,9 @@
 #include "MainCam.h"
 #include "Ring.h"
 #include "ScriptUI.h"
-
+#include"Pipeline.h"
+#include"Player.h"
+#include"HP_Bar.h"
 
 CStage::CStage(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -20,6 +22,8 @@ HRESULT CStage::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Stage");
 	m_pManagement->StopSound(CSoundMgr::BGM);
+
+	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
 
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -34,7 +38,6 @@ HRESULT CStage::Ready_Scene()
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
 	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
-
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
 
@@ -48,6 +51,7 @@ HRESULT CStage::Ready_Scene()
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
+	//lightDesc.tLightColor = D3DCOLOR_XRGB(160, 160, 160);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -64,8 +68,9 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
-	
+
 	Stage_Flow(fDeltaTime);
+
 
 
 	return _uint();
@@ -108,6 +113,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	return _uint();
 }
 
+
 _uint CStage::Stage_Flow(_float fDeltaTime)
 {
 	switch (m_iFlowCount)
@@ -135,7 +141,6 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 		return S_OK;
-
 	case 2:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
@@ -154,7 +159,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
-		return S_OK;
+	return S_OK;
 	case 4:
 	{
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
@@ -173,34 +178,10 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
-
-	case 6:
-	{
-		if (false == m_bFadeIn) {
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::Static,
-				L"GameObject_FadeIn",
-				L"Layer_Fade",
-				this)))
-			{
-				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-				return E_FAIL;
-			}
-			m_bFadeIn = true;
-			return NO_EVENT;
-		}
-
+	return S_OK;
 	}
-
-	default:
-		return S_OK;
-	}
-
 	return S_OK;
 }
-
-
-
 
 HRESULT CStage::Add_Layer_Cam(const wstring & LayerTag)
 {
@@ -223,7 +204,9 @@ HRESULT CStage::Add_Layer_Cam(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
+	
+
+	HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
@@ -325,11 +308,7 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist2 In Layer");
 		return E_FAIL;
 	}
-
-
-
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
-
 	UI_DESC HUD_Boarder_Gatling;
 	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
@@ -466,3 +445,8 @@ HRESULT CStage::Add_Layer_MissionUI(const wstring & LayerTag, EQuest eQuest)
 
 	return S_OK;
 }
+
+
+
+
+

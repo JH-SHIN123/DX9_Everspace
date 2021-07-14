@@ -271,7 +271,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 
 	TimeOperation(fDeltaTime);
 	
-	Make_Arrow();
+	//Make_Arrow();
 
 	Make_LockOn_Alert(fDeltaTime);
 
@@ -285,7 +285,7 @@ _uint CPlayer::Update_GameObject(_float fDeltaTime)
 		Increase_Stamina(fDeltaTime);
 		TimeOperation(fDeltaTime);
 
-		Make_Arrow();
+		//Make_Arrow();
 
 		// 월드행렬 업데이트
 		m_pTransform->Update_Transform_Quaternion();
@@ -324,6 +324,7 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 
 		m_IsDead = true;
 	}
+	
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
@@ -524,25 +525,25 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			return;
 		}
 	}
-	else if (m_pController->Key_Down(KEY_3))
-	{
-		// 이전 무기 HUD 삭제
-		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-		m_iWeapon = WEAPON_MISSILE;
-		UI_DESC MissileHUD;
-		MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_UI",
-			L"Layer_HUD_Weapon",
-			(void*)&MissileHUD)))
-		{
-			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-			return;
-		}
-	}
+	//else if (m_pController->Key_Down(KEY_3))
+	//{
+	//	// 이전 무기 HUD 삭제
+	//	m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+	//	m_iWeapon = WEAPON_MISSILE;
+	//	UI_DESC MissileHUD;
+	//	MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+	//	MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+	//	MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
+	//	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+	//		EResourceType::Static,
+	//		L"GameObject_UI",
+	//		L"Layer_HUD_Weapon",
+	//		(void*)&MissileHUD)))
+	//	{
+	//		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+	//		return;
+	//	}
+	//}
 	// 피깎는 !TEST!!!!!!!!!!!!!
 	if (m_pController->Key_Down(KEY_F1))
 	{
@@ -856,10 +857,29 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 
 _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 {
+	m_IsAstroidCollide = FALSE;
 	// 1.Planet
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
 
+	static _float fDelayTime = 0.f;
+	
+	fDelayTime += fDeltaTime;
+	
+	if (m_IsAstroidCollide&& fDelayTime > 1.f)
+	{
+		Set_Damage(10.f);
+		Get_HpBar()->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_HUD_Effect_Damage",
+			L"Layer_HUD_Effect")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_Effect_Damage In Layer");
+			return 0;
+		}
+		fDelayTime = 0.f;
+	}
 	// 일반이동 충돌
 	if (m_IsBoost == false && m_IsAstroidCollide == true)
 	{

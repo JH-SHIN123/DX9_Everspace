@@ -64,6 +64,7 @@ void CCollisionHandler::Collision_PlayerToObstacle(const wstring& wstrDstLayerTa
 	{
 		if (nullptr == dst) continue;
 		const vector<class CCollide*>* dstCollides = dst->Get_Collides();
+		
 		if (nullptr == dstCollides) continue;
 
 		for (auto& src : *Src_Layer)

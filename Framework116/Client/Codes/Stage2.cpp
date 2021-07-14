@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Stage2.h"
 #include "MainCam.h"
-
+#include"Player.h"
+#include"Pipeline.h"
+#include"Loading.h"
 CStage2::CStage2(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -13,6 +15,8 @@ HRESULT CStage2::Ready_Scene()
 	::SetWindowText(g_hWnd, L"CStage2");
 	m_pManagement->StopSound(CSoundMgr::BGM);
 
+	if (FAILED(Add_Layer_Player(L"Layer_Player")))
+		return E_FAIL;
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -23,9 +27,6 @@ HRESULT CStage2::Ready_Scene()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
 		return E_FAIL;
 	}
-
-	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage1.map");
-	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage1.navi");
 	
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
@@ -41,6 +42,8 @@ HRESULT CStage2::Ready_Scene()
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
+
+	Ready_Asteroid();
 
 	//// TEST
 	//GAMEOBJECT_DESC tDesc;
@@ -63,13 +66,51 @@ HRESULT CStage2::Ready_Scene()
 	/*if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
 		return E_FAIL;*/
 
+
 	return S_OK;
 }
 
 _uint CStage2::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
+	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
+	CQuestHandler::Get_Instance()->Update_Quest();
+	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
+	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
+
+	switch (Stage2_Flow(fDeltaTime))
+	{
+	case -1:
+		return UPDATE_ERROR;
+	case TRUE:
+		break;
+	case UPDATE_FLYAWAY:
+		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 300.f);
+		break;
+	case PLAYER_DEAD:
+		m_fDelaySceneChange += fDeltaTime;
+		if (m_fDelaySceneChange >= 5.f)
+		{
+			m_pManagement->Clear_NonStatic_Resources();
+			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+				CLoading::Create(m_pDevice, ESceneType::Stage2))))
+			{
+				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				return E_FAIL;
+			}
+			return CHANGE_SCENE;
+		}
+		break;
+	case CLEAR_FLYAWAY:
+		if (!m_bLoadMapNavi)
+		{
+			CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage1.map");
+			CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage1.navi");
+			m_bLoadMapNavi = TRUE;
+		}
+		break;
+	}
 
 	return _uint();
 }
@@ -79,6 +120,24 @@ _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 	CScene::LateUpdate_Scene(fDeltaTime);
 
 	return _uint();
+}
+
+HRESULT CStage2::Add_Layer_Player(const wstring & LayerTag)
+{
+
+
+		GAMEOBJECT_DESC tDesc;
+		tDesc.wstrMeshName = L"Component_Mesh_BigShip";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_Player",
+			LayerTag, (void**)&tDesc)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add Player In Layer");
+			return E_FAIL;
+		}
+
+		return S_OK;
 }
 
 HRESULT CStage2::Add_Layer_Cam(const wstring& LayerTag)
@@ -275,31 +334,266 @@ HRESULT CStage2::Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc)
 	return S_OK;
 }
 
-//HRESULT CStage2::Add_Layer_Monster(const wstring & LayerTag)
-//{
-//	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-//		EResourceType::NonStatic,
-//		L"GameObject_Monster",
-//		LayerTag)))
-//	{
-//		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
-//		return E_FAIL;
-//	}
-//
-//	return S_OK;
-//}
+HRESULT CStage2::Add_Layer_ScriptUI(const wstring & LayerTag, EScript eScript)
+{
+	UI_DESC Desc;
+	Desc.tTransformDesc.vPosition = { 0.f, 0.f ,0.f };
+	Desc.tTransformDesc.vScale = { 1.f, 1.f,0.f };
+	Desc.wstrTexturePrototypeTag = L"Component_Texture_ScriptUI_Script";
 
-HRESULT CStage2::Add_Layer_Sniper(const wstring & LayerTag)
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ScriptUI",
+		LayerTag, &Desc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add ScriptUI In Layer");
+		return E_FAIL;
+	}
+
+	((CScriptUI*)m_pManagement->Get_GameObject(LayerTag))->Set_Script(eScript);
+
+	return S_OK;
+}
+
+HRESULT CStage2::Add_Layer_MissionUI(const wstring & LayerTag, EQuest eQuest)
+{
+	CQuestHandler::Get_Instance()->Set_Start_Quest(eQuest);
+
+	UI_DESC Desc;
+	Desc.tTransformDesc.vPosition = { 835.f, -50.f ,0.f };
+	Desc.tTransformDesc.vScale = { 201.f, 123.f,0.f };
+	Desc.wstrTexturePrototypeTag = L"Component_Texture_HUD_Mission";
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_MissionUI",
+		LayerTag, &Desc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add ScriptUI In Layer");
+		return E_FAIL;
+	}
+	return S_OK;
+}
+HRESULT CStage2::Add_Layer_Asteroid(const wstring & LayerTag, GAMEOBJECT_DESC tDesc)
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
-		L"GameObject_Sniper",
-		LayerTag)))
+		L"GameObject_Asteroid",
+		LayerTag, (void**)&tDesc)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper In Layer");
 		return E_FAIL;
 	}
 	return S_OK;
+}
+
+
+void CStage2::Ready_Asteroid()
+{
+	GAMEOBJECT_DESC tDesc;
+	tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
+	tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
+	tDesc.tTransformDesc.fSpeedPerSec = 1.f;
+	tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
+	CTransform* pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+	_uint iRockCount = 20;
+	for (_uint i = 0; i < iRockCount; i++)
+	{
+		_float3 vRockPos = pPlayerTransform->Get_TransformDesc().vPosition;
+		if (i != iRockCount - 1)
+		{
+
+			if (i % 4 == 0)
+			{
+				vRockPos.x -= CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y -= CPipeline::GetRandomFloat(10, 100);
+			}
+			else if (i % 4 == 1)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y += CPipeline::GetRandomFloat(10, 100);
+			}
+			else if (i % 4 == 2)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y -= CPipeline::GetRandomFloat(10, 100);
+
+			}
+			else
+			{
+				vRockPos.x -= CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y += CPipeline::GetRandomFloat(10, 100);
+			}
+		}
+		vRockPos.z = 300.f + ((i + 1) * 10.f);
+		tDesc.tTransformDesc.vPosition = vRockPos;
+		Add_Layer_Asteroid(L"Layer_Asteroid", tDesc);
+	}
+}
+_uint CStage2::Stage2_Flow(_float fDeltaTime)
+{
+	if (!m_bEnterScene)
+		return TRUE;
+	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
+	if (pPlayer)
+	{
+		if (pPlayer->Get_IsDead())
+			m_iFlowCount = PLAYER_DEAD;
+	}
+	switch (m_iFlowCount)
+	{
+	case 0: // 스크립트 시작
+		if (m_fFlowTime >= 0)
+		{
+			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+
+			m_fFlowTime -= fDeltaTime;
+
+			if (m_fFlowTime <= 0)
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Begin)))
+					return -1;
+				++m_iFlowCount;
+			}
+		}
+		return TRUE;
+	case 1: // 스크립트 시작
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_AfterCamProduction)))
+				return -1;
+			++m_iFlowCount;
+		}
+		return TRUE;
+	case 2:
+		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+		{
+			if (m_fFlowTime <= 1)
+			{
+				m_fFlowTime += fDeltaTime;
+				if (m_fFlowTime >= 1)
+				{
+					++m_iFlowCount;
+				}
+			}
+		}
+		return TRUE;
+	case 3:
+		if (m_bFinishFlyAway)
+		{
+			if (m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
+			{
+				for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
+				{
+					pDst->Set_IsDead(TRUE);
+				}
+			}
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Finish_AsteroidFlyAway)))
+				return -1;
+			m_iFlowCount = CLEAR_FLYAWAY;
+			return TRUE;
+		}
+		return UPDATE_FLYAWAY;
+	case 4:
+	{
+		if (!m_bPlayPlayerDeadScript&& pPlayer->Get_IsDead())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_PlayerDead)))
+				return -1;
+			m_bPlayPlayerDeadScript = TRUE;
+		}
+	}
+	return PLAYER_DEAD;
+	case 5:
+		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+		{
+			return CLEAR_FLYAWAY;
+		}
+	default:
+		return TRUE;
+	}
+
+	return S_OK;
+}
+
+
+//TRUE반환시 끝났음
+_bool CStage2::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMaxYDist,
+	_float fMaxZDist, _float fMinZDist, CTransform* pTargetTransform, _uint iRockAmount,
+	_float fRockSpeed, _float fDistFromTarget)
+{
+	if (nullptr == pTargetTransform)
+	{
+		PRINT_LOG(L"Err", L"pTargetTransform is nullptr");
+		return FALSE;
+	}
+	_float fFinishTime = 60.f;
+	m_fFlyingAsteroidTime += fDeltaTime;
+	if (m_fFlyingAsteroidTime >= fFinishTime)
+	{
+		m_bFinishFlyAway = TRUE;
+		return TRUE;
+	}
+
+	if (!m_bStartFlyAway)
+	{
+		_float3 vRockPos = pTargetTransform->Get_TransformDesc().vPosition;
+		GAMEOBJECT_DESC tDesc;
+		tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
+		tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
+		tDesc.tTransformDesc.fSpeedPerSec = 1.f;
+		tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
+		for (_uint i = 0; i < iRockAmount; i++)
+		{
+			vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+			vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+			vRockPos.y += CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+			vRockPos.y -= CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+
+			vRockPos.z += CPipeline::GetRandomFloat(0, fMaxZDist) + fMinZDist;
+			tDesc.tTransformDesc.vPosition = vRockPos;
+			Add_Layer_Asteroid(L"Layer_Asteroid", tDesc);
+			if (iRockAmount < m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
+				break;
+		}
+		for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
+			pDst->Update_GameObject(fDeltaTime);
+		m_bStartFlyAway = TRUE;
+		return FALSE;
+	}
+	_float fLongLange = fMaxZDist + fMinZDist + fDistFromTarget;
+	_float fNeedToFinishTime = fLongLange / fRockSpeed;
+	_float3 vTargetPos = pTargetTransform->Get_TransformDesc().vPosition;
+	_float3 vDir = { 0,0,-1 };
+	CTransform* pTransform = nullptr;
+	for (auto& pObj : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
+	{
+		_float3 vRockPos = vTargetPos;
+		pTransform = (CTransform*)pObj->Get_Component(L"Com_Transform");
+		pTransform->Go_Dir(vDir, fRockSpeed * fDeltaTime);
+		pTransform->RotateX(fDeltaTime);
+		//다지나가는데 필요한 시간
+
+		if (m_fFlyingAsteroidTime <= fFinishTime - fNeedToFinishTime)
+		{
+			if (pTransform->Get_TransformDesc().vPosition.z
+				<= vTargetPos.z - fDistFromTarget)
+			{
+				vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+				vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
+
+				vRockPos.y += CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+				vRockPos.y -= CPipeline::GetRandomFloat(0, fMaxYDist / 2.f);
+
+				vRockPos.z += CPipeline::GetRandomFloat(fMaxZDist*0.5f, fMaxZDist) + fMinZDist;
+				pTransform->Set_Position(vRockPos);
+			}
+		}
+
+
+	}
+
+	return FALSE;
 }
 
 CStage2* CStage2::Create(LPDIRECT3DDEVICE9 pDevice)

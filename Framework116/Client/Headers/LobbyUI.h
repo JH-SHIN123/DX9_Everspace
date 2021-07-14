@@ -38,6 +38,8 @@ public:
 	void Update_ItemFrame(_float fDeltaTime);
 
 	_bool Get_CancelSceneSelect() { return m_bCancelSceneChange; }
+	wstring Get_strTexturePrototypeTag() { return m_wstrTexturePrototypeTag; }
+	_uint Get_SelectedScene() { return m_iSelect; }
 public:
 	static CLobbyUI* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
