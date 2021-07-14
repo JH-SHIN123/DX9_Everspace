@@ -481,6 +481,9 @@
     <ClInclude Include="..\Headers\LoopExplosionSystem.h">
       <Filter>02.GameObject\06.Particle\LoopExplosion</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Delivery.h">
+      <Filter>02.GameObject\12.EventObject\Delivery</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -693,6 +696,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LoopExplosionSystem.cpp">
       <Filter>02.GameObject\06.Particle\LoopExplosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Delivery.cpp">
+      <Filter>02.GameObject\12.EventObject\Delivery</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
