@@ -421,6 +421,8 @@ void CStage2::Ready_Asteroid()
 }
 _uint CStage2::Stage2_Flow(_float fDeltaTime)
 {
+	//return CLEAR_FLYAWAY;
+
 	//if (!m_bEnterScene)
 	//	return TRUE;
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
