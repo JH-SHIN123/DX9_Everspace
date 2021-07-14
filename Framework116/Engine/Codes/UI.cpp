@@ -105,17 +105,6 @@ _uint CUI::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
 		return UPDATE_ERROR;
 
-	//// Picking Check
-	//POINT	pt = {};
-	//GetCursorPos(&pt);
-	//ScreenToClient(g_hWnd, &pt);
-
-	// 데카르트 좌표계 -> 화면좌표계로 변경해야함
-	//if (PtInRect(&m_tUIBounds, pt))
-	//{
-
-	//}
-
 	return _uint();
 }
 

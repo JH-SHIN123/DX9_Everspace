@@ -946,9 +946,15 @@ void CPlayer::Free()
 
 _uint CPlayer::Make_Arrow()
 {
+	if (nullptr == m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster") ||
+		nullptr == m_pManagement->Get_GameObjectList(L"Layer_Sniper") ||
+		nullptr == m_pManagement->Get_GameObjectList(L"Layer_AlertArrow"))
+		return NO_EVENT;
+	
 	// 나중에는 모든 몬스터 순회하면서 검사해야함.
 	// 몬스터 pos - 플레이어 pos. => 
 	// 각도로 비교하자~
+
 
 	if (m_pManagement->Get_GameObjectList(L"Layer_Boss_Monster")->size() == 0 
 		||m_pManagement->Get_GameObjectList(L"Layer_Sniper")->size() == 0)

@@ -202,6 +202,8 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Engine_Include.h" />
     <ClInclude Include="..\Headers\Engine_Struct.h" />
     <ClInclude Include="..\Headers\Engine_Typedef.h" />
+    <ClInclude Include="..\Headers\FadeIn.h" />
+    <ClInclude Include="..\Headers\FadeOut.h" />
     <ClInclude Include="..\Headers\Frame_Manager.h" />
     <ClInclude Include="..\Headers\GameObject.h" />
     <ClInclude Include="..\Headers\GameObject_Manager.h" />
@@ -223,6 +225,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClInclude Include="..\Headers\Scene_Manager.h" />
     <ClInclude Include="..\Headers\SoundMgr.h" />
     <ClInclude Include="..\Headers\SpriteTexture.h" />
+    <ClInclude Include="..\Headers\Status_Info.h" />
     <ClInclude Include="..\Headers\Texture.h" />
     <ClInclude Include="..\Headers\Time_Manager.h" />
     <ClInclude Include="..\Headers\Transform.h" />
@@ -249,6 +252,8 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Component_Manager.cpp" />
     <ClCompile Include="..\Codes\Controller.cpp" />
     <ClCompile Include="..\Codes\Device_Manager.cpp" />
+    <ClCompile Include="..\Codes\FadeIn.cpp" />
+    <ClCompile Include="..\Codes\FadeOut.cpp" />
     <ClCompile Include="..\Codes\Frame_Manager.cpp" />
     <ClCompile Include="..\Codes\GameObject.cpp" />
     <ClCompile Include="..\Codes\GameObject_Manager.cpp" />
@@ -270,6 +275,7 @@ xcopy			/y				..\Bin\*.dll		..\..\Tool\Bin\</Command>
     <ClCompile Include="..\Codes\Scene_Manager.cpp" />
     <ClCompile Include="..\Codes\SoundMgr.cpp" />
     <ClCompile Include="..\Codes\SpriteTexture.cpp" />
+    <ClCompile Include="..\Codes\Status_Info.cpp" />
     <ClCompile Include="..\Codes\Texture.cpp" />
     <ClCompile Include="..\Codes\Time_Manager.cpp" />
     <ClCompile Include="..\Codes\Transform.cpp" />

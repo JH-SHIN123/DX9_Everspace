@@ -21,25 +21,33 @@ public:
 
 public: /* For.Loading Thread */
 	static unsigned __stdcall ThreadMain(void* pArg);
+	HRESULT Ready_LobbyResources();
 	HRESULT Ready_StageResources();
 	HRESULT Ready_Stage2Resources();
 	HRESULT Ready_Stage3Resources();
 
-	HRESULT Ready_LobbyResources();
-	HRESULT Ready_StageEffect();
-	HRESULT Ready_BossAndOthers();
-	HRESULT Ready_HUD_Resources();
-	HRESULT Ready_ScriptUI_Resources();
-	HRESULT Ready_Stage1();
-	HRESULT Ready_Map_Effect_Resources();
-	
+public: /* For.Loading UI Resource */
+	HRESULT Load_HUD_Resources();
+	HRESULT Load_ScriptUI_Resources();
+
+public: /* For Loading Monster Resource */
+	HRESULT Load_Stage1_Prop_Resources();
+	HRESULT Load_Stage2_Prop_Resources();
+	HRESULT Load_Stage3_Prop_Resources();
+
+public: /* For Loading Effect Resource */
+	HRESULT Load_StageEffect_Resources();
+	HRESULT Load_StageMap_Resources();
+
+private:
+	_bool m_IsFinished = false;
+	_bool m_bFadeIn = false;
 
 private:
 	ESceneType m_eNextSceneID = ESceneType::None;
 
 	HANDLE m_hLoadingThread = nullptr;
 	CRITICAL_SECTION m_CriticalSection;
-	_bool m_IsFinished = false;
 };
 
 #define __LOADING_H__

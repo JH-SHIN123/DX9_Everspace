@@ -92,8 +92,23 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// HP 세팅
-	m_fHp = 900.f;
-	m_fFullHp = m_fHp;
+	STAT_INFO tStatus;
+	tStatus.iMaxHp = 900;
+	tStatus.iHp = tStatus.iMaxHp;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+
+	//m_fHp = 900.f;
+	//m_fFullHp = m_fHp;
 
 	return S_OK;
 }
@@ -105,7 +120,6 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	Transform_Check();
 	Move_AI(fDeltaTime);
 	Attack_AI(fDeltaTime);
-
 
 	if (!m_IsHPBar)
 		Add_Hp_Bar(fDeltaTime);
@@ -130,7 +144,7 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_fHp <= 0.f)
+	if (m_pInfo->Get_Hp() <= 0)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
@@ -141,8 +155,8 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
-		m_fHp -= 100.f;
+		m_pHp_Bar->Set_ScaleX(-100.f / m_pInfo->Get_MaxHp() * m_pInfo->Get_Hp());
+		m_pInfo->Set_Damage(100);
 		m_IsCollide = false;
 	}
 
@@ -211,7 +225,7 @@ _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Middle(_float fDeltaTime)
 {
-
+	RotateMy_Y(fDeltaTime);
 
 
 	return _uint();
@@ -340,6 +354,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		m_IsLaserAlert = true;
 	}
 
+	// 경고 이펙트 / 조준
 	if (m_fLaser_CoolTime >= 2.2f)
 	{
 		if (m_IsLaserAlert == true)
@@ -406,9 +421,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		}
 	}
 
-
-	// 2초가 넘어가면 발사
-	// 2초의 쿨타임으로 1초동안 발사!
+	// 레이저 발사 2개
 	if (m_fLaser_CoolTime >= 2.7f)
 	{
 		if (m_IsLaserAttack == true)
@@ -462,6 +475,9 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 					PRINT_LOG(L"Error", L"Failed To Add Bullet_Laser In Layer");
 					return E_FAIL;
 				}
+				_float3 vEffectPos = m_vLaserCannon_Position + (vLook * 5.f);
+
+				CEffectHandler::Add_Layer_Effect_Boss_FireBullet(vEffectPos, 1.f);
 			}
 		}
 	}
@@ -473,8 +489,6 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 {
 	m_fEmpBomb_CoolTime += fDeltaTime;
 
-
-
 	if (m_fEmpBomb_CoolTime >= 5.f)
 	{
 		m_fEmpBomb_CoolTime = 0.f;
@@ -482,9 +496,14 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
 
 		_float3 vUp = m_pTransform->Get_State(EState::Up);
+		_float3 vLook = m_pTransform->Get_State(EState::Look);
 		D3DXVec3Normalize(&vUp, &vUp);
+		D3DXVec3Normalize(&vLook, &vLook);
 
-		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * 2.f);
+		pArg->vPosition = m_pTransform->Get_State(EState::Position) + (vUp * -25.f) + (vLook * 40.f);
+		pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+		m_vEmpBomb_Position;
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
@@ -494,6 +513,9 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 			PRINT_LOG(L"Error", L"Failed To Add Bullet_EMP_Bomb In Layer");
 			return E_FAIL;
 		}
+
+		CEffectHandler::Add_Layer_Effect_Boss_FireBullet(pArg->vPosition, 1.f);
+
 	}
 
 
@@ -575,29 +597,22 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 		m_eActionMode = SpecialAction;
 
 
-	//switch (m_eActionMode)
-	//{
-	//case CBoss_Monster::Near:
-	//	Move_Near(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::Middle:
-	//	Move_Middle(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::Far:
-	//	Move_Far(fDeltaTime);
-	//	break;
-
-	//case CBoss_Monster::SpecialAction:
-	//	break;
-
-	//default:
-	//	return UPDATE_ERROR;
-	//	break;
-	//}
-
-
+	switch (m_eActionMode)
+	{
+	case CBoss_Monster::Near:
+		Move_Near(fDeltaTime);
+		break;
+	case CBoss_Monster::Middle:
+		Move_Middle(fDeltaTime);
+		break;
+	case CBoss_Monster::Far:
+		Move_Far(fDeltaTime);
+		break;
+	case CBoss_Monster::SpecialAction:
+		break;
+	default:
+		break;
+	}
 
 	return _uint();
 }
@@ -735,7 +750,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			CGameObject* pGameObject = nullptr;
 			UI_DESC HUD_Hp_Bar;
 			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+			HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_fFullHp), 8.f, 0.f };
 			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
@@ -750,7 +765,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			CGameObject* pGameObjectBorder = nullptr;
 			UI_DESC HUD_Hp_Bar_Border;
 			HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
+			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
 			HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
@@ -833,6 +848,7 @@ CGameObject * CBoss_Monster::Clone(void * pArg/* = nullptr*/)
 
 void CBoss_Monster::Free()
 {
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pTargetTransform);

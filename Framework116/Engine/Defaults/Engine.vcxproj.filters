@@ -148,6 +148,18 @@
     <Filter Include="01.Utilities\03.GameObject\04.Font">
       <UniqueIdentifier>{6c950e3a-4292-4f1a-af13-94f0c5b83f68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utilities\04.Component\07.Status">
+      <UniqueIdentifier>{9c379d68-8f25-4e5d-a7ad-a44baf2a2cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\05.Fade">
+      <UniqueIdentifier>{5de53852-d3da-4fd6-a9aa-2dcb0e308410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\05.Fade\In">
+      <UniqueIdentifier>{3fa7b5c4-4ec9-4441-9997-e9013d8b1dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utilities\03.GameObject\05.Fade\Out">
+      <UniqueIdentifier>{c9f5b3a5-4cf2-4d5b-9537-cc93f1f4f8c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Headers\Management.h">
@@ -294,6 +306,15 @@
     <ClInclude Include="..\Headers\MyFont.h">
       <Filter>01.Utilities\03.GameObject\04.Font</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Status_Info.h">
+      <Filter>01.Utilities\04.Component\07.Status</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FadeIn.h">
+      <Filter>01.Utilities\03.GameObject\05.Fade\In</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\FadeOut.h">
+      <Filter>01.Utilities\03.GameObject\05.Fade\Out</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Codes\Management.cpp">
@@ -421,6 +442,15 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MyFont.cpp">
       <Filter>01.Utilities\03.GameObject\04.Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Status_Info.cpp">
+      <Filter>01.Utilities\04.Component\07.Status</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FadeIn.cpp">
+      <Filter>01.Utilities\03.GameObject\05.Fade\In</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\FadeOut.cpp">
+      <Filter>01.Utilities\03.GameObject\05.Fade\Out</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

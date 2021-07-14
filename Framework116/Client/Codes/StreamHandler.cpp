@@ -266,26 +266,35 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 
 	wstring wstrPrototypeTag = pPassData->wstrPrototypeTag;
 
-#pragma region Stage1
 	if (wstrPrototypeTag == L"GameObject_Player")
 	{
-		GAMEOBJECT_DESC tDesc;
-		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
-		tDesc.tTransformDesc.vPosition = pPassData->Pos;
-		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
-		tDesc.tTransformDesc.vScale = pPassData->Scale;
-		tDesc.wstrMeshName = pPassData->wstrMeshName;
-
-		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
-			EResourceType::Static,
-			wstrPrototypeTag,
-			L"Layer_Player",
-			&tDesc)))
+		if (CManagement::Get_Instance()->Get_GameObject(L"Layer_Player"))
 		{
-			wstring errMsg = L"Failed to Add Layer ";
-			errMsg += wstrPrototypeTag;
-			PRINT_LOG(L"Error", errMsg.c_str());
-			return E_FAIL;
+			CTransform* pTransform = (CTransform*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Player")->Get_Component(L"Com_Transform");
+			pTransform->Set_Position(pPassData->Pos);
+			pTransform->Set_Rotate(pPassData->Rotate);
+			pTransform->Set_Scale(pPassData->Scale);
+		}
+		else 
+		{
+			GAMEOBJECT_DESC tDesc;
+			tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+			tDesc.tTransformDesc.vPosition = pPassData->Pos;
+			tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+			tDesc.tTransformDesc.vScale = pPassData->Scale;
+			tDesc.wstrMeshName = pPassData->wstrMeshName;
+
+			if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+				EResourceType::Static,
+				wstrPrototypeTag,
+				L"Layer_Player",
+				&tDesc)))
+			{
+				wstring errMsg = L"Failed to Add Layer ";
+				errMsg += wstrPrototypeTag;
+				PRINT_LOG(L"Error", errMsg.c_str());
+				return E_FAIL;
+			}
 		}
 	}
 	else if (wstrPrototypeTag == L"GameObject_Ring")
@@ -309,7 +318,7 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			return E_FAIL;
 		}
 	}
-	else if (wstrPrototypeTag == L"GameObject_Planet")
+	else if (wstrPrototypeTag == L"GameObject_Planet" || wstrPrototypeTag == L"GameObject_Planet_Ice")
 	{
 		GAMEOBJECT_DESC tDesc;
 		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
@@ -330,7 +339,8 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			return E_FAIL;
 		}
 	}
-	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B")
+	else if (wstrPrototypeTag == L"GameObject_Asteroid_A" || wstrPrototypeTag == L"GameObject_Asteroid_B" ||
+		wstrPrototypeTag == L"GameObject_Asteroid_C" || wstrPrototypeTag == L"GameObject_Asteroid_D")
 	{
 		GAMEOBJECT_DESC tDesc;
 		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
@@ -393,7 +403,26 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 			return E_FAIL;
 		}
 	}
-#pragma endregion
+	else if (wstrPrototypeTag == L"GameObject_Monster")
+	{
+
+	}
+	else if (wstrPrototypeTag == L"GameObject_Sniper")
+	{
+
+	}
+	else if (wstrPrototypeTag == L"GameObject_Boss")
+	{
+
+	}
+	else if (wstrPrototypeTag == L"GameObject_Broken_Plane")
+	{
+
+	}
+	else if (wstrPrototypeTag == L"GameObject_Delivery")
+	{
+
+	}
 
 	return S_OK;
 }

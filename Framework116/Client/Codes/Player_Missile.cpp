@@ -68,7 +68,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	BoundingSphere.fRadius = 15.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -144,15 +144,15 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 	// 발사되자 마자 유도안되게.
 	m_fBeforeHoming += fDeltaTime;
-	Search_Shortest_Target(fDeltaTime);
 
 	if (m_fBeforeHoming < 1.f)
 		Movement(fDeltaTime);
 	else
 	{
+		Search_Shortest_Target(fDeltaTime);
 		if (m_pTargetTransform != nullptr)
 		{
-			m_fAddSpeed += 0.35f;
+			m_fAddSpeed += 0.55f;
 			m_fRotateSpeed += D3DXToRadian(15.f);
 			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -164,7 +164,6 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	
-	// 아직 충돌하면 사라지게하는거 안했음!!
 	m_fLifeTime += fDeltaTime;
 	
 	return NO_EVENT;
@@ -172,8 +171,9 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 
 _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 {
-	if (m_IsCollide) {
-		m_IsDead = true;
+	if (m_IsCollide)
+	{
+		//m_IsDead = true;
 
 		if (m_pBulletParticle) {
 			m_pBulletParticle->Set_IsDead(true);
@@ -184,14 +184,15 @@ _uint CPlayer_Missile::LateUpdate_GameObject(_float fDeltaTime)
 			m_pHeadParticle->Set_IsDead(true);
 			m_pHeadParticle = nullptr;
 		}
+		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
 		m_pManagement->StopSound(CSoundMgr::PLAYER_WEAPON);
 		m_pManagement->PlaySound(L"Missile_Explosion.ogg", CSoundMgr::PLAYER_MISSILE_EXPLOSION);
-
 		return DEAD_OBJECT;
 	}
 
-	if (m_fLifeTime >= 4.f) {
-		m_IsDead = true;
+	if (m_fLifeTime >= 4.f)
+	{
+		//m_IsDead = true;
 
 		if (m_pBulletParticle) {
 			m_pBulletParticle->Set_IsDead(true);
@@ -225,7 +226,7 @@ _uint CPlayer_Missile::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -331,6 +332,8 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 			m_fDistToDrone = D3DXVec3Length(&vDir);
 		else
 			m_fDistToDrone = 9999.f;
+		if (Test > 0.f)
+			m_fDistToDrone = D3DXVec3Length(&vDir);
 	}
 
 	for (auto& pObj : *m_listCheckSniper)
@@ -340,19 +343,20 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 		_float3 vDir = vTargetPos - vMissilePos;
 
 		_float Test = D3DXVec3Length(&vDir);
+
 		if (Test > 1.f)
 			m_fDistToSniper = D3DXVec3Length(&vDir);
 		else
 			m_fDistToSniper = 9999.f;
 
 	}
+
 	if (m_listCheckBoss->size() == 0)
 		m_fDistToBoss = 9999.f;
 	if (m_listCheckDrone->size() == 0)
 		m_fDistToDrone = 9999.f;
 	if (m_listCheckSniper->size() == 0)
 		m_fDistToSniper = 9999.f;
-
 
 	if (m_fDistToBoss < m_fDistToDrone && m_fDistToBoss < m_fDistToSniper)
 	{
