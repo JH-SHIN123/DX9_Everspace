@@ -301,6 +301,7 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 	const list<class CGameObject*>* m_listCheckDrone = m_pManagement->Get_GameObjectList(L"Layer_Drone");
 	const list<class CGameObject*>* m_listCheckSniper = m_pManagement->Get_GameObjectList(L"Layer_Sniper");
 
+	// 3스테이지 일반몬스터, 저격몬스터, 보스 몬스터(얘는 어차피 맨 마지막에 죽음)
 	if (nullptr == m_listCheckBoss || nullptr == m_listCheckDrone || nullptr == m_listCheckSniper)
 	{
 		PRINT_LOG(L"Error", L"One of list is nullptr");

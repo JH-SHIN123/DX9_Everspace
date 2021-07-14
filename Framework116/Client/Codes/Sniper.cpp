@@ -127,7 +127,7 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		CEffectHandler::Add_Layer_Effect_Bullet_Explosion(m_pTransform->Get_State(EState::Position));
 		m_pHp_Bar->Set_ScaleX(-100.f / m_fFullHp * m_fHpLength);
 		m_fHp -= 100.f;
 		m_IsCollide = false;

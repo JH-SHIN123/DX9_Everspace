@@ -776,8 +776,8 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 			CGameObject* pGameObject = nullptr;
 			//알림생성
    			UI_DESC LockOnAlert;
-			LockOnAlert.tTransformDesc.vPosition = { 800.f, 300.f, 0.f };
-			LockOnAlert.tTransformDesc.vScale = { 100.f, 100.f, 0.f };
+			LockOnAlert.tTransformDesc.vPosition = { 840.f, 300.f, 0.f };
+			LockOnAlert.tTransformDesc.vScale = { 0.f, 0.f, 0.f };
 			LockOnAlert.wstrTexturePrototypeTag = L"Component_Texture_LockOnAlert";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,

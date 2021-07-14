@@ -32,7 +32,7 @@ _uint CLockOnAlert::Update_GameObject(_float fDeltaTime)
 	
 	Adjust_Pos(fDeltaTime);
 
-	if (m_fScaleX > 80.f)
+	if (m_fScaleX > 100.f)
 	{
 		m_bAddScale = false;
 	}
@@ -43,13 +43,13 @@ _uint CLockOnAlert::Update_GameObject(_float fDeltaTime)
 
 	if (m_bAddScale)
 	{
-		m_fScaleX += 2.0f;
-		m_fScaleY += 2.0f;
+		m_fScaleX += 1.0f;
+		m_fScaleY += 1.0f;
 	}
 	else
 	{
-		m_fScaleX -= 2.f;
-		m_fScaleY -= 2.f;
+		m_fScaleX -= 1.0f;
+		m_fScaleY -= 1.0f;
 	}
 
 
