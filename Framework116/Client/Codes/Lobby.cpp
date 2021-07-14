@@ -91,13 +91,34 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 		if (m_bLeaveScene)
 		{
 			m_pManagement->Clear_NonStatic_Resources();
-			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-				CLoading::Create(m_pDevice, ESceneType::Stage))))
+			switch (m_iNextScene)
 			{
-				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-				return E_FAIL;
+			case 0:
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+					CLoading::Create(m_pDevice, ESceneType::Stage))))
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+					return E_FAIL;
+				}
+				return CHANGE_SCENE;
+			case 1:
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+					CLoading::Create(m_pDevice, ESceneType::Stage2))))
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+					return E_FAIL;
+				}
+				return CHANGE_SCENE;
+			case 2:
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+					CLoading::Create(m_pDevice, ESceneType::Stage3))))
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+					return E_FAIL;
+				}
+				return CHANGE_SCENE;
 			}
-			return CHANGE_SCENE;
+
 			m_bLeaveScene = false;
 		}
 	}

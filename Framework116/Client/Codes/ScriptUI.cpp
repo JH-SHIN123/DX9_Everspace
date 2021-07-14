@@ -157,7 +157,6 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 		case EScript::Tutorial:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage1_Ring);
 			break;
-
 		case EScript::Tutorial_Ring_Clear:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
@@ -167,7 +166,17 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 			break;
-
+		case  EScript::Stg2_Begin:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage2_Asteroid);
+			break;
+		case EScript::Stg2_AfterCamProduction:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			break;
+		case EScript::Stg2_Finish_AsteroidFlyAway:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			break;
 		default:
 			break;
 		}
@@ -244,6 +253,18 @@ _uint CScriptUI::Script_Check()
 		break;
 	case EScript::Tutorial_Target_Clear:
 		Script_Tutorial_Target_Clear();
+		break;
+	case EScript::Stg2_Begin:
+		Script_Stg2_Begin();
+		break;
+	case EScript::Stg2_AfterCamProduction:
+		Script_Stg2_AfterCamProduction();
+		break;
+	case EScript::Stg2_Finish_AsteroidFlyAway:
+		Script_Stg2_Finish_AsteroidFlyAway();
+		break;
+	case EScript::Stg2_PlayerDead:
+		Script_Stg2_PlayerDead();
 		break;
 	default:
 		break;
@@ -407,6 +428,130 @@ void CScriptUI::Script_Tutorial_Target_Clear()
 	m_dwScriptCountMax = m_wstrScript.length();
 
 	Portrait_Check();
+}
+
+void CScriptUI::Script_Stg2_Begin()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"아아.";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"들리는가?";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"신병.좋지 못한 소식이다.";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"현재 자네의 위치쪽으로 향하는 유성군이 확인되었다.";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+void CScriptUI::Script_Stg2_AfterCamProduction()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"모두 10m를 넘는 거대한 운석들이다.충돌한다면 추락을 피할 수는 없겠지...";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"자네가 훈련때 보여준 능숙한 솜씨면 무사히 넘어갈수 있을거라 생각한다.";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"무운을 빌지.";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+void CScriptUI::Script_Stg2_Finish_AsteroidFlyAway()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"무사해서 다행이군.";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"훌륭한 실력이었다.";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"속히 작전지로 이동하길 바란다.";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"항로에 적군의 전투기가 포착되었다!!";
+		break;
+	case 6:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"조속히 전투태세를 취하도록!!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+void CScriptUI::Script_Stg2_PlayerDead()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"메이데이!!메이데이!!";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"기체가 손상되어 구조를 요청한다!!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"끄아아아악!!!!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::End;
+		m_wstrScript = L".....";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
 }
 
 void CScriptUI::Lock_Cursor()

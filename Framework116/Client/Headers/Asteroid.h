@@ -21,7 +21,6 @@ public:
 
 private:
 	_uint Movement(_float fDeltaTime);
-
 public:
 	static CAsteroid* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
@@ -36,6 +35,7 @@ private:
 	_bool m_bDecorate = false;
 	_float3 m_vRandomRotateDir = { 0.f,0.f,0.f };
 	_float m_fMoveUpDeltaT = 0.f;
+
 };
 
 #define __ASTEROID_H__ 
