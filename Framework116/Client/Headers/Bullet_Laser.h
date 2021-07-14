@@ -34,6 +34,7 @@ private:
 	CCollideSphere* m_pCollide = nullptr;
 
 	CTransform* m_pTargetTransform = nullptr;
+	CStatus_Info* m_pInfo = nullptr;
 	//CTransform* m_pParentTransform = nullptr;
 
 	//_float m_fTrackingTime = 1.f;

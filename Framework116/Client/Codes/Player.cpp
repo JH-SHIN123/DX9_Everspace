@@ -141,14 +141,30 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// HP 바.
-	m_fHp = 100.f;
-	m_fFullHp = m_fHp;
+	//// HP 바.
+	//m_fHp = 100.f;
+	//m_fFullHp = m_fHp;
+
+	// HP 세팅
+	STAT_INFO tStatus;
+	tStatus.iMaxHp = 100;
+	tStatus.iHp = tStatus.iMaxHp;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
 
 	CGameObject* pGameObject = nullptr;
 	UI_DESC HUD_Hp_Bar;
 	HUD_Hp_Bar.tTransformDesc.vPosition = { -828.5f, 455.f, 0.f };
-	HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+	HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()), 8.f, 0.f };
 	HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
@@ -300,7 +316,7 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 	
-	if (m_fHp <= 0.f && !m_IsDead)
+	if (m_pInfo->Get_Hp() <= 0 && !m_IsDead)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 
@@ -525,8 +541,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// 피깎는 !TEST!!!!!!!!!!!!!
 	if (m_pController->Key_Down(KEY_F1))
 	{
-		m_fHp -= 10.f;
-		m_pHp_Bar->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+		m_pInfo->Set_Damage(10);
+		m_pHp_Bar->Set_ScaleX(-10.f / m_pInfo->Get_MaxHp() * m_fHpLength);
 
 		// HIT Effect
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -964,6 +980,7 @@ void CPlayer::Free()
 	}
 	Safe_Release(m_pStamina_Bar);
 	Safe_Release(m_pHp_Bar);
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);

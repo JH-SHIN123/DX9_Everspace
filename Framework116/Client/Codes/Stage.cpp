@@ -85,7 +85,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	CScene::LateUpdate_Scene(fDeltaTime);
 	
 	// Monster
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Drone");
+	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Drone");
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Drone");
 
 	// Boss
@@ -109,6 +109,9 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 
 	// 몬스터Bullet과 플레이어의 실드배터리
 	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Monster_Bullet", L"Layer_Shield_Battery");
+
+	// 데미지 Src가 데미지를 입는다
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Drone");
 
 	return _uint();
 }
@@ -175,10 +178,30 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		if (Check == true)
 		{
 			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_1);
+			++m_iFlowCount;
 		}
 	}
+
+	case 6:
+	{
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return E_FAIL;
+			}
+			m_bFadeIn = true;
+			return NO_EVENT;
+		}
+
+	}
+
 	default:
-		return E_FAIL;
+		return S_OK;
 	}
 
 	return S_OK;
@@ -317,29 +340,6 @@ HRESULT CStage::Add_Layer_LaserSystem(const wstring& LayerTag, const PARTICLESYS
 		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
 		return E_FAIL;
 	}
-
-	return S_OK;
-}
-
-HRESULT CStage::Add_Layer_Boss_Monster(const wstring & LayerTag)
-{
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Boss_Monster",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-		return E_FAIL;
-	}
-
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Boss_Warmhole",
-	//	L"Layer_Boss_Warmhole")))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-	//	return E_FAIL;
-	//}
 
 	return S_OK;
 }

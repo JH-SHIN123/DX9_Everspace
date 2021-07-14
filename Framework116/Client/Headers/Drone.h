@@ -63,6 +63,7 @@ private:
 	CModelMesh* m_pModelMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTransform* m_pTargetTransform = nullptr;
+	CStatus_Info* m_pInfo = nullptr;
 
 private:
 	_float3 m_vSpawnPos;

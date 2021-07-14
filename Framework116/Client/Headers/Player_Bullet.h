@@ -31,6 +31,7 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
 	D3DMATERIAL9	m_tMaterial;
+	CStatus_Info* m_pInfo = nullptr;
 
 private:
 	//CTransform* m_pTargetTransform = nullptr;

@@ -46,6 +46,7 @@ private:
 	CTransform*		m_pTransformRing_2 = nullptr;
 	CTransform*		m_pTargetTransform = nullptr;
 	CCollideSphere* m_pCollide = nullptr;
+	CStatus_Info*	m_pInfo = nullptr;
 
 	_bool	m_IsBOOM		= false;
 	_bool	m_IsTracking	= false;

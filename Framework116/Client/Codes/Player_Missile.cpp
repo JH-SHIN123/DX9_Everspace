@@ -136,6 +136,21 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	vDir = (_float3*)pArg;
 	
 
+	STAT_INFO tStatus;
+	tStatus.iAtk = 20;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 
@@ -404,6 +419,7 @@ void CPlayer_Missile::Free()
 		CEffectHandler::Add_Layer_Effect_Missile_Explosion(m_pTransform->Get_State(EState::Position));
 
 	//Safe_Release(m_pTargetTransform);
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);

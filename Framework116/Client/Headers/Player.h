@@ -53,6 +53,7 @@ private: // For.Components
 	CMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CController* m_pController = nullptr;
+	CStatus_Info* m_pInfo = nullptr;
 
 	//CCamera* m_pCam = nullptr;
 	//_float m_fCameraDist = 5.f;

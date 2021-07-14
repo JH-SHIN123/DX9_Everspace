@@ -156,6 +156,21 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 		CEffectHandler::Add_Layer_Effect_Gatling(this, &m_pGatlingParticle);
 
 
+	STAT_INFO tStatus;
+	tStatus.iAtk = 100;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 
@@ -280,6 +295,7 @@ void CPlayer_Bullet::Free()
 	if(m_IsClone)
 		CEffectHandler::Add_Layer_Effect_Bullet_Explosion(m_pTransform->Get_State(EState::Position));
 
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);

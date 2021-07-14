@@ -104,6 +104,20 @@ HRESULT CSniper_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 	
+	STAT_INFO tStatus;
+	tStatus.iAtk = 50;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+
 
 	// Add_Effect
 	CEffectHandler::Add_Layer_Effect_Sniper_Bullet_Trail(this,(CGameObject**)&m_pEffect);
@@ -306,6 +320,7 @@ void CSniper_Bullet::Free()
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+	Safe_Release(m_pInfo);
 
 	if (m_pEffect) 
 	{

@@ -18,8 +18,6 @@ HRESULT CStage3::Ready_Scene()
 	CScene::Ready_Scene();
 	::SetWindowText(g_hWnd, L"CStage3");
 
-	//if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
-	//	return E_FAIL;
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -34,8 +32,8 @@ HRESULT CStage3::Ready_Scene()
 	//stage3 map 들어오기 전까지는 ㅜㅜ
 	//CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
 	//CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
-
-	
+	if (FAILED(Add_Layer_Player(L"Layer_Player")))
+		return E_FAIL;
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
@@ -55,7 +53,7 @@ HRESULT CStage3::Ready_Scene()
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
-
+	
 	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
 		return E_FAIL;
 
@@ -85,14 +83,20 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 
 HRESULT CStage3::Add_Layer_Player(const wstring & LayerTag)
 {
+	GAMEOBJECT_DESC tDesc;
+	////tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+	//tDesc.tTransformDesc.vPosition = pPassData->Pos;
+	tDesc.tTransformDesc.vRotate = {0.f,0.f,0.f};
+	tDesc.tTransformDesc.vScale = {1.f,1.f,1.f};
+	tDesc.wstrMeshName = L"Component_Mesh_BigShip";
+
+
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
 		L"GameObject_Player",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Player In Layer");
+		LayerTag,
+		&tDesc)))
 		return E_FAIL;
-	}
 
 	return S_OK;
 }
@@ -176,6 +180,36 @@ HRESULT CStage3::Add_Layer_Light(const wstring & LayerTag, const LIGHT_DESC * pL
 	return S_OK;
 }
 
+HRESULT CStage3::Add_Layer_ExplosionSystem(const wstring & LayerTag, const PARTICLESYSTEM_DESC * pParticleSystemDesc)
+{
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		LayerTag,
+		(void*)pParticleSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CStage3::Add_Layer_LaserSystem(const wstring & LayerTag, const PARTICLESYSTEM_DESC * pParticleSystemDesc)
+{
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_LaserSystem",
+		LayerTag,
+		(void*)pParticleSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CStage3::Add_Layer_Boss_Monster(const wstring & LayerTag)
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -186,15 +220,6 @@ HRESULT CStage3::Add_Layer_Boss_Monster(const wstring & LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
 		return E_FAIL;
 	}
-
-	//if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Boss_Warmhole",
-	//	L"Layer_Boss_Warmhole")))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-	//	return E_FAIL;
-	//}
 
 	return S_OK;
 }

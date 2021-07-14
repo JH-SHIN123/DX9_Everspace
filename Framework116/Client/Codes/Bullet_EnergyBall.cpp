@@ -17,7 +17,7 @@ CBullet_EnergyBall::CBullet_EnergyBall(const CBullet_EnergyBall & other)
 
 HRESULT CBullet_EnergyBall::Ready_GameObject_Prototype()
 {
-	CGameObject::Ready_GameObject_Prototype();//¾Ó±â¸ð¶ì
+	CGameObject::Ready_GameObject_Prototype();
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
@@ -104,6 +104,20 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(this,(CGameObject**)&m_pEffect);
 	//m_vEffectOffset = { 0.f,0.f,0.f };
+
+	STAT_INFO tStatus;
+	tStatus.iAtk = 20;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
 
 
 	return S_OK;
@@ -304,6 +318,7 @@ void CBullet_EnergyBall::Free()
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+	Safe_Release(m_pInfo);
 
 	if (m_pEffect) 
 	{

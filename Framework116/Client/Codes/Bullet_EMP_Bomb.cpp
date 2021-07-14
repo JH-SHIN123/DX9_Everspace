@@ -115,6 +115,21 @@ HRESULT CBullet_EMP_Bomb::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Trail(this, (CGameObject**)&m_pEffect);
 
+	STAT_INFO tStatus;
+	tStatus.iAtk = 50;
+
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		L"Com_StatInfo",
+		(CComponent**)&m_pInfo,
+		&tStatus)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+		return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 
@@ -448,6 +463,7 @@ void CBullet_EMP_Bomb::Free()
 	Safe_Release(m_pMesh);
 
 	Safe_Release(m_pTransform);
+	Safe_Release(m_pInfo);
 	//Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
 

@@ -750,7 +750,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			CGameObject* pGameObject = nullptr;
 			UI_DESC HUD_Hp_Bar;
 			HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+			HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()), 8.f, 0.f };
 			HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
@@ -765,7 +765,7 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 			CGameObject* pGameObjectBorder = nullptr;
 			UI_DESC HUD_Hp_Bar_Border;
 			HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
+			HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()) + 2.5f, 12.f, 0.f };
 			HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
