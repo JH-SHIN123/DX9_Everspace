@@ -57,6 +57,9 @@ private:
 		_float fDistFromTarget);
 	_float m_fFlyingAsteroidTime = 1.f;
 	_bool m_bStartFlyAway = FALSE;
+	_bool m_bFinishFlyAway = FALSE;
+	_bool m_bPlayPlayerDeadScript = FALSE;
+#define UPDATE_FLYAWAY 3
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;

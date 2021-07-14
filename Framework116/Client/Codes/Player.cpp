@@ -815,7 +815,9 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 	CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
 
 	static _float fDelayTime = 0.f;
+	
 	fDelayTime += fDeltaTime;
+	
 	if (m_IsAstroidCollide&& fDelayTime > 1.f)
 	{
 		Set_Damage(10.f);

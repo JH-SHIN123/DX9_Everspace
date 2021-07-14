@@ -47,8 +47,9 @@ HRESULT CStage::Ready_Scene()
 	tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
 	tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
 	tDesc.tTransformDesc.fSpeedPerSec = 1.f;
+	tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
 	CTransform* pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
-	_uint iRockCount = 10;
+	_uint iRockCount = 20;
 	for (int i = 0; i < iRockCount; i++)
 	{
 		_float3 vRockPos = pPlayerTransform->Get_TransformDesc().vPosition;
@@ -57,24 +58,24 @@ HRESULT CStage::Ready_Scene()
 
 			if (i % 4 == 0)
 			{
-				vRockPos.x -= CPipeline::GetRandomFloat(20, 40);
-				vRockPos.y -= CPipeline::GetRandomFloat(20, 40);
+				vRockPos.x -= CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y -= CPipeline::GetRandomFloat(10, 100);
 			}
 			else if (i % 4 == 1)
 			{
-				vRockPos.x += CPipeline::GetRandomFloat(20, 40);
-				vRockPos.y += CPipeline::GetRandomFloat(20, 40);
+				vRockPos.x += CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y += CPipeline::GetRandomFloat(10, 100);
 			}
 			else if(i%4 ==2)
 			{
-				vRockPos.x += CPipeline::GetRandomFloat(20, 40);
-				vRockPos.y -= CPipeline::GetRandomFloat(20, 40);
+				vRockPos.x += CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y -= CPipeline::GetRandomFloat(10, 100);
 
 			}
 			else
 			{
-				vRockPos.x -= CPipeline::GetRandomFloat(20, 40);
-				vRockPos.y += CPipeline::GetRandomFloat(20, 40);
+				vRockPos.x -= CPipeline::GetRandomFloat(10, 100);
+				vRockPos.y += CPipeline::GetRandomFloat(10, 100);
 			}
 		}
 		vRockPos.z = 300+((i+1)*10);
@@ -109,15 +110,19 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 	
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
+	
 	switch (Stage2_Flow(fDeltaTime))
 	{
-	case 3:
-		if (AsteroidFlyingAway(fDeltaTime, 200.f, 100.f, 200.f, 200.f, pPlayerTransform, 30, 70.f, 300.f))
-		{
-			//스크립트
-		}
+	case -1:
+		return UPDATE_ERROR;
+	case UPDATE_FLYAWAY:
+		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 300.f) ;
 		break;
 	}
+	
+	
+	
+	
 	
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
@@ -222,6 +227,12 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 
 _uint CStage::Stage2_Flow(_float fDeltaTime)
 {
+	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
+	if (pPlayer)
+	{
+		if (pPlayer->Get_IsDead())
+			m_iFlowCount = 4;
+	}
 	switch (m_iFlowCount)
 	{
 	case 0: // 스크립트 시작
@@ -238,7 +249,7 @@ _uint CStage::Stage2_Flow(_float fDeltaTime)
 				++m_iFlowCount;
 			}
 		}
-		return 1;
+		return TRUE;
 	case 1: // 스크립트 시작
 		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
 		{
@@ -246,13 +257,48 @@ _uint CStage::Stage2_Flow(_float fDeltaTime)
 				return -1;
 			++m_iFlowCount;
 		}
-		return 1;
+		return TRUE;
 	case 2:
 		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
-			++m_iFlowCount;
-		return 1;
+		{
+			if (m_fFlowTime <= 1)
+			{
+				m_fFlowTime += fDeltaTime;
+				if (m_fFlowTime>=1)
+				{
+					++m_iFlowCount;
+				}
+			}
+		}
+		return TRUE;
 	case 3:
-		return 3;
+		if (m_bFinishFlyAway)
+		{
+			if (m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
+			{
+				for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
+				{
+					pDst->Set_IsDead(TRUE);
+				}
+			}
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Finish_AsteroidFlyAway)))
+				return -1;
+			m_iFlowCount++;
+			return TRUE;
+		}
+		return UPDATE_FLYAWAY;
+	case 4:
+	{
+		if (!m_bPlayPlayerDeadScript&& pPlayer->Get_IsDead())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_PlayerDead)))
+				return -1;
+			m_bPlayPlayerDeadScript = TRUE;
+		}
+	}
+	return TRUE;
+	default:
+		return TRUE;
 	}
 
 	return S_OK;
@@ -260,7 +306,7 @@ _uint CStage::Stage2_Flow(_float fDeltaTime)
 
 //TRUE반환시 끝났음
 _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMaxYDist,
-	_float fMaxZDist, _float fMinZDist,CTransform* pTargetTransform, _uint iRockAmount,
+	_float fMaxZDist, _float fMinZDist, CTransform* pTargetTransform, _uint iRockAmount,
 	_float fRockSpeed, _float fDistFromTarget)
 {
 	if (nullptr == pTargetTransform)
@@ -271,7 +317,10 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 	_float fFinishTime = 60.f;
 	m_fFlyingAsteroidTime += fDeltaTime;
 	if (m_fFlyingAsteroidTime >= fFinishTime)
+	{
+		m_bFinishFlyAway = TRUE;
 		return TRUE;
+	}
 
 	if (!m_bStartFlyAway)
 	{
@@ -280,6 +329,7 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 		tDesc.wstrMeshName = L"Component_Mesh_Rock_Generic_001";
 		tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
 		tDesc.tTransformDesc.fSpeedPerSec = 1.f;
+		tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
 		for (int i = 0; i < iRockAmount; i++)
 		{
 			vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist/2.f);
@@ -293,6 +343,8 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 			if (iRockAmount < m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
 				break;
 		}
+		for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_Asteroid"))
+			pDst->Update_GameObject(fDeltaTime);
 		m_bStartFlyAway = TRUE;
 		return FALSE;
 	}
@@ -306,6 +358,7 @@ _bool CStage::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMa
 		_float3 vRockPos = vTargetPos;
 		pTransform = (CTransform*)pObj->Get_Component(L"Com_Transform");
 		pTransform->Go_Dir(vDir, fRockSpeed * fDeltaTime);
+		pTransform->RotateX(fDeltaTime);
 		//다지나가는데 필요한 시간
 		
 		if (m_fFlyingAsteroidTime <= fFinishTime - fNeedToFinishTime)
