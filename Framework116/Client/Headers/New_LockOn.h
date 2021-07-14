@@ -1,18 +1,18 @@
 #pragma once
-#ifndef __HP_BAR_BORDER_H__
+#ifndef __NEW_LOCKON_H__
 
 #include "GameObject.h"
 
 USING(Engine)
-class CHP_Bar_Border final : public CUI
+class CNew_LockOn final : public CUI
 {
 public:
 	enum MAKERID {MAKER_PLAYER, MAKER_BOSS_MONSTER, MAKER_MONSTER, MAKER_SNIPER, MAKER_DRONE, MAKER_END};
 
 public:
-	explicit CHP_Bar_Border(LPDIRECT3DDEVICE9 pDevice);
-	explicit CHP_Bar_Border(const CHP_Bar_Border& other);
-	virtual ~CHP_Bar_Border() = default;
+	explicit CNew_LockOn(LPDIRECT3DDEVICE9 pDevice);
+	explicit CNew_LockOn(const CNew_LockOn& other);
+	virtual ~CNew_LockOn() = default;
 
 public:
 	virtual HRESULT Ready_GameObject_Prototype() override;
@@ -27,20 +27,17 @@ public:
 	// 피깎는용도!
 	void Set_ScaleX(_float _fDamage);
 	void Set_Pos(_float3 _vPos) { m_pTransform->Set_Position(_vPos); }
-	_uint Who_Make_Me(MAKERID _iMakerName);
 	_float3 Get_Pos() { return m_pTransform->Get_State(EState::Position); }
 
+	_uint Who_Make_Me(MAKERID _iMakerName);
 	_uint Check_Degree();
-
-	//거리멀면 렌더안해
-	void Set_Is_Far(_bool IsFar) { m_IsFar = IsFar; }
 
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Adjust_Pos(_float fDeltaTime);
 
 public:
-	static CHP_Bar_Border* Create(LPDIRECT3DDEVICE9 pDevice);
+	static CNew_LockOn* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
 
@@ -56,10 +53,8 @@ private: // 플레이어 트랜스폼
 	CTransform* m_pPlayerTransform = nullptr;
 	// 최초참조시에 AddRef
 	_bool m_IsRef = false;
-	// 너무머냐?
-	_bool m_IsFar = false;
 	
 };
 
-#define __HP_BAR_BORDER_H__
+#define __NEW_LOCKON_H__
 #endif

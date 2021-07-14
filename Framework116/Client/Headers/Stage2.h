@@ -36,13 +36,17 @@ private:
 	void Ready_Asteroid();
 	_bool AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMaxYDist, _float fMaxZDist,
 		_float fMinZDist, CTransform* pTargetTransform, _uint iRockAmount, _float fRockSpeed,
+<<<<<<< HEAD
 		_float fDistFromTarget,_float fFinishTime);
+=======
+		_float fDistFromTarget);
+>>>>>>> origin/main
 
-	//HRESULT Add_Layer_Monster(const wstring& LayerTag);
-	HRESULT Add_Layer_Sniper(const wstring& LayerTag);
 
 
 	// Stage3 생기기전까지만 사용하겠습니당~~
+	//HRESULT Add_Layer_Sniper(const wstring& LayerTag);
+	//HRESULT Add_Layer_Monster(const wstring& LayerTag);
 
 public:
 	static CStage2* Create(LPDIRECT3DDEVICE9 pDevice);

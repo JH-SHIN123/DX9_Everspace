@@ -107,6 +107,11 @@ private: // emp bomb
 	_float m_fHpLength = 64.f;
 	
 	_uint Check_Degree();
+
+	// Lock On Ãß°¡
+	class CNew_LockOn* m_pLockOn = nullptr;
+	_bool m_IsLockOn = false;
+	_uint Make_LockOn();
 };
 
 #define __BOSS_MONSTER_H__

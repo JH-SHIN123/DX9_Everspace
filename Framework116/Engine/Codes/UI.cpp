@@ -36,7 +36,8 @@ HRESULT CUI::Ready_GameObject(void* pArg)
 
 	if (m_wstrTexturePrototypeTag == L"Component_Texture_HP_Bar" 
 		|| m_wstrTexturePrototypeTag == L"Component_Texture_Stamina_Bar"
-		|| m_wstrTexturePrototypeTag == L"Component_Texture_HP_Border")
+		|| m_wstrTexturePrototypeTag == L"Component_Texture_HP_Border"
+		|| m_wstrTexturePrototypeTag == L"Component_Texture_Lock_On")
 	{
 		if (FAILED(CGameObject::Add_Component(
 			EResourceType::Static,

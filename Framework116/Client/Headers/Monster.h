@@ -25,6 +25,11 @@ private:
 	_uint	Shoot_Bullet(_float fDeltaTime);
 	_bool	RotateToPlayer(_float fDeltaTime);
 
+public: // Add_HP_Bar
+	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
+	_bool Get_Is_Hp_Bar() { return m_IsHPBar; }
+
 public:
 	static CMonster* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
@@ -50,6 +55,38 @@ private:
 	// Pattern
 	_float m_fPatternTime = 0.f;
 	_bool m_bAttack = false;
+
+	// HP Bar 추가
+	_bool m_IsHPBar = false;
+	class CHP_Bar* m_pHp_Bar = nullptr;
+	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
+	_float m_fHpLength = 64.f;
+
+	_uint Check_Degree();
+
+	// Lock On 추가
+	class CNew_LockOn* m_pLockOn = nullptr;
+	_bool m_IsLockOn = false;
+	_uint Make_LockOn();
+	//////////////////////Effect///////////////////////////
+private:
+	void Update_Effect();
+
+private: // Engine Effect
+	_float3 m_vLeftEngineOffset = { 0.f, 0.f, 0.f };
+	_float3 m_vRightEngineOffset = { 0.f, 0.f, 0.f };
+	class CEngineEffectSystem* m_pLeftEngineEffect = nullptr;
+	class CEngineEffectSystem* m_pRightEngineEffect = nullptr;
+
+private: // Wing Effect
+	_float3 m_vLeftWingOffset = { 0.f, 0.f, 0.f };
+	_float3 m_vRightWingOffset = { 0.f, 0.f, 0.f };
+	class CWingBoost_System* m_pLeftWingBoost = nullptr;
+	class CWingBoost_System* m_pRightWingBoost = nullptr;
+
+private:
+	_bool m_IsBoost = false;
+	//////////////////////////////////////////////////////////
 };
 
 #define __MONSTER_H__

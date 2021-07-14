@@ -1,34 +1,34 @@
 #include "stdafx.h"
-#include "..\Headers\HP_Bar.h"
+#include "..\Headers\New_LockOn.h"
 #include "Pipeline.h"
 #include "Collision.h"
 #include "Sniper.h"
 
-CHP_Bar::CHP_Bar(LPDIRECT3DDEVICE9 pDevice)
+CNew_LockOn::CNew_LockOn(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
 {
 }
 
-CHP_Bar::CHP_Bar(const CHP_Bar & other)
+CNew_LockOn::CNew_LockOn(const CNew_LockOn & other)
 	: CUI(other)
 {
 }
 
-HRESULT CHP_Bar::Ready_GameObject_Prototype()
+HRESULT CNew_LockOn::Ready_GameObject_Prototype()
 {
 	CUI::Ready_GameObject_Prototype();
 
 	return S_OK;
 }
 
-HRESULT CHP_Bar::Ready_GameObject(void * pArg/* = nullptr*/)
+HRESULT CNew_LockOn::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CUI::Ready_GameObject(pArg);
-
+	m_pTransform->Set_Position(_float3(12345.f, 0.f, 0.f));
 	return S_OK;
 }
 
-_uint CHP_Bar::Update_GameObject(_float fDeltaTime)
+_uint CNew_LockOn::Update_GameObject(_float fDeltaTime)
 {
 	CUI::Update_GameObject(fDeltaTime);
 	
@@ -47,57 +47,57 @@ _uint CHP_Bar::Update_GameObject(_float fDeltaTime)
 	return NO_EVENT;
 }
 
-_uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
+_uint CNew_LockOn::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CUI::LateUpdate_GameObject(fDeltaTime);
 
+	if (m_IsDead)
+		return DEAD_OBJECT;
+
 	return _uint();
 }
 
-_uint CHP_Bar::Render_GameObject()
+_uint CNew_LockOn::Render_GameObject()
 {
 	//Check_Degree();
-	if (!m_IsBack)
-	{
-		if (!m_IsFar)
-			CUI::Render_GameObject();
-	}
+	if(!m_IsBack)
+		CUI::Render_GameObject();
 
 	return _uint();
 }
 
-void CHP_Bar::Set_ScaleX(_float _fDamage)
+void CNew_LockOn::Set_ScaleX(_float _fDamage)
 {
 	m_pTransform->Set_ScaleX(m_pTransform->Get_TransformDesc().vScale.x + _fDamage);
 }
 
-_uint CHP_Bar::Movement(_float fDeltaTime)
+_uint CNew_LockOn::Movement(_float fDeltaTime)
 {
 	return _uint();
 }
 
-_uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
+_uint CNew_LockOn::Adjust_Pos(_float fDeltaTime)
 {
 	wstring dstLayerTag = L"";
 	_float2 vHpOffset = { 0.f,0.f };
 
 	switch (m_eMakerID)
 	{
-	case CHP_Bar::MAKER_PLAYER:
+	case CNew_LockOn::MAKER_PLAYER:
 		if (m_pTransform) {
 			m_pTransform->Set_Position(_float3(-(WINCX / 2.f) + 132.5f, WINCY / 2.f - 84.f, 0.f));
 			m_pTransform->Update_Transform();
 		}
 		return _uint();
-	//case CHP_Bar::MAKER_BOSS_MONSTER:
+	//case CNew_LockOn::MAKER_BOSS_MONSTER:
 	//	dstLayerTag = L"Layer_Boss_Monster";
 	//	vHpOffset = {-30.f, 30.f};
 	//	break;
-	//case CHP_Bar::MAKER_SNIPER:
+	//case CNew_LockOn::MAKER_SNIPER:
 	//	//dstLayerTag = L"Layer_Sniper";
 	//	//vHpOffset = { -30.f, 30.f };
 	//	break;
-	//case CHP_Bar::MAKER_DRONE:
+	//case CNew_LockOn::MAKER_DRONE:
 	//	dstLayerTag = L"Layer_Drone";
 	//	break;
 	}
@@ -138,13 +138,13 @@ _uint CHP_Bar::Adjust_Pos(_float fDeltaTime)
 	return _uint();
 }
 
-_uint CHP_Bar::Who_Make_Me(MAKERID _iMakerName)
+_uint CNew_LockOn::Who_Make_Me(MAKERID _iMakerName)
 {
 	m_eMakerID = _iMakerName;
 	return _uint();
 }
 
-_uint CHP_Bar::Check_Degree()
+_uint CNew_LockOn::Check_Degree()
 {
 	
 	if (m_pManagement->Get_GameObjectList(L"Layer_Player")->size() == 0
@@ -228,9 +228,9 @@ _uint CHP_Bar::Check_Degree()
 	return _uint();
 }
 
-CHP_Bar * CHP_Bar::Create(LPDIRECT3DDEVICE9 pDevice)
+CNew_LockOn * CNew_LockOn::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CHP_Bar* pInstance = new CHP_Bar(pDevice);
+	CNew_LockOn* pInstance = new CNew_LockOn(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create HP_Bar");
@@ -240,9 +240,9 @@ CHP_Bar * CHP_Bar::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
+CGameObject * CNew_LockOn::Clone(void * pArg/* = nullptr*/)
 {
-	CHP_Bar* pClone = new CHP_Bar(*this); /* 복사 생성자 호출 */
+	CNew_LockOn* pClone = new CNew_LockOn(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone HP_Bar");
@@ -252,7 +252,7 @@ CGameObject * CHP_Bar::Clone(void * pArg/* = nullptr*/)
    	return pClone;
 }
 
-void CHP_Bar::Free()
+void CNew_LockOn::Free()
 {
 	Safe_Release(m_pPlayerTransform);
 	CUI::Free();

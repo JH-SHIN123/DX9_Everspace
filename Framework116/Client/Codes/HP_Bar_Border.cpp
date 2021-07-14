@@ -60,8 +60,10 @@ _uint CHP_Bar_Border::Render_GameObject()
 {
 	//Check_Degree();
 	if (!m_IsBack)
+	{
+		if(!m_IsFar)
 		CUI::Render_GameObject();
-
+	}
 	return _uint();
 }
 

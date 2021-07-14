@@ -71,6 +71,11 @@ private:
 	_float m_fHpLength = 64.f;
 
 	_uint Check_Degree();
+
+	// Lock On Ãß°¡
+	class CNew_LockOn* m_pLockOn = nullptr;
+	_bool m_IsHUDLockOn = false;
+	_uint Make_LockOn();
 };
 
 #define __SNIPER_H__

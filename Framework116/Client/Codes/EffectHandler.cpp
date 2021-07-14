@@ -465,6 +465,34 @@ HRESULT CEffectHandler::Add_Layer_Effect_Sniper_Bullet_Trail(CGameObject * pTarg
 
 	return S_OK;
 }
+HRESULT CEffectHandler::Add_Layer_Effect_BrokenPlane_Smoke(class CGameObject** ppGameObject)
+{
+	PARTICLESYSTEM_DESC pSystemDesc;
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
+	pSystemDesc.iNumParticles = 30;
+	pSystemDesc.tResetAttribute.fParticleSize = 5.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 10.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.01f;
+	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_LoopExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc,
+		(CGameObject**)ppGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Explosion In Layer");
+	}
+
+	CGameObject* pGameObject = *ppGameObject;
+	Safe_Release(pGameObject);
+
+	return S_OK;
+}
 HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Alert(const _float3 & _vPos, const _float _fSize)
 {
 	PARTICLESYSTEM_DESC pSystemDesc;

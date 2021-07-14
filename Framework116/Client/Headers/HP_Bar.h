@@ -32,6 +32,9 @@ public:
 	_uint Who_Make_Me(MAKERID _iMakerName);
 	_uint Check_Degree();
 
+	//거리멀면 렌더안해
+	void Set_Is_Far(_bool IsFar) { m_IsFar = IsFar; }
+
 private:
 	_uint Movement(_float fDeltaTime);
 	_uint Adjust_Pos(_float fDeltaTime);
@@ -53,6 +56,8 @@ private: // 플레이어 트랜스폼
 	CTransform* m_pPlayerTransform = nullptr;
 	// 최초참조시에 AddRef
 	_bool m_IsRef = false;
+
+	_bool m_IsFar = false;
 	
 };
 

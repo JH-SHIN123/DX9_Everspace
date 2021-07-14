@@ -6,9 +6,9 @@
 // ¼Óµµ / RGB ·£´ý°ª
 
 USING(Engine)
-class CExplosionSystem final : public CParticleSystem
+class CExplosionSystem : public CParticleSystem
 {
-private:
+protected:
 	explicit CExplosionSystem(LPDIRECT3DDEVICE9 pDevice);
 	explicit CExplosionSystem(const CExplosionSystem& other);
 	virtual ~CExplosionSystem() = default;
@@ -27,9 +27,6 @@ public:
 	static CExplosionSystem* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void Free() override;
-
-private:
-	_float3 m_vPos = { 0.f,0.f,0.f };
 };
 
 

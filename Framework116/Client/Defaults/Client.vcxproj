@@ -171,9 +171,12 @@
     <ClInclude Include="..\Headers\AlertArrow.h" />
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\BrokenPlane.h" />
+    <ClInclude Include="..\Headers\Delivery.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\LockOnAlert.h" />
+    <ClInclude Include="..\Headers\New_LockOn.h" />
+    <ClInclude Include="..\Headers\LoopExplosionSystem.h" />
     <ClInclude Include="..\Headers\Shield_Battery.h" />
     <ClInclude Include="..\Headers\Sniper.h" />
     <ClInclude Include="..\Headers\Sniper_Bullet.h" />
@@ -248,9 +251,12 @@
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\BrokenPlane.cpp" />
+    <ClCompile Include="..\Codes\Delivery.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\LockOnAlert.cpp" />
+    <ClCompile Include="..\Codes\New_LockOn.cpp" />
+    <ClCompile Include="..\Codes\LoopExplosionSystem.cpp" />
     <ClCompile Include="..\Codes\Shield_Battery.cpp" />
     <ClCompile Include="..\Codes\Sniper.cpp" />
     <ClCompile Include="..\Codes\Sniper_Bullet.cpp" />

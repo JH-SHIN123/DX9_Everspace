@@ -435,6 +435,7 @@ void CScriptUI::Script_Stg2_Begin()
 	switch (m_dwScriptNext)
 	{
 	case 0:
+<<<<<<< HEAD
 		m_ePortrait = EPortraitNumber::Player;
 		m_wstrScript = L".....";
 		break;
@@ -527,6 +528,20 @@ void CScriptUI::Script_Stg2_Begin()
 		m_wstrScript = L"그리고 또한가지,";
 		break;
 	case 23:
+=======
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"아아.";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"들리는가?";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"신병.좋지 못한 소식이다.";
+		break;
+	case 3:
+>>>>>>> origin/main
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"현재 자네의 위치쪽으로 향하는 유성군이 확인되었다.";
 		break;
@@ -555,10 +570,13 @@ void CScriptUI::Script_Stg2_AfterCamProduction()
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"무운을 빌지.";
 		break;
+<<<<<<< HEAD
 	case 3:
 		m_ePortrait = EPortraitNumber::End;
 		m_wstrScript = L"통신이 끊겼다....";
 		break;
+=======
+>>>>>>> origin/main
 	default:
 		m_wstrName = L"";
 		m_wstrScript = L"";
@@ -578,7 +596,11 @@ void CScriptUI::Script_Stg2_Finish_AsteroidFlyAway()
 		break;
 	case 1:
 		m_ePortrait = EPortraitNumber::Admiral;
+<<<<<<< HEAD
 		m_wstrScript = L"훌륭한 실력이었다만.";
+=======
+		m_wstrScript = L"훌륭한 실력이었다.";
+>>>>>>> origin/main
 		break;
 	case 2:
 		m_ePortrait = EPortraitNumber::Admiral;
@@ -590,11 +612,19 @@ void CScriptUI::Script_Stg2_Finish_AsteroidFlyAway()
 		break;
 	case 4:
 		m_ePortrait = EPortraitNumber::Admiral;
+<<<<<<< HEAD
 		m_wstrScript = L"쳇!!";
 		break;
 	case 5:
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"전방에 적군이 포착되었다!!";
+=======
+		m_wstrScript = L"!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"항로에 적군의 전투기가 포착되었다!!";
+>>>>>>> origin/main
 		break;
 	case 6:
 		m_ePortrait = EPortraitNumber::Admiral;

@@ -80,6 +80,11 @@ private:
 	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
 	_float m_fHpLength = 32.f;
 
+	// Lock On Ãß°¡
+	class CNew_LockOn* m_pLockOn = nullptr;
+	_bool m_IsLockOn = false;
+	_uint Make_LockOn();
+
 };
 
 #define __DRONE_H__
