@@ -37,7 +37,7 @@ public:
 
 	
 	static HRESULT Add_Layer_Effect_Sniper_Bullet_Trail(class CGameObject* pTarget, class CGameObject** ppGameObject = nullptr);
-
+	static HRESULT Add_Layer_Effect_BrokenPlane_Smoke(const _float3& _vPos);
 
 };
 

@@ -32,6 +32,7 @@
 #include "EngineEffectSystem.h"
 #include "LockOn.h"
 #include "Planet.h"
+#include "LoopExplosionSystem.h"
 #include "Drone.h"
 #include "WingBoost_System.h"
 #include"Product.h"
@@ -1549,6 +1550,16 @@ HRESULT CLoading::Load_StageEffect_Resources()
 		CExplosionSystem::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_ExplosionSystem");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_ExplosionSystem */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_LoopExplosionSystem",
+		CLoopExplosionSystem::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LoopExplosionSystem");
 		return E_FAIL;
 	}
 

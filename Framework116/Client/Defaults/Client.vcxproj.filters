@@ -253,6 +253,9 @@
     <Filter Include="02.GameObject\12.EventObject\Delivery">
       <UniqueIdentifier>{8c6cb597-0b78-4ee2-b3f3-57c70b0c3e3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\06.Particle\LoopExplosion">
+      <UniqueIdentifier>{d77706c1-e1a7-45c3-b0ec-2f011542dfb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -475,6 +478,9 @@
     <ClInclude Include="..\Headers\Planet.h">
       <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\LoopExplosionSystem.h">
+      <Filter>02.GameObject\06.Particle\LoopExplosion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -684,6 +690,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Planet.cpp">
       <Filter>02.GameObject\14.Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LoopExplosionSystem.cpp">
+      <Filter>02.GameObject\06.Particle\LoopExplosion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
