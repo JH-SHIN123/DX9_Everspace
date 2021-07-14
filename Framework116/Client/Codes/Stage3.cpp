@@ -31,7 +31,7 @@ HRESULT CStage3::Ready_Scene()
 	}
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage3.map");
-	//CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
+	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage3.navi");
 
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
