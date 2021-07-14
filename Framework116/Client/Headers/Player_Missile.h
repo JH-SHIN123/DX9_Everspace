@@ -65,6 +65,7 @@ private:
 	_float m_fDistToBoss = 0.f;
 	_float m_fDistToDrone = 0.f;
 	_float m_fDistToSniper = 0.f;
+	_float m_fDistToNormalMonster = 0.f;
 
 };
 
