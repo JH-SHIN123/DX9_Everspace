@@ -40,7 +40,7 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 		}
 	}
 
-	// FadeInÀÌ ³¡³µÀ»¶§ ¾ÀÀüÈ¯
+	//FadeInÀÌ ³¡³µÀ»¶§ ¾ÀÀüÈ¯ 
 	if (m_bLeaveScene)
 	{
 		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
