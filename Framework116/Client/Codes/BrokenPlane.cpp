@@ -75,7 +75,7 @@ HRESULT CBrokenPlane::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	CEffectHandler::Add_Layer_Effect_BrokenPlane_Smoke(&m_pSmokeEffect);
+
 
 	return S_OK;
 }
@@ -83,6 +83,17 @@ HRESULT CBrokenPlane::Ready_GameObject(void* pArg)
 _uint CBrokenPlane::Update_GameObject(_float fDeltaTime)
 {
 	if (m_IsDead) return DEAD_OBJECT;
+
+	if (m_bCreateEffect)
+	{
+		if (m_fCreateEffectTime >= 5.f)
+		{
+			CEffectHandler::Add_Layer_Effect_BrokenPlane_Smoke(&m_pSmokeEffect);
+			m_fCreateEffectTime = 0.f;
+			m_bCreateEffect = false;
+		}
+		else m_fCreateEffectTime += fDeltaTime;
+	}
 
 	CGameObject::Update_GameObject(fDeltaTime);
 	Movement(fDeltaTime);

@@ -35,6 +35,8 @@ private:
 	CGameObject* m_pSmokeEffect = nullptr;
 
 private:
+	_bool m_bCreateEffect = false;
+	_float m_fCreateEffectTime = 0.f;
 	_float m_fMoveUpDeltaT = 0.f;
 };
 
