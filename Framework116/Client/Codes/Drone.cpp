@@ -174,14 +174,17 @@ _uint CDrone::LateUpdate_GameObject(_float fDeltaTime)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
-		m_pHp_Bar->Set_IsDead(TRUE);
-		m_pHP_Bar_Border->Set_IsDead(TRUE);
+		if(m_pHp_Bar)
+			m_pHp_Bar->Set_IsDead(TRUE);
+		if (m_pHP_Bar_Border)
+			m_pHP_Bar_Border->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		return DEAD_OBJECT;
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		m_pHp_Bar->Set_ScaleX(-30.f / m_fFullHp * m_fHpLength);
+		if (m_pHp_Bar)
+			m_pHp_Bar->Set_ScaleX(-30.f / m_fFullHp * m_fHpLength);
 		m_fHp -= 30.f;
 		m_IsCollide = false;
 	}

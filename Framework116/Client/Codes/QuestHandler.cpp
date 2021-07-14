@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "..\Headers\QuestHandler.h"
-#include "TutorialUI.h"
 #include "Player.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
@@ -27,14 +26,14 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 
 	switch (eQuest)
 	{
-	case Stage_1_Ring:
+	case EQuest::Stage_1_Ring:
 	{
 		m_wstrQuestName = L"고리를 통과하라";
 		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"))->size();
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"));
 	}
 		break;
-	case Stage_1_Target:
+	case EQuest::Stage_1_Target:
 	{
 		m_wstrQuestName = L"과녁을 파괴하라";
 		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"))->size();
@@ -73,6 +72,16 @@ _int CQuestHandler::Set_Counting(const _int iCount)
 	return QUEST_NOTCLEAR;
 }
 
+_int CQuestHandler::Set_ClearStage(EStageClear eClearStage)
+{
+	if (EStageClear::End <= eClearStage)
+		return UPDATE_ERROR;
+
+	m_eStageClear = eClearStage;
+
+	return NO_ERROR;
+}
+
 const wstring& CQuestHandler::Get_QusetName() const
 {
 	return m_wstrQuestName;
@@ -93,14 +102,19 @@ _bool CQuestHandler::Get_IsClear()
 	return m_IsClear;
 }
 
+const EStageClear CQuestHandler::Get_StageClear() const
+{
+	return m_eStageClear;
+}
+
 _bool CQuestHandler::Update_Quest()
 {
 	switch (m_eNowQuest)
 	{
-	case Stage_1_Ring:
+	case EQuest::Stage_1_Ring:
 		Update_Quest_Stage1_Ring();
 		break;
-	case Stage_1_Target:
+	case EQuest::Stage_1_Target:
 		Update_Quest_Stage1_Target();
 		break;
 	default:

@@ -68,34 +68,34 @@ private:
 	CModelMesh*  m_pMesh = nullptr;
 	CTransform* m_pTransform = nullptr;
 	CTransform* m_pTargetTransform = nullptr;
-
+	CStatus_Info* m_pInfo = nullptr;
 
 private: /* AI */
 		 // 거리에 따라 행동을 다르게
-	ActionMode m_eActionMode = End;
-	_bool m_IsSpecialAction = false;
-	_float3 m_vMyPos;
+	ActionMode	m_eActionMode = End;
+	_bool		m_IsSpecialAction = false;
+	_float3		m_vMyPos;
 
 private: // EnergyBall
 	_float3 m_vRight_EnergyBallCannon_Position;
 	_float3 m_vLeft_EnergyBallCannon_Position;
-	_float m_fCannonLength = 26.f;
-	_float m_fLeftCannonCoolTime = 0.f;
-	_float m_fRightCannonCoolTime = 0.f;
+	_float	m_fCannonLength = 26.f;
+	_float	m_fLeftCannonCoolTime = 0.f;
+	_float	m_fRightCannonCoolTime = 0.f;
 
 private: // laser
 	_float3 m_vLaserCannon_Position;
-	_float m_fLaser_CoolTime = 0.f;
-	_float m_fLaser_Degree = 10.f;
-	_bool m_IsLaserAlert = false;
-	_bool m_IsLaserAttack = false;
-	_bool m_IsLaserTarget = false;
-	_uint m_iLaserCount = 0;
+	_float	m_fLaser_CoolTime = 0.f;
+	_float	m_fLaser_Degree = 10.f;
+	_bool	m_IsLaserAlert = false;
+	_bool	m_IsLaserAttack = false;
+	_bool	m_IsLaserTarget = false;
+	_uint	m_iLaserCount = 0;
 
 
-private:
-	// emp bomb
-	_float m_fEmpBomb_CoolTime = 0.f;
+private: // emp bomb
+	_float3 m_vEmpBomb_Position;
+	_float	m_fEmpBomb_CoolTime = 0.f;
 
 	// Spawn Monster
 	_float m_fSpawnCoolTime = 0.f;

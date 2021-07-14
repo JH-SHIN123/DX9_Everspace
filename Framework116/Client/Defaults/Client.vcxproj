@@ -233,10 +233,8 @@
     <ClInclude Include="..\Headers\Stage.h" />
     <ClInclude Include="..\Headers\Stamina_Bar.h" />
     <ClInclude Include="..\Headers\StreamHandler.h" />
-    <ClInclude Include="..\Headers\TargetMonster.h" />
     <ClInclude Include="..\Headers\Terrain.h" />
     <ClInclude Include="..\Headers\VIBuffer_HexagonTex.h" />
-    <ClInclude Include="..\Headers\TutorialUI.h" />
     <ClInclude Include="..\Headers\WingBoost_System.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -309,10 +307,8 @@
     <ClCompile Include="..\Codes\Stage.cpp" />
     <ClCompile Include="..\Codes\Stamina_Bar.cpp" />
     <ClCompile Include="..\Codes\StreamHandler.cpp" />
-    <ClCompile Include="..\Codes\TargetMonster.cpp" />
     <ClCompile Include="..\Codes\Terrain.cpp" />
     <ClCompile Include="..\Codes\VIBuffer_HexagonTex.cpp" />
-    <ClCompile Include="..\Codes\TutorialUI.cpp" />
     <ClCompile Include="..\Codes\WingBoost_System.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

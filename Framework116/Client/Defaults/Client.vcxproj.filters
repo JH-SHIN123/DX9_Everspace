@@ -136,9 +136,6 @@
     <Filter Include="02.GameObject\09.HUD\05.MissionUI">
       <UniqueIdentifier>{078845c1-2258-4768-9ea8-37c058281276}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\12.TargetMonster">
-      <UniqueIdentifier>{ec3f8199-67e4-4bae-bdc8-a8e07ff027cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\06.Particle\EngineBoost">
       <UniqueIdentifier>{be95110a-b9c3-4575-9e9a-de07624eff64}</UniqueIdentifier>
     </Filter>
@@ -247,12 +244,6 @@
     <Filter Include="01.Scene\01.Stage\Stage1">
       <UniqueIdentifier>{479fc2ab-69eb-4045-9eab-8e500b54f736}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\14.Planet\Earth">
-      <UniqueIdentifier>{5421d0a9-5b60-493c-a038-b579d4ba52e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\14.Planet\Ice">
-      <UniqueIdentifier>{60378cc2-ab7e-4870-9bdc-f599b1416ce0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -357,9 +348,6 @@
     <ClInclude Include="..\Headers\Ring.h">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\TargetMonster.h">
-      <Filter>02.GameObject\12.TargetMonster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Headers\MaterialHandler.h">
       <Filter>97.Utilities\03.Material</Filter>
     </ClInclude>
@@ -377,9 +365,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Meteor.h">
       <Filter>02.GameObject\13.Meteor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\TutorialUI.h">
-      <Filter>02.GameObject\09.HUD\04.TutorialUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\EngineEffectSystem.h">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
@@ -416,9 +401,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\HP_Bar_Border.h">
       <Filter>02.GameObject\09.HUD\08.HP_Bar_Border</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h">
-      <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\BackUI.h">
       <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
@@ -476,6 +458,9 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_Battery.h">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -569,9 +554,6 @@
     <ClCompile Include="..\Codes\Ring.cpp">
       <Filter>02.GameObject\11.Ring</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\TargetMonster.cpp">
-      <Filter>02.GameObject\12.TargetMonster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Codes\MaterialHandler.cpp">
       <Filter>97.Utilities\03.Material</Filter>
     </ClCompile>
@@ -589,9 +571,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Meteor.cpp">
       <Filter>02.GameObject\13.Meteor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\TutorialUI.cpp">
-      <Filter>02.GameObject\09.HUD\04.TutorialUI</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\EngineEffectSystem.cpp">
       <Filter>02.GameObject\06.Particle\EngineBoost</Filter>
@@ -628,9 +607,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\HP_Bar_Border.cpp">
       <Filter>02.GameObject\09.HUD\08.HP_Bar_Border</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp">
-      <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\BackUI.cpp">
       <Filter>02.GameObject\09.HUD\06.ScriptUI\00.BackUI</Filter>
@@ -688,6 +664,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_Battery.cpp">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp">
+      <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,13 @@ public:
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) override;
 
 public:
+	HRESULT Add_Layer_Cam(const wstring& LayerTag);
+	HRESULT Add_Layer_Light(const wstring& LayerTag, const LIGHT_DESC* pLightDesc);
+	HRESULT Add_Layer_Skybox(const wstring& LayerTag);
+	HRESULT Add_Layer_HUD(const wstring& LayerTag);
+	HRESULT Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc);
+
+public:
 	static CStage2* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
 

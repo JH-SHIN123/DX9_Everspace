@@ -19,9 +19,9 @@ HRESULT CLobby::Ready_Scene()
 {
 	::SetWindowText(g_hWnd, L"Lobby");
 
+	CScene::Ready_Scene();
 	m_pManagement->StopSound(CSoundMgr::BGM);
 
-		CScene::Ready_Scene();
 	if (FAILED(Add_Layer_Lobby_Model(L"Layer_Lobby_Model")))
 		return E_FAIL;
 
@@ -51,6 +51,18 @@ HRESULT CLobby::Ready_Scene()
 		return E_FAIL;
 
 	m_tUnitInfo = { 20,30,50,30,40,70 };
+
+	// Fade Out
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_FadeOut",
+		L"Layer_Fade",
+		this)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -58,16 +70,36 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 {
 	m_pManagement->PlaySound(L"Garage_BGM.ogg", CSoundMgr::BGM);
 
+	if (false == m_bEnterScene)
+		return _uint();
+
 	if (m_bSceneChange)
 	{
-		m_pManagement->Clear_NonStatic_Resources();
-		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-			CLoading::Create(m_pDevice, ESceneType::Stage))))
-		{
-			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-			return E_FAIL;
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return E_FAIL;
+			}
+			m_bFadeIn = true;
+			return NO_EVENT;
 		}
-		return CHANGE_SCENE;
+		if (m_bLeaveScene)
+		{
+			m_pManagement->Clear_NonStatic_Resources();
+			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+				CLoading::Create(m_pDevice, ESceneType::Stage))))
+			{
+				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				return E_FAIL;
+			}
+			return CHANGE_SCENE;
+			m_bLeaveScene = false;
+		}
 	}
 	if (m_bIsGatcha)
 	{
@@ -422,6 +454,7 @@ CLobby * CLobby::Create(LPDIRECT3DDEVICE9 pDevice)
 
 void CLobby::Free()
 {
+	m_pManagement->StopAll();
 
 	Safe_Release(m_pPlayer);
 	CScene::Free();

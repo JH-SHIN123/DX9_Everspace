@@ -20,6 +20,7 @@
 #include "GeoMesh_Cylinder.h"
 #include "GeoMesh_Sphere.h"
 #include "GeoMesh_Torus.h"
+#include "Status_Info.h"
 
 BEGIN(Engine)
 class CComponent_Manager : public CBase

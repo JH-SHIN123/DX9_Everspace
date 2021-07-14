@@ -8,8 +8,17 @@
 
 USING(Engine)
 
-enum EQuest {
-	Stage_1_Ring, Stage_1_Target,
+enum class EQuest {
+	Stage_1_Ring = 0, 
+	Stage_1_Target,
+	End
+};
+
+enum class EStageClear {
+	None = 0,
+	Stage_1,
+	Stage_2,
+	Stage_3,
 	End
 };
 
@@ -25,12 +34,14 @@ private:
 public:
 	HRESULT Set_Start_Quest(EQuest eQuest);
 	_int	Set_Counting(const _int iCount = 1);
+	_int	Set_ClearStage(EStageClear eClearStage);
 
 public:
 	const wstring& Get_QusetName() const;
 	_int  Get_CountRemaining();
 	_int  Get_CountMax();
 	_bool Get_IsClear();
+	const EStageClear Get_StageClear() const;
 
 public: // 계속 돌려줘야함
 	_bool Update_Quest();
@@ -41,11 +52,14 @@ private:
 	void Update_Quest_Stage1_Target();
 
 private:
-	EQuest	m_eNowQuest = End;
+	EQuest	m_eNowQuest = EQuest::End;
 	wstring m_wstrQuestName = L"";
 	_bool	m_IsClear = true;
 	_int	m_iCount = 0;
 	_int	m_iCount_Max = 0;
+
+private:
+	EStageClear m_eStageClear = EStageClear::None;
 
 private:
 	list<class CGameObject*> m_listTargetObject;

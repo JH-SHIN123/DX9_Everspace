@@ -18,6 +18,12 @@ public:
 public:
 	static CLogo* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
+
+private:
+	_bool m_bFadeIn = false;
+
+private:
+	// ¿µ»ó
 };
 
 #define __LOGO_H__

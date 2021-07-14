@@ -142,7 +142,18 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 
 	m_fLiveTime -= fDeltaTime;
 	if (m_fLiveTime <= 0.f)
+		m_IsDead = true;
+
+	if (m_IsDead == true)
+	{
+		if (m_pEffect)
+		{
+			m_pEffect->Set_IsDead(true);
+			m_pEffect = nullptr;
+		}
+
 		return DEAD_OBJECT;
+	}
 
 	return _uint();
 }

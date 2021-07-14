@@ -14,6 +14,10 @@
 #include "Shield_Battery.h"
 #include "HUD_Effect_Damage.h"
 #include "HUD_Effect_Boost.h"
+#include "QuestHandler.h"
+#include "Status_Info.h"
+#include "FadeIn.h"
+#include "FadeOut.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -192,6 +196,24 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_FadeIn",
+		CFadeIn::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeIn");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_FadeOut",
+		CFadeOut::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -334,6 +356,25 @@ HRESULT CMainApp::Ready_StaticResources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AlertArrow");
 		return E_FAIL;
 	}
+
+	// m_tInfo
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Status_Info",
+		CStatus_Info::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Status_Info");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_FadeOut",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/FadeOut.png", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_AlertArrow");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	return S_OK;
@@ -393,6 +434,8 @@ CMainApp * CMainApp::Create()
 
 void CMainApp::Free()
 {
+	CQuestHandler::Get_Instance()->Release_Ref();
+	
 	Safe_Release(m_pDevice);
 	
 	if (Safe_Release(m_pManagement))

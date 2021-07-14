@@ -87,6 +87,9 @@ public:
 	virtual void Free() override;
 
 private:
+	_bool m_bFadeIn = false;
+
+private:
 	class CPlayer* m_pPlayer = nullptr;
 
 	
