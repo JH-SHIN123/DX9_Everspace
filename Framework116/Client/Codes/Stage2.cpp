@@ -42,9 +42,8 @@ HRESULT CStage2::Ready_Scene()
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
-<<<<<<< HEAD
+
 	Ready_Asteroid();
-=======
 
 	//// TEST
 	//GAMEOBJECT_DESC tDesc;
@@ -67,7 +66,7 @@ HRESULT CStage2::Ready_Scene()
 	/*if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
 		return E_FAIL;*/
 
->>>>>>> main
+
 	return S_OK;
 }
 
@@ -335,7 +334,6 @@ HRESULT CStage2::Add_Layer_UI(const wstring& LayerTag, const UI_DESC* pUIDesc)
 	return S_OK;
 }
 
-<<<<<<< HEAD
 HRESULT CStage2::Add_Layer_ScriptUI(const wstring & LayerTag, EScript eScript)
 {
 	UI_DESC Desc;
@@ -382,28 +380,6 @@ HRESULT CStage2::Add_Layer_Asteroid(const wstring & LayerTag, GAMEOBJECT_DESC tD
 		EResourceType::NonStatic,
 		L"GameObject_Asteroid",
 		LayerTag, (void**)&tDesc)))
-=======
-//HRESULT CStage2::Add_Layer_Monster(const wstring & LayerTag)
-//{
-//	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-//		EResourceType::NonStatic,
-//		L"GameObject_Monster",
-//		LayerTag)))
-//	{
-//		PRINT_LOG(L"Error", L"Failed To Add Monster In Layer");
-//		return E_FAIL;
-//	}
-//
-//	return S_OK;
-//}
-
-HRESULT CStage2::Add_Layer_Sniper(const wstring & LayerTag)
-{
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Sniper",
-		LayerTag)))
->>>>>>> main
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper In Layer");
 		return E_FAIL;
@@ -411,7 +387,7 @@ HRESULT CStage2::Add_Layer_Sniper(const wstring & LayerTag)
 	return S_OK;
 }
 
-<<<<<<< HEAD
+
 void CStage2::Ready_Asteroid()
 {
 	GAMEOBJECT_DESC tDesc;
@@ -421,7 +397,7 @@ void CStage2::Ready_Asteroid()
 	tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
 	CTransform* pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
 	_uint iRockCount = 20;
-	for (int i = 0; i < iRockCount; i++)
+	for (_uint i = 0; i < iRockCount; i++)
 	{
 		_float3 vRockPos = pPlayerTransform->Get_TransformDesc().vPosition;
 		if (i != iRockCount - 1)
@@ -449,7 +425,7 @@ void CStage2::Ready_Asteroid()
 				vRockPos.y += CPipeline::GetRandomFloat(10, 100);
 			}
 		}
-		vRockPos.z = 300 + ((i + 1) * 10);
+		vRockPos.z = 300.f + ((i + 1) * 10.f);
 		tDesc.tTransformDesc.vPosition = vRockPos;
 		Add_Layer_Asteroid(L"Layer_Asteroid", tDesc);
 	}
@@ -567,7 +543,7 @@ _bool CStage2::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fM
 		tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
 		tDesc.tTransformDesc.fSpeedPerSec = 1.f;
 		tDesc.tTransformDesc.fRotatePerSec = D3DXToRadian(CPipeline::GetRandomFloat(30, 45));
-		for (int i = 0; i < iRockAmount; i++)
+		for (_uint i = 0; i < iRockAmount; i++)
 		{
 			vRockPos.x += CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
 			vRockPos.x -= CPipeline::GetRandomFloat(0, fMaxXDist / 2.f);
@@ -620,9 +596,6 @@ _bool CStage2::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fM
 	return FALSE;
 }
 
-
-=======
->>>>>>> main
 CStage2* CStage2::Create(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (nullptr == pDevice)

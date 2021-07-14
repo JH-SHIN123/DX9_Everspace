@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Headers\Stage.h"
+#include"Stage.h"
 #include "Camera.h"
 #include "StreamHandler.h"
 #include "Asteroid.h"
@@ -58,19 +58,6 @@ HRESULT CStage::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-<<<<<<< HEAD
-	
-	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-		//return E_FAIL;
-
-	/*if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
-		return E_FAIL;*/
-
-	/*if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
-		return E_FAIL;
-*/
-=======
->>>>>>> main
 
 	return S_OK;
 }
@@ -126,6 +113,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	return _uint();
 }
 
+
 _uint CStage::Stage_Flow(_float fDeltaTime)
 {
 	switch (m_iFlowCount)
@@ -153,7 +141,6 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 		return S_OK;
-
 	case 2:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
@@ -172,7 +159,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
-		return S_OK;
+	return S_OK;
 	case 4:
 	{
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
@@ -191,48 +178,10 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
-
-<<<<<<< HEAD
+	return S_OK;
+	}
 	return S_OK;
 }
-
-HRESULT CStage::Add_Layer_Player(const wstring & LayerTag)
-{	
-	GAMEOBJECT_DESC tDesc;
-	tDesc.wstrMeshName = L"Component_Mesh_BigShip";
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::Static,
-		L"GameObject_Player",
-		LayerTag,(void**)&tDesc)))
-=======
-	case 6:
->>>>>>> main
-	{
-		if (false == m_bFadeIn) {
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::Static,
-				L"GameObject_FadeIn",
-				L"Layer_Fade",
-				this)))
-			{
-				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
-				return E_FAIL;
-			}
-			m_bFadeIn = true;
-			return NO_EVENT;
-		}
-
-	}
-
-	default:
-		return S_OK;
-	}
-
-	return S_OK;
-}
-
-
-
 
 HRESULT CStage::Add_Layer_Cam(const wstring & LayerTag)
 {
@@ -255,7 +204,9 @@ HRESULT CStage::Add_Layer_Cam(const wstring & LayerTag)
 	return S_OK;
 }
 
-HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
+	
+
+	HRESULT CStage::Add_Layer_Skybox(const wstring& LayerTag)
 {
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
@@ -357,11 +308,7 @@ HRESULT CStage::Add_Layer_HUD(const wstring& LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist2 In Layer");
 		return E_FAIL;
 	}
-
-
-
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
-
 	UI_DESC HUD_Boarder_Gatling;
 	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
@@ -498,22 +445,8 @@ HRESULT CStage::Add_Layer_MissionUI(const wstring & LayerTag, EQuest eQuest)
 
 	return S_OK;
 }
-<<<<<<< HEAD
-
-HRESULT CStage::Add_Layer_Sniper(const wstring & LayerTag)
-{
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Sniper",
-		LayerTag)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper In Layer");
-		return E_FAIL;
-	}
-	return S_OK;
-}
 
 
 
-=======
->>>>>>> main
+
+

@@ -44,11 +44,8 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 	if (m_bLeaveScene)
 	{
 		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-<<<<<<< HEAD
 			CLoading::Create(m_pDevice, ESceneType::Lobby))))
-=======
-			CLoading::Create(m_pDevice, ESceneType::Stage2))))
->>>>>>> main
+
 		{
 			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 			return E_FAIL;

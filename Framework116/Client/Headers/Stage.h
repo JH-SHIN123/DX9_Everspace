@@ -21,7 +21,6 @@ public:
 private:
 	_uint Stage_Flow(_float fDeltaTime);
 
-	
 private:
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
 	HRESULT Add_Layer_Skybox(const wstring& LayerTag);
@@ -35,13 +34,7 @@ private:
 	HRESULT Add_Layer_ScriptUI(const wstring& LayerTag, EScript eScript);
 	HRESULT Add_Layer_MissionUI(const wstring& LayerTag, EQuest eQuest);
 
-<<<<<<< HEAD
-	//Sniper
-	HRESULT Add_Layer_Sniper(const wstring& LayerTag);
 
-	
-=======
->>>>>>> main
 public:
 	static CStage* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
