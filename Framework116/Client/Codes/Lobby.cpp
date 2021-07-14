@@ -10,6 +10,7 @@
 #include"StatusBoard.h"
 #include"Status.h"
 #include"LobbyScriptUI.h"
+#include"QuestHandler.h"
 CLobby::CLobby(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -62,7 +63,11 @@ HRESULT CLobby::Ready_Scene()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
 		return E_FAIL;
 	}
-
+	CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_1);
+	for (int i = 0; i < 3;i++)
+	{
+		m_bStageLock[i] = CQuestHandler::Get_Instance()->Get_IsStageLocked(i);
+	}
 	return S_OK;
 }
 
