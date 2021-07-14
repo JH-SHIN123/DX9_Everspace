@@ -21,7 +21,6 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 
 	m_eNowQuest = eQuest;
 	m_IsClear = false;
-	m_bAllTargetCollide = false;
 	m_iCount = 0;
 
 	switch (eQuest)
@@ -137,9 +136,6 @@ _bool CQuestHandler::Update_Quest()
 		break;
 	}
 
-	m_IsClear = m_bAllTargetCollide;
-
-
 	if (m_iCount >= m_iCount_Max)
 	{
 		m_iCount = m_iCount_Max;
@@ -168,7 +164,7 @@ void CQuestHandler::Release_Ref()
 
 void CQuestHandler::Update_Quest_Stage1_Ring()
 {
-	m_bAllTargetCollide = true;
+	_bool bAllTargetCollide = true;
 	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_uint i = 0;
 	m_iCount = 0;
@@ -178,7 +174,7 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 
 		if (iter->Get_IsCollide() == false)
 		{
-			m_bAllTargetCollide = false;
+			bAllTargetCollide = false;
 			_float3 vPos;
 			vPos = ((CTransform*)(iter->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
 
@@ -188,24 +184,9 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 			++i;
 		}
 	}
+
 	m_iCount -= i;
-
-
-	_uint iSize = m_listTargetObject.size();
-
-	for (_uint i = 0; i < iSize; ++i)
-	{
-		for (_uint j = 0; j < iSize; ++j)
-		{
-			if (m_vSearchTagetDis[j].w > m_vSearchTagetDis[j + 1].w)
-			{
-				_float4 vTemp = m_vSearchTagetDis[j];
-				m_vSearchTagetDis[j] = m_vSearchTagetDis[j + 1];
-				m_vSearchTagetDis[j + 1] = vTemp;
-			}
-		}
-	}
-
+	m_IsClear = bAllTargetCollide;
 }
 
 void CQuestHandler::Update_Quest_Stage1_Target()

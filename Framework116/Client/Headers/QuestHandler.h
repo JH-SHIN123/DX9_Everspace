@@ -52,14 +52,14 @@ private:
 	void Update_Quest_Stage1_Ring();
 	void Update_Quest_Stage1_Target();
 
-private:
+private: // 퀘스트 
 	EQuest	m_eNowQuest = EQuest::End;
 	wstring m_wstrQuestName = L"";
 	_bool	m_IsClear = true;
 	_int	m_iCount = 0;
 	_int	m_iCount_Max = 0;
 
-private:
+private: // 스테이지
 	EStageClear m_eStageClear = EStageClear::End;
 	_bool m_bClear[3] = { true, true, true };
 
@@ -67,7 +67,6 @@ private:
 	list<class CGameObject*> m_listTargetObject;
 	CTransform* m_pPlayerTransform = nullptr;
 	_float4 m_vSearchTagetDis[20];
-	_bool m_bAllTargetCollide = false;
 };
 
 #define __UIHANDLER_H__

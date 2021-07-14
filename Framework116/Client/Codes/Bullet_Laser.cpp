@@ -62,11 +62,10 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	// For.Com_Transform
-
+	 //For.Com_Transform
 	TRANSFORM_DESC TransformDesc = *((TRANSFORM_DESC*)pArg);
-	//TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
-	//TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
+	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;
+	TransformDesc.fRotatePerSec = D3DXToRadian(180.f);
 	TransformDesc.fSpeedPerSec = 300.f;
 	TransformDesc.vScale = { 3.f, 3.f, 3.f };
 
@@ -80,7 +79,6 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	// asdasd
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -106,14 +104,7 @@ HRESULT CBullet_Laser::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	//m_pParentTransform = (CTransform*)m_pManagement->Get_Component(L"GameObject_Boss_Monster", L"Com_Transform");
-	//Safe_AddRef(m_pParentTransform);
-	//if (nullptr == m_pParentTransform)
-	//{
-	//	PRINT_LOG(L"Error", L"m_pParentTransform is nullptr");
-	//	return E_FAIL;
-	//}
-
+	m_pTransform->Update_Transform();
 	CEffectHandler::Add_Layer_Effect_BossBullet_Laser_Trail(this, (CGameObject**)&m_pEffect);
 
 	STAT_INFO tStatus;
@@ -156,9 +147,6 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 
 	BillBoard();
 
-	m_fLiveTime -= fDeltaTime;
-	if (m_fLiveTime <= 0.f && m_IsCollide == true)
-		m_IsDead = true;
 
 	if (m_IsDead == true)
 	{
@@ -170,6 +158,11 @@ _uint CBullet_Laser::LateUpdate_GameObject(_float fDeltaTime)
 
 		return DEAD_OBJECT;
 	}
+
+	m_fLiveTime -= fDeltaTime;
+	if (m_fLiveTime <= 0.f && m_IsCollide == true)
+		m_IsDead = true;
+
 
 	return _uint();
 }
@@ -185,7 +178,7 @@ _uint CBullet_Laser::Render_GameObject()
 	m_pRectTexure->Render_VIBuffer();
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
@@ -212,7 +205,7 @@ _uint CBullet_Laser::Movement(_float fDeltaTime)
 		_float3 vMyPos = m_pTransform->Get_State(EState::Position);
 		m_vMoveDir = vTargetPos - vMyPos;
 		D3DXVec3Normalize(&m_vMoveDir, &m_vMoveDir);
-		//m_pTransform->Set_Rotate(m_vMoveDir);
+		m_pTransform->Set_Rotate(m_vMoveDir);
 		m_IsTracking = true;
 	}
 
@@ -277,12 +270,12 @@ CGameObject * CBullet_Laser::Clone(void * pArg/* = nullptr*/)
 
 void CBullet_Laser::Free()
 {
-	Safe_Release(m_pTargetTransform);
-	Safe_Release(m_pInfo);
 	Safe_Release(m_pRectTexure);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+	Safe_Release(m_pTargetTransform);
+	Safe_Release(m_pInfo);
 
 	if (m_pEffect)
 	{

@@ -139,6 +139,7 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	for (auto& collide : m_Collides)
 		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
+	/* ¾ê°¡ ¹®Á¦ */
 	Make_LockOn();
 
 	return NO_EVENT;
@@ -633,32 +634,17 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 
 _uint CBoss_Monster::Attack_AI(_float fDeltaTime)
 {
-	//switch (m_eActionMode)
-	//{
-	//case CBoss_Monster::Near:
-	//	EnergyBallCannon_Target_Search(fDeltaTime);
-	//	Fire_Laser(fDeltaTime);
-	//	break;
-	//case CBoss_Monster::Middle:
-	//	//Spawn_Monster(fDeltaTime);
-	//	break;
-	//case CBoss_Monster::Far:
-	//	Fire_EMP(fDeltaTime);
-	//	Fire_Laser(fDeltaTime);
-	//	break;
-	//case CBoss_Monster::SpecialAction:
-	//	break;
-	//default:
-	//	return UPDATE_ERROR;
-	//}
+	_float fDis = fabs(D3DXVec3Length(&m_pTargetTransform->Get_State(EState::Position))
+		- D3DXVec3Length(&m_pTransform->Get_State(EState::Position)));
 
-
-	EnergyBallCannon_Target_Search(fDeltaTime);
-	Fire_Laser(fDeltaTime);
-
-	if (m_IsFireEmp == true)
-		Fire_EMP(fDeltaTime);
-
+	if (fDis < BOSSRANGE_FAR)
+	{
+		EnergyBallCannon_Target_Search(fDeltaTime);
+		Fire_Laser(fDeltaTime);
+		
+		if (m_IsFireEmp == true)
+			Fire_EMP(fDeltaTime);
+	}
 
 	return _uint();
 }
@@ -907,13 +893,17 @@ CGameObject * CBoss_Monster::Clone(void * pArg/* = nullptr*/)
 
 void CBoss_Monster::Free()
 {
+	//if(m_pLockOn)
+	//	m_pLockOn->Set_IsDead(TRUE);
+	//Safe_Release(m_pLockOn);
+
 	Safe_Release(m_pInfo);
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pHp_Bar);
-	Safe_Release(m_pLockOn);
 	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
+
 
 	CGameObject::Free();
 }
