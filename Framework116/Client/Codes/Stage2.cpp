@@ -46,28 +46,6 @@ HRESULT CStage2::Ready_Scene()
 
 	Ready_Asteroid();
 
-	//// TEST
-	//GAMEOBJECT_DESC tDesc;
-	//tDesc.wstrMeshName = L"Component_Mesh_Broken_Plane";
-
-	//if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
-	//	EResourceType::NonStatic,
-	//	L"GameObject_Broken_Plane",
-	//	L"Layer_Broken_Plane",
-	//	&tDesc)))
-	//{
-	//	wstring errMsg = L"Failed to Add Layer ";
-	//	PRINT_LOG(L"Error", errMsg.c_str());
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
-
-	/*if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
-		return E_FAIL;*/
-
-
 	return S_OK;
 }
 
@@ -418,7 +396,6 @@ void CStage2::Ready_Asteroid()
 			{
 				vRockPos.x += CPipeline::GetRandomFloat(10, 100);
 				vRockPos.y -= CPipeline::GetRandomFloat(10, 100);
-
 			}
 			else
 			{

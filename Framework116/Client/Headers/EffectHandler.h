@@ -35,10 +35,8 @@ public:
 	static HRESULT Add_Layer_Effect_BossBullet_EMP_Trail(class CGameObject* pTarget, class CGameObject** ppGameObject = nullptr);
 	static HRESULT Add_Layer_Effect_BossBullet_EMP_Exlposion(const _float3& _vPos, const _float _fSize);
 
-	
 	static HRESULT Add_Layer_Effect_Sniper_Bullet_Trail(class CGameObject* pTarget, class CGameObject** ppGameObject = nullptr);
-	static HRESULT Add_Layer_Effect_BrokenPlane_Smoke(const _float3& _vPos);
-
+	static HRESULT Add_Layer_Effect_BrokenPlane_Smoke(class CGameObject** ppGameObject = nullptr);
 };
 
 #define __EFFECTHANDLER_H__

@@ -13,6 +13,7 @@ private:
 
 public:
 	virtual _uint Update_GameObject(_float fDeltaTime) override;
+	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 
 public:
 	static CLoopExplosionSystem* Create(LPDIRECT3DDEVICE9 pDevice);

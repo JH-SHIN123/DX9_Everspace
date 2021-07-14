@@ -75,6 +75,8 @@ HRESULT CBrokenPlane::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
+	CEffectHandler::Add_Layer_Effect_BrokenPlane_Smoke(&m_pSmokeEffect);
+
 	return S_OK;
 }
 
@@ -87,6 +89,12 @@ _uint CBrokenPlane::Update_GameObject(_float fDeltaTime)
 
 	m_pTransform->Update_Transform();
 	if(m_pCollide) m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+
+	if (m_pSmokeEffect)
+	{
+		CTransform* pTransform = (CTransform*)m_pSmokeEffect->Get_Component(L"Com_Transform");
+		if(pTransform) pTransform->Set_Position(m_pTransform->Get_State(EState::Position));
+	}
 
 	return _uint();
 }
@@ -164,9 +172,15 @@ CGameObject* CBrokenPlane::Clone(void* pArg)
 
 void CBrokenPlane::Free()
 {
+	if (m_pSmokeEffect)
+	{
+		m_pSmokeEffect->Set_IsDead(true);
+		m_pSmokeEffect = nullptr;
+	}
+
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pCollide);
-
+	
 	CGameObject::Free();
 }

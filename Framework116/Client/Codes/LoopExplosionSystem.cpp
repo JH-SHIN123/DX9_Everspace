@@ -15,6 +15,10 @@ CLoopExplosionSystem::CLoopExplosionSystem(const CLoopExplosionSystem& other)
 
 _uint CLoopExplosionSystem::Update_GameObject(_float fDeltaTime)
 {
+	if (m_IsDead) {
+		return DEAD_OBJECT;
+	}
+
 	CParticleSystem::Update_GameObject(fDeltaTime);
 
 	for (auto& p : m_listParticles)
@@ -39,6 +43,20 @@ _uint CLoopExplosionSystem::Update_GameObject(_float fDeltaTime)
 	}
 
 	return m_pTransform->Update_Transform();
+}
+
+_uint CLoopExplosionSystem::LateUpdate_GameObject(_float fDeltaTime)
+{
+	if (m_IsDead) {
+		return DEAD_OBJECT;
+	}
+
+	CParticleSystem::LateUpdate_GameObject(fDeltaTime);
+
+	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::Particle, this)))
+		return UPDATE_ERROR;
+
+	return _uint();
 }
 
 CLoopExplosionSystem* CLoopExplosionSystem::Create(LPDIRECT3DDEVICE9 pDevice)
