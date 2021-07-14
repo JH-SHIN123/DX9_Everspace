@@ -94,6 +94,7 @@ _uint CMonster::Update_GameObject(_float fDeltaTime)
 		
 
 	m_pTransform->Update_Transform();
+	//m_pTransform->Update_Transform_Quaternion();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	return NO_EVENT;
 }
@@ -170,6 +171,8 @@ _uint CMonster::Monster_Battle(_float fDeltaTime)
 {
 	// 배틀상태가 On일때 뭐할랭
 	// 플레이어 공전하면서 공격?
+	m_fPatternTime += fDeltaTime;
+
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
 	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
 
@@ -177,18 +180,43 @@ _uint CMonster::Monster_Battle(_float fDeltaTime)
 	_float fDist = D3DXVec3Length(&vDir);
 	D3DXVec3Normalize(&vDir, &vDir);
 
+
+	
+	if (m_fPatternTime > 0.f && m_fPatternTime <= 7.f)
+	{
+		if (fDist > 200.f)
+		{
+			m_pTransform->Go_Dir(vDir, fDeltaTime * 4.f);
+		}
+		RotateToPlayer(fDeltaTime * 3.f);
+		m_pTransform->Go_Side(fDeltaTime * 2.f);
+		m_bAttack = true;
+	}
+	else if (m_fPatternTime > 7.f && m_fPatternTime <= 8.f)
+	{
+		m_pTransform->Go_Up(-fDeltaTime);
+		m_bAttack = false;
+	}
+	else if (m_fPatternTime > 8.f && m_fPatternTime <= 10.f)
+	{
+		// 플레이어 안바라보고 그 각도에서 회전이 안먹어요 하면서 직진
+		if (fDist < 500.f)
+		{
+			m_pTransform->Go_Straight(fDeltaTime * 10.f);
+		}
+		m_bAttack = false;
+	}
+	else if (m_fPatternTime > 10.f)
+	{
+		// 다시 플레이어를 바라보렴
+		RotateToPlayer(fDeltaTime * 3.f);
+		m_fPatternTime = 0.f;
+	}
+	
+
 	m_fAttackDelay += fDeltaTime;
 
-	RotateToPlayer(fDeltaTime * 3.f);
-
-	if (fDist > 200.f)
-	{
-		m_pTransform->Go_Dir(vDir, fDeltaTime * 4.f);
-	}
-
-	m_pTransform->Go_Side(fDeltaTime * 2.f);
-	
-	if (m_fAttackDelay > 1.f)
+	if (m_fAttackDelay > 1.f && m_bAttack == true)
 	{
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
 
@@ -207,6 +235,25 @@ _uint CMonster::Monster_Battle(_float fDeltaTime)
 	}
 
 
+	return _uint();
+}
+
+_uint CMonster::Shoot_Bullet(_float fDeltaTime)
+{
+	TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+	pArg->vPosition = m_pTransform->Get_State(EState::Position);
+	pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Sniper_Bullet",
+		L"Layer_Sniper_Bullet", pArg)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet In Layer");
+		return E_FAIL;
+	}
+	m_fAttackDelay = 0.f;
 	return _uint();
 }
 

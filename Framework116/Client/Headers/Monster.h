@@ -22,6 +22,7 @@ private:
 	_uint	Movement(_float fDeltaTime);
 	_uint	Search_Target(_float fDeltaTime);
 	_uint	Monster_Battle(_float fDeltaTime);
+	_uint	Shoot_Bullet(_float fDeltaTime);
 	_bool	RotateToPlayer(_float fDeltaTime);
 
 public:
@@ -45,6 +46,10 @@ private:
 	_float	m_fMoveDist = 0.f;
 	_float  m_fAttackDelay = 0.f;
 	_bool m_IsLookingPlayer = false;
+
+	// Pattern
+	_float m_fPatternTime = 0.f;
+	_bool m_bAttack = false;
 };
 
 #define __MONSTER_H__
