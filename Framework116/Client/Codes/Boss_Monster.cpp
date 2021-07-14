@@ -233,7 +233,7 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 {
-
+	m_pTransform->Go_Straight(fDeltaTime);
 
 	return _uint();
 }
@@ -435,7 +435,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		}
 	}
 
-	// 레이저 발사 2개
+	// 레이저 발사 1개
 	if (m_fLaser_CoolTime >= 2.7f)
 	{
 		if (m_IsLaserAttack == true)
@@ -472,8 +472,8 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 
 				//if (m_iLaserCount < 1)
 				//{
-					vMyPos -= vUp * 20.f;
-					m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				vMyPos -= vUp * 20.f;
+				m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
 				//}
 
 				pArg->vPosition = m_vLaserCannon_Position;
@@ -691,14 +691,19 @@ void CBoss_Monster::RotateMy_X(_float fDeltaTime)
 
 	D3DXVec3Normalize(&vMyUp, &vMyUp);
 	D3DXVec3Normalize(&vMyDown, &vMyDown);
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
 
 	_float fUpScala = D3DXVec3Dot(&vTargetDir, &vMyUp);
 	_float fDownScala = D3DXVec3Dot(&vTargetDir, &vMyDown);
 
-	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
+	_float fTheta = D3DXVec3Dot(&vTargetDir, &vMyLook);
 	_float fRadianMax = D3DXToRadian(95.f);
 	_float fRadianMin = D3DXToRadian(85.f);
 
+	_int i = 0;
+
+	if (fTheta < 0.01f && fTheta > -0.99f)
+		return;
 
 	if (fUpScala < fDownScala)
 		m_pTransform->RotateX(fDeltaTime);
@@ -719,7 +724,7 @@ void CBoss_Monster::RotateMy_Y(_float fDeltaTime)
 	_float3 vMyUp = m_pTransform->Get_State(EState::Up);
 	D3DXVec3Normalize(&vMyLook, &vMyLook);
 
-	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
+	_float fTheta = D3DXVec3Dot(&vTargetDir, &vMyLook);
 	_float fRadianMax = D3DXToRadian(95.f);
 	_float fRadianMin = D3DXToRadian(85.f);
 
@@ -733,14 +738,14 @@ void CBoss_Monster::RotateMy_Y(_float fDeltaTime)
 	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
 	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
 
-	//if (fCeta < fRadianMin)
-	//{
+	if (fTheta > 0.99f && fTheta < 1.01f)
+		return;
+
 	if (fRight < fLeft)
 		m_pTransform->RotateY(-fDeltaTime);
 
 	else
 		m_pTransform->RotateY(fDeltaTime);
-	//}
 }
 
 void CBoss_Monster::RotateMy_Z(_float fDeltaTime)
@@ -923,7 +928,7 @@ _uint CBoss_Monster::Check_Degree()
 {
 	_float3 vPlayerLook = m_pTargetTransform->Get_State(EState::Look);
 	_float3 v1 = vPlayerLook;
-	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position); 
+	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position);
 	_float fCeta;
 	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 	_float v1v2 = D3DXVec3Dot(&v1, &v2);
@@ -931,7 +936,7 @@ _uint CBoss_Monster::Check_Degree()
 	_float v2Length = D3DXVec3Length(&v2);
 	fCeta = acosf(v1v2 / (v1Length * v2Length));
 
-	_float fDegree = D3DXToDegree(fCeta);
+	_float fDegree = D3DXToDegree(fCeta); //
 
 	if (v2.x < 0)
 	{

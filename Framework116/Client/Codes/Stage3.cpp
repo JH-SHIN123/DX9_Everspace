@@ -53,7 +53,12 @@ HRESULT CStage3::Ready_Scene()
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
-	
+
+	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
+		return E_FAIL;
+
+
+
 	return S_OK;
 }
 
@@ -88,8 +93,8 @@ HRESULT CStage3::Add_Layer_Player(const wstring & LayerTag)
 	GAMEOBJECT_DESC tDesc;
 	////tDesc.tTransformDesc.matWorld = pPassData->matWorld;
 	//tDesc.tTransformDesc.vPosition = pPassData->Pos;
-	tDesc.tTransformDesc.vRotate = {0.f,0.f,0.f};
-	tDesc.tTransformDesc.vScale = {1.f,1.f,1.f};
+	tDesc.tTransformDesc.vRotate = { 0.f,0.f,0.f };
+	tDesc.tTransformDesc.vScale = { 1.f,1.f,1.f };
 	tDesc.wstrMeshName = L"Component_Mesh_BigShip";
 
 

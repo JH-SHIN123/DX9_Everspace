@@ -32,7 +32,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"))->size();
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"));
 	}
-		break;
+	break;
 	case EQuest::Stage_1_Target:
 	{
 		m_wstrQuestName = L"°ú³áÀ» ÆÄ±«ÇÏ¶ó";
@@ -40,7 +40,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"));
 	}
 
-		break;
+	break;
 	default:
 		break;
 	}
@@ -78,6 +78,7 @@ _int CQuestHandler::Set_ClearStage(EStageClear eClearStage)
 		return UPDATE_ERROR;
 
 	m_eStageClear = eClearStage;
+	m_bClear[(_uint)eClearStage] = false;
 
 	return NO_ERROR;
 }
@@ -102,17 +103,24 @@ _bool CQuestHandler::Get_IsClear()
 	return m_IsClear;
 }
 
-const EStageClear CQuestHandler::Get_StageClear() const
+_bool CQuestHandler::Get_IsStageLocked(_uint iStageIdx)
 {
-	return m_eStageClear;
+	return m_bClear[iStageIdx];
 }
 
-_bool CQuestHandler::Get_IsStageClear(EStageClear eStageClear)
+_bool CQuestHandler::Get_IsStage_1_Locked()
 {
-	if (eStageClear <= m_eStageClear)
-		return true;
+	return m_bClear[0];
+}
 
-	return false;
+_bool CQuestHandler::Get_IsStage_2_Locked()
+{
+	return m_bClear[1];
+}
+
+_bool CQuestHandler::Get_IsStage_3_Locked()
+{
+	return m_bClear[2];
 }
 
 _bool CQuestHandler::Update_Quest()
@@ -205,7 +213,7 @@ void CQuestHandler::Update_Quest_Stage1_Target()
 	m_iCount = 0;
 	for (auto& iter : m_listTargetObject)
 	{
-		if(iter->Get_IsDead() == true)
+		if (iter->Get_IsDead() == true)
 			++m_iCount;
 	}
 }
