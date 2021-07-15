@@ -588,7 +588,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	{
 		_float fDamage = _float(m_pInfo->Get_HittedDamage());
 		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
-		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
+		m_pHp_Bar->Set_ScaleX((-10 / fMaxHp) * m_fHpLength);
+		m_pInfo->Set_Hp(-10);
 
 		// HIT Effect
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
