@@ -120,6 +120,9 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CSniper::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+
+	if (m_IsDead)
+		return DEAD_OBJECT;
 	
 	//배틀모드가 아닐때는 그냥 돌아다니렴.
 	if (!m_IsBattle)
@@ -149,7 +152,7 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_pInfo->Get_Hp() <= 0)
+	if (m_pInfo->Get_Hp() <= 0 || m_IsDead == true)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;

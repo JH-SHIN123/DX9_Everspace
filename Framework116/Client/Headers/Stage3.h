@@ -6,6 +6,9 @@
 #include "QuestHandler.h"
 #include "ScriptUI.h"
 
+#define QUEST_FAILED 666
+#define PLAYER_DEAD 888
+
 USING(Engine)
 
 class CStage3 final : public CScene
@@ -19,8 +22,9 @@ public:
 	virtual _uint Update_Scene(_float fDeltaTime) override;
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) override;
 
-public:
+private:
 	void Stage_Flow(_float fDeltaTime);
+	void All_Monster_Boom(_float fDeltaTime);
 
 public:
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
@@ -52,6 +56,11 @@ private:
 	_bool m_bFadeIn = false;
 	_bool m_bSceneChange = false;
 
+private:
+	_bool m_IsAllMonsterBoom = false;
+	_bool m_IsAllBoom = false;
+	_float m_fBoomTime = 0.f;
+	//list<class CGameObject*> m_listObjectList;
 };
 
 #define __STAGE3_H__

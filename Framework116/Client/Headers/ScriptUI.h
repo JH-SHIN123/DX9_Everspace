@@ -18,6 +18,8 @@ enum class EScript {
 	Stage3_Opening,
 	Stage3_Boss_Opening,
 	Stage3_Boss_Clear,
+	Stage3_Player_Dead,
+	Stage3_Delivery_Dead,
 	End
 };
 
@@ -66,6 +68,8 @@ private: //대화
 	void Script_Stage3_Opening();
 	void Script_Stage3_Boss_Opening();
 	void Script_Stage3_Boss_Clear();
+	void Script_Stage3_Player_Dead();
+	void Script_Stage3_Delivery_Dead();
 
 private: // 기타
 	void Lock_Cursor();

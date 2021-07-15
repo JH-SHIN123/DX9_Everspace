@@ -877,6 +877,85 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 
 }
 
+void CScriptUI::Script_Stage3_Player_Dead()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"이봐! 괜찮나..?";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"들리면 대답해!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"이봐! 야! 대답하라고!!!!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"야!! 잭 한마!!!!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"으아아아아아아!!!!!!!!!!!!!!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+}
+
+void CScriptUI::Script_Stage3_Delivery_Dead()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"어..?";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"수송대장님!!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"시코르스키 수송대장님!! 대답해주십시오..!!!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"아아..!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"으아아아아아아!!!!!!!!!!!!!!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+
+}
+
 void CScriptUI::Lock_Cursor()
 {
 	//RECT rc;

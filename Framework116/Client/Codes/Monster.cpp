@@ -132,6 +132,9 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CMonster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+
+	if (m_IsDead)
+		return DEAD_OBJECT;
 	
 	m_IsBoost = true;
 	Search_Target(fDeltaTime);
@@ -168,7 +171,7 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_pInfo->Get_Hp() <= 0.f)
+	if (m_pInfo->Get_Hp() <= 0.f || m_IsDead == true)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
