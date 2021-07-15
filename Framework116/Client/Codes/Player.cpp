@@ -588,6 +588,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		_float fDamage = _float(m_pInfo->Get_HittedDamage());
 		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
 		m_pHp_Bar->Set_ScaleX((-10 / fMaxHp) * m_fHpLength);
+		m_pInfo->Set_Damage(10);
 
 		// HIT Effect
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -914,6 +915,7 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 		_float fDamage = (_float)m_pInfo->Get_HittedDamage();
 		_float fMaxHp = (_float)m_pInfo->Get_MaxHp();
 		Get_HpBar()->Set_ScaleX(fDamage / fMaxHp * m_fHpLength);
+		m_pInfo->Set_Damage(10);
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,

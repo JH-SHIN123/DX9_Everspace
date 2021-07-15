@@ -11,7 +11,7 @@ enum class EScript {
 	Tutorial,
 	Tutorial_Ring_Clear,
 	Tutorial_Target_Clear,
-	Stg2_Begin,Stg2_AfterCamProduction,
+	Stg2_Begin, Stg2_AfterCamProduction,
 	Stg2_Finish_AsteroidFlyAway,
 	Stg2_SearchTarget,
 	Stg2_PlayerDead,
