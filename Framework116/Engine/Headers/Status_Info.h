@@ -30,6 +30,7 @@ public:
 	void Set_MaxEnergy(_uint iMaxEnergy);
 	void Set_Energy(_uint iEnergy);
 	void Set_FireRate(_uint iFreRate);
+	void Set_HittedDamage(_uint iHittedDamage); //Hp바에 넣을 데미지
 
 public:
 	const _uint Get_Attack();
@@ -41,6 +42,7 @@ public:
 	const _uint Get_MaxEnergy();
 	const _uint Get_Energy();
 	const _uint Get_FireRate();
+	_uint Get_HittedDamage();
 
 public:
 	virtual HRESULT Ready_Component_Prototype() override;

@@ -30,6 +30,9 @@ private:
 	_uint Rotate_Y(_float fDeltaTime);
 
 private:
+	void Explosion(_float fDeltaTime);
+
+private:
 	HRESULT Ready_GameObject_EMP();
 
 public:

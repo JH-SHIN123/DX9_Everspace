@@ -13,6 +13,7 @@ enum class EScript {
 	Tutorial_Target_Clear,
 	Stg2_Begin,Stg2_AfterCamProduction,
 	Stg2_Finish_AsteroidFlyAway,
+	Stg2_SearchTarget,
 	Stg2_PlayerDead,
 	End
 };
@@ -57,6 +58,7 @@ private: //대화
 	void Script_Stg2_Begin();
 	void Script_Stg2_AfterCamProduction();
 	void Script_Stg2_Finish_AsteroidFlyAway();
+	void Script_Stg2_Search_Target();
 	void Script_Stg2_PlayerDead();
 private: // 기타
 	void Lock_Cursor();

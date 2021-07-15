@@ -220,9 +220,6 @@
     <Filter Include="01.Scene\02.Lobby\02.LobbyCursor">
       <UniqueIdentifier>{7e750ad3-0827-469d-86be-bc84b4fed4d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\03.Monster\01.Sniper">
-      <UniqueIdentifier>{e01bd318-fd70-46f8-aa3a-23506b2434b4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\08.Bullet\04.Sniper_Bullet">
       <UniqueIdentifier>{0181d743-2a18-46ba-8d2c-b332a7caeef6}</UniqueIdentifier>
     </Filter>
@@ -255,6 +252,12 @@
     </Filter>
     <Filter Include="02.GameObject\06.Particle\LoopExplosion">
       <UniqueIdentifier>{d77706c1-e1a7-45c3-b0ec-2f011542dfb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Monster\Sniper">
+      <UniqueIdentifier>{e01bd318-fd70-46f8-aa3a-23506b2434b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\03.Monster\Normal">
+      <UniqueIdentifier>{4a73a710-f9de-4ea7-ac1b-d09d73483274}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -293,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="..\Headers\MainCam.h">
       <Filter>02.GameObject\02.Camera\00.MainCam</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Headers\Monster.h">
-      <Filter>02.GameObject\03.Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Grass.h">
       <Filter>02.GameObject\04.Grass</Filter>
@@ -463,12 +463,11 @@
       <Filter>01.Scene\01.Stage\Stage3</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Sniper.h">
-      <Filter>02.GameObject\03.Monster\01.Sniper</Filter>
+      <Filter>02.GameObject\03.Monster\Sniper</Filter>
     </ClInclude>
     <ClInclude Include="..\Headers\Shield_Battery.h">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClInclude>
-    <ClInclude Include="..\Headers\Planet.h" />
     <ClInclude Include="..\Headers\BrokenPlane.h">
       <Filter>02.GameObject\12.EventObject\Broken</Filter>
     </ClInclude>
@@ -487,6 +486,12 @@
     </ClInclude>
     <ClInclude Include="..\Headers\Delivery.h">
       <Filter>02.GameObject\12.EventObject\Delivery</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Planet.h">
+      <Filter>02.GameObject\14.Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\Monster.h">
+      <Filter>02.GameObject\03.Monster\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -513,9 +518,6 @@
     </ClCompile>
     <ClCompile Include="..\Codes\MainCam.cpp">
       <Filter>02.GameObject\02.Camera\00.MainCam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Codes\Monster.cpp">
-      <Filter>02.GameObject\03.Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Grass.cpp">
       <Filter>02.GameObject\04.Grass</Filter>
@@ -683,7 +685,7 @@
       <Filter>01.Scene\01.Stage\Stage3</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Sniper.cpp">
-      <Filter>02.GameObject\03.Monster\01.Sniper</Filter>
+      <Filter>02.GameObject\03.Monster\Sniper</Filter>
     </ClCompile>
     <ClCompile Include="..\Codes\Shield_Battery.cpp">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
@@ -707,6 +709,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Delivery.cpp">
       <Filter>02.GameObject\12.EventObject\Delivery</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Monster.cpp">
+      <Filter>02.GameObject\03.Monster\Normal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

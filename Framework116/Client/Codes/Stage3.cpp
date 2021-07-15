@@ -17,6 +17,7 @@ HRESULT CStage3::Ready_Scene()
 {
 	CScene::Ready_Scene();
 	::SetWindowText(g_hWnd, L"CStage3");
+	m_pManagement->StopSound(CSoundMgr::BGM);
 
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -29,11 +30,9 @@ HRESULT CStage3::Ready_Scene()
 		return E_FAIL;
 	}
 
-	//stage3 map 들어오기 전까지는 ㅜㅜ
-	//CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
-	//CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
-	if (FAILED(Add_Layer_Player(L"Layer_Player")))
-		return E_FAIL;
+	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage3.map");
+	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage3.navi");
+
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
@@ -47,20 +46,11 @@ HRESULT CStage3::Ready_Scene()
 
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(135, 135, 135);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
-		return E_FAIL;
-	
-	if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-		return E_FAIL;
-
-	if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
-		return E_FAIL;
-
-	if (FAILED(Add_Layer_Boss_Monster(L"Layer_Boss_Monster")))
 		return E_FAIL;
 
 	return S_OK;
@@ -78,27 +68,23 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
 
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Boss_Monster");
+
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Monster");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Monster");
+
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Sniper");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Sniper");
+
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
+
+
+	CCollisionHandler::Collision_PlayerToBoss(L"Layer_Player", L"Layer_Boss_Monster");
+
 	return _uint();
-}
-
-HRESULT CStage3::Add_Layer_Player(const wstring & LayerTag)
-{
-	GAMEOBJECT_DESC tDesc;
-	////tDesc.tTransformDesc.matWorld = pPassData->matWorld;
-	//tDesc.tTransformDesc.vPosition = pPassData->Pos;
-	tDesc.tTransformDesc.vRotate = {0.f,0.f,0.f};
-	tDesc.tTransformDesc.vScale = {1.f,1.f,1.f};
-	tDesc.wstrMeshName = L"Component_Mesh_BigShip";
-
-
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::Static,
-		L"GameObject_Player",
-		LayerTag,
-		&tDesc)))
-		return E_FAIL;
-
-	return S_OK;
 }
 
 HRESULT CStage3::Add_Layer_Cam(const wstring & LayerTag)

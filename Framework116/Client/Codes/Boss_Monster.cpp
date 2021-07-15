@@ -22,6 +22,7 @@ CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	, m_fLaser_Degree(other.m_fLaser_Degree)
 	, m_IsLaserAlert(other.m_IsLaserAlert)
 	, m_IsLaserTarget(other.m_IsLaserTarget)
+	, m_IsFireEmp(other.m_IsFireEmp)
 {
 }
 
@@ -34,9 +35,20 @@ HRESULT CBoss_Monster::Ready_GameObject_Prototype()
 
 HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 {
-	Add_InLayer_MyParts();
-
 	CGameObject::Ready_GameObject(pArg);
+
+	GAMEOBJECT_DESC* pDesc = nullptr;
+	if (auto ptr = (BASE_DESC*)pArg)
+	{
+		if (pDesc = dynamic_cast<GAMEOBJECT_DESC*>(ptr))
+		{
+		}
+		else
+		{
+			PRINT_LOG(L"Error", L"CMonster is nullptr");
+			return E_FAIL;
+		}
+	}
 
 	// For.Com_VIBuffer
 	wstring meshTag = L"Component_Mesh_Boss";
@@ -51,10 +63,10 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Transform
-	TRANSFORM_DESC TransformDesc;
-	TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
-	TransformDesc.fSpeedPerSec = 2.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(10.f);
+	TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
+	//TransformDesc.vPosition = _float3(500.f, 3.f, 50.f);
+	TransformDesc.fSpeedPerSec = 10.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(30.f);
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -120,6 +132,7 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
+	Check_NewPattern();
 	Transform_Check();
 	Move_AI(fDeltaTime);
 	Attack_AI(fDeltaTime);
@@ -137,7 +150,8 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 	for (auto& collide : m_Collides)
 		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
-	Make_LockOn();
+	/* 얘가 문제 */
+	//Make_LockOn();
 
 	return NO_EVENT;
 }
@@ -168,8 +182,9 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 	}
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
-		m_pHp_Bar->Set_ScaleX(-100.f / m_pInfo->Get_MaxHp() * m_pInfo->Get_Hp());
-		m_pInfo->Set_Damage(100);
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
 		m_IsCollide = false;
 	}
 
@@ -231,7 +246,7 @@ _uint CBoss_Monster::Movement(_float fDeltaTime)
 
 _uint CBoss_Monster::Move_Near(_float fDeltaTime)
 {
-
+	m_pTransform->Go_Straight(fDeltaTime);
 
 	return _uint();
 }
@@ -287,7 +302,6 @@ _uint CBoss_Monster::EnergyBallCannon_Target_Search(_float fDeltaTime)
 		{
 			Left_EnergyBall(fDeltaTime);
 		}
-
 	}
 	else
 	{
@@ -434,12 +448,12 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 		}
 	}
 
-	// 레이저 발사 2개
+	// 레이저 발사 1개
 	if (m_fLaser_CoolTime >= 2.7f)
 	{
 		if (m_IsLaserAttack == true)
 		{
-			if (m_iLaserCount <= 1)
+			if (m_iLaserCount == 0)
 			{
 				//m_IsLaserAttack = false;
 				//m_fLaser_CoolTime = 0.f;
@@ -471,8 +485,8 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 
 				//if (m_iLaserCount < 1)
 				//{
-					vMyPos -= vUp * 20.f;
-					m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
+				vMyPos -= vUp * 20.f;
+				m_vLaserCannon_Position = vMyPos + (vLook * 125.f);
 				//}
 
 				pArg->vPosition = m_vLaserCannon_Position;
@@ -632,26 +646,30 @@ _uint CBoss_Monster::Move_AI(_float fDeltaTime)
 
 _uint CBoss_Monster::Attack_AI(_float fDeltaTime)
 {
-	switch (m_eActionMode)
+	_float fDis = fabs(D3DXVec3Length(&m_pTargetTransform->Get_State(EState::Position))
+		- D3DXVec3Length(&m_pTransform->Get_State(EState::Position)));
+
+	if (fDis < BOSSRANGE_FAR)
 	{
-	case CBoss_Monster::Near:
 		EnergyBallCannon_Target_Search(fDeltaTime);
 		Fire_Laser(fDeltaTime);
-		break;
-	case CBoss_Monster::Middle:
-		EnergyBallCannon_Target_Search(fDeltaTime);
-		Fire_Laser(fDeltaTime);
-		//Spawn_Monster(fDeltaTime);
-		break;
-	case CBoss_Monster::Far:
-		Fire_EMP(fDeltaTime);
-		Fire_Laser(fDeltaTime);
-		break;
-	case CBoss_Monster::SpecialAction:
-		break;
-	default:
-		return UPDATE_ERROR;
+		
+		if (m_IsFireEmp == true)
+			Fire_EMP(fDeltaTime);
 	}
+
+	return _uint();
+}
+
+_uint CBoss_Monster::Check_NewPattern()
+{
+	_float fNowHp = _float(m_pInfo->Get_Hp()) / _float(m_pInfo->Get_MaxHp());
+
+	if (fNowHp <= 0.7f)
+	{
+		m_IsFireEmp = true;
+	}
+
 	return _uint();
 }
 
@@ -671,14 +689,19 @@ void CBoss_Monster::RotateMy_X(_float fDeltaTime)
 
 	D3DXVec3Normalize(&vMyUp, &vMyUp);
 	D3DXVec3Normalize(&vMyDown, &vMyDown);
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
 
 	_float fUpScala = D3DXVec3Dot(&vTargetDir, &vMyUp);
 	_float fDownScala = D3DXVec3Dot(&vTargetDir, &vMyDown);
 
-	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
+	_float fTheta = D3DXVec3Dot(&vTargetDir, &vMyLook);
 	_float fRadianMax = D3DXToRadian(95.f);
 	_float fRadianMin = D3DXToRadian(85.f);
 
+	_int i = 0;
+
+	if (fTheta < 0.01f && fTheta > -0.99f)
+		return;
 
 	if (fUpScala < fDownScala)
 		m_pTransform->RotateX(fDeltaTime);
@@ -699,7 +722,7 @@ void CBoss_Monster::RotateMy_Y(_float fDeltaTime)
 	_float3 vMyUp = m_pTransform->Get_State(EState::Up);
 	D3DXVec3Normalize(&vMyLook, &vMyLook);
 
-	_float fCeta = D3DXVec3Dot(&vTargetDir, &vMyLook);
+	_float fTheta = D3DXVec3Dot(&vTargetDir, &vMyLook);
 	_float fRadianMax = D3DXToRadian(95.f);
 	_float fRadianMin = D3DXToRadian(85.f);
 
@@ -713,14 +736,14 @@ void CBoss_Monster::RotateMy_Y(_float fDeltaTime)
 	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
 	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
 
-	//if (fCeta < fRadianMin)
-	//{
+	if (fTheta > 0.99f && fTheta < 1.01f)
+		return;
+
 	if (fRight < fLeft)
 		m_pTransform->RotateY(-fDeltaTime);
 
 	else
 		m_pTransform->RotateY(fDeltaTime);
-	//}
 }
 
 void CBoss_Monster::RotateMy_Z(_float fDeltaTime)
@@ -882,28 +905,26 @@ CGameObject * CBoss_Monster::Clone(void * pArg/* = nullptr*/)
 
 void CBoss_Monster::Free()
 {
+	//if(m_pLockOn)
+	//	m_pLockOn->Set_IsDead(TRUE);
+	//Safe_Release(m_pLockOn);
+
 	Safe_Release(m_pInfo);
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pHp_Bar);
-	Safe_Release(m_pLockOn);
 	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 
+
 	CGameObject::Free();
-}
-
-HRESULT CBoss_Monster::Add_InLayer_MyParts()
-{
-
-	return S_OK;
 }
 
 _uint CBoss_Monster::Check_Degree()
 {
 	_float3 vPlayerLook = m_pTargetTransform->Get_State(EState::Look);
 	_float3 v1 = vPlayerLook;
-	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position); 
+	_float3 v2 = m_pTransform->Get_State(EState::Position) - m_pTargetTransform->Get_State(EState::Position);
 	_float fCeta;
 	D3DXVec3Normalize(&vPlayerLook, &vPlayerLook);
 	_float v1v2 = D3DXVec3Dot(&v1, &v2);
@@ -911,7 +932,7 @@ _uint CBoss_Monster::Check_Degree()
 	_float v2Length = D3DXVec3Length(&v2);
 	fCeta = acosf(v1v2 / (v1Length * v2Length));
 
-	_float fDegree = D3DXToDegree(fCeta);
+	_float fDegree = D3DXToDegree(fCeta); //
 
 	if (v2.x < 0)
 	{

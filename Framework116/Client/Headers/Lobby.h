@@ -111,7 +111,7 @@ private:
 	_uint m_iMissileCount = 0;
 	_uint m_iVMaxBuffItem = 0;
 
-	_bool m_bStageLock[3] = { 0,0,1 };
+	_bool m_bStageLock[3] = { TRUE,TRUE,TRUE };
 	//for.StgClearProduction
 	_bool m_bIsStgClear = FALSE;
 

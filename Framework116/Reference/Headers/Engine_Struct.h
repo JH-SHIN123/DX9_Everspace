@@ -75,15 +75,16 @@ typedef struct tagRay
 
 typedef struct tagStatusInfo
 {
-	_uint iAtk = 0;
-	_uint iDef = 0;
-	_uint iHp = 0;
-	_uint iMaxHp = 0;
-	_uint iShield = 0;
-	_uint iMaxShield = 0;
-	_uint iEnergy = 0;
-	_uint iMaxEnergy = 0;
-	_uint iFireRate = 0;
+	_uint iAtk			= 0;
+	_uint iDef			= 0;
+	_uint iHp			= 0;
+	_uint iMaxHp		= 0;
+	_uint iShield		= 0;
+	_uint iMaxShield	= 0;
+	_uint iEnergy		= 0;
+	_uint iMaxEnergy	= 0;
+	_uint iFireRate		= 0;
+	_uint iHittedDamage	= 0;
 }STAT_INFO;
 
 END

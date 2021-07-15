@@ -9,6 +9,7 @@ enum class ESoloMoveMode // Lock 보다 작아야 스킵 문구가 뜸
 {
 	Stage1_Ring,
 	Stage2_Asteroid,
+	Stage2_FinishAsteroid,
 	Lock,
 	End
 };
@@ -51,6 +52,7 @@ private: // 카메라 연출
 	_uint Solo_Lock(_float fDeltaTime);
 	_uint Solo_Stage1_Ring(_float fDeletaTime);
 	_uint Solo_Stage2_Asteroid(_float fDeltaTime);
+	_uint Solo_Stage2FinishAsteroid(_float fDeltaTime);
 public:
 	static CMainCam* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;

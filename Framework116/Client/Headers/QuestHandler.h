@@ -9,19 +9,17 @@
 USING(Engine)
 
 enum class EQuest {
-	Stage_1_Ring = 0, 
+	Stage_1_Ring = 0,
 	Stage_1_Target,
 	End
 };
 
 enum class EStageClear {
-	None = 0,
-	Stage_1,
+	Stage_1 = 0,
 	Stage_2,
 	Stage_3,
 	End
 };
-
 
 class CQuestHandler
 {
@@ -41,7 +39,10 @@ public:
 	_int  Get_CountRemaining();
 	_int  Get_CountMax();
 	_bool Get_IsClear();
-	const EStageClear Get_StageClear() const;
+	_bool Get_IsStageLocked(_uint iStageIdx);
+	_bool Get_IsStage_1_Locked();
+	_bool Get_IsStage_2_Locked();
+	_bool Get_IsStage_3_Locked();
 
 public: // 계속 돌려줘야함
 	_bool Update_Quest();
@@ -51,21 +52,21 @@ private:
 	void Update_Quest_Stage1_Ring();
 	void Update_Quest_Stage1_Target();
 
-private:
+private: // 퀘스트 
 	EQuest	m_eNowQuest = EQuest::End;
 	wstring m_wstrQuestName = L"";
 	_bool	m_IsClear = true;
 	_int	m_iCount = 0;
 	_int	m_iCount_Max = 0;
 
-private:
-	EStageClear m_eStageClear = EStageClear::None;
+private: // 스테이지
+	EStageClear m_eStageClear = EStageClear::End;
+	_bool m_bClear[3] = { true, true, true };
 
 private:
 	list<class CGameObject*> m_listTargetObject;
 	CTransform* m_pPlayerTransform = nullptr;
 	_float4 m_vSearchTagetDis[20];
-	_bool m_bAllTargetCollide = false;
 };
 
 #define __UIHANDLER_H__

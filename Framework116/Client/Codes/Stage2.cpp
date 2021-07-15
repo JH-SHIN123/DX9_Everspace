@@ -44,12 +44,6 @@ HRESULT CStage2::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
-	//if (FAILED(Add_Layer_Monster(L"Layer_Monster")))
-	//	return E_FAIL;
-
-	//if (FAILED(Add_Layer_Sniper(L"Layer_Sniper")))
-	//	return E_FAIL;
-
 	Ready_Asteroid();
 
 	return S_OK;
@@ -58,6 +52,7 @@ HRESULT CStage2::Ready_Scene()
 _uint CStage2::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
+
 	// Boss
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Boss_Monster");
@@ -69,6 +64,8 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	//Monster
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Monster");
+
+
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
@@ -83,7 +80,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	case TRUE:
 		break;
 	case UPDATE_FLYAWAY:
-		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 300.f);
+		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 30.f,20.f);
 		break;
 	case PLAYER_DEAD:
 		m_fDelaySceneChange += fDeltaTime;
@@ -100,12 +97,6 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		}
 		break;
 	case CLEAR_FLYAWAY:
-		if (!m_bLoadMapNavi)
-		{
-			CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage1.map");
-			CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage1.navi");
-			m_bLoadMapNavi = TRUE;
-		}
 		break;
 	}
 
@@ -116,13 +107,23 @@ _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 {
 	CScene::LateUpdate_Scene(fDeltaTime);
 
+	// Boss
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Boss_Monster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Asteroid");
+	//Sniper
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Sniper");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Sniper");
+
+	//Monster
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Monster");
+
 	return _uint();
 }
 
 HRESULT CStage2::Add_Layer_Player(const wstring & LayerTag)
 {
-
-
 		GAMEOBJECT_DESC tDesc;
 		tDesc.wstrMeshName = L"Component_Mesh_BigShip";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -428,8 +429,7 @@ void CStage2::Ready_Asteroid()
 }
 _uint CStage2::Stage2_Flow(_float fDeltaTime)
 {
-	//if (!m_bEnterScene)
-	//	return TRUE;
+
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	if (pPlayer)
 	{
@@ -442,9 +442,7 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 		if (m_fFlowTime >= 0)
 		{
 			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
-
-			m_fFlowTime -= fDeltaTime;
-
+			m_fFlowTime -= fDeltaTime*4;
 			if (m_fFlowTime <= 0)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Begin)))
@@ -500,11 +498,24 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 		}
 	}
 	return PLAYER_DEAD;
-	case 5:
-		if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+	case CLEAR_FLYAWAY:
+		if (!m_bLoadMapNavi)
 		{
+			CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage1.map");
+			CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage1.navi");
+			m_bLoadMapNavi = TRUE;
 			return CLEAR_FLYAWAY;
 		}
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_SearchTarget)))
+					return -1;
+			}
+			++m_iFlowCount;
+		}
+		return TRUE;
 	default:
 		return TRUE;
 	}
@@ -516,14 +527,13 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 //TRUE반환시 끝났음
 _bool CStage2::AsteroidFlyingAway(_float fDeltaTime, _float fMaxXDist, _float fMaxYDist,
 	_float fMaxZDist, _float fMinZDist, CTransform* pTargetTransform, _uint iRockAmount,
-	_float fRockSpeed, _float fDistFromTarget)
+	_float fRockSpeed, _float fDistFromTarget, _float fFinishTime)
 {
 	if (nullptr == pTargetTransform)
 	{
 		PRINT_LOG(L"Err", L"pTargetTransform is nullptr");
 		return FALSE;
 	}
-	_float fFinishTime = 60.f;
 	m_fFlyingAsteroidTime += fDeltaTime;
 	if (m_fFlyingAsteroidTime >= fFinishTime)
 	{

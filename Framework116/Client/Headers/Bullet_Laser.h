@@ -28,21 +28,18 @@ public:
 	virtual void Free() override;
 
 private:
-	CVIBuffer_RectTexture*  m_pRectTexure = nullptr;
-	CTransform* m_pTransform = nullptr;
-	CTexture*	m_pTexture = nullptr;
-	CCollideSphere* m_pCollide = nullptr;
+	CVIBuffer_RectTexture*  m_pRectTexure		= nullptr;
+	CTransform*				m_pTransform		= nullptr;
+	CTexture*				m_pTexture			= nullptr;
+	CCollideSphere*			m_pCollide			= nullptr;
+	CTransform*				m_pTargetTransform	= nullptr;
+	CStatus_Info*			m_pInfo				= nullptr;
+	class CGameObject*		m_pEffect			= nullptr;
 
-	CTransform* m_pTargetTransform = nullptr;
-	CStatus_Info* m_pInfo = nullptr;
-	//CTransform* m_pParentTransform = nullptr;
-
-	//_float m_fTrackingTime = 1.f;
 	_bool m_IsTracking = false;
 	_float m_fLiveTime = 5.f;
 	_float3 m_vMoveDir = {};
 	D3DMATERIAL9 m_tMaterial;
-	class CGameObject* m_pEffect = nullptr;
 
 
 

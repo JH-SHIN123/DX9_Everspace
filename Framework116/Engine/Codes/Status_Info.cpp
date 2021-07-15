@@ -78,6 +78,11 @@ void CStatus_Info::Set_FireRate(_uint iFreRate)
 	m_tStatusInfo.iFireRate = iFreRate;
 }
 
+void CStatus_Info::Set_HittedDamage(_uint iHittedDamage)
+{
+	m_tStatusInfo.iHittedDamage = iHittedDamage;
+}
+
 const _uint CStatus_Info::Get_Attack()
 {
 	return m_tStatusInfo.iAtk;
@@ -121,6 +126,11 @@ const _uint CStatus_Info::Get_Energy()
 const _uint CStatus_Info::Get_FireRate()
 {
 	return m_tStatusInfo.iFireRate;
+}
+
+_uint CStatus_Info::Get_HittedDamage()
+{
+	return m_tStatusInfo.iHittedDamage;
 }
 
 HRESULT CStatus_Info::Ready_Component_Prototype()

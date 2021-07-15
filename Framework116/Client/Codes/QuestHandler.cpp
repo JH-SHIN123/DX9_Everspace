@@ -21,7 +21,6 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 
 	m_eNowQuest = eQuest;
 	m_IsClear = false;
-	m_bAllTargetCollide = false;
 	m_iCount = 0;
 
 	switch (eQuest)
@@ -32,7 +31,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"))->size();
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"));
 	}
-		break;
+	break;
 	case EQuest::Stage_1_Target:
 	{
 		m_wstrQuestName = L"°ú³áÀ» ÆÄ±«ÇÏ¶ó";
@@ -40,7 +39,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"));
 	}
 
-		break;
+	break;
 	default:
 		break;
 	}
@@ -78,6 +77,7 @@ _int CQuestHandler::Set_ClearStage(EStageClear eClearStage)
 		return UPDATE_ERROR;
 
 	m_eStageClear = eClearStage;
+	m_bClear[(_uint)eClearStage] = false;
 
 	return NO_ERROR;
 }
@@ -102,9 +102,24 @@ _bool CQuestHandler::Get_IsClear()
 	return m_IsClear;
 }
 
-const EStageClear CQuestHandler::Get_StageClear() const
+_bool CQuestHandler::Get_IsStageLocked(_uint iStageIdx)
 {
-	return m_eStageClear;
+	return m_bClear[iStageIdx];
+}
+
+_bool CQuestHandler::Get_IsStage_1_Locked()
+{
+	return m_bClear[0];
+}
+
+_bool CQuestHandler::Get_IsStage_2_Locked()
+{
+	return m_bClear[1];
+}
+
+_bool CQuestHandler::Get_IsStage_3_Locked()
+{
+	return m_bClear[2];
 }
 
 _bool CQuestHandler::Update_Quest()
@@ -120,9 +135,6 @@ _bool CQuestHandler::Update_Quest()
 	default:
 		break;
 	}
-
-	m_IsClear = m_bAllTargetCollide;
-
 
 	if (m_iCount >= m_iCount_Max)
 	{
@@ -152,7 +164,7 @@ void CQuestHandler::Release_Ref()
 
 void CQuestHandler::Update_Quest_Stage1_Ring()
 {
-	m_bAllTargetCollide = true;
+	_bool bAllTargetCollide = true;
 	_float3 fPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_uint i = 0;
 	m_iCount = 0;
@@ -162,7 +174,7 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 
 		if (iter->Get_IsCollide() == false)
 		{
-			m_bAllTargetCollide = false;
+			bAllTargetCollide = false;
 			_float3 vPos;
 			vPos = ((CTransform*)(iter->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
 
@@ -172,24 +184,9 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 			++i;
 		}
 	}
+
 	m_iCount -= i;
-
-
-	_uint iSize = m_listTargetObject.size();
-
-	for (_uint i = 0; i < iSize; ++i)
-	{
-		for (_uint j = 0; j < iSize; ++j)
-		{
-			if (m_vSearchTagetDis[j].w > m_vSearchTagetDis[j + 1].w)
-			{
-				_float4 vTemp = m_vSearchTagetDis[j];
-				m_vSearchTagetDis[j] = m_vSearchTagetDis[j + 1];
-				m_vSearchTagetDis[j + 1] = vTemp;
-			}
-		}
-	}
-
+	m_IsClear = bAllTargetCollide;
 }
 
 void CQuestHandler::Update_Quest_Stage1_Target()
@@ -197,7 +194,7 @@ void CQuestHandler::Update_Quest_Stage1_Target()
 	m_iCount = 0;
 	for (auto& iter : m_listTargetObject)
 	{
-		if(iter->Get_IsDead() == true)
+		if (iter->Get_IsDead() == true)
 			++m_iCount;
 	}
 }

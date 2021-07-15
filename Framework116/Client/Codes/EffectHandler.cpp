@@ -611,9 +611,9 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(const _float3 
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP";
-	pSystemDesc.iNumParticles = 5;
+	pSystemDesc.iNumParticles = 7;
 	pSystemDesc.tResetAttribute.fParticleSize = 40.f * _fSize;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 20.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
 	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
 	pSystemDesc.tTransformDesc.vPosition = _vPos;

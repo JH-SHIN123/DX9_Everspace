@@ -29,6 +29,7 @@ private: // Update 함수에 쓸 최상위 함수
 	_uint Transform_Check();
 	_uint Move_AI(_float fDeltaTime);
 	_uint Attack_AI(_float fDeltaTime);
+	_uint Check_NewPattern();
 
 private: // Move_AI
 	_uint Movement(_float fDeltaTime);
@@ -60,9 +61,6 @@ public:
 	static CBoss_Monster* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject * Clone(void * pArg = nullptr) override;
 	virtual void Free() override;
-
-public:
-	HRESULT Add_InLayer_MyParts();
 
 private:
 	CModelMesh*  m_pMesh = nullptr;
@@ -96,6 +94,7 @@ private: // laser
 private: // emp bomb
 	_float3 m_vEmpBomb_Position;
 	_float	m_fEmpBomb_CoolTime = 0.f;
+	_bool	m_IsFireEmp = false;
 
 	// Spawn Monster
 	_float m_fSpawnCoolTime = 0.f;

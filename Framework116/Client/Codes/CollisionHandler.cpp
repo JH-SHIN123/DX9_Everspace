@@ -1,6 +1,7 @@
 #include"stdafx.h"
 #include "CollisionHandler.h"
 #include "Collision.h"
+#include "Player.h"
 
 void CCollisionHandler::Collision_SphereToSphere(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag)
 {
@@ -103,6 +104,7 @@ void CCollisionHandler::Collision_PlayerToObstacle(const wstring& wstrDstLayerTa
 
 void CCollisionHandler::Collision_SphereToSphere_Damage(const wstring & wstrDstLayerTag, const wstring & wstrSrcLayerTag)
 {
+	// src가 데미지를 입는다
 	const list<CGameObject*>* Dst_Layer = CManagement::Get_Instance()->Get_GameObjectList(wstrDstLayerTag);
 	const list<CGameObject*>* Src_Layer = CManagement::Get_Instance()->Get_GameObjectList(wstrSrcLayerTag);
 
@@ -146,12 +148,66 @@ void CCollisionHandler::Collision_SphereToSphere_Damage(const wstring & wstrDstL
 				dst->Set_IsCollide(true);
 				src->Set_IsCollide(true);
 				pSrcInfo->Set_Damage(pDstInfo->Get_Damage());
+  				pSrcInfo->Set_HittedDamage(pDstInfo->Get_Damage());
 
 				break;
 			}
 		}
 	}
 
+}
+
+void CCollisionHandler::Collision_PlayerToBoss(const wstring & wstrDstLayerTag, const wstring & wstrSrcLayerTag)
+{
+	const list<CGameObject*>* Dst_Layer = CManagement::Get_Instance()->Get_GameObjectList(wstrDstLayerTag);
+	const list<CGameObject*>* Src_Layer = CManagement::Get_Instance()->Get_GameObjectList(wstrSrcLayerTag);
+
+	if (nullptr == Dst_Layer) return;
+	if (nullptr == Src_Layer) return;
+
+	for (auto& dst : *Dst_Layer)
+	{
+		if (nullptr == dst) continue;
+		const vector<class CCollide*>* dstCollides = dst->Get_Collides();
+		if (nullptr == dstCollides) continue;
+
+		for (auto& src : *Src_Layer)
+		{
+			if (nullptr == src) continue;
+			const vector<class CCollide*>* srcCollides = src->Get_Collides();
+			if (nullptr == srcCollides) continue;
+
+			//
+			CTransform* pDstTransform = (CTransform*)dst->Get_Component(L"Com_Transform");
+			CTransform* pSrcTransform = (CTransform*)src->Get_Component(L"Com_Transform");
+
+			if (nullptr == pDstTransform || nullptr == pSrcTransform) continue;
+
+			float fDstScaleRate = 0.f;
+			fDstScaleRate += pDstTransform->Get_TransformDesc().vScale.x;
+			fDstScaleRate += pDstTransform->Get_TransformDesc().vScale.y;
+			fDstScaleRate += pDstTransform->Get_TransformDesc().vScale.z;
+			fDstScaleRate /= 3.f;
+
+			float fSrcScaleRate = 0.f;
+			fSrcScaleRate += pSrcTransform->Get_TransformDesc().vScale.x;
+			fSrcScaleRate += pSrcTransform->Get_TransformDesc().vScale.y;
+			fSrcScaleRate += pSrcTransform->Get_TransformDesc().vScale.z;
+			fSrcScaleRate /= 3.f;
+
+			if (Check_Collides(dstCollides, srcCollides, fDstScaleRate, fSrcScaleRate))
+			{
+				// Dir과 true로 바꿔줘서 Dir의 반대 방향으로 밀어내자
+				_float3 vDstPos = pDstTransform->Get_State(EState::Position);
+				_float3 vSrcPos = pSrcTransform->Get_State(EState::Position);
+				_float3 vDir = vSrcPos - vDstPos;
+				D3DXVec3Normalize(&vDir, &vDir);
+
+				static_cast<CPlayer*>(dst)->Set_Collide_Boss(vDir);
+				break;
+			}
+		}
+	}
 }
 
 bool CCollisionHandler::Check_Collides(const vector<class CCollide*>* pDstCollides, const vector<class CCollide*>* pSrcCollides,

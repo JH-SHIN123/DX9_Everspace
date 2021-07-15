@@ -76,7 +76,7 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	
+
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -102,7 +102,9 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(this,(CGameObject**)&m_pEffect);
+
+	m_pTransform->Update_Transform();
+	CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(this, (CGameObject**)&m_pEffect);
 	//m_vEffectOffset = { 0.f,0.f,0.f };
 
 	STAT_INFO tStatus;
@@ -197,7 +199,7 @@ _uint CBullet_EnergyBall::Movement(_float fDeltaTime)
 
 		return NO_EVENT;
 	}
-	
+
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
 	_float3 vMyPos = m_pTransform->Get_State(EState::Position);
 
@@ -225,7 +227,7 @@ _uint CBullet_EnergyBall::Movement(_float fDeltaTime)
 
 	if (fRight < fLeft)
 	{
-		if(fCeta < fRadianMax)
+		if (fCeta < fRadianMax)
 			m_pTransform->RotateY(-fDeltaTime);
 	}
 	else
@@ -312,15 +314,15 @@ CGameObject * CBullet_EnergyBall::Clone(void * pArg/* = nullptr*/)
 
 void CBullet_EnergyBall::Free()
 {
-	Safe_Release(m_pTargetTransform);
-
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
+	Safe_Release(m_pTargetTransform);
 	Safe_Release(m_pInfo);
 
-	if (m_pEffect) 
+
+	if (m_pEffect)
 	{
 		m_pEffect->Set_IsDead(true);
 		m_pEffect = nullptr;

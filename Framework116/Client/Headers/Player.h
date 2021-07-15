@@ -25,6 +25,7 @@ public:
 	_uint Set_IsScript(_bool IsScript);
 	_uint Set_IsCameraMove(_bool IsCameraMove);
 	void Set_IsShield(_bool IsShield) { m_IsShield = IsShield; }
+	void Set_Collide_Boss(_float3 vDir, _bool bCollide = true);
 	void Someone_Try_To_Kill_Me(_bool _bLockOn) { m_bLockOn = _bLockOn; }
 
 public:
@@ -40,6 +41,7 @@ private:
 	void	Make_LockOn_Alert(_float fDeltaTime);
 	
 	_uint	Collide_Planet_Or_Astroid(const _float fDeltaTime);
+	void	Collide_Boss(_float fDeltaTime);
 
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 pDevice);
@@ -143,6 +145,11 @@ private:
 	
 private:
 	class CHUD_Effect_Boost* m_pHUD_Effect_Boost = nullptr;
+
+private: // 보스와 충돌
+	_bool m_IsCollide_Boss = false;
+	_float m_fCollideTime_Boss = 0.f;
+	_float3 m_vCollideDir_Boss;
 
 private:
 	CLight* m_pHeadLight = nullptr;

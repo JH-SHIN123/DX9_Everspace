@@ -40,12 +40,11 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 		}
 	}
 
-	// FadeInÀÌ ³¡³µÀ»¶§ ¾ÀÀüÈ¯
+	//FadeInÀÌ ³¡³µÀ»¶§ ¾ÀÀüÈ¯ 
 	if (m_bLeaveScene)
 	{
 		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-			CLoading::Create(m_pDevice, ESceneType::Stage2))))
-
+			CLoading::Create(m_pDevice, ESceneType::Stage3))))
 		{
 			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 			return E_FAIL;
