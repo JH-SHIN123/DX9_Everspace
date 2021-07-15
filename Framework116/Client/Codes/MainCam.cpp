@@ -224,6 +224,12 @@ void CMainCam::Check_SoloMoveMode(_float fDeltaTime)
 	case ESoloMoveMode::Stage2_FinishAsteroid:
 		Solo_Stage2FinishAsteroid(fDeltaTime);
 		break;
+	case ESoloMoveMode::Stage3_Delivery:
+		Solo_Stage3_Dilevery(fDeltaTime);
+		break;
+	case ESoloMoveMode::Stage3_Boss:
+		Solo_Stage3_Boss(fDeltaTime);
+		break;
 	default:
 		m_eSoloMoveMode = ESoloMoveMode::End;
 		break;
@@ -721,6 +727,251 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 
 }
 
+_uint CMainCam::Solo_Stage3_Dilevery(_float fDeltaTime)
+{
+	if (m_IsMoveCountCheck == false)
+	{
+		m_byMoveCount = 0;
+		m_IsMoveCountCheck = true;
+
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Delivery", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+		if (m_pTargetTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
+			return UPDATE_ERROR;
+		}
+	}
+
+	_float fSpeedPerSec = 120.f;
+	_float fCameraDis = 70.f;
+
+	switch (m_byMoveCount)
+	{
+	case 0: // at을 플레이어 > 화물
+	{
+		_float3 vCameraDir = { 0.f,0.f, -1.f };
+
+		// 0.05f 민감도
+		D3DXQuaternionSlerp(&m_qCameraRot, &m_qCameraRot, &m_pPlayerTransform->Get_TransformDesc().qRot, 0.05f);
+
+		_float4x4 matCameraRot;
+		D3DXMatrixRotationQuaternion(&matCameraRot, &m_qCameraRot);
+
+		// Camera Pos
+		_float4x4 matInitCameraRot;
+		D3DXMatrixRotationX(&matInitCameraRot, D3DXToRadian(m_fCamAngle));
+
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matInitCameraRot);
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matCameraRot);
+		_float3 vCameraPos = m_pPlayerTransform->Get_State(EState::Position) + vCameraDir * m_fDistanceFromTarget;
+
+		// Up
+		_float3 vCameraUp = { 0.f,1.f,0.f };
+		D3DXVec3TransformNormal(&vCameraUp, &vCameraUp, &matCameraRot);
+
+		// LookAt
+		_float3 vCameraLookAt = _float3(0.f, 10.f, 0.f);
+		memcpy(&matCameraRot._41, &m_pTargetTransform->Get_State(EState::Position), sizeof(_float3));
+		D3DXVec3TransformCoord(&vCameraLookAt, &vCameraLookAt, &matCameraRot);
+
+		vCameraPos.x += 20.f;
+		vCameraPos.y += 20.f;
+		vCameraPos.z += 20.f;
+
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_pPlayerTransform->Get_State(EState::Position));
+		_float3 vLen = (m_pPlayerTransform->Get_State(EState::Position) - m_CameraDesc.vEye);
+		_float fLength = D3DXVec3Length(&(m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vEye));
+		_float fStopDir = D3DXVec3Length(&(m_CameraDesc.vAt - vCameraLookAt));
+
+		D3DXVec3Normalize(&vDir, &vDir);
+		//D3DXVec3Normalize(&fStopDir, &fStopDir);
+
+		m_CameraDesc.vEye += 30.f * fDeltaTime * vDir;
+		m_CameraDesc.vAt += fSpeedPerSec * fDeltaTime * vDir;
+
+		if(fLength <= fCameraDis)
+		{
+			++m_byMoveCount;
+			m_CameraDesc.vAt = vCameraLookAt;
+			m_fCameraMoveTime = 2.f;
+			m_fCameraMoveAngle = 92.f;
+		}
+	}
+	break;
+	case 1:
+	{
+		// 한바꾸 돌리자
+		m_fCameraMoveAngle += 0.1f;
+		m_fCameraMoveTime -= fDeltaTime;
+		m_CameraDesc.vEye.x = m_CameraDesc.vAt.x + cosf(D3DXToRadian(m_fCameraMoveAngle)) * fCameraDis;
+		m_CameraDesc.vEye.z = m_CameraDesc.vAt.z - sinf(D3DXToRadian(m_fCameraMoveAngle)) * fCameraDis;
+
+		if (m_fCameraMoveTime <= 0.f)
+		{
+			m_fCameraMoveTime = 0.7f;
+			++m_byMoveCount;
+		}
+
+	}
+	break;
+
+	case 2:
+	{
+		// 뒤로 이동
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vEye);
+
+		if (D3DXVec3Length(&vDir) >= 120.f)
+		{
+			++m_byMoveCount;
+		}
+
+		D3DXVec3Normalize(&vDir, &vDir);
+		m_CameraDesc.vEye += fDeltaTime * -vDir * 50.f;
+	}
+	break;
+
+	default:
+		Safe_Release(m_pTargetTransform);
+		m_IsMoveCountCheck = false;
+		// 플레이어 무빙 허용
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+		m_eSoloMoveMode = ESoloMoveMode::End;
+		break;
+	}
+
+
+	return _uint();
+}
+
+_uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
+{
+	if (m_IsMoveCountCheck == false)
+	{
+		m_byMoveCount = 0;
+		m_IsMoveCountCheck = true;
+
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Delivery", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+		if (m_pTargetTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
+			return UPDATE_ERROR;
+		}
+	}
+
+	_float fSpeedPerSec = 120.f;
+	_float fCameraDis = 70.f;
+
+	switch (m_byMoveCount)
+	{
+	case 0: // at을 플레이어 > 화물
+	{
+		_float3 vCameraDir = { 0.f,0.f, -1.f };
+
+		// 0.05f 민감도
+		D3DXQuaternionSlerp(&m_qCameraRot, &m_qCameraRot, &m_pPlayerTransform->Get_TransformDesc().qRot, 0.05f);
+
+		_float4x4 matCameraRot;
+		D3DXMatrixRotationQuaternion(&matCameraRot, &m_qCameraRot);
+
+		// Camera Pos
+		_float4x4 matInitCameraRot;
+		D3DXMatrixRotationX(&matInitCameraRot, D3DXToRadian(m_fCamAngle));
+
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matInitCameraRot);
+		D3DXVec3TransformNormal(&vCameraDir, &vCameraDir, &matCameraRot);
+		_float3 vCameraPos = m_pPlayerTransform->Get_State(EState::Position) + vCameraDir * m_fDistanceFromTarget;
+
+		// Up
+		_float3 vCameraUp = { 0.f,1.f,0.f };
+		D3DXVec3TransformNormal(&vCameraUp, &vCameraUp, &matCameraRot);
+
+		// LookAt
+		_float3 vCameraLookAt = _float3(0.f, 10.f, 0.f);
+		memcpy(&matCameraRot._41, &m_pTargetTransform->Get_State(EState::Position), sizeof(_float3));
+		D3DXVec3TransformCoord(&vCameraLookAt, &vCameraLookAt, &matCameraRot);
+
+		vCameraPos.x += 20.f;
+		vCameraPos.y += 20.f;
+		vCameraPos.z += 20.f;
+
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_pPlayerTransform->Get_State(EState::Position));
+		_float3 vLen = (m_pPlayerTransform->Get_State(EState::Position) - m_CameraDesc.vEye);
+		_float fLength = D3DXVec3Length(&(m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vEye));
+		_float3 vLook = m_pTargetTransform->Get_State(EState::Look);
+		_float3 vUp = m_pTargetTransform->Get_State(EState::Up);
+		_float3 vLeft;
+		D3DXVec3Cross(&vLeft, &vLook, &vUp);
+		D3DXVec3Normalize(&vLeft, &vLeft);
+		D3DXVec3Normalize(&vDir, &vDir);
+
+		m_CameraDesc.vAt = vCameraLookAt;
+		vCameraLookAt += vLeft * 50.f;
+		m_CameraDesc.vEye = vCameraLookAt;
+		m_vCameraMovePos = vCameraLookAt;
+
+		m_fCameraMoveTime = 2.f;
+		m_fCameraMoveAngle = 92.f;
+		++m_byMoveCount;
+	}
+	break;
+	case 1:
+	{
+		Safe_Release(m_pTargetTransform);
+		
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+		if (m_pTargetTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
+			return UPDATE_ERROR;
+		}
+		++m_byMoveCount;
+	}
+	break;
+
+	case 2:
+	{
+		// 화물 > 보스
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vAt);
+
+		if (D3DXVec3Length(&vDir) >= 10.f)
+		{
+			++m_byMoveCount;
+		}
+
+		D3DXVec3Normalize(&vDir, &vDir);
+		m_CameraDesc.vAt -= fDeltaTime * vDir * 50.f;
+	}
+	break;
+
+	case 3:
+	{
+		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vAt);
+
+		_float fDis = D3DXVec3Length(&(m_vCameraMovePos - vDir));
+		if (fDis <= 3.f)
+		{
+			++m_byMoveCount;
+		}
+
+		D3DXVec3Normalize(&vDir, &vDir);
+		m_CameraDesc.vAt -= fDeltaTime * -vDir * 50.f;
+	}
+		break;
+
+	default:
+		Safe_Release(m_pTargetTransform);
+		m_IsMoveCountCheck = false;
+		// 플레이어 무빙 허용
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+		m_eSoloMoveMode = ESoloMoveMode::End;
+		break;
+	}
+	return _uint();
+}
+
 
 CMainCam * CMainCam::Create(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -769,6 +1020,7 @@ void CMainCam::Set_IsSoloMove(ESoloMoveMode eMove)
 	if (eMove >= ESoloMoveMode::End)
 		eMove = ESoloMoveMode::End;
 
+	m_fCameraMoveTime = 0.f;
 	m_eSoloMoveMode = eMove;
 }
 

@@ -20,6 +20,12 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_MoveStart(_bool bMove = true);
+
+public:
+	_bool Get_IsArrive();
+
 private:
 	_uint Movement(_float fDeltaTime);
 	void FindNextRoute();
@@ -31,6 +37,7 @@ public:
 
 private:
 	_bool m_bArrive = false;
+	_bool m_IsStart = false;
 
 private:
 	CTransform* m_pTransform = nullptr;

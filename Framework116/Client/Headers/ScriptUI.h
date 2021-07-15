@@ -16,6 +16,8 @@ enum class EScript {
 	Stg2_SearchTarget,
 	Stg2_PlayerDead,
 	Stage3_Opening,
+	Stage3_Boss_Opening,
+	Stage3_Boss_Clear,
 	End
 };
 
@@ -62,6 +64,8 @@ private: //대화
 	void Script_Stg2_Search_Target();
 	void Script_Stg2_PlayerDead();
 	void Script_Stage3_Opening();
+	void Script_Stage3_Boss_Opening();
+	void Script_Stage3_Boss_Clear();
 
 private: // 기타
 	void Lock_Cursor();

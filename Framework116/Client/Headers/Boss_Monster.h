@@ -111,6 +111,9 @@ private: // emp bomb
 	class CNew_LockOn* m_pLockOn = nullptr;
 	_bool m_IsLockOn = false;
 	_uint Make_LockOn();
+
+private:
+	//_bool m_Is
 };
 
 #define __BOSS_MONSTER_H__

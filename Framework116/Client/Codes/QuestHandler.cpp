@@ -2,6 +2,7 @@
 #include "..\Headers\QuestHandler.h"
 #include "Player.h"
 #include "CollisionHandler.h"
+#include "Delivery.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
 
@@ -22,6 +23,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 
 	m_eNowQuest = eQuest;
 	m_IsClear = false;
+	m_IsRetry = false;
 	m_iCount = 0;
 	m_iCount_Max = 0;
 	m_fTimer = 0.f;
@@ -58,6 +60,18 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	}
 	break;
 
+	case EQuest::Stage_3_Delivery:
+	{
+		m_wstrQuestName = L"화물을 호위하라";
+		m_iCount_Max = 1;
+	}
+	break;
+	case EQuest::Stage_3_Boss:
+	{
+		m_wstrQuestName = L"보스를 격파하라";
+		m_iCount_Max = 1;
+	}
+		break;
 	default:
 		break;
 	}
@@ -65,6 +79,10 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	// 여기서 레퍼런스 카운팅
 	if (m_listTargetObject.empty())
 	{
+		if (m_eNowQuest == EQuest::Stage_3_Delivery ||
+			m_eNowQuest == EQuest::Stage_3_Boss)
+			return S_OK;
+
 		PRINT_LOG(L"Error", L"m_listTargetObject is empty");
 		return E_FAIL;
 	}
@@ -120,6 +138,11 @@ _bool CQuestHandler::Get_IsClear()
 	return m_IsClear;
 }
 
+_bool CQuestHandler::Get_IsRetry()
+{
+	return m_IsRetry;
+}
+
 _bool CQuestHandler::Get_IsStageLocked(_uint iStageIdx)
 {
 	return m_bClear[iStageIdx];
@@ -155,6 +178,12 @@ _bool CQuestHandler::Update_Quest()
 		break;
 	case EQuest::Stage_2_Rescue:
 		Update_Quest_Stage2_Resque();
+		break;
+	case EQuest::Stage_3_Delivery:
+		Update_Quest_Stage3_Delivery();
+		break;
+	case EQuest::Stage_3_Boss:
+		Update_Quest_Stage3_Boss();
 		break;
 	default:
 		break;
@@ -251,4 +280,42 @@ void CQuestHandler::Update_Quest_Stage2_Resque()
 			m_iCount = m_iCount_Max;
 		}
 	}
+}
+
+void CQuestHandler::Update_Quest_Stage3_Delivery()
+{
+	if (m_IsClear == false)
+	{
+		m_IsRetry = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Delivery")->empty();
+
+		if (m_IsRetry == true)
+		{
+			m_IsClear = false;
+			return;
+		}
+		m_IsClear = ((CDelivery*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Delivery"))->Get_IsArrive();
+
+		if (m_IsClear == true)
+			m_iCount = m_iCount_Max;
+	}
+}
+
+void CQuestHandler::Update_Quest_Stage3_Boss()
+{
+	if (m_IsClear == false)
+	{
+		m_IsRetry = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Player")->empty();
+
+		if (m_IsRetry == true)
+		{
+			m_IsClear = false;
+			return;
+		}
+
+		m_IsClear = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty();
+
+		if(m_IsClear == true)
+			m_iCount = m_iCount_Max;
+	}
+
 }

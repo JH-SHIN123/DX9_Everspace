@@ -55,6 +55,7 @@ private:
 private:
 	//HWND	m_hVideo;
 	CGameObject* m_pLoadingUI = nullptr;
+	CGameObject* m_pLoadingUIIcon = nullptr;
 };
 
 #define __LOADING_H__

@@ -114,7 +114,9 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 		{
 			if (m_pLoadingUI) m_pLoadingUI->Set_IsDead(true);
 			Safe_Release(m_pLoadingUI);
-
+			if (m_pLoadingUIIcon) m_pLoadingUIIcon->Set_IsDead(true);
+			Safe_Release(m_pLoadingUIIcon);
+			
 			CScene* pNextScene = nullptr;
 			switch (m_eNextSceneID)
 			{
@@ -177,7 +179,7 @@ void CLoading::Free()
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
 	CloseHandle(m_hLoadingThread);
 	DeleteCriticalSection(&m_CriticalSection);
-
+	
 	m_pManagement->StopAll();
 
 
@@ -212,6 +214,7 @@ unsigned CLoading::ThreadMain(void * pArg)
 	if (FAILED(hr))
 	{
 		CManagement::Get_Instance()->Clear_NonStatic_Resources();
+
 		LeaveCriticalSection(&pLoading->m_CriticalSection);
 		return LOADING_ERROR;
 	}
@@ -1822,6 +1825,18 @@ HRESULT CLoading::Ready_LoadingResources()
 		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
 	}
+
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_LoadingIcon",
+		L"Layer_LoadingUI",
+		nullptr,
+		&m_pLoadingUIIcon)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+		return E_FAIL;
+	}
+
 
 	return S_OK;
 }

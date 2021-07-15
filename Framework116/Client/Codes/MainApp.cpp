@@ -19,6 +19,7 @@
 #include "FadeIn.h"
 #include "FadeOut.h"
 #include "LoadingUI.h"
+#include "LoadingIcon.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -91,10 +92,27 @@ HRESULT CMainApp::Ready_LoadingResources()
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_LoadingUI");
 		return E_FAIL;
 	}
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_LoadingIcon",
+		CLoadingIcon::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LoadingUI");
+		return E_FAIL;
+	}
+
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
 		L"Component_Texture_Loading",
 		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Loading/loading%d.png", 5))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_LoadingIcon",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Loading/loading_icon.png", 1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet");
 		return E_FAIL;
