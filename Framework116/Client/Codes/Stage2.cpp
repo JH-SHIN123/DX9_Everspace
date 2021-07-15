@@ -51,6 +51,7 @@ HRESULT CStage2::Ready_Scene()
 
 _uint CStage2::Update_Scene(_float fDeltaTime)
 {
+
 	CScene::Update_Scene(fDeltaTime);
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
@@ -129,6 +130,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 
 _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 {
+
 	CScene::LateUpdate_Scene(fDeltaTime);
 
 	// Boss

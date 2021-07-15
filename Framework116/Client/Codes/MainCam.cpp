@@ -717,7 +717,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 	case 2:
 	{
 		Safe_Release(m_pTargetTransform);
-		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
 		if (nullptr == m_pTargetTransform)
 		{
 			PRINT_LOG(L"Err", L"PlayerTransform is nullptr");
