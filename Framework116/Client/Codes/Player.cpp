@@ -790,6 +790,11 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pManagement->PlaySound(L"Gatling_Stop.ogg", CSoundMgr::PLAYER_WEAPON);
 		}
 	}
+	if (m_pController->Key_Down(KEY_P))
+	{
+		m_pInfo->Set_MaxHp(1000);
+		m_pInfo->Set_Hp(1000);
+	}
 
 	// 마우스 고정시켜서 끄기 불편해서.. ES쓰세용
 	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
