@@ -142,9 +142,6 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	//// HP 바.
-	//m_fHp = 100.f;
-	//m_fFullHp = m_fHp;
 
 	// HP 세팅
 	STAT_INFO tStatus;
@@ -320,7 +317,25 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 
 		// 기존 이펙트 모두 off
+		if (m_pLeftEngineEffect) {
+			m_pLeftEngineEffect->Set_IsDead(true);
+			m_pLeftEngineEffect = nullptr;
+		}
+		if (m_pRightEngineEffect) {
+			m_pRightEngineEffect->Set_IsDead(true);
+			m_pRightEngineEffect = nullptr;
+		}
 
+		if (m_pLeftWingBoost) {
+			m_pLeftWingBoost->Set_IsDead(true);
+			m_pLeftWingBoost = nullptr;
+		}
+		if (m_pRightWingBoost) {
+			m_pRightWingBoost->Set_IsDead(true);
+			m_pLeftWingBoost = nullptr;
+		}
+
+		m_IsBoost = false;
 		m_IsDead = true;
 	}
 	
@@ -424,6 +439,7 @@ void CPlayer::Set_Collide_Boss(_float3 vDir, _bool bCollide)
 
 void CPlayer::KeyProcess(_float fDeltaTime)
 {
+	if (m_IsDead) return;
 	if (nullptr == m_pController) return;
 	m_pController->Update_Controller();
 
@@ -907,9 +923,9 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 	
 	if (m_IsAstroidCollide&& fDelayTime > 1.f)
 	{
-		_float fDamage = (_float)m_pInfo->Get_HittedDamage();
+		_float fDamage = 10.f;
 		_float fMaxHp = (_float)m_pInfo->Get_MaxHp();
-		Get_HpBar()->Set_ScaleX(fDamage / fMaxHp * m_fHpLength);
+		Get_HpBar()->Set_ScaleX(-fDamage / fMaxHp * m_fHpLength);
 		m_pInfo->Set_Damage(10);
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
