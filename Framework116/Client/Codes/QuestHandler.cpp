@@ -245,6 +245,11 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 		}
 
 		list<CGameObject*> pList;
+
+		if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"))
+		{
+			return;
+		}
 		
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
 		{
