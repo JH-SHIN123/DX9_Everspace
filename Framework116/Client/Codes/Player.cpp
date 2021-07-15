@@ -214,7 +214,6 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// Add Engine-Boost Effect
-	if(m_pTransform) m_pTransform->Update_Transform();
 	CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pLeftEngineEffect);
 	m_vLeftEngineOffset = { -1.4f, 0.9f, -6.7f };
 	CEffectHandler::Add_Layer_Effect_EngineBoost((CGameObject**)&m_pRightEngineEffect);
