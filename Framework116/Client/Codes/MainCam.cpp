@@ -589,10 +589,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			return UPDATE_ERROR;
 		}
 		Safe_AddRef(m_pTargetTransform);
-<<<<<<< HEAD
 		CStreamHandler::Get_PassData_Navi(m_vecNaviRoute, L"../../Resources/Data/Navi/stage1.navi");
-=======
->>>>>>> origin/main
 	}
 	_float fSpeedPerSec = 120.f;
 	switch (m_byMoveCount)
@@ -647,7 +644,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 		_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float fLength = D3DXVec3Length(&vDir);
-<<<<<<< HEAD
+
 		if (nullptr == m_pManagement->Get_GameObjectList(L"Layer_NaviArrow"))
 		{
 			PRINT_LOG(L"Err", L"Layer_NaviArrow is nullptr");
@@ -657,17 +654,6 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 
 		if (fLength <= 20.f)
 		{
-=======
-
-		if (fLength <= 20.f)
-		{
-			if (nullptr == m_pManagement->Get_GameObjectList(L"Layer_NaviArrow"))
-			{
-				PRINT_LOG(L"Err", L"Layer_NaviArrow is nullptr");
-				return UPDATE_ERROR;
-			}
-			_uint iSize = m_pManagement->Get_GameObjectList(L"Layer_NaviArrow")->size();
->>>>>>> origin/main
 			if (iCount < iSize - 1)
 			{
 				iCount++;
@@ -690,7 +676,6 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			else
 				m_byMoveCount++;
 		}
-<<<<<<< HEAD
 		if (iCount < iSize-1)
 		{
 			_float3 vNodePos = m_vecNaviRoute[iCount].vNodePos;
@@ -714,7 +699,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			m_CameraDesc.vUp = vUp;
 
 		}
-		else if(iCount >= iSize-1)
+		else if (iCount >= iSize - 1)
 		{
 			_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
 			_float3 vDir = vTargetPos - m_CameraDesc.vEye;
@@ -727,23 +712,6 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			if (vLength <= 20.f)
 				++m_byMoveCount;
 		}
-
-=======
-		D3DXVec3Normalize(&vDir, &vDir);
-		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeltaTime;
-		_float3 vCurAt = m_CameraDesc.vAt;
-		_float3 vNextAt =m_pTargetTransform->Get_State(EState::Look);
-		D3DXVec3Normalize(&vCurAt, &vCurAt);
-		D3DXVec3Normalize(&vNextAt, &vNextAt);
-		_float fAngel = acosf(D3DXVec3Dot(&vCurAt, &vNextAt));
-		_float3 vAxis;
-		D3DXVec3Cross(&vAxis, &vCurAt, &vNextAt);
-		_float4x4 matRot;
-		D3DXMatrixRotationAxis(&matRot, &vAxis,D3DXToRadian(fAngel));
-		_float3 vRot;
-		D3DXVec3TransformNormal(&vRot, &vRot, &matRot);
-		m_CameraDesc.vAt = m_CameraDesc.vEye + vRot*20.f;
->>>>>>> origin/main
 	}
 	break;
 	case 2:
@@ -781,8 +749,6 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 
 	return NO_EVENT;
 
-<<<<<<< HEAD
-=======
 }
 
 _uint CMainCam::Solo_Stage3_Dilevery(_float fDeltaTime)
@@ -1028,7 +994,6 @@ _uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
 		break;
 	}
 	return _uint();
->>>>>>> origin/main
 }
 
 

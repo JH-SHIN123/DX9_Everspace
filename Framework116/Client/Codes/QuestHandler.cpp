@@ -16,12 +16,7 @@ CQuestHandler::~CQuestHandler()
 
 HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 {
-<<<<<<< HEAD
-	
-=======
-	if (m_IsClear == TRUE)
-		return E_FAIL;
->>>>>>> origin/main
+
 
 	Release_Ref();
 
@@ -182,15 +177,12 @@ _bool CQuestHandler::Update_Quest()
 	case EQuest::Stage_2_Rescue:
 		Update_Quest_Stage2_Resque();
 		break;
-<<<<<<< HEAD
-=======
 	case EQuest::Stage_3_Delivery:
 		Update_Quest_Stage3_Delivery();
 		break;
 	case EQuest::Stage_3_Boss:
 		Update_Quest_Stage3_Boss();
 		break;
->>>>>>> origin/main
 	default:
 		break;
 	}
