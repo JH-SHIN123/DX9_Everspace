@@ -237,6 +237,13 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 	// true ÀÏ‹š ¿òÁ÷ÀÓÀ» false·Î ¸ØÃá´Ù
 	if (true == bLock)
 	{
+		if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") ||
+			nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") ||
+			nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"))
+		{
+			return;
+		}
+
 		list<CGameObject*> pList;
 
 		if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"))
@@ -284,9 +291,15 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 		}
 	}
 
-
 	else if (false == bLock)
 	{
+		if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") ||
+			nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") ||
+			nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"))
+		{
+			return;
+		}
+
 		list<CGameObject*> pList;
 
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
