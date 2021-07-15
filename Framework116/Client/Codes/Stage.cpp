@@ -102,13 +102,13 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Sniper");
 
 	// TargetMonster
-	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_TargetMonster");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_TargetMonster");
 
 	// Planet
-	// CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Planet");
+	 CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Planet");
 
 	// 몬스터Bullet과 플레이어의 실드배터리
-	//CCollisionHandler::Collision_SphereToSphere(L"Layer_Monster_Bullet", L"Layer_Shield_Battery");
+	CCollisionHandler::Collision_SphereToSphere(L"Layer_Monster_Bullet", L"Layer_Shield_Battery");
 
 	// 데미지 Src가 데미지를 입는다
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Drone");
@@ -179,7 +179,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
 		if (Check == true)
 		{
-			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_1);
+			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_2);
 			++m_iFlowCount;
 		}
 		return S_OK;

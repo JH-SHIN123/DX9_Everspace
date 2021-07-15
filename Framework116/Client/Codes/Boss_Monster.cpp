@@ -875,18 +875,7 @@ void CBoss_Monster::Set_Hp_Pos()
 	if (m_pHP_Bar_Border)
 		m_pHP_Bar_Border->Set_Pos(vPosition);
 	if (m_pLockOn)
-	{
-		if (m_pLockOn->Get_IsDead() == false)
-		{
-			if (GetAsyncKeyState(L'R') & 0x8000)
-			{
-				POINT pt = { (LONG)ptBoss.x, (LONG)ptBoss.y };
-				//ScreenToClient(g_hWnd, &pt);
-				SetCursorPos((_int)pt.x + 8, (_int)pt.y + 13);
-			}
-			m_pLockOn->Set_Pos(vLockOnPos);
-		}
-	}
+		m_pLockOn->Set_Pos(vLockOnPos);
 
 }
 
@@ -916,9 +905,9 @@ CGameObject * CBoss_Monster::Clone(void * pArg/* = nullptr*/)
 
 void CBoss_Monster::Free()
 {
-	if(m_pLockOn)
-		m_pLockOn->Set_IsDead(TRUE);
-	Safe_Release(m_pLockOn);
+	//if(m_pLockOn)
+	//	m_pLockOn->Set_IsDead(TRUE);
+	//Safe_Release(m_pLockOn);
 
 	Safe_Release(m_pInfo);
 	Safe_Release(m_pHP_Bar_Border);
