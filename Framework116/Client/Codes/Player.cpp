@@ -131,6 +131,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
 	LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
+
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
 		L"GameObject_UI",
@@ -911,6 +912,7 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 		_float fDamage = (_float)m_pInfo->Get_HittedDamage();
 		_float fMaxHp = (_float)m_pInfo->Get_MaxHp();
 		Get_HpBar()->Set_ScaleX(fDamage / fMaxHp * m_fHpLength);
+		m_pInfo->Set_Hp(-10);
 
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,

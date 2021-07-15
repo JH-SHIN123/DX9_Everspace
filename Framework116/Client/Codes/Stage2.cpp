@@ -135,6 +135,7 @@ _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Boss_Monster");
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Asteroid");
+
 	//Sniper
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Sniper");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Sniper");
@@ -142,6 +143,13 @@ _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 	//Monster
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Monster");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Monster");
+
+	//Player
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Sniper_Bullet", L"Layer_Player");
+	//CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Asteroid");
+	//CCollisionHandler::Collision_PlayerToObstacle(L"Layer_Player", L"Layer_Planet");
+	
+
 
 	return _uint();
 }
@@ -528,11 +536,14 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 				return E_FAIL;
 			}
 			///////////////////////////////
-			if (m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS")->size())
+			if (nullptr != m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS"))
 			{
-				for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS"))
+				if (m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS")->size())
 				{
-					pDst->Set_IsDead(TRUE);
+					for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS"))
+					{
+						pDst->Set_IsDead(TRUE);
+					}
 				}
 			}
 			if (m_pManagement->Get_GameObjectList(L"Layer_Asteroid")->size())
@@ -575,6 +586,16 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 	{
 		if (!m_bPlayPlayerDeadScript&& pPlayer->Get_IsDead())
 		{
+			if (nullptr != m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS"))
+			{
+				if (m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS")->size())
+				{
+					for (auto& pDst : *m_pManagement->Get_GameObjectList(L"Layer_HUD_FPS"))
+					{
+						pDst->Set_IsDead(TRUE);
+					}
+				}
+			}
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_PlayerDead)))
 				return -1;
 			m_bPlayPlayerDeadScript = TRUE;
