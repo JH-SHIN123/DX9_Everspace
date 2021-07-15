@@ -259,6 +259,12 @@
     <Filter Include="02.GameObject\03.Monster\Normal">
       <UniqueIdentifier>{4a73a710-f9de-4ea7-ac1b-d09d73483274}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\99.Loading\LoadingUI">
+      <UniqueIdentifier>{129371fa-1883-4595-962e-eed5bf3aac71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Scene\99.Loading\LoadingUI\Loading_Icon">
+      <UniqueIdentifier>{f6c92128-b726-4732-8bb2-4a2e016894b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -493,6 +499,12 @@
     <ClInclude Include="..\Headers\Monster.h">
       <Filter>02.GameObject\03.Monster\Normal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\LoadingUI.h">
+      <Filter>01.Scene\99.Loading\LoadingUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Headers\LoadingIcon.h">
+      <Filter>01.Scene\99.Loading\LoadingUI\Loading_Icon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -712,6 +724,12 @@
     </ClCompile>
     <ClCompile Include="..\Codes\Monster.cpp">
       <Filter>02.GameObject\03.Monster\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LoadingUI.cpp">
+      <Filter>01.Scene\99.Loading\LoadingUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\LoadingIcon.cpp">
+      <Filter>01.Scene\99.Loading\LoadingUI\Loading_Icon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

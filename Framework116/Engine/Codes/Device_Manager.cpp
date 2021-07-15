@@ -27,10 +27,18 @@ LPD3DXFONT CDevice_Manager::Get_Font() const
 
 void CDevice_Manager::Render_Begin()
 {
+#ifdef _DEBUG
 	m_pDevice->Clear(
 		0, nullptr, 
 		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,
-		D3DCOLOR_ARGB(255, 255, 0, 255), 1.f, 0);
+		D3DCOLOR_ARGB(255, 0, 0, 0), 1.f, 0);
+#else
+	m_pDevice->Clear(
+		0, nullptr,
+		D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL,
+		D3DCOLOR_ARGB(255, 0, 0, 0), 1.f, 0);
+#endif
+
 	m_pDevice->BeginScene();	
 }
 

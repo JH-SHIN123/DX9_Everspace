@@ -16,7 +16,7 @@ CQuestHandler::~CQuestHandler()
 
 HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 {
-	if (m_IsClear == false)
+	if (m_IsClear == TRUE)
 		return E_FAIL;
 
 	Release_Ref();
@@ -49,7 +49,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	case EQuest::Stage_2_Dodge:
 	{
 		m_wstrQuestName = L"운석을 피하라";
-		m_iCount_Max = 20;
+		m_iCount_Max = 15;
 	}
 	break;
 
@@ -173,11 +173,12 @@ _bool CQuestHandler::Update_Quest()
 	case EQuest::Stage_1_Target:
 		Update_Quest_Stage1_Target();
 		break;
-
-
-
-
-
+	case EQuest::Stage_2_Dodge:
+		Update_Quest_Stage2_Dodge();
+		break;
+	case EQuest::Stage_2_Rescue:
+		Update_Quest_Stage2_Resque();
+		break;
 	case EQuest::Stage_3_Delivery:
 		Update_Quest_Stage3_Delivery();
 		break;

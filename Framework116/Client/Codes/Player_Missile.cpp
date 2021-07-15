@@ -167,7 +167,7 @@ _uint CPlayer_Missile::Update_GameObject(_float fDeltaTime)
 		Search_Shortest_Target(fDeltaTime);
 		if (m_pTargetTransform != nullptr)
 		{
-			m_fAddSpeed += 0.55f;
+			m_fAddSpeed += 0.75f;
 			m_fRotateSpeed += D3DXToRadian(15.f);
 			m_pTransform->Set_SpeedPerSec(m_fAddSpeed);
 			m_pTransform->Set_RotatePerSec(m_fRotateSpeed);
@@ -241,7 +241,7 @@ _uint CPlayer_Missile::Render_GameObject()
 	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 #ifdef _DEBUG // Render Collide
-	m_pCollide->Render_Collide();
+	//m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
