@@ -71,21 +71,23 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// For.Com_Collide
-	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 4.f;
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_CollideSphere",
-		L"Com_CollideSphere",
-		(CComponent**)&m_pCollide,
-		&BoundingSphere,
-		true)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
+	PASSDATA_COLLIDE tCollide;
+	CStreamHandler::Load_PassData_Collide(L"enemy2", L"Component_Mesh_Enemy2", tCollide);
+	m_Collides.reserve(tCollide.vecBoundingSphere.size());
+	int i = 0;
+	for (auto& bounds : tCollide.vecBoundingSphere) {
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_CollideSphere",
+			L"Com_CollideSphere" + to_wstring(i++),
+			nullptr,
+			&bounds,
+			true)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
 	}
-
 
 	m_pPlayerTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
 	Safe_AddRef(m_pPlayerTransform);
@@ -102,7 +104,6 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	STAT_INFO tStatus;
 	tStatus.iMaxHp = 1000;
 	tStatus.iHp = tStatus.iMaxHp;
-
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Status_Info",
@@ -133,7 +134,10 @@ _uint CSniper::Update_GameObject(_float fDeltaTime)
 	}
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+	for (auto& p : m_Collides)
+	{
+		if (p) p->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+	}
 	Make_LockOn();
 	return NO_EVENT;
 }
@@ -166,10 +170,12 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
-		m_pHp_Bar->Set_ScaleX(-100.f / m_pInfo->Get_MaxHp() * m_fHpLength);
-		m_fHp -= 100;
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
 		m_IsCollide = false;
 	}
+		
 
 	return _uint();
 }
@@ -182,7 +188,8 @@ _uint CSniper::Render_GameObject()
 	m_pModelMesh->Render_Mesh(); 
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	for (auto& p : m_Collides)
+		if (p) p->Render_Collide();
 #endif
 
 	return _uint();
@@ -425,7 +432,6 @@ void CSniper::Free()
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pTransform);
-	Safe_Release(m_pCollide);
 
 	CGameObject::Free();
 }
@@ -507,43 +513,47 @@ _uint CSniper::Make_LockOn()
 	D3DXVec3Normalize(&m_vLockOn, &m_vLockOn);
 
 	// True면? - LockOn HUD 생성
-
-	if (CCollision::IntersectRayToSphere(ray, m_pCollide->Get_BoundingSphere()))
+	for (auto& p : m_Collides)
 	{
-		if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
-			&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 1)
+		if (nullptr == p) continue;
+		if (CCollision::IntersectRayToSphere(ray, p->Get_BoundingSphere()))
 		{
-			m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->front()->Set_IsDead(true);
-			m_IsHUDLockOn = false;
-		}
-		else if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
-			&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 0)
-		{
-			m_IsHUDLockOn = false;
-		}
-		if (!m_IsHUDLockOn)
-		{
-
-			CGameObject* pLockOn = nullptr;
-			UI_DESC HUD_Lock_On;
-			HUD_Lock_On.tTransformDesc.vPosition = { 11110.f, 0.f, 0.f };
-			HUD_Lock_On.tTransformDesc.vScale = { 50.f, 50.f, 0.f };
-			HUD_Lock_On.wstrTexturePrototypeTag = L"Component_Texture_LockOn";
-			if (FAILED(m_pManagement->Add_GameObject_InLayer(
-				EResourceType::NonStatic,
-				L"GameObject_LockOn",
-				L"Layer_NewLockOn",
-				&HUD_Lock_On, &pLockOn)))
+			if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
+				&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 1)
 			{
-				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-				return E_FAIL;
+				m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->front()->Set_IsDead(true);
+				m_IsHUDLockOn = false;
 			}
-			m_IsHUDLockOn = true;
+			else if (m_pManagement->Get_GameObjectList(L"Layer_NewLockOn") != nullptr
+				&& m_pManagement->Get_GameObjectList(L"Layer_NewLockOn")->size() == 0)
+			{
+				m_IsHUDLockOn = false;
+			}
+			if (!m_IsHUDLockOn)
+			{
 
-			m_pLockOn = static_cast<CNew_LockOn*>(pLockOn);
-			m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_MONSTER);
+				CGameObject* pLockOn = nullptr;
+				UI_DESC HUD_Lock_On;
+				HUD_Lock_On.tTransformDesc.vPosition = { 11110.f, 0.f, 0.f };
+				HUD_Lock_On.tTransformDesc.vScale = { 50.f, 50.f, 0.f };
+				HUD_Lock_On.wstrTexturePrototypeTag = L"Component_Texture_LockOn";
+				if (FAILED(m_pManagement->Add_GameObject_InLayer(
+					EResourceType::NonStatic,
+					L"GameObject_LockOn",
+					L"Layer_NewLockOn",
+					&HUD_Lock_On, &pLockOn)))
+				{
+					PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+					return E_FAIL;
+				}
+				m_IsHUDLockOn = true;
+
+				m_pLockOn = static_cast<CNew_LockOn*>(pLockOn);
+				m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_MONSTER);
+			}
 		}
 	}
+
 	return S_OK;
 }
 

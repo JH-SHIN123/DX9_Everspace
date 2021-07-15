@@ -101,10 +101,6 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	// Init
-	//m_eNextState = State::Research;
-	//m_vCreatePosition = TransformDesc.vPosition;
-	//m_vResearchRange = { 50.f,50.f,50.f };
 
 	m_fAngle = CPipeline::GetRandomFloat(0.1f, 1.f);
 	_float Check = CPipeline::GetRandomFloat(0.f, 1.f);
@@ -129,7 +125,7 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	//m_fHp = 100.f;
 	//m_fFullHp = m_fHp;
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 100;
+	tStatus.iMaxHp = 300;
 	tStatus.iHp = tStatus.iMaxHp;
 
 	if (FAILED(CGameObject::Add_Component(
@@ -141,7 +137,9 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
-	}	return S_OK;
+	}	
+	
+	return S_OK;
 }
 
 _uint CDrone::Update_GameObject(_float fDeltaTime)
@@ -205,8 +203,11 @@ _uint CDrone::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
 		if (m_pHp_Bar)
-			m_pHp_Bar->Set_ScaleX(-30.f / m_fFullHp * m_fHpLength);
-		m_fHp -= 30.f;
+		{
+			_float fDamage = _float(m_pInfo->Get_HittedDamage());
+			_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+			m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
+		}
 		m_IsCollide = false;
 	}
 

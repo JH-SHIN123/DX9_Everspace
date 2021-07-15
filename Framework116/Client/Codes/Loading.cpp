@@ -58,6 +58,7 @@
 #include "Sniper.h"
 #include "Sniper_Bullet.h"
 #include "LockOnAlert.h"
+#include "Delivery.h"
 #pragma endregion
 
 
@@ -635,32 +636,6 @@ HRESULT CLoading::Load_Stage1_Prop_Resources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
 		return E_FAIL;
 	}
-	/*로딩시간때문에 잠시 주석해놓음 지우지 말것!*/
-	//if (FAILED(m_pManagement->Add_Component_Prototype(
-	//	EResourceType::Static,
-	//	L"Component_Mesh_Delivery",
-	//	CModelMesh::Create(m_pDevice, L"../../Resources/Models/delivery.X", L"../../Resources/Textures/Delivery/"))))
-	//{
-	//	PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
-	//	return E_FAIL;
-	//}
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_Mesh_Enemy1",
-		CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy1.X", L"../../Resources/Textures/Enemy/"))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
-		return E_FAIL;
-	}
-	if (FAILED(m_pManagement->Add_Component_Prototype(
-		EResourceType::Static,
-		L"Component_Mesh_Enemy2",
-		CModelMesh::Create(m_pDevice, L"../../Resources/Models/enemy2.X", L"../../Resources/Textures/Enemy/"))))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Mesh_BigShip");
-		return E_FAIL;
-	}
-
 #pragma endregion
 
 #pragma endregion
@@ -877,6 +852,15 @@ HRESULT CLoading::Load_Stage3_Prop_Resources()
 		EResourceType::NonStatic,
 		L"GameObject_NaviArrow",
 		CNaviArrow::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_NaviArrow");
+		return E_FAIL;
+	}
+
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::NonStatic,
+		L"GameObject_Delivery",
+		CDelivery::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_NaviArrow");
 		return E_FAIL;

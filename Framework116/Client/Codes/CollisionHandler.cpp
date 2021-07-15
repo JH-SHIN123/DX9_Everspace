@@ -148,6 +148,7 @@ void CCollisionHandler::Collision_SphereToSphere_Damage(const wstring & wstrDstL
 				dst->Set_IsCollide(true);
 				src->Set_IsCollide(true);
 				pSrcInfo->Set_Damage(pDstInfo->Get_Damage());
+  				pSrcInfo->Set_HittedDamage(pDstInfo->Get_Damage());
 
 				break;
 			}

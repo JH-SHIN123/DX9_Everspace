@@ -569,18 +569,29 @@ _uint CMainCam::Solo_Stage2_Asteroid(_float fDeltaTime)
 
 _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 {
+<<<<<<< HEAD
 	static _uint iCount = 0;
+=======
+>>>>>>> origin/main
 	if (m_IsMoveCountCheck == false)
 	{
 		m_byMoveCount = 0;
 		m_IsMoveCountCheck = true;
+<<<<<<< HEAD
 		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_NaviArrow", L"Com_Transform");
+=======
+		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
+		Safe_AddRef(m_pTargetTransform);
+>>>>>>> origin/main
 		if (m_pTargetTransform == nullptr)
 		{
 			PRINT_LOG(L"Error", L"m_pPlayerTransform is nullptr");
 			return UPDATE_ERROR;
 		}
+<<<<<<< HEAD
 		Safe_AddRef(m_pTargetTransform);
+=======
+>>>>>>> origin/main
 	}
 	_float fSpeedPerSec = 120.f;
 	switch (m_byMoveCount)
@@ -632,6 +643,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 	break;
 	case 1:
 	{
+<<<<<<< HEAD
 		_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
 		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 		_float fLength = D3DXVec3Length(&vDir);
@@ -680,17 +692,32 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 		_float3 vRot;
 		D3DXVec3TransformNormal(&vRot, &vRot, &matRot);
 		m_CameraDesc.vAt = m_CameraDesc.vEye + vRot*20.f;
+=======
+		//_float3 vTargetPos = ((CTransform*)(m_pManagement->Get_GameObject(L"Layer_Ring", 4)->Get_Component(L"Com_Transform")))->Get_State(EState::Position);
+		_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
+		_float3 vDir = vTargetPos - m_CameraDesc.vEye;
+		_float vLength = D3DXVec3Length(&vDir);
+		D3DXVec3Normalize(&vDir, &vDir);
+
+		m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeltaTime;
+
+		if (vLength <= 40.f)
+			++m_byMoveCount;
+>>>>>>> origin/main
 	}
 	break;
 	case 2:
 	{
 		Safe_Release(m_pTargetTransform);
 		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Player", L"Com_Transform");
+<<<<<<< HEAD
 		if (nullptr == m_pTargetTransform)
 		{
 			PRINT_LOG(L"Err", L"PlayerTransform is nullptr");
 			return UPDATE_ERROR;
 		}
+=======
+>>>>>>> origin/main
 		Safe_AddRef(m_pTargetTransform);
 		_float3 vTargetPos = m_pTargetTransform->Get_TransformDesc().vPosition;
 		vTargetPos -= m_pTargetTransform->Get_State(EState::Look) * 20;
@@ -701,6 +728,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 	default:
 		Safe_Release(m_pTargetTransform);
 		m_IsMoveCountCheck = false;
+<<<<<<< HEAD
 		if (m_pManagement->Get_GameObjectList(L"Layer_Player"))
 		{
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
@@ -711,11 +739,18 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			return UPDATE_ERROR;
 		}
 
+=======
+		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+>>>>>>> origin/main
 		m_eSoloMoveMode = ESoloMoveMode::End;
 		break;
 	}
 
+<<<<<<< HEAD
 	return S_OK;
+=======
+	return NO_EVENT;
+>>>>>>> origin/main
 }
 
 

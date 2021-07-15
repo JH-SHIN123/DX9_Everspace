@@ -237,6 +237,7 @@ _uint CTransform::RotateX_Quaternion()
 	return _uint();
 }
 
+
 _uint CTransform::RotateY_Quaternion()
 {
 	D3DXQUATERNION qRot;

@@ -31,7 +31,7 @@ HRESULT CStage3::Ready_Scene()
 	}
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/stage3.map");
-	//CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
+	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/stage3.navi");
 
 
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
@@ -71,6 +71,11 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Boss_Monster");
 
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Monster");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Monster");
+
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Sniper");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Sniper");
 
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");

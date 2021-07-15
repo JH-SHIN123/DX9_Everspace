@@ -16,6 +16,8 @@ public:
 	static HRESULT Load_PassData_Resource(const wstring& wstrFilePath, const _bool _isStatic);
 	static HRESULT Load_PassData_Collide(const wstring& wstrFileName, const wstring& wstrMeshPrototypeTag, PASSDATA_COLLIDE& OutPassData);
 	static HRESULT Load_PassData_Navi(const TCHAR* wstrFilePath);
+	
+	static HRESULT Get_PassData_Navi(vector<PASSDATA_ROUTE>& vecOutRoutes, const TCHAR* wstrFilePath);
 
 private:
 	static HRESULT Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData);

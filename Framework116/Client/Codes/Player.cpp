@@ -328,6 +328,26 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
+	if (m_IsCollide == true)
+	{
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
+
+		// HIT Effect
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_HUD_Effect_Damage",
+			L"Layer_HUD_Effect")))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_Effect_Damage In Layer");
+			return 0;
+		}
+
+		m_IsCollide = false;
+	}
+
+	// 보스 길막용
 	Collide_Boss(fDeltaTime);
 
 	return _uint();
@@ -556,8 +576,9 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// 피깎는 !TEST!!!!!!!!!!!!!
 	if (m_pController->Key_Down(KEY_F1))
 	{
-		m_pInfo->Set_Damage(10);
-		m_pHp_Bar->Set_ScaleX(-10.f / m_pInfo->Get_MaxHp() * m_fHpLength);
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
 
 		// HIT Effect
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -568,6 +589,8 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_Effect_Damage In Layer");
 			return;
 		}
+
+		m_IsCollide = false;
 	}
 	if (m_pController->Key_Down(KEY_F2))
 	{
@@ -1035,7 +1058,7 @@ void CPlayer::Free()
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);
-	Safe_Release(m_pHeadLight);
+	Safe_Release(m_pHeadLight);//
 
 	CGameObject::Free();
 }

@@ -257,6 +257,38 @@ HRESULT CStreamHandler::Load_PassData_Navi(const TCHAR* wstrFilePath)
 	return S_OK;
 }
 
+HRESULT CStreamHandler::Get_PassData_Navi(vector<PASSDATA_ROUTE>& vecOutRoutes, const TCHAR* wstrFilePath)
+{
+	HANDLE hFile = CreateFile(wstrFilePath, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+	if (INVALID_HANDLE_VALUE == hFile) {
+		PRINT_LOG(L"Error", L"Failed to Load Map");
+		return E_FAIL;
+	}
+
+	DWORD dwByte = 0;
+
+	vector<PASSDATA_ROUTE> vecRoutes;
+	PASSDATA_ROUTE tRoute;
+
+	while (true)
+	{
+		// Mesh Transform
+		ReadFile(hFile, &tRoute, sizeof(tRoute), &dwByte, nullptr);
+
+		if (0 == dwByte)
+			break;
+
+		vecRoutes.emplace_back(tRoute);
+	}
+
+	CloseHandle(hFile);
+
+	// 데이터 저장
+	vecOutRoutes.swap(vecRoutes);
+
+	return S_OK;
+}
+
 HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 {
 	if (nullptr == pPassData) {
@@ -503,7 +535,24 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 	}
 	else if (wstrPrototypeTag == L"GameObject_Delivery")
 	{
+		GAMEOBJECT_DESC tDesc;
+		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
+		tDesc.tTransformDesc.vPosition = pPassData->Pos;
+		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
+		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
+		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+			EResourceType::NonStatic,
+			L"GameObject_Delivery",
+			L"Layer_Delivery",
+			&tDesc)))
+		{
+			wstring errMsg = L"Failed to Add Layer ";
+			errMsg += wstrPrototypeTag;
+			PRINT_LOG(L"Error", errMsg.c_str());
+			return E_FAIL;
+		}
 	}
 
 	return S_OK;
