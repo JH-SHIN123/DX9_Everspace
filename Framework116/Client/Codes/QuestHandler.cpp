@@ -238,34 +238,43 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 	if (true == bLock)
 	{
 		list<CGameObject*> pList;
-
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
+		
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
 			{
-				static_cast<CMonster*>(iter)->Set_IsFight(false);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CMonster*>(iter)->Set_IsFight(false);
+				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
 			{
-				static_cast<CSniper*>(iter)->Set_IsFight(false);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CSniper*>(iter)->Set_IsFight(false);
+				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
 			{
-				static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+				}
 			}
 		}
 	}
@@ -275,38 +284,45 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 	{
 		list<CGameObject*> pList;
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
 			{
-				static_cast<CMonster*>(iter)->Set_IsFight(true);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CMonster*>(iter)->Set_IsFight(true);
+				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
 			{
-				static_cast<CSniper*>(iter)->Set_IsFight(true);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CSniper*>(iter)->Set_IsFight(true);
+				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster") != nullptr)
 		{
-			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
-
-			for (auto& iter : pList)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
 			{
-				static_cast<CBoss_Monster*>(iter)->Set_BossFight(true);
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CBoss_Monster*>(iter)->Set_BossFight(true);
+				}
 			}
 		}
 	}
-
-
 }
 
 void CQuestHandler::Update_Quest_Stage1_Ring()
