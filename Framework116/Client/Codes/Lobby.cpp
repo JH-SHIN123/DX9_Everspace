@@ -95,7 +95,7 @@ _uint CLobby::Update_Scene(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			m_pManagement->Clear_NonStatic_Resources();
+			//m_pManagement->Clear_NonStatic_Resources();
 			switch (m_iNextScene)
 			{
 			case 0:

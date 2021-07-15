@@ -72,7 +72,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		m_fDelaySceneChange += fDeltaTime;
 		if (m_fDelaySceneChange >= 5.f)
 		{
-			m_pManagement->Clear_NonStatic_Resources();
+			//m_pManagement->Clear_NonStatic_Resources();
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 				CLoading::Create(m_pDevice, ESceneType::Stage2))))
 			{
@@ -112,7 +112,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			m_pManagement->Clear_NonStatic_Resources();
+			//m_pManagement->Clear_NonStatic_Resources();
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 				CLoading::Create(m_pDevice, ESceneType::Lobby))))
 			{

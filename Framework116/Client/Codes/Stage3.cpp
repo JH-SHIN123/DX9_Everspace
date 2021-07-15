@@ -197,7 +197,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			m_pManagement->Clear_NonStatic_Resources();
+			//m_pManagement->Clear_NonStatic_Resources();
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 				CLoading::Create(m_pDevice, ESceneType::Lobby))))
 			{

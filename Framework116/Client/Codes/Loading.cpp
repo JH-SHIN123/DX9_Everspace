@@ -76,6 +76,9 @@ HRESULT CLoading::Ready_Scene()
 	::SetWindowText(g_hWnd, L"Loading");
 	m_pManagement->StopSound(CSoundMgr::BGM);
 
+	// 클론들 비우기
+	m_pManagement->Clear_NonStatic_Resources();
+
 	// 씬 진입전 로딩쓰레드 생성
 	m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
 	if (nullptr == m_hLoadingThread)
