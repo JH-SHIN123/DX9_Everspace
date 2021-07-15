@@ -50,7 +50,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Transform
 	TRANSFORM_DESC TransformDesc;
-	TransformDesc.fSpeedPerSec = 20.f;
+	TransformDesc.fSpeedPerSec = 60.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	TransformDesc.vScale = { 0.1f, 0.1f, 0.1f };
 
@@ -137,7 +137,7 @@ HRESULT CPlayer_Missile::Ready_GameObject(void * pArg/* = nullptr*/)
 	
 
 	STAT_INFO tStatus;
-	tStatus.iAtk = 20;
+	tStatus.iAtk = 170;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
