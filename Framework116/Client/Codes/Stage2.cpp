@@ -53,26 +53,12 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
-	// Boss
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Boss_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Asteroid");
-	//Sniper
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Sniper");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Sniper");
-
-	//Monster
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Monster");
-
-
-
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
-
+	CQuestHandler::Get_Instance()->Update_Quest();
 	switch (Stage2_Flow(fDeltaTime))
 	{
 	case -1:
@@ -447,7 +433,7 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Begin)))
 					return -1;
-				++m_iFlowCount;
+					++m_iFlowCount;
 			}
 		}
 		return TRUE;
@@ -467,6 +453,8 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 				m_fFlowTime += fDeltaTime;
 				if (m_fFlowTime >= 1)
 				{
+					if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Dodge)))
+						return -1;
 					++m_iFlowCount;
 				}
 			}
@@ -512,7 +500,10 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_SearchTarget)))
 					return -1;
+				if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Rescue)))
+					return -1;
 			}
+			
 			++m_iFlowCount;
 		}
 		return TRUE;
