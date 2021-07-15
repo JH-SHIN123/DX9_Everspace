@@ -438,7 +438,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
 	{
-		m_pTransform->Go_Straight(fDeltaTime * 10.f);
+		m_pTransform->Go_Straight(fDeltaTime);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
 		m_IsMove = true;
 	}
