@@ -71,15 +71,44 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Boss_Monster");
 
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Monster");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Monster");
 
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Sniper");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Sniper");
+
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
 
 
 	CCollisionHandler::Collision_PlayerToBoss(L"Layer_Player", L"Layer_Boss_Monster");
 
 	return _uint();
+}
+
+void CStage3::Stage_Flow(_float fDeltaTime)
+{
+	switch (m_iFlowCount)
+	{
+	case 0:
+		if (m_fFlowTime >= 0)
+		{
+			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+
+			m_fFlowTime -= fDeltaTime;
+
+			if (m_fFlowTime <= 0)
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Opening)))
+					return;
+				++m_iFlowCount;
+			}
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 HRESULT CStage3::Add_Layer_Cam(const wstring & LayerTag)

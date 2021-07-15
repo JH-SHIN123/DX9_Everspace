@@ -359,6 +359,7 @@ void CScriptUI::Script_Tutorial_Ring_Clear()
 	}
 	m_dwScriptCountMax = m_wstrScript.length();
 
+	Portrait_Check();
 }
 
 void CScriptUI::Script_Tutorial_Target_Clear()
@@ -663,6 +664,65 @@ void CScriptUI::Script_Stg2_PlayerDead()
 	m_dwScriptCountMax = m_wstrScript.length();
 }
 
+void CScriptUI::Script_Stage3_Opening()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"좋아 무사히 가이아 행성 구역에 도착했군, 앞으로 얼마 안남았네";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"여기가 정찰조들이 보고한 가이아 행성 구역입니까?";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"근데 어째 정찰조들은 보이지 않는 것 같습니다?";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"!!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"무전 교란이다! 정찰조는 당했다고 밖에 생각이 들지 않는군...";
+		break;
+	case 6:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"적이 매복해 있을 것이다, 포위 당하기 전에 소탕한다.";
+		break;
+	case 7:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"2인 1조로 행동한다 수송기체는 느리니 자네가 호위를 하는 식이 맞겠군.";
+		break;
+	case 8:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"알겠습니다!";
+		break;
+	case 9:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"잘 부탁하네 신병.";
+		break;
+	case 10:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"맏겨만 주십시오!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+}
+
 void CScriptUI::Lock_Cursor()
 {
 	//RECT rc;
@@ -691,6 +751,8 @@ void CScriptUI::Portrait_Check()
 	case EPortraitNumber::Friendly:
 		m_wstrName = L"마호메드 아라이 주니어";
 		break;
+	case EPortraitNumber::Delivery:
+		m_wstrName = L"수송대장 시코르스키";
 	default:
 		m_wstrName = L"";
 		break;

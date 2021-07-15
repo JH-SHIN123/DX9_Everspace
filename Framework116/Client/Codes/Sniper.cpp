@@ -104,7 +104,6 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 	STAT_INFO tStatus;
 	tStatus.iMaxHp = 1000;
 	tStatus.iHp = tStatus.iMaxHp;
-
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Status_Info",
@@ -171,10 +170,12 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 	if (m_IsCollide) {
 		// Bullet 데미지 만큼.
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
-		m_pHp_Bar->Set_ScaleX(-100.f / m_pInfo->Get_MaxHp() * m_fHpLength);
-		m_fHp -= 100;
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
 		m_IsCollide = false;
 	}
+		
 
 	return _uint();
 }
@@ -424,9 +425,9 @@ CGameObject * CSniper::Clone(void * pArg/* = nullptr*/)
 
 void CSniper::Free()
 {
-	Safe_Release(m_pInfo);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pHP_Bar_Border);
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pLockOn);
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pPlayerTransform);

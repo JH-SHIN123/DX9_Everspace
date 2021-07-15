@@ -20,6 +20,9 @@ public:
 	virtual _uint LateUpdate_Scene(_float fDeltaTime) override;
 
 public:
+	void Stage_Flow(_float fDeltaTime);
+
+public:
 	HRESULT Add_Layer_Cam(const wstring& LayerTag);
 
 	HRESULT Add_Layer_ExplosionSystem(const wstring& LayerTag, const PARTICLESYSTEM_DESC* pParticleSystemDesc);
@@ -40,6 +43,14 @@ public:
 public:
 	static CStage3* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual void Free() override;
+
+private:
+	_float m_fFlowTime = 1.f;
+	_uint m_iFlowCount = 0;
+
+private:
+	_bool m_bFadeIn = false;
+	_bool m_bSceneChange = false;
 
 };
 

@@ -14,7 +14,8 @@ public:
 	static void Collision_SphereToSphere(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
 	static void Collision_PlayerToObstacle(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
 	static void Collision_SphereToSphere_Damage(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
-	static void Collision_PlayerToBoss(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
+	static void	Collision_PlayerToBoss(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
+	static _bool Collision_PlayerToObject(const wstring& wstrDstLayerTag, const wstring& wstrSrcLayerTag);
 
 private:
 	static bool Check_Collides(const vector<class CCollide*>* pDstCollides, const vector<class CCollide*>* pSrcCollides, 

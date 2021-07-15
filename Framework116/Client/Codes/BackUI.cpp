@@ -77,11 +77,6 @@ HRESULT CBackUI::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	//if (m_wstrTexturePrototypeTag == L"Component_Texture_Portrait")
-	//{
-	//	m_ePortraitNumber = EPortraitNumber
-	//}
-
 	return S_OK;
 }
 

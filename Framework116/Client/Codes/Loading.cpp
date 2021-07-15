@@ -1565,7 +1565,7 @@ HRESULT CLoading::Load_ScriptUI_Resources()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_Texture_Portrait",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Portrait/Portrait%d.png", 3))))
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/Portrait/Portrait%d.png", 5))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_ScriptUI_Portrait_Test");
 		return E_FAIL;
