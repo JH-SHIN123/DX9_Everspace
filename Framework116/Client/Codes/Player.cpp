@@ -356,42 +356,49 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 _uint CPlayer::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
-
-	if (!m_IsDead)
+	// 운석 날아오는중이면 메쉬 렌더하지 마!
+	if (!m_IsAstroidStage)
 	{
-		m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-		m_pMesh->Render_Mesh();
-
-
-	wstring str = L"궁서";
-	RECT rc;
-	GetClientRect(g_hWnd, &rc);
-	m_pManagement->Get_Font()->DrawText(NULL
-		, str.c_str(), -1
-		, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
-
-	// 카메라 스킵
-	if (m_IsCameraMove)
-	{
-		ESoloMoveMode eCheck = ((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Get_SoloMoveMode();
-		if (eCheck < ESoloMoveMode::Lock)
+		if (!m_IsDead)
 		{
-			wstring mesage = L"C 키를 눌러 스킵";
-			RECT tUIBounds;
-			GetClientRect(g_hWnd, &tUIBounds);
-			//tUIBounds.top += 700;
-			tUIBounds.left += 1700;
-			m_pManagement->Get_Font()->DrawText(NULL
-				, mesage.c_str(), -1
-				, &tUIBounds, DT_CENTER, D3DXCOLOR(100, 100, 100, 255));
-		}
-	}
+			m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
+			m_pMesh->Render_Mesh();
+
+
+			//wstring str = L"궁서";
+			//RECT rc;
+			//GetClientRect(g_hWnd, &rc);
+			//m_pManagement->Get_Font()->DrawText(NULL
+			//	, str.c_str(), -1
+			//	, &rc, DT_CENTER, D3DXCOLOR(255, 0, 0, 255));
+
+			// 카메라 스킵
+			if (m_IsCameraMove)
+			{
+				ESoloMoveMode eCheck = ((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Get_SoloMoveMode();
+				if (eCheck < ESoloMoveMode::Lock)
+				{
+					wstring mesage = L"C 키를 눌러 스킵";
+					RECT tUIBounds;
+					GetClientRect(g_hWnd, &tUIBounds);
+					//tUIBounds.top += 700;
+					tUIBounds.left += 1700;
+					m_pManagement->Get_Font()->DrawText(NULL
+						, mesage.c_str(), -1
+						, &tUIBounds, DT_CENTER, D3DXCOLOR(100, 100, 100, 255));
+				}
+			}
 
 
 #ifdef _DEBUG // Render Collide
-		//for (auto& collide : m_Collides)
-			//collide->Render_Collide();
+			//for (auto& collide : m_Collides)
+				//collide->Render_Collide();
 #endif
+		}
+	}
+	else // 대신 텍스처를 렌더하렴.
+	{
+
 	}
 	return _uint();
 }
@@ -517,60 +524,63 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		m_pTransform->RotateZ(-fDeltaTime);
 
 	// Weapon Change / Skills (OverDrive, Shield)
-	if (m_pController->Key_Down(KEY_1))
+	if (m_IsAstroidStage == false)
 	{
-		// 이전 무기 HUD 삭제
-		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-		m_iWeapon = WEAPON_LAZER;
-		UI_DESC LaserHUD;
-		LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-		LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-		LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_UI",
-			L"Layer_HUD_Weapon",
-			(void*)&LaserHUD)))
+		if (m_pController->Key_Down(KEY_1))
 		{
-			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-			return;
+			// 이전 무기 HUD 삭제
+			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+			m_iWeapon = WEAPON_LAZER;
+			UI_DESC LaserHUD;
+			LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+			LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_UI",
+				L"Layer_HUD_Weapon",
+				(void*)&LaserHUD)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
 		}
-	}
-	else if (m_pController->Key_Down(KEY_2))
-	{
-		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-		m_iWeapon = WEAPON_MACHINEGUN;
-		UI_DESC MachinegunHUD;
-		MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-		MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-		MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_UI",
-			L"Layer_HUD_Weapon",
-			(void*)&MachinegunHUD)))
+		else if (m_pController->Key_Down(KEY_2))
 		{
-			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-			return;
+			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+			m_iWeapon = WEAPON_MACHINEGUN;
+			UI_DESC MachinegunHUD;
+			MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+			MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_UI",
+				L"Layer_HUD_Weapon",
+				(void*)&MachinegunHUD)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
 		}
-	}
-	else if (m_pController->Key_Down(KEY_3))
-	{
-		// 이전 무기 HUD 삭제
-		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-		m_iWeapon = WEAPON_MISSILE;
-		UI_DESC MissileHUD;
-		MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
-		if (FAILED(m_pManagement->Add_GameObject_InLayer(
-			EResourceType::Static,
-			L"GameObject_UI",
-			L"Layer_HUD_Weapon",
-			(void*)&MissileHUD)))
+		else if (m_pController->Key_Down(KEY_3))
 		{
-			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-			return;
+			// 이전 무기 HUD 삭제
+			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+			m_iWeapon = WEAPON_MISSILE;
+			UI_DESC MissileHUD;
+			MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+			MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_UI",
+				L"Layer_HUD_Weapon",
+				(void*)&MissileHUD)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
 		}
 	}
 	// 피깎는 !TEST!!!!!!!!!!!!!

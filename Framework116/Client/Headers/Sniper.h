@@ -22,6 +22,9 @@ public:
 	virtual _uint Render_GameObject() override;
 
 public:
+	void Set_IsFight(_bool bFight);
+
+public:
 	_uint	Movement(_float fDeltaTime);
 	_bool Get_IsLockOn() { return m_IsLockOn; }
 	_bool RotateToPlayer(_float fDeltaTime);
@@ -75,6 +78,9 @@ private:
 	class CNew_LockOn* m_pLockOn = nullptr;
 	_bool m_IsHUDLockOn = false;
 	_uint Make_LockOn();
+
+private:
+	_bool m_IsFight = true;
 };
 
 #define __SNIPER_H__

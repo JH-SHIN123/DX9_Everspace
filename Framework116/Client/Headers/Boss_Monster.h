@@ -25,6 +25,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_BossFight(_bool bFight);
+
 private: // Update 함수에 쓸 최상위 함수
 	_uint Transform_Check();
 	_uint Move_AI(_float fDeltaTime);
@@ -113,7 +116,7 @@ private: // emp bomb
 	_uint Make_LockOn();
 
 private:
-	//_bool m_Is
+	_bool m_IsFight = true;
 };
 
 #define __BOSS_MONSTER_H__

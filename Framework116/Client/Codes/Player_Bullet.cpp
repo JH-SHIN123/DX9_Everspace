@@ -158,6 +158,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	STAT_INFO tStatus;
 	tStatus.iAtk = 100;
+	
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -169,7 +170,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-
+	
 
 	return S_OK;
 }

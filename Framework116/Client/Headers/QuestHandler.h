@@ -2,10 +2,6 @@
 
 #ifndef __UIHANDLER_H__
 
-#define QUEST_NOTCLEAR	0
-#define QUEST_CLEAR		1
-#define QUEST_FAIELD	2
-
 USING(Engine)
 
 enum class EQuest {
@@ -49,9 +45,16 @@ public:
 	_bool Get_IsStage_2_Locked();
 	_bool Get_IsStage_3_Locked();
 
+public: // 로비씬 가야할 때
+	_bool Get_IsPlayer_Dead();
+	_bool Get_IsObject_Dead();
+
 public: // 계속 돌려줘야함
 	_bool Update_Quest();
 	void Release_Ref();
+
+public: // 몬스터 AI 관련
+	void Lock_MonsterAI(_bool bLock); // true일때 안움직임
 
 private:
 	void Update_Quest_Stage1_Ring();
@@ -69,6 +72,8 @@ private: // 퀘스트
 	_int	m_iCount_Max = 0;
 	_float	m_fTimer = 0.f;
 	_bool	m_IsRetry = false;
+	_bool	m_IsArrivePlayer = false;
+	_bool	m_IsArriveObject = false;
 
 private: // 스테이지
 	EStageClear m_eStageClear = EStageClear::End;

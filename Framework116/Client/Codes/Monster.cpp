@@ -16,6 +16,7 @@ CMonster::CMonster(LPDIRECT3DDEVICE9 pDevice)
 
 CMonster::CMonster(const CMonster & other)
 	: CGameObject(other)
+	, m_IsFight(other.m_IsFight)
 {
 }
 
@@ -132,15 +133,21 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 _uint CMonster::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
+
+	if (m_IsDead)
+		return DEAD_OBJECT;
 	
 	m_IsBoost = true;
 	Search_Target(fDeltaTime);
 	if (!m_IsDead)
 	{
-		if (!m_bBattle)
-			Movement(fDeltaTime);
-		else
-			Monster_Battle(fDeltaTime);
+		if (m_IsFight == true)
+		{
+			if (!m_bBattle)
+				Movement(fDeltaTime);
+			else
+				Monster_Battle(fDeltaTime);
+		}
 
 		if (m_pHp_Bar != nullptr && m_pHP_Bar_Border != nullptr)
 		{
@@ -149,7 +156,6 @@ _uint CMonster::Update_GameObject(_float fDeltaTime)
 		}
 
 		m_pTransform->Update_Transform();
-		//m_pTransform->Update_Transform_Quaternion();
 		for (auto& p : m_Collides)
 		{
 			if (p) p->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
@@ -168,7 +174,7 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
 
-	if (m_pInfo->Get_Hp() <= 0.f)
+	if (m_pInfo->Get_Hp() <= 0.f || m_IsDead == true)
 	{
 		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
 		m_IsDead = true;
@@ -254,6 +260,11 @@ _uint CMonster::Render_GameObject()
 #endif
 
 	return _uint();
+}
+
+void CMonster::Set_IsFight(_bool bFight)
+{
+	m_IsFight = bFight;
 }
 
 _uint CMonster::Movement(_float fDeltaTime)

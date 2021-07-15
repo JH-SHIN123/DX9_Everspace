@@ -153,6 +153,15 @@ private: // 보스와 충돌
 
 private:
 	CLight* m_pHeadLight = nullptr;
+
+public:
+	_bool Get_IsAstroidStage() { return m_IsAstroidStage; }
+	void Set_IsAstroidStage(_bool _IsAstroidStage) { m_IsAstroidStage = _IsAstroidStage; }
+	// 운석 날아오는중에는 렌더하지 말아줭..
+private:
+	_bool m_IsAstroidStage = false;
+
+
 };
 
 #define __PLAYER_H__

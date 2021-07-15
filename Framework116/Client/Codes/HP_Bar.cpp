@@ -3,6 +3,7 @@
 #include "Pipeline.h"
 #include "Collision.h"
 #include "Sniper.h"
+#include "Player.h"
 
 CHP_Bar::CHP_Bar(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
@@ -30,28 +31,17 @@ HRESULT CHP_Bar::Ready_GameObject(void * pArg/* = nullptr*/)
 
 _uint CHP_Bar::Update_GameObject(_float fDeltaTime)
 {
+	Adjust_Pos(fDeltaTime);
 	CUI::Update_GameObject(fDeltaTime);
 	
-	//Adjust_Pos(fDeltaTime);
-	
-	//여기서 하지말고 몬스터 내부에서 직접 뿌려줘야 할 것 같은데.
-	//if (m_listCheckMonsters->front()->Get_IsCollide() == true)
-	//{
-	//	_float3 vScale = { m_pTransform->Get_TransformDesc().vScale.x, m_pTransform->Get_TransformDesc().vScale.y, 0.f };
-	//	// dmg 만큼 감소
-	//	vScale.x -= 1.f;
-	//	m_pTransform->Set_Scale(vScale);
-	//}
-
-
 	return NO_EVENT;
 }
 
 _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 {
-	CUI::LateUpdate_GameObject(fDeltaTime);
+	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
-	if (m_IsDead)
+	if (m_IsDead == true)
 		return DEAD_OBJECT;
 
 	return _uint();
@@ -60,10 +50,15 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 _uint CHP_Bar::Render_GameObject()
 {
 	//Check_Degree();
-	if (!m_IsBack)
+	if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
 	{
-		if (!m_IsFar)
-			CUI::Render_GameObject();
+		if (!m_IsBack)
+		{
+			if (!m_IsFar)
+			{
+				CUI::Render_GameObject();
+			}
+		}
 	}
 
 	return _uint();

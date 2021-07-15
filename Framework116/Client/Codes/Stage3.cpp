@@ -55,6 +55,10 @@ HRESULT CStage3::Ready_Scene()
 	if (FAILED(Add_Layer_HUD(L"Layer_HUD")))
 		return E_FAIL;
 
+	m_IsAllMonsterBoom = false;
+	m_IsAllBoom = false;
+	m_fBoomTime = 0.f;
+
 	return S_OK;
 }
 
@@ -94,8 +98,12 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 
 void CStage3::Stage_Flow(_float fDeltaTime)
 {
-	if (CQuestHandler::Get_Instance()->Get_IsRetry() == true)
-		m_iFlowCount = 666;
+	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
+		m_iFlowCount = PLAYER_DEAD;
+
+	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
+		m_iFlowCount = QUEST_FAILED;
+
 
 	switch (m_iFlowCount)
 	{
@@ -128,7 +136,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 		}
 
 	}
-		break;
+	break;
 
 	case 2:
 	{
@@ -139,7 +147,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 	}
-		break;
+	break;
 
 	case 3:
 	{
@@ -149,33 +157,80 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 				return;
 
 			++m_iFlowCount;
+
 		}
 	}
-		break;
+	break;
 
 	case 4:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+
+			m_IsAllMonsterBoom = true;
+			All_Monster_Boom(fDeltaTime);
+			++m_iFlowCount;
+		}
+		break;
+
+	case 5:
+		if (m_IsAllBoom == true)
 		{
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Boss_Clear)))
 				return;
 			++m_iFlowCount;
 		}
 		break;
-	case 5:
-		{
-			_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
-			if (Check == true)
-			{
-				CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
-
-				++m_iFlowCount;
-			}
-		}
-		break;
 	case 6:
+	{
+		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+		if (Check == true)
+		{
+			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
+
+			++m_iFlowCount;
+		}
+	}
+	break;
+	case 7:
 		m_bSceneChange = true;
 		++m_iFlowCount;
 		break;
+
+	case QUEST_FAILED:
+	{
+		if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Delivery_Dead)))
+			return;
+		++m_iFlowCount;
+
+	}
+	break;
+	case QUEST_FAILED + 1:
+	{
+		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+		if (Check == true)
+		{
+			m_iFlowCount = 7;
+		}
+	}
+	break;
+
+	case PLAYER_DEAD:
+	{
+		if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Delivery_Dead)))
+			return;
+		++m_iFlowCount;
+	}
+	break;
+
+	case PLAYER_DEAD + 1:
+	{
+		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+		if (Check == true)
+		{
+			m_iFlowCount = 7;
+		}
+	}
+	break;
 	default:
 		break;
 	}
@@ -209,6 +264,46 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 		}
 	}
 
+}
+
+void CStage3::All_Monster_Boom(_float fDeltaTime)
+{
+	if (m_IsAllMonsterBoom == FALSE)
+		return;
+
+
+
+	//_bool bCheck = m_pManagement->Get_GameObjectList(L"Layer_Monster")->empty();
+
+	//if (bCheck == TRUE)
+	//	return;
+
+	//list<class CGameObject*> listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Monster"));
+
+	//for (auto& iter : listObjectList)
+	//{
+	//	iter->Set_IsDead(TRUE);
+	//}
+
+
+
+
+	//bCheck = m_pManagement->Get_GameObjectList(L"Layer_Sniper")->empty();
+
+	//if (bCheck == TRUE)
+	//	return;
+
+	//listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Sniper"));
+
+	//for (auto& iter : listObjectList)
+	//{
+	//	iter->Set_IsDead(TRUE);
+	//}
+
+
+	m_IsAllBoom = true;
+
+	m_IsAllMonsterBoom = false;
 }
 
 HRESULT CStage3::Add_Layer_Cam(const wstring & LayerTag)

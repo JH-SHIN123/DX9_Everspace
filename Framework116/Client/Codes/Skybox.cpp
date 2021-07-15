@@ -64,7 +64,7 @@ HRESULT CSkybox::Ready_GameObject(void * pArg/* = nullptr*/)
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
 		L"Component_Texture_Skybox_Stage3",
-		L"Com_Texture",
+		L"Com_Texture2",
 		(CComponent**)&m_pStage3Texture)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Texture_Skybox_Stage3");
@@ -138,6 +138,9 @@ _uint CSkybox::Render_GameObject()
 	//switch(iStage)
 	//{
 	//case (_uint)ESceneType::Stage:
+	//	m_pTexture->Set_Texture(0);
+	//	break;
+	//case (_uint)ESceneType::Stage2:
 	//	m_pTexture->Set_Texture(0);
 	//	break;
 	//case (_uint)ESceneType::Stage3:

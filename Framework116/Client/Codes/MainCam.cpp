@@ -2,7 +2,10 @@
 #include "..\Headers\MainCam.h"
 #include "Pipeline.h"
 #include "Player.h"
+#include "QuestHandler.h"
+
 #include"StreamHandler.h"
+
 CMainCam::CMainCam(LPDIRECT3DDEVICE9 pDevice)
 	: CCamera(pDevice)
 {
@@ -467,6 +470,7 @@ _uint CMainCam::Solo_Stage1_Ring(_float fDeletaTime)
 		// 플레이어 무빙 허용
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		m_eSoloMoveMode = ESoloMoveMode::End;
+		CQuestHandler::Get_Instance()->Lock_MonsterAI(false); // 몬스터 AI 다시 움직임
 		break;
 	}
 
@@ -567,6 +571,7 @@ _uint CMainCam::Solo_Stage2_Asteroid(_float fDeltaTime)
 		// 플레이어 무빙 허용
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		m_eSoloMoveMode = ESoloMoveMode::End;
+		CQuestHandler::Get_Instance()->Lock_MonsterAI(false); // 몬스터 AI 다시 움직임
 		break;
 	}
 
@@ -736,6 +741,7 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 		if (m_pManagement->Get_GameObjectList(L"Layer_Player"))
 		{
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false); // 몬스터 AI 다시 움직임
 		}
 		else
 		{
@@ -861,6 +867,7 @@ _uint CMainCam::Solo_Stage3_Dilevery(_float fDeltaTime)
 		// 플레이어 무빙 허용
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		m_eSoloMoveMode = ESoloMoveMode::End;
+		CQuestHandler::Get_Instance()->Lock_MonsterAI(false); // 몬스터 AI 다시 움직임
 		break;
 	}
 
@@ -931,7 +938,7 @@ _uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
 		D3DXVec3Normalize(&vDir, &vDir);
 
 		m_CameraDesc.vAt = vCameraLookAt;
-		vCameraLookAt += vLeft * 50.f;
+		vCameraLookAt += vLeft * 70.f;
 		m_CameraDesc.vEye = vCameraLookAt;
 		m_vCameraMovePos = vCameraLookAt;
 
@@ -952,6 +959,7 @@ _uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
 			return UPDATE_ERROR;
 		}
 		++m_byMoveCount;
+		m_fCameraMoveTime = 0.f;
 	}
 	break;
 
@@ -960,28 +968,43 @@ _uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
 		// 화물 > 보스
 		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vAt);
 
-		if (D3DXVec3Length(&vDir) >= 10.f)
+		m_fCameraMoveTime += fDeltaTime;
+		if (m_fCameraMoveTime >= 5.f)
 		{
+			Safe_Release(m_pTargetTransform);
+
+			m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Delivery", L"Com_Transform");
+			Safe_AddRef(m_pTargetTransform);
+			if (m_pTargetTransform == nullptr)
+			{
+				PRINT_LOG(L"Error", L"m_pTargetTransform is nullptr");
+				return UPDATE_ERROR;
+			}
+
 			++m_byMoveCount;
+			m_fCameraMoveTime = 0.f;
+			//m_vCameraMovePos = m_CameraDesc.vAt;
 		}
 
 		D3DXVec3Normalize(&vDir, &vDir);
-		m_CameraDesc.vAt -= fDeltaTime * vDir * 50.f;
+		m_CameraDesc.vAt += fDeltaTime * vDir * 50.f;
 	}
 	break;
 
 	case 3:
 	{
+		// 보스 > 화물
 		_float3 vDir = (m_pTargetTransform->Get_State(EState::Position) - m_CameraDesc.vAt);
 
-		_float fDis = D3DXVec3Length(&(m_vCameraMovePos - vDir));
-		if (fDis <= 3.f)
+		m_fCameraMoveTime += fDeltaTime;
+		if (m_fCameraMoveTime <= 6.f)
 		{
 			++m_byMoveCount;
+			//m_CameraDesc.vAt = m_vCameraMovePos;
 		}
 
 		D3DXVec3Normalize(&vDir, &vDir);
-		m_CameraDesc.vAt -= fDeltaTime * -vDir * 50.f;
+		m_CameraDesc.vAt += fDeltaTime * vDir * 50.f;
 	}
 		break;
 
@@ -991,6 +1014,7 @@ _uint CMainCam::Solo_Stage3_Boss(_float fDeltaTime)
 		// 플레이어 무빙 허용
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 		m_eSoloMoveMode = ESoloMoveMode::End;
+		CQuestHandler::Get_Instance()->Lock_MonsterAI(false); // 몬스터 AI 다시 움직임
 		break;
 	}
 	return _uint();

@@ -18,6 +18,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_IsFight(_bool bFight);
+
 private:
 	_uint	Movement(_float fDeltaTime);
 	_uint	Search_Target(_float fDeltaTime);
@@ -86,6 +89,9 @@ private: // Wing Effect
 private:
 	_bool m_IsBoost = false;
 	//////////////////////////////////////////////////////////
+
+private:
+	_bool m_IsFight = true;
 };
 
 #define __MONSTER_H__

@@ -2,6 +2,7 @@
 #include "..\Headers\Stamina_Bar.h"
 #include "Pipeline.h"
 #include "Collision.h"
+#include "Player.h"
 
 CStamina_Bar::CStamina_Bar(LPDIRECT3DDEVICE9 pDevice)
 	: CUI(pDevice)
@@ -47,8 +48,10 @@ _uint CStamina_Bar::LateUpdate_GameObject(_float fDeltaTime)
 
 _uint CStamina_Bar::Render_GameObject()
 {
-	CUI::Render_GameObject();
-
+	if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
+	{
+		CUI::Render_GameObject();
+	}
 	return _uint();
 }
 

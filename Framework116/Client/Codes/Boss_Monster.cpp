@@ -23,6 +23,7 @@ CBoss_Monster::CBoss_Monster(const CBoss_Monster & other)
 	, m_IsLaserAlert(other.m_IsLaserAlert)
 	, m_IsLaserTarget(other.m_IsLaserTarget)
 	, m_IsFireEmp(other.m_IsFireEmp)
+	, m_IsFight(other.m_IsFight)
 {
 }
 
@@ -134,8 +135,12 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 
 	Check_NewPattern();
 	Transform_Check();
-	Move_AI(fDeltaTime);
-	Attack_AI(fDeltaTime);
+
+	if (m_IsFight == true)
+	{
+		Move_AI(fDeltaTime);
+		Attack_AI(fDeltaTime);
+	}
 
 	if (!m_IsHPBar)
 		Add_Hp_Bar(fDeltaTime);
@@ -151,7 +156,7 @@ _uint CBoss_Monster::Update_GameObject(_float fDeltaTime)
 		collide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
 	/* ¾ê°¡ ¹®Á¦ */
-	//Make_LockOn();
+	Make_LockOn();
 
 	return NO_EVENT;
 }
@@ -204,6 +209,11 @@ _uint CBoss_Monster::Render_GameObject()
 #endif
 
 	return _uint();
+}
+
+void CBoss_Monster::Set_BossFight(_bool bFight)
+{
+	m_IsFight = bFight;
 }
 
 _uint CBoss_Monster::Movement(_float fDeltaTime)

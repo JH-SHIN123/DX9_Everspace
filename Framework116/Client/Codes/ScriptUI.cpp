@@ -7,6 +7,7 @@
 #include "MainCam.h"
 #include "QuestHandler.h"
 
+
 CScriptUI::CScriptUI(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -109,6 +110,9 @@ HRESULT CScriptUI::Ready_GameObject(void * pArg/* = nullptr*/)
 	((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Lock);
 
 
+	// 몬스터 공격/이동 멈춰
+	CQuestHandler::Get_Instance()->Lock_MonsterAI(true);
+
 	return S_OK;
 }
 
@@ -160,11 +164,13 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 		case EScript::Tutorial_Ring_Clear:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false);
 			break;
 
 		case EScript::Tutorial_Target_Clear:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false);
 			break;
 		case  EScript::Stg2_Begin:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage2_Asteroid);
@@ -172,6 +178,7 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 		case EScript::Stg2_AfterCamProduction:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false);
 			break;
 		case EScript::Stg2_Finish_AsteroidFlyAway:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage2_FinishAsteroid);
@@ -179,6 +186,7 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 		case EScript::Stg2_SearchTarget:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false);
 			break;
 		case EScript::Stage3_Opening:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage3_Delivery);
@@ -900,6 +908,85 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 	case 13:
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"하하하, 곧 구조선이 도착할것이니 조금만 기다리게나";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+
+}
+
+void CScriptUI::Script_Stage3_Player_Dead()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"이봐! 괜찮나..?";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"들리면 대답해!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"이봐! 야! 대답하라고!!!!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"야!! 잭 한마!!!!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"으아아아아아아!!!!!!!!!!!!!!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+}
+
+void CScriptUI::Script_Stage3_Delivery_Dead()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"어..?";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"수송대장님!!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"시코르스키 수송대장님!! 대답해주십시오..!!!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"...";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"아아..!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"으아아아아아아!!!!!!!!!!!!!!";
 		break;
 	default:
 		m_wstrName = L"";

@@ -3,6 +3,10 @@
 #include "Player.h"
 #include "CollisionHandler.h"
 #include "Delivery.h"
+#include "Player.h"
+#include "Monster.h"
+#include "Sniper.h"
+#include "Boss_Monster.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
 
@@ -16,13 +20,13 @@ CQuestHandler::~CQuestHandler()
 
 HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 {
-
-
 	Release_Ref();
 
 	m_eNowQuest = eQuest;
 	m_IsClear = false;
 	m_IsRetry = false;
+	m_IsArrivePlayer = false;
+	m_IsArriveObject = false;
 	m_iCount = 0;
 	m_iCount_Max = 0;
 	m_fTimer = 0.f;
@@ -69,7 +73,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_wstrQuestName = L"보스를 격파하라";
 		m_iCount_Max = 1;
 	}
-		break;
+	break;
 	default:
 		break;
 	}
@@ -100,9 +104,9 @@ _int CQuestHandler::Set_Counting(const _int iCount)
 	m_iCount += iCount;
 
 	if (m_IsClear == true)
-		return QUEST_CLEAR;
+		return true;
 
-	return QUEST_NOTCLEAR;
+	return false;
 }
 
 _int CQuestHandler::Set_ClearStage(EStageClear eClearStage)
@@ -161,6 +165,16 @@ _bool CQuestHandler::Get_IsStage_3_Locked()
 	return m_bClear[2];
 }
 
+_bool CQuestHandler::Get_IsPlayer_Dead()
+{
+	return m_IsArrivePlayer;
+}
+
+_bool CQuestHandler::Get_IsObject_Dead()
+{
+	return m_IsArriveObject;
+}
+
 _bool CQuestHandler::Update_Quest()
 {
 	switch (m_eNowQuest)
@@ -190,8 +204,13 @@ _bool CQuestHandler::Update_Quest()
 	if (m_iCount >= m_iCount_Max)
 	{
 		m_iCount = m_iCount_Max;
-		m_IsClear = QUEST_CLEAR;
+		m_IsClear = true;
 	}
+
+	if (m_IsArrivePlayer == false)
+		m_IsArrivePlayer = ((CPlayer*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Player"))->Get_IsDead();
+
+	m_IsRetry = m_IsArrivePlayer;
 
 	return m_IsClear;
 }
@@ -210,6 +229,83 @@ void CQuestHandler::Release_Ref()
 
 	if (m_pPlayerTransform != nullptr)
 		Safe_Release(m_pPlayerTransform);
+
+}
+
+void CQuestHandler::Lock_MonsterAI(_bool bLock)
+{
+	// true 일떄 움직임을 false로 멈춘다
+	if (true == bLock)
+	{
+		list<CGameObject*> pList;
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CMonster*>(iter)->Set_IsFight(false);
+			}
+		}
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CSniper*>(iter)->Set_IsFight(false);
+			}
+		}
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+			}
+		}
+	}
+
+
+	else if (false == bLock)
+	{
+		list<CGameObject*> pList;
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CMonster*>(iter)->Set_IsFight(true);
+			}
+		}
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CSniper*>(iter)->Set_IsFight(true);
+			}
+		}
+
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
+		{
+			pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster"));
+
+			for (auto& iter : pList)
+			{
+				static_cast<CBoss_Monster*>(iter)->Set_BossFight(true);
+			}
+		}
+	}
+
 
 }
 
@@ -283,29 +379,29 @@ void CQuestHandler::Update_Quest_Stage2_Resque()
 
 void CQuestHandler::Update_Quest_Stage3_Delivery()
 {
-	if (m_IsClear == false)
+	m_IsClear = false;
+
+	m_IsArriveObject = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Delivery")->empty();
+
+	if (m_IsArriveObject == true)
 	{
-		m_IsRetry = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Delivery")->empty();
-
-		if (m_IsRetry == true)
-		{
-			m_IsClear = false;
-			return;
-		}
-		m_IsClear = ((CDelivery*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Delivery"))->Get_IsArrive();
-
-		if (m_IsClear == true)
-			m_iCount = m_iCount_Max;
+		m_IsClear = false;
+		return;
 	}
+
+	m_IsClear = ((CDelivery*)CManagement::Get_Instance()->Get_GameObject(L"Layer_Delivery"))->Get_IsArrive();
+
+	if (m_IsClear == true)
+		m_iCount = m_iCount_Max;
 }
 
 void CQuestHandler::Update_Quest_Stage3_Boss()
 {
 	if (m_IsClear == false)
 	{
-		m_IsRetry = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Player")->empty();
+		m_IsArriveObject = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Delivery")->empty();
 
-		if (m_IsRetry == true)
+		if (m_IsArriveObject == true)
 		{
 			m_IsClear = false;
 			return;
@@ -313,7 +409,7 @@ void CQuestHandler::Update_Quest_Stage3_Boss()
 
 		m_IsClear = CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty();
 
-		if(m_IsClear == true)
+		if (m_IsClear == true)
 			m_iCount = m_iCount_Max;
 	}
 
