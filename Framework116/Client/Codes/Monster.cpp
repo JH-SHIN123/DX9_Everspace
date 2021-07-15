@@ -571,8 +571,19 @@ void CMonster::Set_Hp_Pos()
 		m_pHp_Bar->Set_Pos(vPosition);
 	if(m_pHP_Bar_Border)
 		m_pHP_Bar_Border->Set_Pos(vPosition);
-	if(m_pLockOn)
-		m_pLockOn->Set_Pos(vLockOnPos);
+	if (m_pLockOn)
+	{
+		if (m_pLockOn->Get_IsDead() == false)
+		{
+			if (GetAsyncKeyState(L'R') & 0x8000)
+			{
+				POINT pt = { (LONG)ptBoss.x, (LONG)ptBoss.y };
+				//ScreenToClient(g_hWnd, &pt);
+				SetCursorPos((_int)pt.x + 8, (_int)pt.y + 13);
+			}
+			m_pLockOn->Set_Pos(vLockOnPos);
+		}
+	}
 
 }
 
