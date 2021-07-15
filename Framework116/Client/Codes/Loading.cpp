@@ -1503,6 +1503,17 @@ HRESULT CLoading::Load_HUD_Resources()
 		return E_FAIL;
 	}
 
+
+	/* For.Component_Texture_Head_Up_Display */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Head_Up_Display",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/HeadUpDisplay.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Head_Up_Display");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return S_OK;

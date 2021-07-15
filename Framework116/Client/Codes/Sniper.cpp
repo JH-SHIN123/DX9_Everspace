@@ -395,7 +395,19 @@ void CSniper::Set_Hp_Pos()
 	if (m_pHP_Bar_Border)
 		m_pHP_Bar_Border->Set_Pos(vPosition);
 	if (m_pLockOn)
-		m_pLockOn->Set_Pos(vLockOnPos);
+	{
+		if (m_pLockOn->Get_IsDead() == false)
+		{
+			if (GetAsyncKeyState(L'R') & 0x8000)
+			{
+				POINT pt = { ptBoss.x, ptBoss.y };
+				//ScreenToClient(g_hWnd, &pt);
+				SetCursorPos((_int)pt.x + 7, (_int)pt.y + 13);
+			}
+			m_pLockOn->Set_Pos(vLockOnPos);
+		}
+	}
+
 }
 
 
