@@ -14,6 +14,7 @@ private:
 public:
 	void Set_IsBoost(const _bool _bSwitch) { m_bBoost = _bSwitch; }
 	void Set_EngineOffset(const _float3& _vOffset) { m_vEngineOffset = _vOffset; }
+	void Set_SizeRate(const _float _fRate) { m_fSizeRate = _fRate; }
 
 public:
 	virtual void ResetParticle_ParticleSystem(PARTICLE_ATTRIBUTE & attribute) override;
@@ -33,6 +34,7 @@ public:
 private:
 	_bool	m_bBoost = false;
 	_float3 m_vEngineOffset = { 0.f,0.f,0.f };
+	_float	m_fSizeRate = 1.f;
 };
 
 #define __ENGINE_EFFECT_SYSTEM_H__

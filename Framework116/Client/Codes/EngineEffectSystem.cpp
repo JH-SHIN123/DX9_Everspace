@@ -68,7 +68,7 @@ _uint CEngineEffectSystem::Update_GameObject(_float fDeltaTime)
 		m_tResetAttribute.vColorGreen_RandomRange = { 0.2f,0.2f };
 		m_tResetAttribute.vColorBlue_RandomRange = { 0.2f,0.2f };
 		m_tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
-		m_tResetAttribute.fParticleSize = 0.6f;
+		m_tResetAttribute.fParticleSize = 0.6f * m_fSizeRate;
 		m_tResetAttribute.fLifeTime = 2.5f;
 	}
 	else {
@@ -78,7 +78,7 @@ _uint CEngineEffectSystem::Update_GameObject(_float fDeltaTime)
 		m_tResetAttribute.vColorGreen_RandomRange = { 0.08f,0.08f };
 		m_tResetAttribute.vColorBlue_RandomRange = { 0.08f,0.08f };
 		m_tResetAttribute.fParticleAlphaFadeSpeed = 0.2f;
-		m_tResetAttribute.fParticleSize = 0.7f;
+		m_tResetAttribute.fParticleSize = 0.7f * m_fSizeRate;
 		m_tResetAttribute.fLifeTime = 0.5f;
 	}
 

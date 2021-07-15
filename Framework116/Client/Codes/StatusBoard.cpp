@@ -88,12 +88,7 @@ HRESULT CStatusBoard::Ready_GameObject(void * pArg/* = nullptr*/)
 	//	return E_FAIL;
 	//}
 
-#ifdef _DEBUG
-	WritePrivateProfileString(L"Section_1", L"Key_1", L"0", L"../test.ini");
-	WritePrivateProfileString(L"Section_1", L"Key_2", L"0", L"../test.ini");
-	WritePrivateProfileString(L"Section_1", L"Key_3", L"0", L"../test.ini");
-	WritePrivateProfileString(L"Section_1", L"Key_4", L"0", L"../test.ini");
-#endif // _DEBUG
+
 
 	return S_OK;
 }
