@@ -71,20 +71,20 @@ private:
 	_bool m_IsLockOn = false;
 	_uint Make_LockOn();
 	//////////////////////Effect///////////////////////////
-private:
-	void Update_Effect();
+//private:
+//	void Update_Effect();
 
-private: // Engine Effect
-	_float3 m_vLeftEngineOffset = { 0.f, 0.f, 0.f };
-	_float3 m_vRightEngineOffset = { 0.f, 0.f, 0.f };
-	class CEngineEffectSystem* m_pLeftEngineEffect = nullptr;
-	class CEngineEffectSystem* m_pRightEngineEffect = nullptr;
-
-private: // Wing Effect
-	_float3 m_vLeftWingOffset = { 0.f, 0.f, 0.f };
-	_float3 m_vRightWingOffset = { 0.f, 0.f, 0.f };
-	class CWingBoost_System* m_pLeftWingBoost = nullptr;
-	class CWingBoost_System* m_pRightWingBoost = nullptr;
+//private: // Engine Effect
+//	_float3 m_vLeftEngineOffset = { 0.f, 0.f, 0.f };
+//	_float3 m_vRightEngineOffset = { 0.f, 0.f, 0.f };
+//	class CEngineEffectSystem* m_pLeftEngineEffect = nullptr;
+//	class CEngineEffectSystem* m_pRightEngineEffect = nullptr;
+//
+//private: // Wing Effect
+//	_float3 m_vLeftWingOffset = { 0.f, 0.f, 0.f };
+//	_float3 m_vRightWingOffset = { 0.f, 0.f, 0.f };
+//	class CWingBoost_System* m_pLeftWingBoost = nullptr;
+//	class CWingBoost_System* m_pRightWingBoost = nullptr;
 
 private:
 	_bool m_IsBoost = false;
