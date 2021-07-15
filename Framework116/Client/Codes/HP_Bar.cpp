@@ -51,8 +51,8 @@ _uint CHP_Bar::Render_GameObject()
 {
 	//Check_Degree();
 	// hp바 아예 안생기는 버그 수정하고 주석해제 ㄱ
-	//if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
-	//{
+	if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
+	{
 		if (!m_IsBack)
 		{
 			if (!m_IsFar)
@@ -60,7 +60,7 @@ _uint CHP_Bar::Render_GameObject()
 				CUI::Render_GameObject();
 			}
 		}
-	//}
+	}
 
 	return _uint();
 }

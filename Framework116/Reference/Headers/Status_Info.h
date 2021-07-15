@@ -14,35 +14,35 @@ private:
 
 public:
 	void Set_StatusInfo(const STAT_INFO& tStatusInfo);
-	void Set_Damage(_uint iDamage);
+	void Set_Damage(_int iDamage);
 
 public:
 	const STAT_INFO Get_StatusInfo();
-	const _uint Get_Damage();
+	const _int Get_Damage();
 
 public:
-	void Set_Attack(_uint iAttack);
-	void Set_Deffend(_uint iDeffend);
-	void Set_MaxHp(_uint iMaxHp);
-	void Set_Hp(_uint iHp);
-	void Set_MaxShield(_uint iMaxShield);
-	void Set_Shield(_uint iShield);
-	void Set_MaxEnergy(_uint iMaxEnergy);
-	void Set_Energy(_uint iEnergy);
-	void Set_FireRate(_uint iFreRate);
-	void Set_HittedDamage(_uint iHittedDamage); //Hp바에 넣을 데미지
+	void Set_Attack(_int iAttack);
+	void Set_Deffend(_int iDeffend);
+	void Set_MaxHp(_int iMaxHp);
+	void Set_Hp(_int iHp);
+	void Set_MaxShield(_int iMaxShield);
+	void Set_Shield(_int iShield);
+	void Set_MaxEnergy(_int iMaxEnergy);
+	void Set_Energy(_int iEnergy);
+	void Set_FireRate(_int iFreRate);
+	void Set_HittedDamage(_int iHittedDamage); //Hp바에 넣을 데미지
 
 public:
-	const _uint Get_Attack();
-	const _uint Get_Deffend();
-	const _uint Get_MaxHp();
-	const _uint Get_Hp();
-	const _uint Get_MaxShield();
-	const _uint Get_Shield();
-	const _uint Get_MaxEnergy();
-	const _uint Get_Energy();
-	const _uint Get_FireRate();
-	_uint Get_HittedDamage();
+	const _int Get_Attack();
+	const _int Get_Deffend();
+	const _int Get_MaxHp();
+	const _int Get_Hp();
+	const _int Get_MaxShield();
+	const _int Get_Shield();
+	const _int Get_MaxEnergy();
+	const _int Get_Energy();
+	const _int Get_FireRate();
+	_int Get_HittedDamage();
 
 public:
 	virtual HRESULT Ready_Component_Prototype() override;
