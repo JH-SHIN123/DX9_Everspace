@@ -819,6 +819,9 @@ _uint CBoss_Monster::Add_Hp_Bar(_float fDeltaTime)
 
 			m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
 			m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_BOSS_MONSTER);
+
+			Safe_Release(pGameObject);
+			Safe_Release(pGameObjectBorder);
 		}
 
 	}
@@ -1043,6 +1046,7 @@ _uint CBoss_Monster::Make_LockOn()
 
 			m_pLockOn = static_cast<CNew_LockOn*>(pLockOn);
 			m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_BOSS_MONSTER);
+			Safe_Release(pLockOn);
 		}
 	}
 	return S_OK;
