@@ -910,8 +910,8 @@ _uint CPlayer::Collide_Planet_Or_Astroid(const _float fDeltaTime)
 	
 	if (m_IsAstroidCollide&& fDelayTime > 1.f)
 	{
-		Set_Damage(10.f);
-		Get_HpBar()->Set_ScaleX(-10.f / m_fFullHp * m_fHpLength);
+		m_pInfo->Set_Damage(10);
+		Get_HpBar()->Set_ScaleX(-10.f / m_pInfo->Get_MaxHp() * m_fHpLength);
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::Static,
 			L"GameObject_HUD_Effect_Damage",

@@ -99,7 +99,7 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 void CStage3::Stage_Flow(_float fDeltaTime)
 {
 	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
-		m_iFlowCount = PLAYER_DEAD;
+		m_iFlowCount = PLAYER_STAGE3_DEAD;
 
 	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
 		m_iFlowCount = QUEST_FAILED;
@@ -214,7 +214,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 	}
 	break;
 
-	case PLAYER_DEAD:
+	case PLAYER_STAGE3_DEAD:
 	{
 		if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Delivery_Dead)))
 			return;
@@ -222,7 +222,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 	}
 	break;
 
-	case PLAYER_DEAD + 1:
+	case PLAYER_STAGE3_DEAD + 1:
 	{
 		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
 		if (Check == true)
