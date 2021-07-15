@@ -15,6 +15,7 @@ enum class EScript {
 	Stg2_Finish_AsteroidFlyAway,
 	Stg2_SearchTarget,
 	Stg2_PlayerDead,
+	Stage3_Opening,
 	End
 };
 
@@ -60,6 +61,8 @@ private: //대화
 	void Script_Stg2_Finish_AsteroidFlyAway();
 	void Script_Stg2_Search_Target();
 	void Script_Stg2_PlayerDead();
+	void Script_Stage3_Opening();
+
 private: // 기타
 	void Lock_Cursor();
 	void Portrait_Check();

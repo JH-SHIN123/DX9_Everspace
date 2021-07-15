@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\QuestHandler.h"
 #include "Player.h"
+#include "CollisionHandler.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
 
@@ -22,6 +23,8 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	m_eNowQuest = eQuest;
 	m_IsClear = false;
 	m_iCount = 0;
+	m_iCount_Max = 0;
+	m_fTimer = 0.f;
 
 	switch (eQuest)
 	{
@@ -32,14 +35,29 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Ring"));
 	}
 	break;
+
 	case EQuest::Stage_1_Target:
 	{
 		m_wstrQuestName = L"과녁을 파괴하라";
 		m_iCount_Max = (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"))->size();
 		m_listTargetObject = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Drone"));
 	}
-
 	break;
+
+	case EQuest::Stage_2_Dodge:
+	{
+		m_wstrQuestName = L"운석을 피하라";
+		m_iCount_Max = 20;
+	}
+	break;
+
+	case EQuest::Stage_2_Rescue:
+	{
+		m_wstrQuestName = L"아군을 구조하라";
+		m_iCount_Max = 1;
+	}
+	break;
+
 	default:
 		break;
 	}
@@ -196,5 +214,35 @@ void CQuestHandler::Update_Quest_Stage1_Target()
 	{
 		if (iter->Get_IsDead() == true)
 			++m_iCount;
+	}
+}
+
+void CQuestHandler::Update_Quest_Stage2_Dodge()
+{
+	if (m_IsClear == true)
+		return;
+
+	_float fTime = CManagement::Get_Instance()->Get_DeltaTime();
+
+	m_fTimer += fTime;
+	m_iCount = (_uint)m_fTimer;
+
+	if (m_fTimer >= (_float)m_iCount_Max)
+	{
+		m_iCount = m_iCount_Max;
+		m_IsClear = true;
+	}
+}
+
+void CQuestHandler::Update_Quest_Stage2_Resque()
+{
+	if (m_IsClear == false)
+	{
+		m_IsClear = CCollisionHandler::Collision_PlayerToObject(L"Layer_Player", L"Layer_Broken_Plane");
+
+		if (m_IsClear == true)
+		{
+			m_iCount = m_iCount_Max;
+		}
 	}
 }

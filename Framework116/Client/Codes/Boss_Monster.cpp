@@ -414,7 +414,7 @@ _uint CBoss_Monster::Fire_Laser(_float fDeltaTime)
 			_float fRadian_Max_Y = 1.f - fLaser_Radian_Y;
 			_float fRadian_Min_Y = fLaser_Radian_Y - 1.f;
 
-			if (0.1f >= fTheta_Y &&
+			if (0.15f >= fTheta_Y &&
 				fTheta_Y >= -0.45f)
 			{
 				if (fRadian_Min_Z <= fTheta_Z &&

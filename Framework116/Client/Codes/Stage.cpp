@@ -95,7 +95,7 @@ _uint CStage::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Asteroid");
 
 	// Ring
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player", L"Layer_Ring");
+	CCollisionHandler::Collision_PlayerToObject(L"Layer_Player", L"Layer_Ring");
 
 	//Sniper
 	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Sniper");

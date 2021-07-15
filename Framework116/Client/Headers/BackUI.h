@@ -11,6 +11,7 @@ enum class EPortraitNumber
 	Admiral = 0,
 	Player,
 	Friendly,
+	Delivery,
 	End
 };
 class CBackUI final : public CGameObject

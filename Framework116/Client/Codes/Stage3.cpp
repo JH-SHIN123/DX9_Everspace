@@ -87,6 +87,30 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 	return _uint();
 }
 
+void CStage3::Stage_Flow(_float fDeltaTime)
+{
+	switch (m_iFlowCount)
+	{
+	case 0:
+		if (m_fFlowTime >= 0)
+		{
+			SetCursorPos(WINCX >> 1, (WINCY >> 1) - 5);
+
+			m_fFlowTime -= fDeltaTime;
+
+			if (m_fFlowTime <= 0)
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Opening)))
+					return;
+				++m_iFlowCount;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
+
 HRESULT CStage3::Add_Layer_Cam(const wstring & LayerTag)
 {
 	CAMERA_DESC CameraDesc;
