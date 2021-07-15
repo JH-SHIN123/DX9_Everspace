@@ -398,7 +398,7 @@ HRESULT CStreamHandler::Add_GameObject_Layer_Map(const PASSDATA_MAP* pPassData)
 		tDesc.tTransformDesc.matWorld = pPassData->matWorld;
 		tDesc.tTransformDesc.vPosition = pPassData->Pos;
 		tDesc.tTransformDesc.vRotate = pPassData->Rotate;
-		tDesc.tTransformDesc.vScale = pPassData->Scale * 0.1f;
+		tDesc.tTransformDesc.vScale = pPassData->Scale;
 		tDesc.wstrMeshName = pPassData->wstrMeshName;
 
 		if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
