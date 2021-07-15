@@ -438,7 +438,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 	// Move
 	if (GetAsyncKeyState('W') & 0x8000)
 	{
-		m_pTransform->Go_Straight(fDeltaTime);
+		m_pTransform->Go_Straight(fDeltaTime * 10.f);
 		m_pManagement->PlaySound(L"Player_Move.ogg", CSoundMgr::PLAYER_MOVE);
 		m_IsMove = true;
 	}
@@ -554,25 +554,25 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			return;
 		}
 	}
-	//else if (m_pController->Key_Down(KEY_3))
-	//{
-	//	// 이전 무기 HUD 삭제
-	//	m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
-	//	m_iWeapon = WEAPON_MISSILE;
-	//	UI_DESC MissileHUD;
-	//	MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-	//	MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-	//	MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
-	//	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-	//		EResourceType::Static,
-	//		L"GameObject_UI",
-	//		L"Layer_HUD_Weapon",
-	//		(void*)&MissileHUD)))
-	//	{
-	//		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-	//		return;
-	//	}
-	//}
+	else if (m_pController->Key_Down(KEY_3))
+	{
+		// 이전 무기 HUD 삭제
+		m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
+		m_iWeapon = WEAPON_MISSILE;
+		UI_DESC MissileHUD;
+		MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+		MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+		MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
+		if (FAILED(m_pManagement->Add_GameObject_InLayer(
+			EResourceType::Static,
+			L"GameObject_UI",
+			L"Layer_HUD_Weapon",
+			(void*)&MissileHUD)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+			return;
+		}
+	}
 	// 피깎는 !TEST!!!!!!!!!!!!!
 	if (m_pController->Key_Down(KEY_F1))
 	{

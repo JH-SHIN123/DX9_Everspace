@@ -236,6 +236,7 @@ HRESULT CStage3::Add_Layer_Boss_Monster(const wstring & LayerTag)
 
 HRESULT CStage3::Add_Layer_HUD(const wstring & LayerTag)
 {
+
 	// Crosshair
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
@@ -265,17 +266,13 @@ HRESULT CStage3::Add_Layer_HUD(const wstring & LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist2 In Layer");
 		return E_FAIL;
 	}
-
-
-
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
-
-	UI_DESC HUD_Boarder_Gatling;
-	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_Gatling;
+	//HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+	//HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
+	//	return E_FAIL;
 
 	// Skill OverDrive
 
@@ -286,12 +283,12 @@ HRESULT CStage3::Add_Layer_HUD(const wstring & LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
 		return E_FAIL;
 
-	UI_DESC HUD_Boarder_OverDrive;
-	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
-	HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_OverDrive;
+	//HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
+	//HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
+	//	return E_FAIL;
 
 	// Skill Shield
 	UI_DESC HUD_Shield_Battery;
@@ -301,12 +298,12 @@ HRESULT CStage3::Add_Layer_HUD(const wstring & LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
 		return E_FAIL;
 
-	UI_DESC HUD_Boarder_Shield;
-	HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
-	HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_Shield;
+	//HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
+	//HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))
+	//	return E_FAIL;
 
 	// Player Status (Shield, HP)
 
@@ -358,6 +355,13 @@ HRESULT CStage3::Add_Layer_HUD(const wstring & LayerTag)
 	HUD_HP_OutBar.tTransformDesc.vScale = { 262.f, 14.f, 0.f };
 	HUD_HP_OutBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Out_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
+		return E_FAIL;
+
+	UI_DESC HeadUpDisplay;
+	HeadUpDisplay.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	HeadUpDisplay.tTransformDesc.vScale = { 945.f, 763.f, 0.f };
+	HeadUpDisplay.wstrTexturePrototypeTag = L"Component_Texture_Head_Up_Display";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HeadUpDisplay)))
 		return E_FAIL;
 
 

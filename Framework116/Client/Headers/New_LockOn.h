@@ -24,6 +24,7 @@ public:
 public:
 	// 뒤야 앞이야!
 	void Set_IsBack(_bool bCheck) { m_IsBack = bCheck; }
+	_bool Get_IsBack() { return m_IsBack; }
 	// 피깎는용도!
 	void Set_ScaleX(_float _fDamage);
 	void Set_Pos(_float3 _vPos) { m_pTransform->Set_Position(_vPos); }

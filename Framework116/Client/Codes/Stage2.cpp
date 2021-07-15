@@ -53,26 +53,12 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
-	// Boss
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Boss_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Boss_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Asteroid");
-	//Sniper
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Sniper");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Sniper");
-
-	//Monster
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Bullet", L"Layer_Monster");
-	CCollisionHandler::Collision_SphereToSphere(L"Layer_Player_Missile", L"Layer_Monster");
-
-
-
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
-
+	CQuestHandler::Get_Instance()->Update_Quest();
 	switch (Stage2_Flow(fDeltaTime))
 	{
 	case -1:
@@ -80,7 +66,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	case TRUE:
 		break;
 	case UPDATE_FLYAWAY:
-		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 30.f,20.f);
+		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 30.f,15.f);
 		break;
 	case PLAYER_DEAD:
 		m_fDelaySceneChange += fDeltaTime;
@@ -190,6 +176,7 @@ HRESULT CStage2::Add_Layer_Skybox(const wstring& LayerTag)
 
 HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 {
+
 	// Crosshair
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::NonStatic,
@@ -219,17 +206,13 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 		PRINT_LOG(L"Error", L"Failed To Add Layer_AimAssist2 In Layer");
 		return E_FAIL;
 	}
-
-
-
 	// Weapon Gatling -> 테두리 빼고 플레이어로 통합.
-
-	UI_DESC HUD_Boarder_Gatling;
-	HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
-	HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_Gatling;
+	//HUD_Boarder_Gatling.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+	//HUD_Boarder_Gatling.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_Gatling.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Gatling)))
+	//	return E_FAIL;
 
 	// Skill OverDrive
 
@@ -240,12 +223,12 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
 		return E_FAIL;
 
-	UI_DESC HUD_Boarder_OverDrive;
-	HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
-	HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_OverDrive;
+	//HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
+	//HUD_Boarder_OverDrive.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_OverDrive.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_OverDrive)))
+	//	return E_FAIL;
 
 	// Skill Shield
 	UI_DESC HUD_Shield_Battery;
@@ -255,12 +238,12 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
 		return E_FAIL;
 
-	UI_DESC HUD_Boarder_Shield;
-	HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
-	HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
-	HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))
-		return E_FAIL;
+	//UI_DESC HUD_Boarder_Shield;
+	//HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
+	//HUD_Boarder_Shield.tTransformDesc.vScale = { 201.f, 123.f, 0.f };
+	//HUD_Boarder_Shield.wstrTexturePrototypeTag = L"Component_Texture_HUD_Boarder";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Boarder_Shield)))
+	//	return E_FAIL;
 
 	// Player Status (Shield, HP)
 
@@ -313,6 +296,14 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 	HUD_HP_OutBar.wstrTexturePrototypeTag = L"Component_Texture_HUD_Out_Bar";
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
+
+	UI_DESC HeadUpDisplay;
+	HeadUpDisplay.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	HeadUpDisplay.tTransformDesc.vScale = { 945.f, 763.f, 0.f };
+	HeadUpDisplay.wstrTexturePrototypeTag = L"Component_Texture_Head_Up_Display";
+	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HeadUpDisplay)))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -447,7 +438,7 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Begin)))
 					return -1;
-				++m_iFlowCount;
+					++m_iFlowCount;
 			}
 		}
 		return TRUE;
@@ -467,6 +458,8 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 				m_fFlowTime += fDeltaTime;
 				if (m_fFlowTime >= 1)
 				{
+					if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Dodge)))
+						return -1;
 					++m_iFlowCount;
 				}
 			}
@@ -512,7 +505,10 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_SearchTarget)))
 					return -1;
+				if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Rescue)))
+					return -1;
 			}
+			
 			++m_iFlowCount;
 		}
 		return TRUE;
