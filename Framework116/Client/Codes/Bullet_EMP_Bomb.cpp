@@ -111,8 +111,8 @@ HRESULT CBullet_EMP_Bomb::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-  	Ready_GameObject_EMP();
-
+	m_pTransform->Update_Transform();
+	Ready_GameObject_EMP();
 	CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Trail(this, (CGameObject**)&m_pEffect);
 
 	STAT_INFO tStatus;
@@ -374,7 +374,7 @@ void CBullet_EMP_Bomb::Explosion(_float fDeltaTime)
 		}
 	}
 
-	
+
 	m_fExplosionTime -= fDeltaTime;
 
 }
@@ -460,13 +460,13 @@ void CBullet_EMP_Bomb::Free()
 {
 	Safe_Release(m_pTransformRing_1);
 	Safe_Release(m_pTransformRing_2);
+	Safe_Release(m_pTransform);
 	Safe_Release(m_pTargetTransform);
 
 	Safe_Release(m_pRing_1);
 	Safe_Release(m_pRing_2);
 	Safe_Release(m_pMesh);
 
-	Safe_Release(m_pTransform);
 	Safe_Release(m_pInfo);
 	//Safe_Release(m_pTexture);
 	Safe_Release(m_pCollide);
@@ -476,7 +476,7 @@ void CBullet_EMP_Bomb::Free()
 		m_pEffect->Set_IsDead(true);
 		m_pEffect = nullptr;
 	}
-	
+
 
 	CGameObject::Free();
 }

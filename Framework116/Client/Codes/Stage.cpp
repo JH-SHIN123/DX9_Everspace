@@ -24,8 +24,6 @@ HRESULT CStage::Ready_Scene()
 	::SetWindowText(g_hWnd, L"Stage");
 	m_pManagement->StopSound(CSoundMgr::BGM);
 
-	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
-
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -39,6 +37,7 @@ HRESULT CStage::Ready_Scene()
 
 	CStreamHandler::Load_PassData_Map(L"../../Resources/Data/Map/tutorial.map");
 	CStreamHandler::Load_PassData_Navi(L"../../Resources/Data/Navi/guide.navi");
+
 	if (FAILED(Add_Layer_Cam(L"Layer_Cam")))
 		return E_FAIL;
 
@@ -495,8 +494,3 @@ HRESULT CStage::Add_Layer_MissionUI(const wstring & LayerTag, EQuest eQuest)
 
 	return S_OK;
 }
-
-
-
-
-

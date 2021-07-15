@@ -255,6 +255,7 @@ CGameObject * CNew_LockOn::Clone(void * pArg/* = nullptr*/)
 void CNew_LockOn::Free()
 {
 	Safe_Release(m_pPlayerTransform);
+
 	CUI::Free();
 }
 

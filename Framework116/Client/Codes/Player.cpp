@@ -1035,7 +1035,7 @@ void CPlayer::Free()
 	Safe_Release(m_pMesh);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pController);
-	Safe_Release(m_pHeadLight);
+	Safe_Release(m_pHeadLight);//
 
 	CGameObject::Free();
 }
