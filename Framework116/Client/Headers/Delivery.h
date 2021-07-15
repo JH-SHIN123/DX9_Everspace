@@ -30,6 +30,9 @@ public:
 	virtual void Free() override;
 
 private:
+	_bool m_bArrive = false;
+
+private:
 	CTransform* m_pTransform = nullptr;
 	CMesh* m_pMesh = nullptr;
 

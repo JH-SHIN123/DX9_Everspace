@@ -136,22 +136,30 @@ _uint CDelivery::Movement(_float fDeltaTime)
     // 현재위치와 다음 경로의 위치의 거리가 1일경우 다음 노드로 이동
 
     // 마지막 노드 
-    if (m_iCurRouteIndex + 1 >= m_vecNaviRoute.size())
-        ;
-    else
+    if (m_iCurRouteIndex == m_vecNaviRoute.size() - 1) {
+        // 도착 파티클 
+        // 도착 퀘스트 완료
+        // 호위선 무적상태
+        m_bArrive = true; /* 도착 */
+    }
+
+    if(!(m_iCurRouteIndex >= m_vecNaviRoute.size() - 1))
     {
         _float3 vCurPos = m_pTransform->Get_State(EState::Position);
-        _float3 vNextPos = m_vecNaviRoute[m_iCurRouteIndex + 1].vNodePos;
+        _float3 vNextPos = m_vecNaviRoute[m_iCurRouteIndex].vNodePos;
 
         // 거리비교
         FLOAT vLength = D3DXVec3Length(&(vNextPos - vCurPos));
-        if (vLength <= 100.f) {
-            FindNextRoute();
+        if (vLength <= 3.f) {
+            m_pTransform->Set_Position(m_vecNaviRoute[m_iCurRouteIndex].vNodePos);
             ++m_iCurRouteIndex;
         }
+
+        FindNextRoute();
     }
 
-    m_pTransform->Go_Straight(fDeltaTime);
+    if(false == m_bArrive)
+        m_pTransform->Go_Straight(fDeltaTime);
 
     return _uint();
 }
@@ -161,33 +169,27 @@ void CDelivery::FindNextRoute()
     if (m_iCurRouteIndex >= m_vecNaviRoute.size()) return;
     if (m_pTransform == nullptr) return;
 
-    //m_pTransform->Set_Position(m_vecNaviRoute[m_iCurRouteIndex].vNodePos);
+    if (m_iCurRouteIndex == 0) {
+        m_pTransform->Set_Position(m_vecNaviRoute[m_iCurRouteIndex].vNodePos);
+        ++m_iCurRouteIndex;
+    }
 
     _float3 right = { 1.f,0.f,0.f };
     _float3 up = { 0.f,1.f,0.f };
     _float3 look = { 0.f,0.f,1.f };
-    _float3 dir = { 0.f,0.f,1.f };
+    _float3 dir = m_vecNaviRoute[m_iCurRouteIndex].vNodePos - m_pTransform->Get_TransformDesc().vPosition;
+    D3DXVec3Normalize(&dir, &dir);
 
-    //if (m_iCurRouteIndex == 0)
-    //{
-    //    dir = m_vecNaviRoute[m_iCurRouteIndex].vNodeDir;
-    //}
-    //else
-    //{
-        dir = m_vecNaviRoute[m_iCurRouteIndex + 1].vNodePos - m_vecNaviRoute[m_iCurRouteIndex].vNodePos;
-        D3DXVec3Normalize(&dir, &dir);
-    //}
-
-    D3DXVec3Cross(&up, &look, &dir);
-    D3DXVec3Normalize(&up, &up);
+    //D3DXVec3Cross(&up, &look, &dir);
+    //D3DXVec3Normalize(&up, &up);
 
     D3DXVec3Cross(&right, &up, &dir);
+    //D3DXVec3Cross(&right, &dir, &up);
     D3DXVec3Normalize(&right, &right);
 
     m_pTransform->Set_State(EState::Right, right);
     m_pTransform->Set_State(EState::Up, up);
     m_pTransform->Set_State(EState::Look, dir);
-
 }
 
 CDelivery* CDelivery::Create(LPDIRECT3DDEVICE9 pDevice)

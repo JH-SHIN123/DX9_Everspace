@@ -58,8 +58,8 @@ HRESULT CNaviArrow::Ready_GameObject(void* pArg)
 	_float3 look = { 0.f,0.f,1.f };
 	_float3 dir = pDesc->vDir;
 
-	D3DXVec3Cross(&up, &look, &dir);
-	D3DXVec3Normalize(&up, &up);
+	//D3DXVec3Cross(&up, &look, &dir);
+	//D3DXVec3Normalize(&up, &up);
 
 	D3DXVec3Cross(&right, &up, &dir);
 	D3DXVec3Normalize(&right, &right);
