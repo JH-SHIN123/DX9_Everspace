@@ -18,7 +18,7 @@ void CStatus_Info::Set_StatusInfo(const STAT_INFO & tStatusInfo)
 	m_tStatusInfo = tStatusInfo;
 }
 
-void CStatus_Info::Set_Damage(_uint iDamage)
+void CStatus_Info::Set_Damage(_int iDamage)
 {
 	m_tStatusInfo.iHp -= iDamage;
 }
@@ -28,107 +28,107 @@ const STAT_INFO CStatus_Info::Get_StatusInfo()
 	return m_tStatusInfo;
 }
 
-const _uint CStatus_Info::Get_Damage()
+const _int CStatus_Info::Get_Damage()
 {
 	return m_tStatusInfo.iAtk;
 }
 
-void CStatus_Info::Set_Attack(_uint iAttack)
+void CStatus_Info::Set_Attack(_int iAttack)
 {
 	m_tStatusInfo.iAtk = iAttack;
 }
 
-void CStatus_Info::Set_Deffend(_uint iDeffend)
+void CStatus_Info::Set_Deffend(_int iDeffend)
 {
 	m_tStatusInfo.iDef = iDeffend;
 }
 
-void CStatus_Info::Set_MaxHp(_uint iMaxHp)
+void CStatus_Info::Set_MaxHp(_int iMaxHp)
 {
 	m_tStatusInfo.iMaxHp = iMaxHp;
 }
 
-void CStatus_Info::Set_Hp(_uint iHp)
+void CStatus_Info::Set_Hp(_int iHp)
 {
 	m_tStatusInfo.iHp = iHp;
 }
 
-void CStatus_Info::Set_MaxShield(_uint iMaxShield)
+void CStatus_Info::Set_MaxShield(_int iMaxShield)
 {
 	m_tStatusInfo.iMaxShield = iMaxShield;
 }
 
-void CStatus_Info::Set_Shield(_uint iShield)
+void CStatus_Info::Set_Shield(_int iShield)
 {
 	m_tStatusInfo.iShield = iShield;
 }
 
-void CStatus_Info::Set_MaxEnergy(_uint iMaxEnergy)
+void CStatus_Info::Set_MaxEnergy(_int iMaxEnergy)
 {
 	m_tStatusInfo.iMaxEnergy = iMaxEnergy;
 }
 
-void CStatus_Info::Set_Energy(_uint iEnergy)
+void CStatus_Info::Set_Energy(_int iEnergy)
 {
 	m_tStatusInfo.iEnergy = iEnergy;
 }
 
-void CStatus_Info::Set_FireRate(_uint iFreRate)
+void CStatus_Info::Set_FireRate(_int iFreRate)
 {
 	m_tStatusInfo.iFireRate = iFreRate;
 }
 
-void CStatus_Info::Set_HittedDamage(_uint iHittedDamage)
+void CStatus_Info::Set_HittedDamage(_int iHittedDamage)
 {
 	m_tStatusInfo.iHittedDamage = iHittedDamage;
 }
 
-const _uint CStatus_Info::Get_Attack()
+const _int CStatus_Info::Get_Attack()
 {
 	return m_tStatusInfo.iAtk;
 }
 
-const _uint CStatus_Info::Get_Deffend()
+const _int CStatus_Info::Get_Deffend()
 {
 	return m_tStatusInfo.iDef;
 }
 
-const _uint CStatus_Info::Get_MaxHp()
+const _int CStatus_Info::Get_MaxHp()
 {
 	return m_tStatusInfo.iMaxHp;
 }
 
-const _uint CStatus_Info::Get_Hp()
+const _int CStatus_Info::Get_Hp()
 {
 	return m_tStatusInfo.iHp;
 }
 
-const _uint CStatus_Info::Get_MaxShield()
+const _int CStatus_Info::Get_MaxShield()
 {
 	return m_tStatusInfo.iMaxShield;
 }
 
-const _uint CStatus_Info::Get_Shield()
+const _int CStatus_Info::Get_Shield()
 {
 	return m_tStatusInfo.iShield;
 }
 
-const _uint CStatus_Info::Get_MaxEnergy()
+const _int CStatus_Info::Get_MaxEnergy()
 {
 	return m_tStatusInfo.iMaxEnergy;
 }
 
-const _uint CStatus_Info::Get_Energy()
+const _int CStatus_Info::Get_Energy()
 {
 	return m_tStatusInfo.iEnergy;
 }
 
-const _uint CStatus_Info::Get_FireRate()
+const _int CStatus_Info::Get_FireRate()
 {
 	return m_tStatusInfo.iFireRate;
 }
 
-_uint CStatus_Info::Get_HittedDamage()
+_int CStatus_Info::Get_HittedDamage()
 {
 	return m_tStatusInfo.iHittedDamage;
 }
