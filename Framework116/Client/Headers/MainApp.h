@@ -14,6 +14,7 @@ public:
 	_uint Update_MainApp();
 
 private:
+	HRESULT Ready_LoadingResources();
 	HRESULT Ready_StaticResources();
 	HRESULT Setup_DefaultSetting();
 

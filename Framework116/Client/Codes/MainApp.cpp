@@ -18,6 +18,7 @@
 #include "Status_Info.h"
 #include "FadeIn.h"
 #include "FadeOut.h"
+#include "LoadingUI.h"
 
 CMainApp::CMainApp()
 	: m_pManagement(CManagement::Get_Instance())
@@ -37,6 +38,12 @@ HRESULT CMainApp::Ready_MainApp()
 	if (nullptr == m_pDevice)
 	{
 		PRINT_LOG(L"Error", L"m_pDevice is nullptr");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_LoadingResources()))
+	{
+		PRINT_LOG(L"Error", L"Failed To Ready_LoadingResources");
 		return E_FAIL;
 	}
 
@@ -70,6 +77,31 @@ _uint CMainApp::Update_MainApp()
 	}
 
 	return _uint();
+}
+
+HRESULT CMainApp::Ready_LoadingResources()
+{
+
+#pragma region LoadingResources
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_LoadingUI",
+		CLoadingUI::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_LoadingUI");
+		return E_FAIL;
+	}
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::Static,
+		L"Component_Texture_Loading",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Loading/loading%d.png", 5))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Bullet");
+		return E_FAIL;
+	}
+#pragma endregion
+
+	return S_OK;
 }
 
 HRESULT CMainApp::Ready_StaticResources()

@@ -76,19 +76,14 @@ HRESULT CLoading::Ready_Scene()
 	::SetWindowText(g_hWnd, L"Loading");
 	m_pManagement->StopSound(CSoundMgr::BGM);
 
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::Static,
-		L"GameObject_FadeOut",
-		L"Layer_Fade",
-		this)))
+	// 씬 진입전 로딩쓰레드 생성
+	m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
+	if (nullptr == m_hLoadingThread)
 	{
-		PRINT_LOG(L"Error", L"Failed To Add GameObject_FadeOut In Layer");
+		PRINT_LOG(L"Error", L"Failed To _beginthreadex");
 		return E_FAIL;
 	}
-
-	// 로딩할 객체 이미지 생성 -> UI
-	// 동영상 재생
-
+	InitializeCriticalSection(&m_CriticalSection);
 
 	return S_OK;
 }
@@ -97,19 +92,6 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 	m_pManagement->PlaySound(L"Loading_Ambience.ogg", CSoundMgr::BGM);
-
-	if (m_bEnterScene)
-	{
-		m_hLoadingThread = (HANDLE)_beginthreadex(0, 0, ThreadMain, this, 0, 0);
-		if (nullptr == m_hLoadingThread)
-		{
-			PRINT_LOG(L"Error", L"Failed To _beginthreadex");
-			return E_FAIL;
-		}
-		InitializeCriticalSection(&m_CriticalSection);
-		m_bEnterScene = false;
-		return NO_EVENT;
-	}
 
 	// 로딩 끝
 	if (m_IsFinished)
@@ -130,6 +112,9 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 
 		if (m_bLeaveScene)
 		{
+			if (m_pLoadingUI) m_pLoadingUI->Set_IsDead(true);
+			Safe_Release(m_pLoadingUI);
+
 			CScene* pNextScene = nullptr;
 			switch (m_eNextSceneID)
 			{
@@ -195,6 +180,7 @@ void CLoading::Free()
 
 	m_pManagement->StopAll();
 
+
 	CScene::Free(); // 2.부모 리소스 정리
 
 }
@@ -239,7 +225,8 @@ unsigned CLoading::ThreadMain(void * pArg)
 HRESULT CLoading::Ready_LobbyResources()
 {
 	m_pManagement->Clear_NonStatic_Resources();
-
+	Ready_LoadingResources();
+	
 	CStreamHandler::Load_PassData_Resource(L"../../Resources/Data/Lobby.txt", FALSE);
 
 #pragma region GameObjects
@@ -450,6 +437,7 @@ HRESULT CLoading::Ready_LobbyResources()
 HRESULT CLoading::Ready_StageResources()
 {
 	m_pManagement->Clear_NonStatic_Resources();
+	Ready_LoadingResources();
 
 	// Stage 공통 로드 리소스
 	Load_HUD_Resources();
@@ -464,6 +452,7 @@ HRESULT CLoading::Ready_StageResources()
 HRESULT CLoading::Ready_Stage2Resources()
 {
 	m_pManagement->Clear_NonStatic_Resources();
+	Ready_LoadingResources();
 
 	Load_HUD_Resources();
 	Load_ScriptUI_Resources();
@@ -478,6 +467,7 @@ HRESULT CLoading::Ready_Stage2Resources()
 HRESULT CLoading::Ready_Stage3Resources()
 {
 	m_pManagement->Clear_NonStatic_Resources();
+	Ready_LoadingResources();
 
 	Load_HUD_Resources();
 	Load_ScriptUI_Resources();
@@ -1776,7 +1766,22 @@ HRESULT CLoading::Load_StageEffect_Resources()
 	return S_OK;
 }
 
-HRESULT CLoading::Load_StageMap_Resources()
+
+HRESULT CLoading::Ready_LoadingResources()
 {
+	UI_DESC uiDesc;
+	uiDesc.tTransformDesc.vScale = { WINCX * 1.2f, WINCY, 0.f };
+	uiDesc.wstrTexturePrototypeTag = L"Component_Texture_Loading";
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_LoadingUI",
+		L"Layer_LoadingUI",
+		(void*)&uiDesc,
+		&m_pLoadingUI)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }

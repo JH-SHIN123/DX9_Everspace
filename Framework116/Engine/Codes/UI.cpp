@@ -103,6 +103,9 @@ _uint CUI::LateUpdate_GameObject(_float fDeltaTime)
 {
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
+	if (m_IsDead == true)
+		return DEAD_OBJECT;
+
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::AlphaUI, this)))
 		return UPDATE_ERROR;
 
