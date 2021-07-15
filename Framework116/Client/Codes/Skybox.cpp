@@ -140,6 +140,9 @@ _uint CSkybox::Render_GameObject()
 	case (_uint)ESceneType::Stage:
 		m_pTexture->Set_Texture(0);
 		break;
+	case (_uint)ESceneType::Stage2:
+		m_pTexture->Set_Texture(0);
+		break;
 	case (_uint)ESceneType::Stage3:
 		m_pStage3Texture->Set_Texture();
 		break;
