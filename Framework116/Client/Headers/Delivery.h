@@ -55,6 +55,23 @@ private: // Engine Trail
 private:
 	vector<PASSDATA_ROUTE> m_vecNaviRoute;
 	_uint m_iCurRouteIndex = 0;
+
+private:
+	// HP Bar 추가
+	CTransform* m_pPlayerTransform = nullptr;
+	_bool m_IsHPBar = false;
+	class CHP_Bar* m_pHp_Bar = nullptr;
+	class CHP_Bar_Border* m_pHP_Bar_Border = nullptr;
+	_float m_fHpLength = 128.f;
+	_uint Check_Degree();
+
+public: // Add_HP_Bar
+	_uint Add_Hp_Bar(_float fDeltaTime);
+	void Set_Hp_Pos();
+	_bool Get_Is_Hp_Bar() { return m_IsHPBar; }
+
+	// 구ㅡ조체
+	CStatus_Info* m_pInfo = nullptr;
 };
 
 
