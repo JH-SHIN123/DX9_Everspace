@@ -81,11 +81,15 @@ _uint CManagement::Update_Game()
 	if (iEvent = m_pGameObject_Manager->LateUpdate_GameObject(fDeltaTime))
 		return iEvent;
 
-	m_pDevice_Manager->Render_Begin();
+	///////////////////////////////////////////////////////////////////////
+	// 영상 플레이동안에는 랜더 X
 
-	m_pRenderer->Render_GameObject();
-
-	m_pDevice_Manager->Render_End();
+	if (!m_bPlayingVideo)
+	{
+		m_pDevice_Manager->Render_Begin();
+		m_pRenderer->Render_GameObject();
+		m_pDevice_Manager->Render_End();
+	}
 
 	return iEvent;
 }
@@ -349,8 +353,59 @@ void CManagement::StopAll()
 	return m_pSound_Manager->StopAll();
 }
 
+HRESULT CManagement::Create_MCIVideoEx(HWND hWnd, const TCHAR* pPath, const _uint iWinCx, const _uint iWinCy)
+{
+	if (NULL != m_hVideo)
+		Release_MCIVideoEx();
+
+	m_hVideo = MCIWndCreate(hWnd, NULL, WS_CHILD | WS_VISIBLE | MCIWNDF_NOPLAYBAR
+		, pPath);
+
+	MoveWindow(m_hVideo, 0, 0, iWinCx, iWinCy, FALSE);
+
+	return S_OK;
+}
+
+HRESULT CManagement::Play_MCIVideoEx()
+{
+	MCIWndPlay(m_hVideo);
+	m_bPlayingVideo = true;
+	return S_OK;
+}
+
+HRESULT CManagement::Release_MCIVideoEx()
+{
+	MCIWndClose(m_hVideo);
+	MCIWndDestroy(m_hVideo);
+	m_hVideo = NULL;
+	m_bPlayingVideo = false;
+	return S_OK;
+}
+
+_bool CManagement::IsPlaying_MCIVideoEx()
+{
+	if (NULL == m_hVideo) 
+		return false;
+
+	// false 영상끝났다.
+	if ((MCIWndGetLength(m_hVideo) <= MCIWndGetPosition(m_hVideo)))
+	{
+		MCIWndStop(m_hVideo);
+		m_bPlayingVideo = false;
+		return false;
+	}
+	return true;
+}
+
+void CManagement::Set_IsPlayingVideo(const _bool _isPlaying)
+{
+	m_bPlayingVideo = _isPlaying;
+}
+
 void CManagement::Free()
 {
+	Release_MCIVideoEx();
+
 	if (Safe_Release(m_pFrame_Manager))
 	{
 		PRINT_LOG(L"Warning", L"Failed To Release Frame_Manager");

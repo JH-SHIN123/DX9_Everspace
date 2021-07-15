@@ -24,6 +24,7 @@ public:
 public:
 	virtual _uint Set_Texture(_uint iIndex = 0);
 	const IDirect3DBaseTexture9* Get_Texture(_uint iIndex = 0);
+	const _uint Get_TextureSize() const { return m_Textures.size(); }
 
 public:
 	static CTexture* Create(LPDIRECT3DDEVICE9 pDevice, ETextureType eType, const TCHAR* pFilePath, _uint iCount = 1);

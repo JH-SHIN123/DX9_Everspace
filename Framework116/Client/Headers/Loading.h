@@ -37,9 +37,12 @@ public: /* For Loading Monster Resource */
 
 public: /* For Loading Effect Resource */
 	HRESULT Load_StageEffect_Resources();
-	HRESULT Load_StageMap_Resources();
 
 private:
+	HRESULT Ready_LoadingResources();
+
+private:
+	_bool m_bStart = true;
 	_bool m_IsFinished = false;
 	_bool m_bFadeIn = false;
 
@@ -48,6 +51,11 @@ private:
 
 	HANDLE m_hLoadingThread = nullptr;
 	CRITICAL_SECTION m_CriticalSection;
+
+private:
+	//HWND	m_hVideo;
+	CGameObject* m_pLoadingUI = nullptr;
+	CGameObject* m_pLoadingUIIcon = nullptr;
 };
 
 #define __LOADING_H__

@@ -65,6 +65,14 @@ public: /* For.Sound_Manager*/
 	void StopSound(CSoundMgr::CHANNELID eID);
 	void StopAll();
 	
+public: /* For.Play Video*/
+	HRESULT Create_MCIVideoEx(HWND hWnd, const TCHAR* pPath, const _uint iWinCx, const _uint iWinCy);
+	HRESULT Play_MCIVideoEx();
+	HRESULT Release_MCIVideoEx();
+
+	_bool	IsPlaying_MCIVideoEx();
+	void	Set_IsPlayingVideo(const _bool _isPlaying);
+
 public:
 	virtual void Free() override;
 
@@ -81,6 +89,10 @@ private:
 private:
 	_uint m_iWinCX = 0;
 	_uint m_iWinCY = 0;
+
+private: // ¿µ»ó
+	_bool	m_bPlayingVideo = false;
+	HWND	m_hVideo = NULL;
 };
 END
 

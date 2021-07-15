@@ -102,7 +102,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 1100;
+	tStatus.iMaxHp = 300;
 	tStatus.iHp = tStatus.iMaxHp;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -479,7 +479,7 @@ _uint CMonster::Add_Hp_Bar(_float fDeltaTime)
 		CGameObject* pGameObject = nullptr;
 		UI_DESC HUD_Hp_Bar;
 		HUD_Hp_Bar.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-		HUD_Hp_Bar.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp), 8.f, 0.f };
+		HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()), 8.f, 0.f };
 		HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
@@ -494,7 +494,7 @@ _uint CMonster::Add_Hp_Bar(_float fDeltaTime)
 		CGameObject* pGameObjectBorder = nullptr;
 		UI_DESC HUD_Hp_Bar_Border;
 		HUD_Hp_Bar_Border.tTransformDesc.vPosition = { ptBoss.x - 64.f, ptBoss.y - 50.f, 0.f };
-		HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_fHp * (m_fHpLength / m_fFullHp) + 2.5f, 12.f, 0.f };
+		HUD_Hp_Bar_Border.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()) + 2.5f, 12.f, 0.f };
 		HUD_Hp_Bar_Border.wstrTexturePrototypeTag = L"Component_Texture_HP_Border";
 		if (FAILED(m_pManagement->Add_GameObject_InLayer(
 			EResourceType::NonStatic,
@@ -512,6 +512,9 @@ _uint CMonster::Add_Hp_Bar(_float fDeltaTime)
 
 		m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
 		m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_MONSTER);
+
+		//Safe_Release(pGameObjectBorder);
+		//Safe_Release(pGameObject);
 
 	}
 	return S_OK;
@@ -568,8 +571,19 @@ void CMonster::Set_Hp_Pos()
 		m_pHp_Bar->Set_Pos(vPosition);
 	if(m_pHP_Bar_Border)
 		m_pHP_Bar_Border->Set_Pos(vPosition);
-	if(m_pLockOn)
-		m_pLockOn->Set_Pos(vLockOnPos);
+	if (m_pLockOn)
+	{
+		if (m_pLockOn->Get_IsDead() == false)
+		{
+			if (GetAsyncKeyState(L'R') & 0x8000)
+			{
+				POINT pt = { (LONG)ptBoss.x, (LONG)ptBoss.y };
+				//ScreenToClient(g_hWnd, &pt);
+				SetCursorPos((_int)pt.x + 8, (_int)pt.y + 13);
+			}
+			m_pLockOn->Set_Pos(vLockOnPos);
+		}
+	}
 
 }
 
@@ -724,6 +738,8 @@ _uint CMonster::Make_LockOn()
 
 				m_pLockOn = static_cast<CNew_LockOn*>(pLockOn);
 				m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_MONSTER);
+
+				//Safe_Release(pLockOn);
 			}
 		}
 

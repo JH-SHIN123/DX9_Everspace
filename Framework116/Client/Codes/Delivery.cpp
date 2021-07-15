@@ -8,6 +8,7 @@ CDelivery::CDelivery(LPDIRECT3DDEVICE9 pDevice) :
 
 CDelivery::CDelivery(const CDelivery& other)
     : CGameObject(other)
+	, m_IsStart(other.m_IsStart)
 {
 }
 
@@ -48,7 +49,7 @@ HRESULT CDelivery::Ready_GameObject(void* pArg)
 
     // For.Com_Transform
     TRANSFORM_DESC TransformDesc = pDesc->tTransformDesc;
-    TransformDesc.fSpeedPerSec = 30.f;
+	TransformDesc.fSpeedPerSec = 60.f;//30.f;
     if (FAILED(CGameObject::Add_Component(
         EResourceType::Static,
         L"Component_Transform",
@@ -92,7 +93,11 @@ _uint CDelivery::Update_GameObject(_float fDeltaTime)
 {
     if (m_IsDead) return DEAD_OBJECT;
     CGameObject::Update_GameObject(fDeltaTime);
-    Movement(fDeltaTime);
+
+	if (m_IsStart == true)
+		Movement(fDeltaTime);
+
+
 
     m_pTransform->Update_Transform_Quaternion();
     for (auto& p : m_Collides)
@@ -127,6 +132,16 @@ _uint CDelivery::Render_GameObject()
 #endif
 
     return _uint();
+}
+
+void CDelivery::Set_MoveStart(_bool bMove)
+{
+	m_IsStart = bMove;
+}
+
+_bool CDelivery::Get_IsArrive()
+{
+	return m_bArrive;
 }
 
 _uint CDelivery::Movement(_float fDeltaTime)

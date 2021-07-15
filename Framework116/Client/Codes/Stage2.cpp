@@ -58,7 +58,10 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	CQuestHandler::Get_Instance()->Update_Quest();
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	CTransform* pPlayerTransform = (CTransform*)pPlayer->Get_Component(L"Com_Transform");
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 	CQuestHandler::Get_Instance()->Update_Quest();
 	switch (Stage2_Flow(fDeltaTime))
 	{
@@ -459,7 +462,10 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 				m_fFlowTime += fDeltaTime;
 				if (m_fFlowTime >= 1)
 				{
+<<<<<<< HEAD
 					CQuestHandler::Get_Instance()->Set_Start_Quest(EQuest::Stage_2_Dodge);
+=======
+>>>>>>> origin/main
 					if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Dodge)))
 						return -1;
 					++m_iFlowCount;
@@ -507,7 +513,10 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_SearchTarget)))
 					return -1;
+<<<<<<< HEAD
 				CQuestHandler::Get_Instance()->Set_Start_Quest(EQuest::Stage_2_Rescue);
+=======
+>>>>>>> origin/main
 				if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_2_Rescue)))
 					return -1;
 			}

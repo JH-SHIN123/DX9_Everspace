@@ -340,6 +340,9 @@ _uint CSniper::Add_Hp_Bar(_float fDeltaTime)
 		m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
 		m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_SNIPER);
 
+		//Safe_Release(pGameObjectBorder);
+		//Safe_Release(pGameObject);
+
 	}
 	return _uint();
 }
@@ -400,7 +403,7 @@ void CSniper::Set_Hp_Pos()
 		{
 			if (GetAsyncKeyState(L'R') & 0x8000)
 			{
-				POINT pt = { ptBoss.x, ptBoss.y };
+				POINT pt = { (LONG)ptBoss.x, (LONG)ptBoss.y };
 				//ScreenToClient(g_hWnd, &pt);
 				SetCursorPos((_int)pt.x + 7, (_int)pt.y + 13);
 			}
@@ -562,6 +565,7 @@ _uint CSniper::Make_LockOn()
 
 				m_pLockOn = static_cast<CNew_LockOn*>(pLockOn);
 				m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_MONSTER);
+				/*Safe_Release(pLockOn);*/
 			}
 		}
 	}

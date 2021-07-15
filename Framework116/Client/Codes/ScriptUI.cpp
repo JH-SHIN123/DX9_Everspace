@@ -180,6 +180,12 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
 			break;
+		case EScript::Stage3_Opening:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage3_Delivery);
+			break;
+		case EScript::Stage3_Boss_Opening:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage3_Boss);
+			break;
 		default:
 			break;
 		}
@@ -271,6 +277,15 @@ _uint CScriptUI::Script_Check()
 		break;
 	case EScript::Stg2_SearchTarget:
 		Script_Stg2_Search_Target();
+		break;
+	case EScript::Stage3_Opening:
+		Script_Stage3_Opening();
+		break;
+	case EScript::Stage3_Boss_Opening:
+		Script_Stage3_Boss_Opening();
+		break;
+	case EScript::Stage3_Boss_Clear:
+		Script_Stage3_Boss_Clear();
 		break;
 	default:
 		break;
@@ -674,7 +689,7 @@ void CScriptUI::Script_Stage3_Opening()
 		break;
 	case 1:
 		m_ePortrait = EPortraitNumber::Delivery;
-		m_wstrScript = L"여기가 정찰조들이 보고한 가이아 행성 구역입니까?";
+		m_wstrScript = L"여기가 정찰조들이 무전한 가이아 행성 구역입니까?";
 		break;
 	case 2:
 		m_ePortrait = EPortraitNumber::Player;
@@ -686,11 +701,11 @@ void CScriptUI::Script_Stage3_Opening()
 		break;
 	case 4:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrScript = L"!!!";
+		m_wstrScript = L"이런!";
 		break;
 	case 5:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrScript = L"무전 교란이다! 정찰조는 당했다고 밖에 생각이 들지 않는군...";
+		m_wstrScript = L"감청이다! 정찰조는 당했다고 밖에 생각이 들지 않는다!";
 		break;
 	case 6:
 		m_ePortrait = EPortraitNumber::Admiral;
@@ -698,17 +713,21 @@ void CScriptUI::Script_Stage3_Opening()
 		break;
 	case 7:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrScript = L"2인 1조로 행동한다 수송기체는 느리니 자네가 호위를 하는 식이 맞겠군.";
+		m_wstrScript = L"2인 1조로 행동한다, 수송기체는 느리니 자네가 호위를 하는 식이 맞겠군.";
 		break;
 	case 8:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"감청의 시도가 있을 수 있으니 다른 무전 채널을 이용한다.";
+		break;
+	case 9:
 		m_ePortrait = EPortraitNumber::Player;
 		m_wstrScript = L"알겠습니다!";
 		break;
-	case 9:
+	case 10:
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"잘 부탁하네 신병.";
 		break;
-	case 10:
+	case 11:
 		m_ePortrait = EPortraitNumber::Player;
 		m_wstrScript = L"맏겨만 주십시오!";
 		break;
@@ -721,6 +740,141 @@ void CScriptUI::Script_Stage3_Opening()
 	m_dwScriptCountMax = m_wstrScript.length();
 
 	Portrait_Check();
+}
+
+void CScriptUI::Script_Stage3_Boss_Opening()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"앗! 저건!";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"왜 그러십니까?";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"전방에 적군 기체로 판별되는 함선이 있다!";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"제길... 본부와 교신이 되지않아..!";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"별 다른 방법이 없습니다.";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"저는!! 임무를 끝까지 완수 하라는 명령을 받았기 때문에!!!";
+		break;
+	case 6:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"끝까지 호위를 하겠습니다.";
+		break;
+	case 7:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"자네는 겁도 없나?";
+		break;
+	case 8:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"이 임무를 완수하면 내가 맥주라도 쏘겠네, 약속하지";
+		break;
+	case 9:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"하하 각오하십시오.";
+		break;
+	case 10:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"자! 임무를 완수해라 잭 한마!!";
+		break;
+	case 11:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"맏겨만 주십시오!";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+}
+
+void CScriptUI::Script_Stage3_Boss_Clear()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"맥주 사주십시오.";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"기가 차는군 하하하!";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"우선 본부와 교신을 해보겠네";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"본부, 화물 운송을 완료 하였다.";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"대단해!! 아주 잘했네 제군들!!";
+		break;
+	case 5:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"잭 한마 이병의 호위가 없었더라면 저희는 죽었을 겁니다.";
+		break;
+	case 6:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"화물에 들어있는 탄약까지 전부 빼앗기고 말입니다...";
+		break;
+	case 7:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"임무를 무사히 완수한 잭 한마 이병에게 표창을 하셨으면 합니다.";
+		break;
+	case 8:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"잘 알았네. 잭 한마 이병! 임무를 완수해주어 고맙네!";
+		break;
+	case 9:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"과찬 이십니다.";
+		break;
+	case 10:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"그것보다 수송대장이 맥주 산다고 합니다.";
+		break;
+	case 11:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"고맙네 수송대장!";
+		break;
+	case 12:
+		m_ePortrait = EPortraitNumber::Delivery;
+		m_wstrScript = L"...아뿔싸...!!!";
+		break;
+	case 13:
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"하하하, 곧 구조선이 도착할것이니 조금만 기다리게나";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
+
 }
 
 void CScriptUI::Lock_Cursor()
@@ -753,6 +907,7 @@ void CScriptUI::Portrait_Check()
 		break;
 	case EPortraitNumber::Delivery:
 		m_wstrName = L"수송대장 시코르스키";
+		break;
 	default:
 		m_wstrName = L"";
 		break;

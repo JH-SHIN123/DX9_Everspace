@@ -7,6 +7,8 @@
 #include "MainCam.h"
 #include "Ring.h"
 #include "ScriptUI.h"
+#include "Delivery.h"
+#include "Loading.h"
 
 CStage3::CStage3(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -60,6 +62,9 @@ _uint CStage3::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
+	CQuestHandler::Get_Instance()->Update_Quest();
+	Stage_Flow(fDeltaTime);
+
 
 	return _uint();
 }
@@ -89,6 +94,9 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 
 void CStage3::Stage_Flow(_float fDeltaTime)
 {
+	if (CQuestHandler::Get_Instance()->Get_IsRetry() == true)
+		m_iFlowCount = 666;
+
 	switch (m_iFlowCount)
 	{
 	case 0:
@@ -106,9 +114,101 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 			}
 		}
 		break;
+
+	case 1:
+	{
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_3_Delivery)))
+				return;
+
+			((CDelivery*)(m_pManagement->Get_GameObject(L"Layer_Delivery")))->Set_MoveStart(TRUE);
+
+			++m_iFlowCount;
+		}
+
+	}
+		break;
+
+	case 2:
+	{
+		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Boss_Opening)))
+				return;
+			++m_iFlowCount;
+		}
+	}
+		break;
+
+	case 3:
+	{
+		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
+		{
+			if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_3_Boss)))
+				return;
+
+			++m_iFlowCount;
+		}
+	}
+		break;
+
+	case 4:
+		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Boss_Clear)))
+				return;
+			++m_iFlowCount;
+		}
+		break;
+	case 5:
+		{
+			_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+			if (Check == true)
+			{
+				CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
+
+				++m_iFlowCount;
+			}
+		}
+		break;
+	case 6:
+		m_bSceneChange = true;
+		++m_iFlowCount;
+		break;
 	default:
 		break;
 	}
+
+	if (m_bSceneChange)
+	{
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return;
+			}
+			m_bFadeIn = true;
+			return;
+		}
+		if (m_bLeaveScene)
+		{
+			m_pManagement->Clear_NonStatic_Resources();
+			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+				CLoading::Create(m_pDevice, ESceneType::Lobby))))
+			{
+				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				return;
+			}
+			return;
+			m_bLeaveScene = false;
+		}
+	}
+
 }
 
 HRESULT CStage3::Add_Layer_Cam(const wstring & LayerTag)
