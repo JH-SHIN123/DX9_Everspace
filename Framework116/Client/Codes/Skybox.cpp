@@ -135,7 +135,7 @@ _uint CSkybox::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 
-	_uint iStage = m_pManagement->Get_Current_Scene_Type();
+	//_uint iStage = m_pManagement->Get_Current_Scene_Type();
 	//switch(iStage)
 	//{
 	//case (_uint)ESceneType::Stage:
