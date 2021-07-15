@@ -278,6 +278,9 @@ _uint CScriptUI::Script_Check()
 	case EScript::Stg2_SearchTarget:
 		Script_Stg2_Search_Target();
 		break;
+	case EScript::Stg2_Clear:
+		Script_Stg2_Clear();
+		break;
 	case EScript::Stage3_Opening:
 		Script_Stage3_Opening();
 		break;
@@ -510,7 +513,7 @@ void CScriptUI::Script_Stg2_Begin()
 		break;
 	case 13:
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrScript = L".....";
+		m_wstrScript = L".....필승...";
 		break;
 	case 14:
 		m_ePortrait = EPortraitNumber::Admiral;
@@ -669,6 +672,39 @@ void CScriptUI::Script_Stg2_PlayerDead()
 	case 3:
 		m_ePortrait = EPortraitNumber::End;
 		m_wstrScript = L".....";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+void CScriptUI::Script_Stg2_Clear()
+{
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"구조하러 왔습니다!! 괜찮으십니까?";
+		break;
+	case 1:
+		m_ePortrait = EPortraitNumber::Politician;
+		m_wstrScript = L"오오...주여..";
+		break;
+	case 2:
+		m_ePortrait = EPortraitNumber::Politician;
+		m_wstrScript = L"이대로 꼼짝없이 죽는줄 알았습니다...";
+		break;
+	case 3:
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"이제 괜찮습니다!!어서 옮겨 타 본국으로 귀환하시지요!!";
+		break;
+	case 4:
+		m_ePortrait = EPortraitNumber::Politician;
+		m_wstrScript = L"네!!";
 		break;
 	default:
 		m_wstrName = L"";
@@ -907,6 +943,9 @@ void CScriptUI::Portrait_Check()
 		break;
 	case EPortraitNumber::Delivery:
 		m_wstrName = L"수송대장 시코르스키";
+		break;
+	case EPortraitNumber::Politician:
+		m_wstrName = L"조난당한 정치가";
 		break;
 	default:
 		m_wstrName = L"";

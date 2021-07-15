@@ -82,8 +82,46 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 			return CHANGE_SCENE;
 		}
 		break;
-	case CLEAR_FLYAWAY:
+	case CLEAR_RESQUE:
+	{
+		if (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))
+		{
+			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+			{
+				CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
+				m_bSceneChange = TRUE;
+			}
+		}
+	}
 		break;
+	}
+	if (m_bSceneChange)
+	{
+		if (false == m_bFadeIn) {
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::Static,
+				L"GameObject_FadeIn",
+				L"Layer_Fade",
+				this)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add Boss_Monster In Layer");
+				return E_FAIL;
+			}
+			m_bFadeIn = true;
+			return NO_EVENT;
+		}
+		if (m_bLeaveScene)
+		{
+			m_pManagement->Clear_NonStatic_Resources();
+			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+				CLoading::Create(m_pDevice, ESceneType::Lobby))))
+			{
+				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				return E_FAIL;
+			}
+			return CHANGE_SCENE;
+			m_bLeaveScene = false;
+		}
 	}
 
 	return _uint();
@@ -515,7 +553,20 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 		}
 		return TRUE;
 	case UPDATE_RESQUE:
+		if (CQuestHandler::Get_Instance()->Get_IsClear())
+		{
+			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+			{
+				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Clear)))
+					return -1;
+			}
+			++m_iFlowCount;
+			return CLEAR_RESQUE;
+		}
+		return UPDATE_RESQUE;
 		break;
+	case CLEAR_RESQUE:
+		return CLEAR_RESQUE;
 	default:
 		return TRUE;
 	}

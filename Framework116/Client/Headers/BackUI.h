@@ -12,6 +12,7 @@ enum class EPortraitNumber
 	Player,
 	Friendly,
 	Delivery,
+	Politician,
 	End
 };
 class CBackUI final : public CGameObject

@@ -58,11 +58,16 @@ private:
 #define PLAYER_DEAD    4
 #define CLEAR_FLYAWAY  5
 #define UPDATE_RESQUE  6
+#define CLEAR_RESQUE   7
 	_float m_fDelaySceneChange = 0.f;
 	_bool m_bLoadMapNavi = FALSE;
 private:
 	_float m_fFlowTime = 1.f;
 	_uint m_iFlowCount = 0;
+private:
+	_bool m_bFadeIn = false;
+	_bool m_bSceneChange = false;
+
 };
 
 #define __STAGE2_H__
