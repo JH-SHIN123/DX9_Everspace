@@ -57,6 +57,7 @@ HRESULT CStage3::Ready_Scene()
 
 	m_IsAllMonsterBoom = false;
 	m_IsAllBoom = false;
+	m_IsGameOver = false;
 	m_fBoomTime = 0.f;
 
 	return S_OK;
@@ -99,11 +100,20 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 
 void CStage3::Stage_Flow(_float fDeltaTime)
 {
-	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
-		m_iFlowCount = PLAYER_STAGE3_DEAD;
+	if (m_IsGameOver == false)
+	{
+		if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
+		{
+			m_IsGameOver = true;
+			m_iFlowCount = PLAYER_STAGE3_DEAD;
+		}
 
-	if (CQuestHandler::Get_Instance()->Get_IsPlayer_Dead() == true)
-		m_iFlowCount = QUEST_FAILED;
+		if (CQuestHandler::Get_Instance()->Get_IsObject_Dead() == true)
+		{
+			m_IsGameOver = true;
+			m_iFlowCount = QUEST_FAILED;
+		}
+	}
 
 
 	switch (m_iFlowCount)
@@ -217,7 +227,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 
 	case PLAYER_STAGE3_DEAD:
 	{
-		if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Delivery_Dead)))
+		if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Player_Dead)))
 			return;
 		++m_iFlowCount;
 	}

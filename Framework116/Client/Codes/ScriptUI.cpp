@@ -298,6 +298,12 @@ _uint CScriptUI::Script_Check()
 	case EScript::Stage3_Boss_Clear:
 		Script_Stage3_Boss_Clear();
 		break;
+	case EScript::Stage3_Player_Dead:
+		Script_Stage3_Player_Dead();
+		break;
+	case EScript::Stage3_Delivery_Dead:
+		Script_Stage3_Delivery_Dead();
+		break;
 	default:
 		break;
 	}

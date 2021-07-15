@@ -59,6 +59,7 @@ private:
 private:
 	_bool m_IsAllMonsterBoom = false;
 	_bool m_IsAllBoom = false;
+	_bool m_IsGameOver = false;
 	_float m_fBoomTime = 0.f;
 	//list<class CGameObject*> m_listObjectList;
 };
