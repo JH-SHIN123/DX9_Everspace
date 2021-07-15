@@ -39,7 +39,7 @@ _uint CHP_Bar::Update_GameObject(_float fDeltaTime)
 
 _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 {
-	CGameObject::LateUpdate_GameObject(fDeltaTime);
+	CUI::LateUpdate_GameObject(fDeltaTime);
 
 	if (m_IsDead == true)
 		return DEAD_OBJECT;
@@ -50,8 +50,9 @@ _uint CHP_Bar::LateUpdate_GameObject(_float fDeltaTime)
 _uint CHP_Bar::Render_GameObject()
 {
 	//Check_Degree();
-	if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
-	{
+	// hp바 아예 안생기는 버그 수정하고 주석해제 ㄱ
+	//if (((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_IsAstroidStage() == false)
+	//{
 		if (!m_IsBack)
 		{
 			if (!m_IsFar)
@@ -59,7 +60,7 @@ _uint CHP_Bar::Render_GameObject()
 				CUI::Render_GameObject();
 			}
 		}
-	}
+	//}
 
 	return _uint();
 }

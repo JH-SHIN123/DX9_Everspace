@@ -419,7 +419,7 @@ _uint CPlayer_Missile::Search_Shortest_Target(_float fDeltaTime)
 	{
 		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Boss_Monster", L"Com_Transform");
 	}
-	else if (m_fDistToDrone < m_fDistToBoss && m_fDistToDrone < m_fDistToSniper && m_fDistToBoss < m_fDistToNormalMonster)
+	else if (m_fDistToDrone < m_fDistToBoss && m_fDistToDrone < m_fDistToSniper && m_fDistToDrone < m_fDistToNormalMonster)
 	{
 		m_pTargetTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Drone", L"Com_Transform");
 	}

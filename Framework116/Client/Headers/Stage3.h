@@ -7,7 +7,7 @@
 #include "ScriptUI.h"
 
 #define QUEST_FAILED 666
-#define PLAYER_DEAD 888
+#define PLAYER_STAGE3_DEAD 888
 
 USING(Engine)
 
