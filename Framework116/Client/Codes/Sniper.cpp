@@ -425,9 +425,9 @@ CGameObject * CSniper::Clone(void * pArg/* = nullptr*/)
 
 void CSniper::Free()
 {
-	Safe_Release(m_pInfo);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pHP_Bar_Border);
+	Safe_Release(m_pInfo);
 	Safe_Release(m_pLockOn);
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pPlayerTransform);

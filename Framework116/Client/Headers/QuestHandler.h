@@ -11,6 +11,8 @@ USING(Engine)
 enum class EQuest {
 	Stage_1_Ring = 0,
 	Stage_1_Target,
+	Stage_2_Dodge,
+	Stage_2_Rescue,
 	End
 };
 
@@ -51,6 +53,8 @@ public: // 계속 돌려줘야함
 private:
 	void Update_Quest_Stage1_Ring();
 	void Update_Quest_Stage1_Target();
+	void Update_Quest_Stage2_Dodge();
+	void Update_Quest_Stage2_Resque();
 
 private: // 퀘스트 
 	EQuest	m_eNowQuest = EQuest::End;
@@ -58,6 +62,7 @@ private: // 퀘스트
 	_bool	m_IsClear = true;
 	_int	m_iCount = 0;
 	_int	m_iCount_Max = 0;
+	_float	m_fTimer = 0.f;
 
 private: // 스테이지
 	EStageClear m_eStageClear = EStageClear::End;

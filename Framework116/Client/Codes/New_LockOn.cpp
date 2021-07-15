@@ -60,6 +60,7 @@ _uint CNew_LockOn::LateUpdate_GameObject(_float fDeltaTime)
 _uint CNew_LockOn::Render_GameObject()
 {
 	//Check_Degree();
+
 	if(!m_IsBack)
 		CUI::Render_GameObject();
 

@@ -206,6 +206,48 @@ _uint CMonster::Render_GameObject()
 	m_pModelMesh->Render_Mesh(); 
 	// Test
 
+	
+	//거리 표시
+	//if (true)
+	//{
+	//	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
+	//	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
+	//	_float3 vDir = vMonsterPos - vTargetPos;
+	//	_int iDist = (_int)D3DXVec3Length(&vDir);
+	//	if (iDist < 400.f)
+	//	{
+	//		D3DVIEWPORT9 vp2;
+	//		m_pDevice->GetViewport(&vp2);
+	//		_float4x4 TestView2, TestProj2;
+	//		m_pDevice->GetTransform(D3DTS_VIEW, &TestView2);
+	//		m_pDevice->GetTransform(D3DTS_PROJECTION, &TestProj2);
+	//		_float4x4 matCombine2 = TestView2 * TestProj2;
+	//		D3DXVec3TransformCoord(&vMonsterPos, &vMonsterPos, &matCombine2);
+	//		vMonsterPos.x += 1.f;
+	//		vMonsterPos.y += 1.f;
+
+	//		vMonsterPos.x = (vp2.Width * (vMonsterPos.x)) / 2.f + vp2.X;
+	//		vMonsterPos.y = (vp2.Height * (2.f - vMonsterPos.y) / 2.f + vp2.Y);
+
+	//		_float3 ptBoss;
+	//		ptBoss.x = vMonsterPos.x;
+	//		ptBoss.y = vMonsterPos.y;
+	//		ptBoss.z = 0.f;
+
+	//		wstring str = to_wstring(iDist);
+	//		wstring str2 = L"M";
+	//		wstring combine = str + str2;
+	//		RECT tUIBounds;
+	//		GetClientRect(g_hWnd, &tUIBounds);
+	//		tUIBounds.top += (_int)-ptBoss.y + (_int)(WINCY / 2);
+	//		tUIBounds.left += (_int)ptBoss.x - (_int)(WINCX / 2);
+	//		tUIBounds.right += (_int)ptBoss.x - (_int)(WINCX / 2) + 20;
+	//		tUIBounds.bottom += (_int)-ptBoss.y + (_int)(WINCY / 2) + 20;
+	//		m_pManagement->Get_Font()->DrawText(NULL
+	//			, combine.c_str(), -1
+	//			, &tUIBounds, DT_CENTER, D3DXCOLOR(100, 100, 100, 255));
+	//	}
+	//}
 #ifdef _DEBUG // Render Collide
 	for (auto& p : m_Collides)
 		if (p) p->Render_Collide();
@@ -250,6 +292,9 @@ _uint CMonster::Search_Target(_float fDeltaTime)
 		Add_Hp_Bar(fDeltaTime);
 		m_bBattle = true;
 	}
+
+
+	
 	return _uint();
 }
 
@@ -525,6 +570,7 @@ void CMonster::Set_Hp_Pos()
 		m_pHP_Bar_Border->Set_Pos(vPosition);
 	if(m_pLockOn)
 		m_pLockOn->Set_Pos(vLockOnPos);
+
 }
 
 
@@ -680,6 +726,7 @@ _uint CMonster::Make_LockOn()
 				m_pLockOn->Who_Make_Me(m_pLockOn->MAKER_MONSTER);
 			}
 		}
+
 	}
 
 	return S_OK;

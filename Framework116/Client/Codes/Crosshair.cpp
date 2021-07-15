@@ -80,7 +80,6 @@ HRESULT CCrosshair::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-
 	return S_OK;
 }
 
@@ -88,7 +87,7 @@ _uint CCrosshair::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);	
 	Movement(fDeltaTime);	
-	Searching_Target(fDeltaTime);
+	//Searching_Target(fDeltaTime);
 
 	return m_pTransform->Update_Transform();
 }
@@ -176,7 +175,6 @@ CGameObject * CCrosshair::Clone(void * pArg/* = nullptr*/)
 
 void CCrosshair::Free()
 {
-	Safe_Release(m_pBossMonsterCollide);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
