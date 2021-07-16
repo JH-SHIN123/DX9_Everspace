@@ -68,6 +68,8 @@ HRESULT CLobby::Ready_Scene()
 	{
 		m_bStageLock[i] = CQuestHandler::Get_Instance()->Get_IsStageLocked(i);
 	}
+
+
 	return S_OK;
 }
 

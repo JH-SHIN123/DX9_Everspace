@@ -11,6 +11,8 @@
 #include "Bullet_EMP_Bomb.h"
 #include "Bullet_EnergyBall.h"
 #include "Bullet_Laser.h"
+#include "Planet.h"
+#include "Asteroid.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
 
@@ -239,22 +241,11 @@ void CQuestHandler::Release_Ref()
 void CQuestHandler::Lock_MonsterAI(_bool bLock)
 {
 	// true 일떄 움직임을 false로 멈춘다
+	
 	if (true == bLock)
 	{
-		//if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") ||
-		//	nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") ||
-		//	nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"))
-		//{
-		//	return;
-		//}
-
 		list<CGameObject*> pList;
-
-		if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster"))
-		{
-			return;
-		}
-		
+	
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
@@ -267,7 +258,6 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
-
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
@@ -280,7 +270,6 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
-
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
@@ -293,6 +282,43 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CPlanet*>(iter)->Set_IsMove(false);
+				}
+			}
+		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CAsteroid*>(iter)->Set_IsMove(false);
+				}
+			}
+		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CAsteroid*>(iter)->Set_IsMove(false);
+				}
+			}
+		}
+
 
 		// 몬스터 총알 지우기
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall") != nullptr)
@@ -316,49 +342,45 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 
 				for (auto& iter : pList)
 				{
-					static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+					iter->Set_IsDead(TRUE);
 				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall") != nullptr)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EMP_Bomb") != nullptr)
 		{
-			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall")->empty() == false)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EMP_Bomb")->empty() == false)
 			{
-				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall"));
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EMP_Bomb"));
 
 				for (auto& iter : pList)
 				{
-					static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+					iter->Set_IsDead(TRUE);
 				}
 			}
 		}
 
-		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall") != nullptr)
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper_Bullet") != nullptr)
 		{
-			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall")->empty() == false)
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper_Bullet")->empty() == false)
 			{
-				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Bullet_EnergyBall"));
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper_Bullet"));
 
 				for (auto& iter : pList)
 				{
-					static_cast<CBoss_Monster*>(iter)->Set_BossFight(false);
+					iter->Set_IsDead(TRUE);
 				}
 			}
 		}
+
 	}
+
+
+
 
 	else if (false == bLock)
 	{
-		//if (nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") ||
-		//	nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") ||
-		//	nullptr == CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper"))
-		//{
-		//	return;
-		//}
-
 		list<CGameObject*> pList;
-
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Monster")->empty() == false)
@@ -371,7 +393,6 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
-
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Sniper")->empty() == false)
@@ -384,7 +405,6 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
-
 		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster") != nullptr)
 		{
 			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Boss_Monster")->empty() == false)
@@ -397,6 +417,43 @@ void CQuestHandler::Lock_MonsterAI(_bool bLock)
 				}
 			}
 		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Planet"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CPlanet*>(iter)->Set_IsMove(true);
+				}
+			}
+		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CAsteroid*>(iter)->Set_IsMove(true);
+				}
+			}
+		}
+		if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco") != nullptr)
+		{
+			if (CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco")->empty() == false)
+			{
+				pList = *(CManagement::Get_Instance()->Get_GameObjectList(L"Layer_Asteroid_Deco"));
+
+				for (auto& iter : pList)
+				{
+					static_cast<CAsteroid*>(iter)->Set_IsMove(true);
+				}
+			}
+		}
+
 	}
 }
 

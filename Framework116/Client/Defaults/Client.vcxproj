@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="..\Headers\AimAssist.h" />
     <ClInclude Include="..\Headers\AimAssist2.h" />
+    <ClInclude Include="..\Headers\AimPanel.h" />
     <ClInclude Include="..\Headers\AlertArrow.h" />
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\BrokenPlane.h" />
@@ -250,6 +251,7 @@
   <ItemGroup>
     <ClCompile Include="..\Codes\AimAssist.cpp" />
     <ClCompile Include="..\Codes\AimAssist2.cpp" />
+    <ClCompile Include="..\Codes\AimPanel.cpp" />
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\BrokenPlane.cpp" />

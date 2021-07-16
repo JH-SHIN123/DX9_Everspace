@@ -61,7 +61,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	{
 		TRANSFORM_DESC TransformDesc;
 		TransformDesc.fSpeedPerSec = 1800.f;
-		TransformDesc.vScale = { 0.2f, 0.2f, 1.f };
+		TransformDesc.vScale = { 0.3f, 0.3f, 11.f };
 
 		if (FAILED(CGameObject::Add_Component(
 			EResourceType::Static,
@@ -74,7 +74,16 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 			return E_FAIL;
 		}
 	}
-
+	// 총알 텍스쳐
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Player_Bullet",
+		L"Com_Texture",
+		(CComponent**)&m_pTexture)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Texture_Player_Bullet");
+		return E_FAIL;
+	}
 
 
 	// For.Com_Collide
@@ -104,12 +113,16 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_float3 vPlayerRight = m_pPlayerTransform->Get_State(EState::Right);
 	_float3 vPlayerUp = m_pPlayerTransform->Get_State(EState::Up);
-	
+	_float3 vPlayerLook2 = m_pPlayerTransform->Get_State(EState::Look);
+
+	// 게틀링건 오프셋
+	// 8.2f, -5.2f, 3.f
 	if (pArg)
 		m_vMuzzlePos = vPlayerPos - (vPlayerRight * 8.2f);
 	else
 		m_vMuzzlePos = vPlayerPos + (vPlayerRight * 8.2f);
 	m_vMuzzlePos += (vPlayerUp * - 5.2f);
+	//m_vMuzzlePos += (vPlayerLook2 * vOffset.z);
 
 	m_pTransform->Set_Position(m_vMuzzlePos);
 
@@ -180,7 +193,7 @@ _uint CPlayer_Bullet::Update_GameObject(_float fDeltaTime)
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	Movement(fDeltaTime);
-	m_pTransform->Update_Transform();
+	m_pTransform->Update_Transform_Quaternion();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
 	m_fLifeTime += fDeltaTime;
@@ -232,9 +245,12 @@ _uint CPlayer_Bullet::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pDevice->SetMaterial(&m_tMaterial);
+	m_pTexture->Set_Texture(0);
+	//m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
+	m_pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 
 #ifdef _DEBUG // Render Collide
@@ -246,23 +262,54 @@ _uint CPlayer_Bullet::Render_GameObject()
 
 _uint CPlayer_Bullet::Movement(_float fDeltaTime)
 {
-	_float4x4 matWorld;
-	matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
-
-	matWorld._31 = m_vPlayerLook.x;
-	matWorld._32 = m_vPlayerLook.y;
-	matWorld._33 = m_vPlayerLook.z;
-
-	if (m_IsFirst)
+	_int iWeapon = ((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Get_Weapon_Type();
+	if (iWeapon == WEAPON_LAZER)
 	{
-		_float3 vPlayerRotate = m_pPlayerTransform->Get_TransformDesc().vRotate;
-		m_pTransform->Set_Rotate(vPlayerRotate);
-		m_IsFirst = false;
-	}
-	m_pTransform->Set_WorldMatrix(matWorld);
+		_float4x4 matWorld;
+		matWorld = m_pPlayerTransform->Get_TransformDesc().matWorld;
 
-	m_pTransform->Go_Straight(fDeltaTime);
-	
+		matWorld._31 = m_vPlayerLook.x;
+		matWorld._32 = m_vPlayerLook.y;
+		matWorld._33 = m_vPlayerLook.z;
+
+		if (m_IsFirst)
+		{
+			_float3 vPlayerRotate = m_pPlayerTransform->Get_TransformDesc().vRotate;
+
+			m_pTransform->Set_Rotate(vPlayerRotate);
+			m_IsFirst = false;
+		}
+
+		m_pTransform->Set_WorldMatrix(matWorld);
+		m_pTransform->Go_Straight(fDeltaTime);
+	}
+	else if (iWeapon == WEAPON_MACHINEGUN)
+	{
+		if (m_IsFirst)
+		{
+			_float3 right = { 1.f,0.f,0.f };
+			_float3 up = { 0.f,1.f,0.f };
+			_float3 look = { 0.f,0.f,1.f };
+			_float3 dir = m_vPlayerLook;
+			D3DXVec3Normalize(&dir, &dir);
+
+			D3DXVec3Cross(&right, &up, &dir);
+			D3DXVec3Normalize(&right, &right);
+
+			D3DXVec3Cross(&up, &dir, &right);
+			D3DXVec3Normalize(&up, &up);
+
+			m_pTransform->Set_State(EState::Right, right);
+			m_pTransform->Set_State(EState::Up, up);
+			m_pTransform->Set_State(EState::Look, dir);
+
+			m_pTransform->Update_Transform_Quaternion();
+			m_IsFirst = false;
+		}
+
+
+		m_pTransform->Go_Straight(fDeltaTime);
+	}
 
 	return _uint();
 }
@@ -299,6 +346,7 @@ void CPlayer_Bullet::Free()
 	Safe_Release(m_pInfo);
 	Safe_Release(m_pPlayerTransform);
 	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pTexture);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pCollide);
 

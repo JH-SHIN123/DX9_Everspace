@@ -120,6 +120,9 @@ HRESULT CPlanet::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
+	// 스크립트 관련
+	m_IsMoving = true;
+
 	return S_OK;
 }
 
@@ -166,8 +169,16 @@ _uint CPlanet::Render_GameObject()
 	return _uint();
 }
 
+void CPlanet::Set_IsMove(_bool IsMove)
+{
+	m_IsMoving = IsMove;
+}
+
 _uint CPlanet::Movement(_float fDeltaTime)
 {
+	if (m_IsMoving == false)
+		return 0;
+
 	if (m_pTransform) {
 		m_pTransform->RotateY(fDeltaTime);
 	}

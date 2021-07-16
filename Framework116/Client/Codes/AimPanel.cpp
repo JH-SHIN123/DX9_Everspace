@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "LoadingIcon.h"
+#include "AimPanel.h"
 
-CLoadingIcon::CLoadingIcon(LPDIRECT3DDEVICE9 pDevice) :
+CAimPanel::CAimPanel(LPDIRECT3DDEVICE9 pDevice) :
 	CUI(pDevice)
 {
 }
 
-CLoadingIcon::CLoadingIcon(const CLoadingIcon& other) :
+CAimPanel::CAimPanel(const CAimPanel& other) :
 	CUI(other)
 {
 }
 
-HRESULT CLoadingIcon::Ready_GameObject(void* pArg)
+HRESULT CAimPanel::Ready_GameObject(void* pArg)
 {
 	CGameObject::Ready_GameObject(pArg);
 
@@ -28,8 +28,8 @@ HRESULT CLoadingIcon::Ready_GameObject(void* pArg)
 
 	// For.Com_Texture
 	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Texture_LoadingIcon",
+		EResourceType::NonStatic,
+		L"Component_Texture_Head_Up_Display",
 		L"Com_Texture",
 		(CComponent**)&m_pTexture)))
 	{
@@ -38,8 +38,8 @@ HRESULT CLoadingIcon::Ready_GameObject(void* pArg)
 	}
 
 	// For.Com_Transform
-	m_tTransformDesc.vPosition = { (WINCX * 0.5f) - 100.f, (WINCY *0.5f) - 100.f, 0.f };
-	m_tTransformDesc.vScale = { 100.f, 100.f, 0.f };
+	m_tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	m_tTransformDesc.vScale = { 945.f, 763.f, 0.f };
 	m_tTransformDesc.fRotatePerSec = D3DXToRadian(90.f);
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -55,7 +55,7 @@ HRESULT CLoadingIcon::Ready_GameObject(void* pArg)
 	return S_OK;
 }
 
-_uint CLoadingIcon::Update_GameObject(_float fDeltaTime)
+_uint CAimPanel::Update_GameObject(_float fDeltaTime)
 {
 	CGameObject::Update_GameObject(fDeltaTime);
 
@@ -67,7 +67,7 @@ _uint CLoadingIcon::Update_GameObject(_float fDeltaTime)
 	return m_pTransform->Update_Transform();
 }
 
-_uint CLoadingIcon::Render_GameObject()
+_uint CAimPanel::Render_GameObject()
 {
 	CGameObject::Render_GameObject();
 
@@ -79,9 +79,9 @@ _uint CLoadingIcon::Render_GameObject()
 	return _uint();
 }
 
-CLoadingIcon* CLoadingIcon::Create(LPDIRECT3DDEVICE9 pDevice)
+CAimPanel* CAimPanel::Create(LPDIRECT3DDEVICE9 pDevice)
 {
-	CLoadingIcon* pInstance = new CLoadingIcon(pDevice);
+	CAimPanel* pInstance = new CAimPanel(pDevice);
 	if (FAILED(pInstance->Ready_GameObject_Prototype()))
 	{
 		PRINT_LOG(L"Error", L"Failed To Create Player");
@@ -91,9 +91,9 @@ CLoadingIcon* CLoadingIcon::Create(LPDIRECT3DDEVICE9 pDevice)
 	return pInstance;
 }
 
-CGameObject* CLoadingIcon::Clone(void* pArg)
+CGameObject* CAimPanel::Clone(void* pArg)
 {
-	CLoadingIcon* pClone = new CLoadingIcon(*this); /* 복사 생성자 호출 */
+	CAimPanel* pClone = new CAimPanel(*this); /* 복사 생성자 호출 */
 	if (FAILED(pClone->Ready_GameObject(pArg)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Clone Player");

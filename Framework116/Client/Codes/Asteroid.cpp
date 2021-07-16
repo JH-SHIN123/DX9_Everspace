@@ -96,6 +96,9 @@ HRESULT CAsteroid::Ready_GameObject(void* pArg)
 
 	}
 
+	// 스크립트 관련
+	m_IsMoving = true;
+
 	return S_OK;
 }
 
@@ -104,6 +107,7 @@ _uint CAsteroid::Update_GameObject(_float fDeltaTime)
 	if (m_IsDead) return DEAD_OBJECT;
 
 	CGameObject::Update_GameObject(fDeltaTime);
+
 	Movement(fDeltaTime);
 
 	m_pTransform->Update_Transform();
@@ -139,6 +143,11 @@ _uint CAsteroid::Render_GameObject()
 	return _uint();
 }
 
+void CAsteroid::Set_IsMove(_bool IsMove)
+{
+	m_IsMoving = IsMove;
+}
+
 _uint CAsteroid::Movement(_float fDeltaTime)
 {
 	//if (m_vRandomRotateDir.x) {
@@ -164,6 +173,8 @@ _uint CAsteroid::Movement(_float fDeltaTime)
 	//else {
 	//	m_fMoveUpDeltaT = 0.f;
 	//}
+	if (m_IsMoving == false)
+		return 0;
 
 	m_pTransform->RotateZ(fDeltaTime);
 	m_pTransform->RotateX(fDeltaTime);

@@ -14,8 +14,8 @@ HRESULT CLogo::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Logo");
 
-	m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
-	m_pManagement->Play_MCIVideoEx();
+	//m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
+	//m_pManagement->Play_MCIVideoEx();
 	
 	return S_OK;
 }
@@ -87,7 +87,6 @@ CLogo * CLogo::Create(LPDIRECT3DDEVICE9 pDevice)
 void CLogo::Free()
 {
 	m_pManagement->StopAll();
-
 	CScene::Free(); // 2.何葛 府家胶 沥府
 	
 }
