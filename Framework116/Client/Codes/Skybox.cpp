@@ -60,6 +60,17 @@ HRESULT CSkybox::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
+	// 스테이지2 텍스처
+	if (FAILED(CGameObject::Add_Component(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage2",
+		L"Com_Texture3",
+		(CComponent**)&m_pStage2Texture)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add_Component Component_Texture_Skybox_Stage2");
+		return E_FAIL;
+	}
+
 	// 스테이지3 텍스처
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::NonStatic,
@@ -135,20 +146,22 @@ _uint CSkybox::Render_GameObject()
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
 
-	//_uint iStage = m_pManagement->Get_Current_Scene_Type();
-	//switch(iStage)
-	//{
-	//case (_uint)ESceneType::Stage:
-	//	m_pTexture->Set_Texture(0);
-	//	break;
-	//case (_uint)ESceneType::Stage2:
-	//	m_pTexture->Set_Texture(0);
-	//	break;
-	//case (_uint)ESceneType::Stage3:
-	//	m_pStage3Texture->Set_Texture();
-	//	break;
-	//}
-	m_pTexture->Set_Texture(0);
+	_uint iStage = m_pManagement->Get_Current_Scene_Type();
+	switch(iStage)
+	{
+	case (_uint)ESceneType::Stage:
+		m_pTexture->Set_Texture(0);
+		break;
+	case (_uint)ESceneType::Stage2:
+		m_pStage2Texture->Set_Texture(0);
+		break;
+	case (_uint)ESceneType::Stage3:
+		m_pStage3Texture->Set_Texture();
+		break;
+	default:
+		m_pTexture->Set_Texture(0);
+	}
+	//m_pTexture->Set_Texture(0);
 	
 	m_pDevice->SetMaterial(&m_tMaterial);
 	m_pVIBuffer->Render_VIBuffer();
@@ -198,6 +211,7 @@ void CSkybox::Free()
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTransform);
 	Safe_Release(m_pTexture);
+	Safe_Release(m_pStage2Texture);
 	Safe_Release(m_pStage3Texture);
 
 	CGameObject::Free();
