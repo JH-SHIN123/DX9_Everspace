@@ -71,19 +71,14 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		AsteroidFlyingAway(fDeltaTime, 200.f, 200.f, 200.f, 200.f, pPlayerTransform, 30, 60.f, 30.f,15.f);
 		break;
 	case PLAYER_DEAD:
-		m_fDelaySceneChange += fDeltaTime;
+		if (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))
+		{
+			if(!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+				m_fDelaySceneChange += fDeltaTime;
+		}
 		if (m_fDelaySceneChange >= 2.f)
 		{
-			//m_pManagement->Clear_NonStatic_Resources();
-			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-				CLoading::Create(m_pDevice, ESceneType::Lobby))))
-			{
-				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-				return E_FAIL;
-			}
-
-			m_fDelaySceneChange = 0.f;
-			return CHANGE_SCENE;
+			m_bSceneChange = TRUE;
 		}
 		break;
 	case CLEAR_RESQUE:
@@ -118,14 +113,14 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			//m_pManagement->Clear_NonStatic_Resources();
+			m_bLeaveScene = false;
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
 				CLoading::Create(m_pDevice, ESceneType::Lobby))))
 			{
 				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 				return E_FAIL;
 			}
-			m_bLeaveScene = false;
+
 			return CHANGE_SCENE;
 		}
 	}
@@ -589,7 +584,7 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			}
 		}
 		return UPDATE_FLYAWAY;
-	case 4:
+	case PLAYER_DEAD:
 	{
 		if (!m_bPlayPlayerDeadScript&& pPlayer->Get_IsDead())
 		{
@@ -602,14 +597,10 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 						pDst->Set_IsDead(TRUE);
 					}
 				}
-			}
+			}	
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_PlayerDead)))
 				return -1;
-			if (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))
-			{
-				if(!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
-					m_bPlayPlayerDeadScript = TRUE;
-			}
+			m_bPlayPlayerDeadScript = TRUE;
 		}
 	}
 	return PLAYER_DEAD;
