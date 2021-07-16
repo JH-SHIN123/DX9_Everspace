@@ -11,6 +11,7 @@
 #include"Status.h"
 #include"LobbyScriptUI.h"
 #include"QuestHandler.h"
+#include"DataBase.h"
 CLobby::CLobby(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -51,8 +52,7 @@ HRESULT CLobby::Ready_Scene()
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
-	m_tUnitInfo = { 20,30,50,30,40,70 };
-
+	
 	// Fade Out
 	if (FAILED(m_pManagement->Add_GameObject_InLayer(
 		EResourceType::Static,
@@ -433,25 +433,7 @@ _bool CLobby::Get_StartUnPacking() const
 	return m_bStartUnPacking;
 }
 
-_uint CLobby::Get_Money() const
-{
-	return m_iMoney;
-}
 
-UNIT_INFO * CLobby::Get_UnitInfo()
-{
-	return &m_tUnitInfo;
-}
-
-void CLobby::Set_UnitInfo(UNIT_INFO _tUnitInfo)
-{
-	m_tUnitInfo = _tUnitInfo;
-}
-
-void CLobby::Set_Money(_uint _iMoney)
-{
-	m_iMoney += _iMoney;
-}
 
 _bool CLobby::GetStageLock(_uint iStageIdx)
 {

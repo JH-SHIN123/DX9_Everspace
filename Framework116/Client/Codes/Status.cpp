@@ -5,6 +5,7 @@
 #include"Lobby.h"
 #include"VIBuffer_HexagonTex.h"
 #include"GatchaBox.h"
+#include"DataBase.h"
 CStatus::CStatus(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -162,7 +163,7 @@ _uint CStatus::Movement(_float fDeltaTime)
 
 _bool CStatus::UpdateHexagon(_float fDeltaTime)
 {
-	m_pUnitInfo = m_pLobby->Get_UnitInfo();
+	m_pUnitInfo = CDataBase::Get_Instance()->Get_UnitInfo();
 	if (!m_pUnitInfo)
 		return FALSE;
 	static _float fUpdateTime = 0;

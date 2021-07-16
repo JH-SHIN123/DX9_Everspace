@@ -58,28 +58,13 @@ public:
 	_bool Get_SceneSelect()const;
 	_bool Get_StartUnPacking()const;
 
-	_uint Get_Money()const;
-	UNIT_INFO* Get_UnitInfo();
-
-	void Set_UnitInfo(UNIT_INFO _tUnitInfo);
-	void Set_Money(_uint _iMoney);
-
-	_uint GetAtkBuffItemCount() { return m_iAtkBuffItem; }
-	_uint GetDefBuffItemCount() { return m_iDefBuffItem; }
-	_uint GetHpBuffItemCount() { return m_iHpBuffItem; }
-	_uint GetEnergyBuffItemCount() { return m_iEnergyBuffItem; }
-	_uint GetMissileCount() { return m_iMissileCount; }
-	_uint GetVMaxBuffItem() { return m_iVMaxBuffItem; }
+	
+	
 	_bool GetStageLock(_uint iStageIdx);
 	_bool GetIsStgClear() { return m_bIsStgClear; }
 	_bool Get_EnterScene() { return m_bEnterScene; }
 
-	void SetAtkBuffItemCount(_uint iPlus) { m_iAtkBuffItem += iPlus; }
-	void SetDefBuffItemCount(_uint iPlus) { m_iDefBuffItem += iPlus; }
-	void SetHpBuffItemCount(_uint iPlus) { m_iHpBuffItem += iPlus; }
-	void SetEnergyBuffItemCount(_uint iPlus) { m_iEnergyBuffItem += iPlus;  }
-	void SetMissileCount(_uint iPlus) { m_iMissileCount += iPlus; }
-	void SetVMaxBuffItemCount(_uint iPlus) { m_iVMaxBuffItem += iPlus; }
+	
 	void SetNextScene(_uint iNextScene) { m_iNextScene = iNextScene; }
 	
 
@@ -101,16 +86,7 @@ private:
 	_bool m_bSceneChange = false;
 	_bool m_bStartUnPacking = false;
 
-	_uint m_iMoney = 300000;
-	UNIT_INFO m_tUnitInfo;
-
-	_uint m_iAtkBuffItem = 0;
-	_uint m_iDefBuffItem = 0;
-	_uint m_iHpBuffItem = 0;
-	_uint m_iEnergyBuffItem = 0;
-	_uint m_iMissileCount = 0;
-	_uint m_iVMaxBuffItem = 0;
-
+	
 	_bool m_bStageLock[3] = { TRUE,TRUE,TRUE };
 	//for.StgClearProduction
 	_bool m_bIsStgClear = FALSE;

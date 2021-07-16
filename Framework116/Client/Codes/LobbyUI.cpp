@@ -7,6 +7,7 @@
 #include"GatchaBox.h"
 #include"Product.h"
 #include"LobbyCam.h"
+#include"DataBase.h"
 
 USING(Engine)
 
@@ -537,37 +538,37 @@ _bool CLobbyUI::Render_ItemSlot()
 			switch (iIndex)
 			{
 			case 1:
-				_itow_s(m_pLobby->GetAtkBuffItemCount(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetAtkBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 2:
-				_itow_s(m_pLobby->GetDefBuffItemCount(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetDefBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 3:
-				_itow_s(m_pLobby->GetHpBuffItemCount(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetHpBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 4:	
-				_itow_s(m_pLobby->GetEnergyBuffItemCount(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetEnergyBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 5:
-				_itow_s(m_pLobby->GetMissileCount(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetMissileCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });		
 				break;
 			case 6:
-				_itow_s(m_pLobby->GetVMaxBuffItem(), szBuf, 10);
+				_itow_s(CDataBase::Get_Instance()->GetVMaxBuffItem(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
 				, szBuf, vFontPos, { 2.f,2.f,2.f }
 				, D3DXCOLOR{ 255,255,255,255 });

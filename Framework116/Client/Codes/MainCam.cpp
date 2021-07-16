@@ -194,7 +194,6 @@ _uint CMainCam::KeyInput(_float fDeltaTime)
 			switch (iWeapon)
 			{
 			case WEAPON_LAZER:
-
 				CameraShakingStart(fDeltaTime, 5.f);
 				break;
 			case WEAPON_MACHINEGUN:
@@ -220,6 +219,9 @@ void CMainCam::Check_SoloMoveMode(_float fDeltaTime)
 		break;
 	case ESoloMoveMode::Lock:
 		Solo_Lock(fDeltaTime);
+		break;
+	case ESoloMoveMode::OutLock:
+		Solo_OutLock(fDeltaTime);
 		break;
 	case ESoloMoveMode::Stage2_Asteroid:
 		Solo_Stage2_Asteroid(fDeltaTime);
@@ -266,6 +268,25 @@ _uint CMainCam::Solo_Lock(_float fDeltaTime)
 	}
 
 
+
+	return _uint();
+}
+
+_uint CMainCam::Solo_OutLock(_float fDeltaTime)
+{
+	_float3 vPlayerPos = m_pPlayerTransform->Get_TransformDesc().vPosition;
+	_float3 vPlayerLook =_float3(1.f,0.f,1.f);
+	
+	_float3 vCamAt = vPlayerPos;
+	_float3 vCurEye = m_CameraDesc.vEye;
+	_float3 vTargetEye = vPlayerPos - vPlayerLook*10.f;
+	_float3 vEyeDir = vTargetEye - vCurEye;
+	D3DXVec3Normalize(&vEyeDir, &vEyeDir);
+
+
+	m_CameraDesc.vEye += vEyeDir * fDeltaTime * 10.f;
+	m_CameraDesc.vAt = vCamAt;
+	m_CameraDesc.vUp = { 0.f,1.f,0.f };
 
 	return _uint();
 }
@@ -710,9 +731,9 @@ _uint CMainCam::Solo_Stage2FinishAsteroid(_float fDeltaTime)
 			_float3 vDir = vTargetPos - m_CameraDesc.vEye;
 			_float vLength = D3DXVec3Length(&vDir);
 			D3DXVec3Normalize(&vDir, &vDir);
-
 			m_CameraDesc.vEye += vDir * fSpeedPerSec * fDeltaTime;
 			m_CameraDesc.vAt = vTargetPos;
+		
 
 			if (vLength <= 20.f)
 				++m_byMoveCount;

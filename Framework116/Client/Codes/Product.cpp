@@ -4,7 +4,7 @@
 #include"Pipeline.h"
 #include"LobbyCam.h"
 #include"Lobby.h"
-
+#include"DataBase.h"
 CProduct::CProduct(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -136,7 +136,7 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 			pCam->Set_StartUnPacking(TRUE);
 			pCam->Set_UnPacked(FALSE);
 			Get_Product();
-			m_pLobby->Set_Money(-1000);
+			CDataBase::Get_Instance()->Set_Money(-1000);
 			if (m_pFont)
 			{
 				m_pFont->Set_IsDead(TRUE);
@@ -151,7 +151,7 @@ _uint CProduct::Update_GameObject(_float fDeltaTime)
 		pCam->Set_StartUnPacking(TRUE);
 		pCam->Set_UnPacked(FALSE);
 		Get_Product();
-		m_pLobby->Set_Money(-1000);
+		CDataBase::Get_Instance()->Set_Money(-1000);
 		if (m_pFont)
 		{
 			m_pFont->Set_IsDead(TRUE);
@@ -282,7 +282,7 @@ void CProduct::Render_Product()
 
 void CProduct::Get_Product()
 {
-	UNIT_INFO tCurUnitInfo = *m_pLobby->Get_UnitInfo();
+	UNIT_INFO tCurUnitInfo = *CDataBase::Get_Instance()->Get_UnitInfo();
 	switch (m_eProduct)
 	{
 	case EProduct::ATK_UP:
@@ -298,28 +298,28 @@ void CProduct::Get_Product()
 		tCurUnitInfo.iMaxShield += 10 * ((_uint)m_eRank + 1);
 		break;
 	case EProduct::MONEY:
-		m_pLobby->Set_Money(3000 * ((_uint)m_eRank + 1));
+		CDataBase::Get_Instance()->Set_Money(3000 * ((_uint)m_eRank + 1));
 		break;
 	case EProduct::Atk_Buff:
-		m_pLobby->SetAtkBuffItemCount((_uint)m_eRank + 1);
+		CDataBase::Get_Instance()->SetAtkBuffItemCount((_uint)m_eRank + 1);
 		break;
 	case EProduct::Def_Buff:
-		m_pLobby->SetDefBuffItemCount((_uint)m_eRank + 1);
+		CDataBase::Get_Instance()->SetDefBuffItemCount((_uint)m_eRank + 1);
 		break;
 	case EProduct::Hp_Buff:
-		m_pLobby->SetHpBuffItemCount((_uint)m_eRank + 1);
+		CDataBase::Get_Instance()->SetHpBuffItemCount((_uint)m_eRank + 1);
 		break;
 	case EProduct::Energy_Buff:
-		m_pLobby->SetEnergyBuffItemCount((_uint)m_eRank + 1);
+		CDataBase::Get_Instance()->SetEnergyBuffItemCount((_uint)m_eRank + 1);
 		break;
 	case EProduct::Missile:
-		m_pLobby->SetMissileCount((_uint)m_eRank + 1);
+		CDataBase::Get_Instance()->SetMissileCount((_uint)m_eRank + 1);
 		break;
 	//case EProduct::VMax_Buff:
 	//	m_pLobby->SetVMaxBuffItemCount((_uint)m_eRank + 1);
 	//	break;
 	}
-	m_pLobby->Set_UnitInfo(tCurUnitInfo);
+	CDataBase::Get_Instance()->Set_UnitInfo(tCurUnitInfo);
 }
 
 void CProduct::Set_Text()

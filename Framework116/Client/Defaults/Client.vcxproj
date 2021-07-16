@@ -172,6 +172,7 @@
     <ClInclude Include="..\Headers\AlertArrow.h" />
     <ClInclude Include="..\Headers\BackUI.h" />
     <ClInclude Include="..\Headers\BrokenPlane.h" />
+    <ClInclude Include="..\Headers\DataBase.h" />
     <ClInclude Include="..\Headers\Delivery.h" />
     <ClInclude Include="..\Headers\Drone.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="..\Codes\AlertArrow.cpp" />
     <ClCompile Include="..\Codes\BackUI.cpp" />
     <ClCompile Include="..\Codes\BrokenPlane.cpp" />
+    <ClCompile Include="..\Codes\DataBase.cpp" />
     <ClCompile Include="..\Codes\Delivery.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />

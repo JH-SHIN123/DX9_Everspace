@@ -127,16 +127,19 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	//m_vLeftWingOffset = { -6.2f, -1.5f, -4.f };
 	//CEffectHandler::Add_Layer_Effect_WingBoost((CGameObject**)&m_pRightWingBoost);
 	//m_vRightWingOffset = { 6.2f, -1.5f, -4.f };
+
+	Get_Delivery();
+
 	return S_OK;
 }
 
 _uint CMonster::Update_GameObject(_float fDeltaTime)
 {
-	CGameObject::Update_GameObject(fDeltaTime);	
+	CGameObject::Update_GameObject(fDeltaTime);
 
 	if (m_IsDead)
 		return DEAD_OBJECT;
-	
+
 	m_IsBoost = true;
 	Search_Target(fDeltaTime);
 	if (!m_IsDead)
@@ -209,10 +212,10 @@ _uint CMonster::Render_GameObject()
 	CGameObject::Render_GameObject();
 
 	m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransform->Get_TransformDesc().matWorld);
-	m_pModelMesh->Render_Mesh(); 
+	m_pModelMesh->Render_Mesh();
 	// Test
 
-	
+
 	//거리 표시
 	//if (true)
 	//{
@@ -267,6 +270,20 @@ void CMonster::Set_IsFight(_bool bFight)
 	m_IsFight = bFight;
 }
 
+void CMonster::Get_Delivery()
+{
+	if (m_pManagement->Get_GameObject(L"Layer_Delivery") != nullptr)
+	{
+		m_pDeliveryTransform = (CTransform*)(m_pManagement->Get_Component(L"Layer_Delivery", L"Com_Transform"));
+		if (m_pDeliveryTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pDeliveryTransform is  nullptr");
+			return;
+		}
+		Safe_AddRef(m_pDeliveryTransform);
+	}
+}
+
 _uint CMonster::Movement(_float fDeltaTime)
 {
 	// 그냥 와리가리하면서 정찰
@@ -279,13 +296,13 @@ _uint CMonster::Movement(_float fDeltaTime)
 	else if (m_fMoveDist >= 6.f && m_fMoveDist < 10.f)
 	{
 		m_pTransform->RotateY(fDeltaTime);
-		
+
 	}
 	else if (m_fMoveDist >= 10.f)
 	{
 		m_fMoveDist = 0.f;
 	}
-	
+
 	return _uint();
 }
 
@@ -294,18 +311,59 @@ _uint CMonster::Search_Target(_float fDeltaTime)
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
 	_float3 vMonsterPos = m_pTransform->Get_State(EState::Position);
 
+	_float3 vDeliveryPos;
+	_float3 vDir_D;
+	_float fDist_D = 12345.f;
+	_float fDist_Player_To_Deli = 0.f;
+
+	if (m_pDeliveryTransform != nullptr)
+	{
+		vDeliveryPos	= m_pDeliveryTransform->Get_State(EState::Position);
+		vDir_D			= vDeliveryPos - vMonsterPos;
+		fDist_D			= D3DXVec3Length(&vDir_D);
+		fDist_Player_To_Deli = D3DXVec3Length(&(vTargetPos - vDeliveryPos));
+	}
+
 	_float3 vDir = vTargetPos - vMonsterPos;
 	_float fDist = D3DXVec3Length(&vDir);
 
-		// 배틀상태 On
+
+	// 플레이어와 배틀상태 On
+
+	m_eAttackTarget = EAttackTarget::End;
+
 	if (fDist <= 300.f && fDist != 0.f)
 	{
 		Add_Hp_Bar(fDeltaTime);
+		m_eAttackTarget = EAttackTarget::Player;
 		m_bBattle = true;
 	}
 
+	// 호이차
+	if (fDist_D <= 300.f && fDist_D != 0.f)
+	{
+		m_bBattle = true;
+		Add_Hp_Bar(fDeltaTime);
+		m_eAttackTarget = EAttackTarget::Delivery;
+
+		// 범위 안에 있는데 플레이어가 있네
+		if(fDist_Player_To_Deli <= DIST_PLAYER_TO_DELIVERY)
+			m_eAttackTarget = EAttackTarget::Player;
+	}
+
+
+	/*
+	+ 호위차 조건 추가
+	플레이어를 때리는 경우
+	- 인식 범위 내에 있다
 
 	
+	호위차 때리는 경우
+	- 인식 범위 내에 있으며 플레이어가 주변에 없다
+
+	*/
+
+
 	return _uint();
 }
 
@@ -322,46 +380,109 @@ _uint CMonster::Monster_Battle(_float fDeltaTime)
 	_float fDist = D3DXVec3Length(&vDir);
 	D3DXVec3Normalize(&vDir, &vDir);
 
+
+	_float3 vDeliveryPos;
+	_float3 vDir_Delivery_To_Player;
+	_float fDist_Delivery_To_Player = 0.f;
+	_float3 vDir_Delivery;
+	_float fDist_Delivery;
+
+	if (m_pDeliveryTransform != nullptr)
+	{
+		// 호위, 플레이어 거리 체크
+		vDeliveryPos			= m_pDeliveryTransform->Get_State(EState::Position);
+		vDir_Delivery_To_Player = vDeliveryPos - vTargetPos;
+		fDist_Delivery_To_Player = D3DXVec3Length(&vDir_Delivery_To_Player);
+
+		// 나, 플레이어 거리 체크
+		vDir_Delivery			= vDeliveryPos - vMonsterPos;
+		fDist_Delivery			= D3DXVec3Length(&vDir_Delivery);
+		D3DXVec3Normalize(&vDir_Delivery, &vDir_Delivery);
+	}
+
 	_float3 vLook = m_pTransform->Get_State(EState::Look);
 
-	
-	if (m_fPatternTime > 0.f && m_fPatternTime <= 7.f)
+	// 플레이어와 호위차의 거리가 작다면
+	// 플레이어 공격
+	// 아니면 호위차 공격
+
+	if (m_eAttackTarget == EAttackTarget::Player)
 	{
-		if (fDist > 200.f)
+		// 플레이어가 호위차 주변에 잘 있으니 플레이어 공격
+		if (m_fPatternTime > 0.f && m_fPatternTime <= 7.f)
 		{
-			m_pTransform->Go_Dir(vDir, fDeltaTime * 4.f);
+			if (fDist > 200.f)
+			{
+				m_pTransform->Go_Dir(vDir, fDeltaTime * 4.f);
+			}
+			RotateToPlayer(fDeltaTime * 3.f);
+			m_pTransform->Go_Side(fDeltaTime * 2.f);
+			m_pTransform->RotateZ(fDeltaTime * 1.f);
+
+			m_bAttack = true;
 		}
-		RotateToPlayer(fDeltaTime * 3.f);
-		m_pTransform->Go_Side(fDeltaTime * 2.f);
-		m_pTransform->RotateZ(fDeltaTime * 1.f);
-		
-		m_bAttack = true;
-	}
-	else if (m_fPatternTime > 7.f && m_fPatternTime <= 8.f)
-	{
-		m_pTransform->Go_Up(-fDeltaTime);
-		m_bAttack = false;
-	}
-	else if (m_fPatternTime > 8.f && m_fPatternTime <= 10.f)
-	{
-		// 플레이어 안바라보고 그 각도에서 회전이 안먹어요 하면서 직진
-		if (fDist < 500.f)
+		else if (m_fPatternTime > 7.f && m_fPatternTime <= 8.f)
 		{
-			m_pTransform->Go_Straight(fDeltaTime * 10.f);
+			m_pTransform->Go_Up(-fDeltaTime);
+			m_bAttack = false;
 		}
-		m_bAttack = false;
+		else if (m_fPatternTime > 8.f && m_fPatternTime <= 10.f)
+		{
+			// 플레이어 안바라보고 그 각도에서 회전이 안먹어요 하면서 직진
+			if (fDist < 500.f)
+			{
+				m_pTransform->Go_Straight(fDeltaTime * 10.f);
+			}
+			m_bAttack = false;
+		}
+		else if (m_fPatternTime > 10.f)
+		{
+			// 다시 플레이어를 바라보렴
+			RotateToPlayer(fDeltaTime * 3.f);
+			m_fPatternTime = 0.f;
+		}
 	}
-	else if (m_fPatternTime > 10.f)
+	else if (m_eAttackTarget == EAttackTarget::Delivery)
 	{
-		// 다시 플레이어를 바라보렴
-		RotateToPlayer(fDeltaTime * 3.f);
-		m_fPatternTime = 0.f;
+		// 플레이어가 딴짓거리 해서 호위 안할때 
+		if (m_fPatternTime > 0.f && m_fPatternTime <= 7.f)
+		{
+			if (fDist_Delivery > 200.f)
+			{
+				m_pTransform->Go_Dir(vDir_Delivery, fDeltaTime * 4.f);
+			}
+			RotateToDelivery(fDeltaTime * 3.f);
+			m_pTransform->Go_Side(fDeltaTime * 2.f);
+			m_pTransform->RotateZ(fDeltaTime * 1.f);
+
+			m_bAttack = true;
+		}
+		else if (m_fPatternTime > 7.f && m_fPatternTime <= 8.f)
+		{
+			m_pTransform->Go_Up(-fDeltaTime);
+			m_bAttack = false;
+		}
+		else if (m_fPatternTime > 8.f && m_fPatternTime <= 10.f)
+		{
+			// 호위차 안바라보고 그 각도에서 회전이 안먹어요 하면서 직진
+			if (fDist_Delivery < 500.f)
+			{
+				m_pTransform->Go_Straight(fDeltaTime * 10.f);
+			}
+			m_bAttack = false;
+		}
+		else if (m_fPatternTime > 10.f)
+		{
+			// 다시 호위차를 바라보렴
+			RotateToDelivery(fDeltaTime * 3.f);
+			m_fPatternTime = 0.f;
+		}
 	}
-	
+
 
 	m_fAttackDelay += fDeltaTime;
 
-	if (m_fAttackDelay > 1.f && m_bAttack == true)
+	if (m_fAttackDelay > 1.f && m_bAttack == true) // 여기서 공격 
 	{
 		TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
 
@@ -453,6 +574,64 @@ _bool CMonster::RotateToPlayer(_float fDeltaTime)
 		m_IsLookingPlayer = false;
 
 	return m_IsLookingPlayer;
+}
+
+_bool CMonster::RotateToDelivery(_float fDeltaTime)
+{
+	if (m_pDeliveryTransform == nullptr)
+		return false;
+
+	_float3 vTargetPos = m_pDeliveryTransform->Get_State(EState::Position);
+	_float3 vSniperPos = m_pTransform->Get_State(EState::Position);
+
+	_float3 vTargetDir = vTargetPos - vSniperPos;
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
+
+	_float3 vSniperLook = m_pTransform->Get_State(EState::Look);
+	_float3 vSniperUp = m_pTransform->Get_State(EState::Up);
+	D3DXVec3Normalize(&vSniperLook, &vSniperLook);
+
+	_float fCeta = D3DXVec3Dot(&vTargetDir, &vSniperLook);
+	_float fRadianMax = D3DXToRadian(95.f);
+	_float fRadianMin = D3DXToRadian(85.f);
+
+	_float3 vMyRight, vMyLeft, vMissileUp, vMissileDown;
+	D3DXVec3Cross(&vMyRight, &vSniperUp, &vSniperLook);
+	D3DXVec3Cross(&vMyLeft, &vSniperLook, &vSniperUp);
+	D3DXVec3Cross(&vMissileUp, &vMyRight, &vSniperLook);
+	D3DXVec3Cross(&vMissileDown, &vSniperLook, &vMyRight);
+
+	D3DXVec3Normalize(&vMyRight, &vMyRight);
+	D3DXVec3Normalize(&vMyLeft, &vMyLeft);
+	D3DXVec3Normalize(&vMissileUp, &vMissileUp);
+	D3DXVec3Normalize(&vMissileDown, &vMissileDown);
+
+	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
+	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
+	_float fUp = D3DXVec3Dot(&vTargetDir, &vMissileUp);
+	_float fDown = D3DXVec3Dot(&vTargetDir, &vMissileDown);
+
+	_bool IsLookingDeli = false;
+
+
+	if (fRight < fLeft)
+		m_pTransform->RotateY(-fDeltaTime);
+	else
+		m_pTransform->RotateY(fDeltaTime);
+
+	if (fUp < fDown)
+		m_pTransform->RotateX(-fDeltaTime);
+	else
+		m_pTransform->RotateX(fDeltaTime);
+
+	if (fabs(fRight - fLeft) < 10.f || fabs(fUp - fDown) < 10.f)
+	{
+		IsLookingDeli = true;
+	}
+	else
+		IsLookingDeli = false;
+
+	return IsLookingDeli;
 }
 
 _uint CMonster::Add_Hp_Bar(_float fDeltaTime)
@@ -578,9 +757,9 @@ void CMonster::Set_Hp_Pos()
 	_float3 vLockOnPos = { ptBoss.x - (WINCX / 2.f), -ptBoss.y + (WINCY / 2.f), 0.f };
 	//_float3 vPosition = { 0.f, 0.f, 0.f };
 
-	if(m_pHp_Bar)
+	if (m_pHp_Bar)
 		m_pHp_Bar->Set_Pos(vPosition);
-	if(m_pHP_Bar_Border)
+	if (m_pHP_Bar_Border)
 		m_pHP_Bar_Border->Set_Pos(vPosition);
 	if (m_pLockOn)
 	{
@@ -631,6 +810,7 @@ void CMonster::Free()
 	Safe_Release(m_pLockOn);
 	Safe_Release(m_pModelMesh);
 	Safe_Release(m_pTransform);
+	Safe_Release(m_pDeliveryTransform);
 
 	CGameObject::Free();
 }
@@ -653,12 +833,12 @@ _uint CMonster::Check_Degree()
 	{
 		if (fDegree > 90.f)
 		{
-			if(m_pHp_Bar)
-			m_pHp_Bar->Set_IsBack(true);
-			if(m_pHP_Bar_Border)
-			m_pHP_Bar_Border->Set_IsBack(true);
-			if(m_pLockOn)
-			m_pLockOn->Set_IsBack(true);
+			if (m_pHp_Bar)
+				m_pHp_Bar->Set_IsBack(true);
+			if (m_pHP_Bar_Border)
+				m_pHP_Bar_Border->Set_IsBack(true);
+			if (m_pLockOn)
+				m_pLockOn->Set_IsBack(true);
 		}
 		else if (fDegree <= 90.f)
 		{

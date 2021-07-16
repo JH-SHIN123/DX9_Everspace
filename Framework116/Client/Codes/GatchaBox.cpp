@@ -5,6 +5,7 @@
 #include"LobbyCam.h"
 #include"Product.h"
 #include"LobbyUI.h"
+#include"DataBase.h"
 CGatchaBox::CGatchaBox(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
 {
@@ -150,7 +151,7 @@ _bool CGatchaBox::CheckPicking()
 		_float fDist;
 		CGameObject* pObj = CCollision::PickingObject(fDist, g_hWnd, WINCX, WINCY, 
 			m_pDevice, m_pManagement->Get_GameObjectList(L"Layer_GatchaBox"));
-		if (pObj==this && m_pLobby->Get_Money() >=1000)
+		if (pObj==this && CDataBase::Get_Instance()->Get_Money() >=1000)
 		{
 			UI_DESC UiDesc;
 
@@ -220,8 +221,8 @@ _bool CGatchaBox::StartUnPacking(_float fDeltaTime)
 			pLobbyCam->Set_UnPacked(TRUE);
 			wstring strLayerTag = L"Layer_Product";
 			Add_Layer_Product(strLayerTag);
-
 			// °«Ã­¹Ú½º ÀÌÆåÆ®
+			m_pManagement->PlaySound(L"fireworkexplosion.wav", CSoundMgr::LOBBY_EFFECT);
 			CEffectHandler::Add_Layer_Effect_Explosion_GatchaBox(m_pTransform->Get_TransformDesc().vPosition, 20.f);
 		}
 		m_bBomb = TRUE;
