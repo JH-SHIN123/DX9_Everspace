@@ -71,9 +71,9 @@ _uint CAimPanel::Update_GameObject(_float fDeltaTime)
 	POINT p1, p2;
 	GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 500;
+	p1.x = rc.left + 700;
 	p1.y = rc.top + 100;
-	p2.x = rc.right - 500;
+	p2.x = rc.right - 700;
 	p2.y = rc.bottom - 100;
 
 	ClientToScreen(g_hWnd, &p1);
@@ -86,7 +86,7 @@ _uint CAimPanel::Update_GameObject(_float fDeltaTime)
 
 	if (PtInRect(&rc, pt))
 	{
-		if (abs(m_fRotateAngleZ) > 0.5f)
+		if (abs(m_fRotateAngleZ) > 0.1f)
 		{
 			// 원점으로 돌아오기
 			_float fRotateSpeed = fDeltaTime * 4.5f;

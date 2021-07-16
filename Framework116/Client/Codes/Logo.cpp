@@ -14,8 +14,8 @@ HRESULT CLogo::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Logo");
 
-	//m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
-	//m_pManagement->Play_MCIVideoEx();
+	m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
+	m_pManagement->Play_MCIVideoEx();
 	
 	return S_OK;
 }
@@ -46,7 +46,7 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 	if (m_bLeaveScene)
 	{
 		if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-			CLoading::Create(m_pDevice, ESceneType::Stage))))
+			CLoading::Create(m_pDevice, ESceneType::Stage2))))
 		{
 			PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 			return E_FAIL;

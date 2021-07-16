@@ -855,25 +855,25 @@ _uint CPlayer::Movement(_float fDeltaTime)
 	GetCursorPos(&pt);
 	ScreenToClient(g_hWnd, &pt);
 
-	RECT rc;
-	POINT p1, p2;
+	//RECT rc;
+	//POINT p1, p2;
 
-	GetClientRect(g_hWnd, &rc);
+	//GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 300;
-	p1.y = rc.top + 100;
-	p2.x = rc.right - 300;
-	p2.y = rc.bottom - 100;
+	//p1.x = rc.left + 300;
+	//p1.y = rc.top + 100;
+	//p2.x = rc.right - 300;
+	//p2.y = rc.bottom - 100;
 
-	ClientToScreen(g_hWnd, &p1);
-	ClientToScreen(g_hWnd, &p2);
+	//ClientToScreen(g_hWnd, &p1);
+	//ClientToScreen(g_hWnd, &p2);
 
-	rc.left = p1.x;
-	rc.top = p1.y;
-	rc.right = p2.x;
-	rc.bottom = p2.y;
+	//rc.left = p1.x;
+	//rc.top = p1.y;
+	//rc.right = p2.x;
+	//rc.bottom = p2.y;
 
-	ClipCursor(&rc);
+	//ClipCursor(&rc);
 	
 	_float3 vMouse = { (_float)pt.x, (_float)pt.y, 0.f };
 	_float3 vScreenCenter = { WINCX / 2.f, WINCY / 2.f, 0.f };
