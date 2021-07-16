@@ -410,6 +410,8 @@ void CScriptUI::Script_Tutorial_Ring_Clear()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -473,6 +475,13 @@ void CScriptUI::Script_Tutorial_Ring_Clear()
 
 void CScriptUI::Script_Tutorial_Target_Clear()
 {
+	if (m_IsSoundFirst)
+	{
+		m_iPreSound = 1234;
+		m_IsSoundFirst = false;
+	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -596,6 +605,8 @@ void CScriptUI::Script_Stg2_Begin()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -711,6 +722,8 @@ void CScriptUI::Script_Stg2_AfterCamProduction()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -746,6 +759,8 @@ void CScriptUI::Script_Stg2_Finish_AsteroidFlyAway()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -785,6 +800,8 @@ void CScriptUI::Script_Stg2_Search_Target()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -816,6 +833,8 @@ void CScriptUI::Script_Stg2_PlayerDead()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -851,6 +870,8 @@ void CScriptUI::Script_Stg2_Clear()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -890,6 +911,8 @@ void CScriptUI::Script_Stage3_Opening()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -959,6 +982,8 @@ void CScriptUI::Script_Stage3_Boss_Opening()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -1028,6 +1053,8 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -1106,6 +1133,8 @@ void CScriptUI::Script_Stage3_Player_Dead()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:
@@ -1151,6 +1180,8 @@ void CScriptUI::Script_Stage3_Delivery_Dead()
 		m_iPreSound = 1234;
 		m_IsSoundFirst = false;
 	}
+	else
+		m_iPreSound = m_dwScriptNext;
 	switch (m_dwScriptNext)
 	{
 	case 0:

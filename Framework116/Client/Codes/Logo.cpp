@@ -53,6 +53,7 @@ _uint CLogo::Update_Scene(_float fDeltaTime)
 			return E_FAIL;
 		}
 
+		
 		m_bLeaveScene = false;
 		return CHANGE_SCENE;
 	}
