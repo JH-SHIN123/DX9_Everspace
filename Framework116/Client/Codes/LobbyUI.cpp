@@ -42,7 +42,7 @@ HRESULT CLobbyUI::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-	 m_vNodeScale = { 50.f,50.f,0.f };
+	 m_vNodeScale = { 80.f,80.f,0.f };
 	 m_vFirstNode = { -379.f,124.f,0.f };
 	 m_vCursorPos = m_vFirstNode;
 	 m_vSecondNode = { -206.f,-123.f,0.f };
@@ -379,10 +379,10 @@ void CLobbyUI::Render_Cursor()
 {
 	_float4x4 matView;
 	D3DXMatrixIdentity(&matView);
-	matView._11 = m_vNodeScale.x;
-	matView._22 = m_vNodeScale.y;
+	matView._11 = 35.f;
+	matView._22 = 35.f;
 	matView._41 = m_vCursorPos.x;
-	matView._42 = m_vCursorPos.y;
+	matView._42 = m_vCursorPos.y - 25.f;
 	m_pDevice->SetTransform(D3DTS_VIEW, &matView);
 	/////////////////////////////////////////////////////////////////
 	m_pTexture->Set_Texture(1);
