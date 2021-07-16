@@ -425,13 +425,13 @@ HRESULT CEffectHandler::Add_Layer_Effect_Boss_FireBullet(const _float3 & _vPos, 
 	return S_OK;
 }
 
-HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(CGameObject * pTarget, CGameObject ** ppGameObject)
+HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(class CGameObject* pTarget, class CGameObject** ppGameObject, _float fScale)
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Bullet_Trail_Puple";
 	pSystemDesc.iNumParticles = 1;
-	pSystemDesc.tResetAttribute.fParticleSize = 3.f;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 3.f;
+	pSystemDesc.tResetAttribute.fParticleSize = 3.f + fScale;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 4.f;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
 	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
 

@@ -702,7 +702,6 @@
     <ClCompile Include="..\Codes\Shield_Battery.cpp">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\BrokenPlane.cpp">
       <Filter>02.GameObject\12.EventObject\Broken</Filter>
     </ClCompile>
@@ -730,6 +729,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\LoadingIcon.cpp">
       <Filter>01.Scene\99.Loading\LoadingUI\Loading_Icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp">
+      <Filter>02.GameObject\14.Planet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

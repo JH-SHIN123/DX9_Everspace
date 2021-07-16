@@ -19,6 +19,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_IsMove(_bool IsMove);
+
 private:
 	_uint Movement(_float fDeltaTime);
 public:
@@ -35,6 +38,9 @@ private:
 	_bool m_bDecorate = false;
 	_float3 m_vRandomRotateDir = { 0.f,0.f,0.f };
 	_float m_fMoveUpDeltaT = 0.f;
+
+private:
+	_bool m_IsMoving = false;
 
 };
 

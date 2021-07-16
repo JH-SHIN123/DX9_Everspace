@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Headers\Bullet_EnergyBall.h"
 #include "EffectHandler.h"
+#include "Pipeline.h"
 
 CBullet_EnergyBall::CBullet_EnergyBall(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData)
 	: CGameObject(pDevice)
@@ -22,7 +23,7 @@ HRESULT CBullet_EnergyBall::Ready_GameObject_Prototype()
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
 		L"Component_GeoMesh_Cylinder_EnergyBall",
-		CGeoMesh_Sphere::Create(m_pDevice, 0.8f))))
+		CGeoMesh_Sphere::Create(m_pDevice, 1.f))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_GeoMesh_Player_Lazer");
 		return E_FAIL;
@@ -34,6 +35,9 @@ HRESULT CBullet_EnergyBall::Ready_GameObject_Prototype()
 HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
+
+	//m_iRandScale = (_int)(CPipeline::GetRandomFloat(1.f, 5.f));
+	m_fRealScale = 4.f;
 
 	// For.Com_VIBuffer
 	if (FAILED(CGameObject::Add_Component(
@@ -64,7 +68,7 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
 	TransformDesc.fSpeedPerSec = 40.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
-	TransformDesc.vScale = { 2.f, 2.f, 2.f };
+	TransformDesc.vScale = { m_fRealScale, m_fRealScale, m_fRealScale };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -104,8 +108,7 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 
 
 	m_pTransform->Update_Transform();
-	CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(this, (CGameObject**)&m_pEffect);
-	//m_vEffectOffset = { 0.f,0.f,0.f };
+	CEffectHandler::Add_Layer_Effect_BossBullet_EnergyBall_Trail(this, (CGameObject**)&m_pEffect, m_fRealScale);
 
 	STAT_INFO tStatus;
 	tStatus.iAtk = 20;
@@ -120,7 +123,6 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-
 
 	return S_OK;
 }
@@ -173,7 +175,7 @@ _uint CBullet_EnergyBall::Render_GameObject()
 	m_pMesh->Render_Mesh();
 
 #ifdef _DEBUG // Render Collide
-	//m_pCollide->Render_Collide();
+	m_pCollide->Render_Collide();
 #endif
 
 	return _uint();
