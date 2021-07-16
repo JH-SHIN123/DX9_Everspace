@@ -28,6 +28,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_IsMove(_bool IsMove);
+
 private:
 	_uint Movement(_float fDeltaTime);
 
@@ -44,6 +47,9 @@ private:
 	CTransform*			m_pTransform = nullptr;
 	CTexture*			m_pTexture = nullptr;
 	CCollideSphere*		m_pCollide = nullptr;
+
+private:
+	_bool m_IsMoving = false;
 
 };
 

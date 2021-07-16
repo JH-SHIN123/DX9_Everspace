@@ -39,6 +39,8 @@ private:
 	_float m_fTrackingTime = 1.f;
 	_bool m_IsTracking = false;
 	_float m_fLiveTime = 10.f;
+	_float m_fRealScale;
+	//_int m_iRandScale;
 
 private:
 	class CGameObject* m_pEffect = nullptr;
