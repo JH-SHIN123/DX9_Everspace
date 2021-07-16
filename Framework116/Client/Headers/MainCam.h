@@ -13,6 +13,7 @@ enum class ESoloMoveMode // Lock 보다 작아야 스킵 문구가 뜸
 	Stage3_Delivery,
 	Stage3_Boss,
 	Lock,
+	OutLock,
 	End
 };
 
@@ -33,7 +34,7 @@ public:
 public:
 	void Set_DistanceFromTarget(_float fDist) { m_fDistanceFromTarget = fDist; }
 	void Set_CamAngle(_float fRadian) { m_fCamAngle = fRadian; }
-
+	void Set_Transform(CTransform* pTransform) { m_pPlayerTransform = pTransform; }
 	// 1인칭 카메라 1차 Test 실패 ㅋㅋ
 	_uint FPSMovement(_float fDeltaTime);
 	_uint SetCameraFPS(_float fDeltaTime);
@@ -52,6 +53,7 @@ private:
 private: // 카메라 연출
 	void Check_SoloMoveMode(_float fDeltaTime);
 	_uint Solo_Lock(_float fDeltaTime);
+	_uint Solo_OutLock(_float fDeltaTime);
 	_uint Solo_Stage1_Ring(_float fDeletaTime);
 	_uint Solo_Stage2_Asteroid(_float fDeltaTime);
 	_uint Solo_Stage2FinishAsteroid(_float fDeltaTime);

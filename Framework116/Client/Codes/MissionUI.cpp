@@ -110,12 +110,12 @@ _uint CMissionUI::Render_GameObject()
 	if (L"운석을 피하라" == CQuestHandler::Get_Instance()->Get_QusetName())
 	{
 		wstring strCount = L"";
-		if (m_iMissionCount > 10)
-			strCount = L"00 : " + to_wstring(m_iMissionCount);
+		_int iCount = m_iMissionMaxCount - m_iMissionCount;
+		if (iCount > 10)
+			strCount = L"00 : " + to_wstring(iCount);
 		else
-			strCount = L"00 : 0" + to_wstring(m_iMissionCount);
-		wstring strMaxCount = L"00 : " + to_wstring(m_iMissionMaxCount);
-		Info = strCount + L" / " + strMaxCount;
+			strCount = L"00 : 0" + to_wstring(iCount);
+		Info = strCount;
 	}
 	RECT m_tUIBounds;
 	GetClientRect(g_hWnd, &m_tUIBounds);

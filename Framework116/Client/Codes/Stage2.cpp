@@ -71,7 +71,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		break;
 	case PLAYER_DEAD:
 		m_fDelaySceneChange += fDeltaTime;
-		if (m_fDelaySceneChange >= 5.f)
+		if (m_fDelaySceneChange >= 2.f)
 		{
 			//m_pManagement->Clear_NonStatic_Resources();
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
@@ -93,11 +93,13 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 				m_bSceneChange = TRUE;
 			}
 		}
+				
 	}
 		break;
 	}
 	if (m_bSceneChange)
 	{
+
 		if (false == m_bFadeIn) {
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::Static,
@@ -600,7 +602,11 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 			}
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_PlayerDead)))
 				return -1;
-			m_bPlayPlayerDeadScript = TRUE;
+			if (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))
+			{
+				if(!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+					m_bPlayPlayerDeadScript = TRUE;
+			}
 		}
 	}
 	return PLAYER_DEAD;
@@ -629,7 +635,11 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 	case UPDATE_RESQUE:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
+			CMainCam* pCam = (CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
+			pCam->Set_Transform(pTransform);
 			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
+
 			{
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stg2_Clear)))
 					return -1;
@@ -640,6 +650,8 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 		return UPDATE_RESQUE;
 		break;
 	case CLEAR_RESQUE:
+	{
+	}
 		return CLEAR_RESQUE;
 	default:
 		return TRUE;
