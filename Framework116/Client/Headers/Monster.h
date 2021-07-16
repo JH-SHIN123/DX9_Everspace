@@ -4,6 +4,15 @@
 #include "GameObject.h"
 
 USING(Engine)
+
+#define DIST_PLAYER_TO_DELIVERY 290.f
+
+enum class EAttackTarget {
+	Player,
+	Delivery,
+	End
+};
+
 class CMonster final : public CGameObject
 {
 public:
@@ -22,11 +31,15 @@ public:
 	void Set_IsFight(_bool bFight);
 
 private:
+	void Get_Delivery();
+
+private:
 	_uint	Movement(_float fDeltaTime);
 	_uint	Search_Target(_float fDeltaTime);
 	_uint	Monster_Battle(_float fDeltaTime);
 	_uint	Shoot_Bullet(_float fDeltaTime);
 	_bool	RotateToPlayer(_float fDeltaTime);
+	_bool	RotateToDelivery(_float fDeltaTime);
 
 public: // Add_HP_Bar
 	_uint Add_Hp_Bar(_float fDeltaTime);
@@ -52,7 +65,7 @@ private:
 	_bool	m_bBattle = false;
 	_float	m_fMoveDist = 0.f;
 	_float  m_fAttackDelay = 0.f;
-	_bool m_IsLookingPlayer = false;
+	_bool	m_IsLookingPlayer = false;
 
 	// Pattern
 	_float m_fPatternTime = 0.f;
@@ -92,6 +105,10 @@ private:
 
 private:
 	_bool m_IsFight = true;
+
+private:
+	CTransform* m_pDeliveryTransform = nullptr;
+	EAttackTarget m_eAttackTarget = EAttackTarget::End;
 };
 
 #define __MONSTER_H__

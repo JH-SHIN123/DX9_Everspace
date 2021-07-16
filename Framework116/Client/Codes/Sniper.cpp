@@ -114,6 +114,9 @@ HRESULT CSniper::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
+
+	Get_Delivery();
+
 	return S_OK;
 }
 
@@ -145,6 +148,7 @@ _uint CSniper::Update_GameObject(_float fDeltaTime)
 		if (p) p->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 	}
 	Make_LockOn();
+
 	return NO_EVENT;
 }
 
@@ -206,6 +210,20 @@ void CSniper::Set_IsFight(_bool bFight)
 	m_IsFight = bFight;
 }
 
+void CSniper::Get_Delivery()
+{
+	if (m_pManagement->Get_GameObject(L"Layer_Delivery") != nullptr)
+	{
+		m_pDeliveryTransform = (CTransform*)(m_pManagement->Get_Component(L"Layer_Delivery", L"Com_Transform"));
+		if (m_pDeliveryTransform == nullptr)
+		{
+			PRINT_LOG(L"Error", L"m_pDeliveryTransform is  nullptr");
+			return;
+		}
+		Safe_AddRef(m_pDeliveryTransform);
+	}
+}
+
 _uint CSniper::Movement(_float fDeltaTime)
 {
 	//최초에 가만히 있을래 아니면 돌아다닐래? -> 돌아다니자 ㅋㅋ
@@ -216,31 +234,74 @@ _uint CSniper::Movement(_float fDeltaTime)
 	_float3 vPlayerPos = m_pPlayerTransform->Get_State(EState::Position);
 	_float3 vSniperPos = m_pTransform->Get_State(EState::Position);
 
+	_float3 vDeliveryPos;
+	_float3 vDir_D;
+	_float fDist_D = 12345.f;
+	_float fDist_Player_To_Deli = 0.f;
+
+	if (m_pDeliveryTransform != nullptr)
+	{
+		vDeliveryPos = m_pDeliveryTransform->Get_State(EState::Position);
+		vDir_D = vDeliveryPos - vSniperPos;
+		fDist_D = D3DXVec3Length(&vDir_D);
+		fDist_Player_To_Deli = D3DXVec3Length(&(vSniperPos - vDeliveryPos));
+	}
+
+
 	_float3 vDir = (vPlayerPos - vSniperPos);
 	_float vDist = D3DXVec3Length(&vDir);
+
+	m_eAttackTarget = EAttackTarget::End;
 
 	// 배틀 상태 On
 	if (vDist <= 400.f && vDist != 0.f)
 	{
 		m_IsBattle = true;
+		m_eAttackTarget = EAttackTarget::Player;
 		Add_Hp_Bar(fDeltaTime);
 	}
+
+	if (fDist_D <= 400.f && fDist_D != 0.f)
+	{
+		m_IsBattle = true;
+		Add_Hp_Bar(fDeltaTime);
+		m_eAttackTarget = EAttackTarget::Delivery;
+
+		// 범위 안에 있는데 플레이어가 있네
+		if (fDist_Player_To_Deli <= DIST_PLAYER_TO_DELIVERY)
+			m_eAttackTarget = EAttackTarget::Player;
+	}
+
 	return _uint();
 }
 
 _uint CSniper::Sniper_Battle(_float fDeltaTime)
 {
-	// 플레이어 쪽으로 회전해! -> OK!
-	RotateToPlayer(fDeltaTime);
-
-	// 플레이어쪽을 바라보고 있으면 락온시작! 그게아니면 계속 회전이나 하렴
-	
-	if (m_IsLookingPlayer)
+	if (m_eAttackTarget == EAttackTarget::Player)
 	{
-		Lock_On(fDeltaTime);
+		// 플레이어 쪽으로 회전해! -> OK!
+		RotateToPlayer(fDeltaTime);
+
+		// 플레이어쪽을 바라보고 있으면 락온시작! 그게아니면 계속 회전이나 하렴
+
+		if (m_IsLookingPlayer)
+		{
+			Lock_On(fDeltaTime);
+		}
+		else
+			return _uint();
 	}
-	else
-		return _uint();
+
+	else if (m_eAttackTarget == EAttackTarget::Delivery)
+	{
+		_bool IsLockOn = RotateToDelivery(fDeltaTime);
+		if (IsLockOn == true)
+		{
+			Lock_On(fDeltaTime);
+		}
+		else
+			return 0;
+	}
 
 
 	return _uint();
@@ -280,6 +341,60 @@ _uint CSniper::Lock_On(_float fDeltaTime)
 	}
 
 	return _uint();
+}
+
+_bool CSniper::RotateToDelivery(_float fDeltaTime)
+{
+	_float3 vTargetPos = m_pDeliveryTransform->Get_State(EState::Position);
+	_float3 vSniperPos = m_pTransform->Get_State(EState::Position);
+
+	_float3 vTargetDir = vTargetPos - vSniperPos;
+	D3DXVec3Normalize(&vTargetDir, &vTargetDir);
+
+	_float3 vSniperLook = m_pTransform->Get_State(EState::Look);
+	_float3 vSniperUp = m_pTransform->Get_State(EState::Up);
+	D3DXVec3Normalize(&vSniperLook, &vSniperLook);
+
+	_float fCeta = D3DXVec3Dot(&vTargetDir, &vSniperLook);
+	_float fRadianMax = D3DXToRadian(95.f);
+	_float fRadianMin = D3DXToRadian(85.f);
+
+	_float3 vMyRight, vMyLeft, vMissileUp, vMissileDown;
+	D3DXVec3Cross(&vMyRight, &vSniperUp, &vSniperLook);
+	D3DXVec3Cross(&vMyLeft, &vSniperLook, &vSniperUp);
+	D3DXVec3Cross(&vMissileUp, &vMyRight, &vSniperLook);
+	D3DXVec3Cross(&vMissileDown, &vSniperLook, &vMyRight);
+
+	D3DXVec3Normalize(&vMyRight, &vMyRight);
+	D3DXVec3Normalize(&vMyLeft, &vMyLeft);
+	D3DXVec3Normalize(&vMissileUp, &vMissileUp);
+	D3DXVec3Normalize(&vMissileDown, &vMissileDown);
+
+	_float fRight = D3DXVec3Dot(&vTargetDir, &vMyRight);
+	_float fLeft = D3DXVec3Dot(&vTargetDir, &vMyLeft);
+	_float fUp = D3DXVec3Dot(&vTargetDir, &vMissileUp);
+	_float fDown = D3DXVec3Dot(&vTargetDir, &vMissileDown);
+
+	_bool IsLooking = false;
+
+	if (fRight < fLeft)
+		m_pTransform->RotateY(-fDeltaTime);
+	else
+		m_pTransform->RotateY(fDeltaTime);
+
+	if (fUp < fDown)
+		m_pTransform->RotateX(-fDeltaTime);
+	else
+		m_pTransform->RotateX(fDeltaTime);
+
+	if (fabs(fRight - fLeft) < 10.f || fabs(fUp - fDown) < 10.f)
+	{
+		IsLooking = true;
+	}
+	else
+		IsLooking = false;
+
+	return IsLooking;
 }
 
 _uint CSniper::Add_Hp_Bar(_float fDeltaTime)
@@ -451,6 +566,7 @@ CGameObject * CSniper::Clone(void * pArg/* = nullptr*/)
 
 void CSniper::Free()
 {
+	Safe_Release(m_pDeliveryTransform);
 	Safe_Release(m_pHp_Bar);
 	Safe_Release(m_pHP_Bar_Border);
 	Safe_Release(m_pInfo);

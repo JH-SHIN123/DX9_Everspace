@@ -2,6 +2,7 @@
 #ifndef __SNIPER_H__
 
 #include "GameObject.h"
+#include "Monster.h"
 
 USING(Engine)
 class CSniper final : public CGameObject
@@ -24,12 +25,17 @@ public:
 public:
 	void Set_IsFight(_bool bFight);
 
+private:
+	void Get_Delivery();
+
 public:
 	_uint	Movement(_float fDeltaTime);
 	_bool Get_IsLockOn() { return m_IsLockOn; }
 	_bool RotateToPlayer(_float fDeltaTime);
 	_uint Sniper_Battle(_float fDeltaTime);
 	_uint Lock_On(_float fDeltaTime);
+	_bool RotateToDelivery(_float fDeltaTime);
+
 
 public: // Add_HP_Bar
 	_uint Add_Hp_Bar(_float fDeltaTime);
@@ -81,6 +87,10 @@ private:
 
 private:
 	_bool m_IsFight = true;
+
+private:
+	CTransform* m_pDeliveryTransform = nullptr;
+	EAttackTarget m_eAttackTarget = EAttackTarget::End;
 };
 
 #define __SNIPER_H__
