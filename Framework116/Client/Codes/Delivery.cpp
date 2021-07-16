@@ -5,6 +5,7 @@
 #include "HP_Bar_Border.h"
 #include "Player.h"
 #include "Collision.h"
+#include "LockOnAlert.h"
 
 CDelivery::CDelivery(LPDIRECT3DDEVICE9 pDevice) :
     CGameObject(pDevice)
@@ -116,7 +117,7 @@ HRESULT CDelivery::Ready_GameObject(void* pArg)
 	//m_fHp = 1000.f;
 	//m_fFullHp = m_fHp;
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 1000;
+	tStatus.iMaxHp = 5000;
 	tStatus.iHp = tStatus.iMaxHp;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -156,6 +157,7 @@ _uint CDelivery::Update_GameObject(_float fDeltaTime)
 		Check_Degree();
 	}
 
+	Make_LockOn_Alert(fDeltaTime);
 
     m_pTransform->Update_Transform_Quaternion();
     for (auto& p : m_Collides)
@@ -172,6 +174,26 @@ _uint CDelivery::LateUpdate_GameObject(_float fDeltaTime)
     if (m_IsDead) return DEAD_OBJECT;
 
     CGameObject::LateUpdate_GameObject(fDeltaTime);
+
+	if (m_pInfo->Get_Hp() <= 0 || m_IsDead == true)
+	{
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		m_IsDead = true;
+		if (m_pHp_Bar)
+			m_pHp_Bar->Set_IsDead(TRUE);
+		if (m_pHP_Bar_Border)
+			m_pHP_Bar_Border->Set_IsDead(TRUE);
+		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
+		return DEAD_OBJECT;
+	}
+	if (m_IsCollide) {
+		// Bullet 데미지 만큼.
+		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		_float fDamage = _float(m_pInfo->Get_HittedDamage());
+		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
+		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);
+		m_IsCollide = false;
+	}
 
     if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
         return UPDATE_ERROR;
@@ -242,6 +264,42 @@ void CDelivery::Update_Effect()
         m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
         m_pRightEngineEffect->Set_IsBoost(true);
     }
+}
+
+void CDelivery::Make_LockOn_Alert(_float fDeltaTime)
+{
+	if (m_bLockOn)
+	{
+		if (!m_bFirstLocked)
+		{
+			CGameObject* pGameObject = nullptr;
+			//알림생성
+			UI_DESC LockOnAlert;
+			LockOnAlert.tTransformDesc.vPosition = { 900.f, 300.f, 0.f };
+			LockOnAlert.tTransformDesc.vScale = { 0.f, 0.f, 0.f };
+			LockOnAlert.wstrTexturePrototypeTag = L"GameObject_LockOnAlert_Delivery";
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_LockOnAlert",
+				L"Layer_LockOnAlert",
+				&LockOnAlert, &pGameObject)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+				return;
+			}
+
+			m_pLockOnAlert = static_cast<CLockOnAlert*>(pGameObject);
+			m_bFirstLocked = true;
+		}
+	}
+	else
+	{
+		if (m_bFirstLocked && !m_bLockOn)
+		{
+			m_pManagement->Get_GameObjectList(L"Layer_LockOnAlert")->front()->Set_IsDead(true);
+			m_bFirstLocked = false;
+		}
+	}
 }
 
 _uint CDelivery::Movement(_float fDeltaTime)

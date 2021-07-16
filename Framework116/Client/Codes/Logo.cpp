@@ -14,8 +14,8 @@ HRESULT CLogo::Ready_Scene()
 
 	::SetWindowText(g_hWnd, L"Logo");
 
-	//m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
-	//m_pManagement->Play_MCIVideoEx();
+	m_pManagement->Create_MCIVideoEx(g_hWnd, L"../../Resources/Video/logo.wmv", WINCX, WINCY);
+	m_pManagement->Play_MCIVideoEx();
 	
 	return S_OK;
 }
