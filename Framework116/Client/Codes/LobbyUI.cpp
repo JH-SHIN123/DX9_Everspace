@@ -187,15 +187,7 @@ _uint CLobbyUI::Render_GameObject()
 			return 0;
 	}
 
-	/*if (m_bClicked && !m_pLobby->Get_SceneSelect())
-	{
 
-		m_fClicked += m_pManagement->Get_DeltaTime();
-		if (m_fClicked >= 0.1f)
-			m_bClicked = false;
-		if(m_wstrTexturePrototypeTag != L"Component_Texture_SceneSelect")
-			return 0;
-	}*/
 	if (!Render_ItemSlot())
 	{
 	CGameObject::Render_GameObject();
@@ -257,6 +249,38 @@ void CLobbyUI::Update_Bounds()
 	m_tUIBounds.right = (LONG)(vPos.x + (vSize.x / 2.f));
 	m_tUIBounds.bottom = (LONG)(vPos.y + (vSize.y / 2.f));
 
+
+}
+
+void CLobbyUI::CheckItemBounds()
+{
+	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect() || m_pLobby->Get_StartUnPacking())
+		return;
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_Product")
+		return;
+	if (m_pController->Key_Down(KEY_LBUTTON))
+	{
+		_float3 vPos = _float3(0.f, 0.f, 0.f);
+		_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
+		_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
+		vPos.x = vDecartPos.x + _float(WINCX / 2.f);
+		vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
+		vPos.y -= 30.f;
+		for(int  i = 0 ; i <3 ; i++)
+		{
+			for (int j = 0; j < 3; j++)
+			{
+				int iIndex = i * 3 + j;
+
+				m_tUIBounds.left = (LONG)(vPos.x - (vSize.x / 2.f) + (j*vSize.x));
+				m_tUIBounds.top = (LONG)(vPos.y - (vSize.y / 2.f) + (i*vSize.y));
+				m_tUIBounds.right = (LONG)(vPos.x + (vSize.x / 2.f)+(j*vSize.x));
+				m_tUIBounds.bottom = (LONG)(vPos.y + (vSize.y / 2.f) + (i*vSize.y));
+				
+
+			}
+		}
+	}
 
 }
 
@@ -531,6 +555,7 @@ _bool CLobbyUI::Render_ItemSlot()
 
 			_float3 vDecartFontPos = vPos;
 			_float3 vFontPos = {0,0,0};
+			_float3 vFontSize = { 1.f,1.f,1.f };
 			vFontPos.x = vDecartFontPos.x + _float(WINCX / 2.f);
 			vFontPos.y = _float(WINCY / 2.f) - vDecartFontPos.y;
 			vFontPos.x += 40.f;
@@ -540,37 +565,37 @@ _bool CLobbyUI::Render_ItemSlot()
 			case 1:
 				_itow_s(CDataBase::Get_Instance()->GetAtkBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 2:
 				_itow_s(CDataBase::Get_Instance()->GetDefBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 3:
 				_itow_s(CDataBase::Get_Instance()->GetHpBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 4:	
 				_itow_s(CDataBase::Get_Instance()->GetEnergyBuffItemCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 			case 5:
 				_itow_s(CDataBase::Get_Instance()->GetMissileCount(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });		
 				break;
 			case 6:
 				_itow_s(CDataBase::Get_Instance()->GetVMaxBuffItem(), szBuf, 10);
 				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
-				, szBuf, vFontPos, { 2.f,2.f,2.f }
+				, szBuf, vFontPos, vFontSize
 				, D3DXCOLOR{ 255,255,255,255 });
 				break;
 				}

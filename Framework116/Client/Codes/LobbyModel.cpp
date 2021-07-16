@@ -208,7 +208,7 @@ void CLobbyModel::StartSceneChange(_float fDeltaTime)
 			fAngle = D3DXVec3Dot(&vDir, &vTargetDir);
 			m_pTransform->RotateX(fDeltaTime*fAngle);
 		
-			if (0.1 >= fAngle&&m_fSoundTiming >= 7.f)
+			if (0.1 >= fAngle&&m_fSoundTiming >= 9.f)
 			{
 				m_bGo_Straight = TRUE;
 			}
