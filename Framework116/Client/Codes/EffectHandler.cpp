@@ -487,9 +487,9 @@ HRESULT CEffectHandler::Add_Layer_Effect_Sniper_Bullet_Trail(CGameObject * pTarg
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Sniper_Bullet_Trail";
 	pSystemDesc.iNumParticles = 1;
-	pSystemDesc.tResetAttribute.fParticleSize = 1.f;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 3.f;
-	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fParticleSize = 1.4f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 2.f;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 10.f;
 	pSystemDesc.tResetAttribute.fLifeTime = 1.f;
 
 	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f, 1.f };

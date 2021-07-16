@@ -61,7 +61,7 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	{
 		TRANSFORM_DESC TransformDesc;
 		TransformDesc.fSpeedPerSec = 1800.f;
-		TransformDesc.vScale = { 0.2f, 0.2f, 21.f };
+		TransformDesc.vScale = { 0.3f, 0.3f, 11.f };
 
 		if (FAILED(CGameObject::Add_Component(
 			EResourceType::Static,

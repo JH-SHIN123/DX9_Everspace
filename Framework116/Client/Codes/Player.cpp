@@ -25,43 +25,87 @@ CPlayer::CPlayer(const CPlayer & other)
 void CPlayer::Update_Effect()
 {
 	// Engine-Boost Effect
-	if (m_pLeftEngineEffect) {
-		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
-		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vLeftEngineOffset.x;
-		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
-		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z;
-		m_pLeftEngineEffect->Set_EngineOffset(vEnginePos);
-		m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
+	if (!m_IsAstroidStage)
+	{
+		if (m_pLeftEngineEffect) {
+			_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+			vEnginePos += m_pTransform->Get_State(EState::Right) * m_vLeftEngineOffset.x;
+			vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
+			vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z;
+			m_pLeftEngineEffect->Set_EngineOffset(vEnginePos);
+			m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
+		}
+		if (m_pRightEngineEffect) {
+			_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+			vEnginePos += m_pTransform->Get_State(EState::Right) * m_vRightEngineOffset.x;
+			vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
+			vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z;
+			m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
+			m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
+		}
+
+		// Wing-Boost Effect
+		if (m_fStamina > 1.f)
+		{
+			if (m_pLeftWingBoost) {
+				_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+				vWingPos += m_pTransform->Get_State(EState::Right) * m_vLeftWingOffset.x;
+				vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
+				vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z;
+				m_pLeftWingBoost->Set_WingOffset(vWingPos);
+				m_pLeftWingBoost->Set_IsBoost(m_IsMove);
+			}
+			if (m_pRightWingBoost) {
+				_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+				vWingPos += m_pTransform->Get_State(EState::Right) * m_vRightWingOffset.x;
+				vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
+				vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z;
+				m_pRightWingBoost->Set_WingOffset(vWingPos);
+				m_pRightWingBoost->Set_IsBoost(m_IsMove);
+			}
+		}
 	}
-	if (m_pRightEngineEffect) {
-		_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
-		vEnginePos += m_pTransform->Get_State(EState::Right) * m_vRightEngineOffset.x;
-		vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
-		vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z;
-		m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
-		m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
+	else
+	{
+		if (m_pLeftEngineEffect) {
+			_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+			vEnginePos += m_pTransform->Get_State(EState::Right) * m_vLeftEngineOffset.x;
+			vEnginePos += m_pTransform->Get_State(EState::Up) * m_vLeftEngineOffset.y;
+			vEnginePos += m_pTransform->Get_State(EState::Look) * m_vLeftEngineOffset.z * 100.f;
+			m_pLeftEngineEffect->Set_EngineOffset(vEnginePos);
+			m_pLeftEngineEffect->Set_IsBoost(m_IsBoost);
+		}
+		if (m_pRightEngineEffect) {
+			_float3 vEnginePos = m_pTransform->Get_TransformDesc().vPosition;
+			vEnginePos += m_pTransform->Get_State(EState::Right) * m_vRightEngineOffset.x;
+			vEnginePos += m_pTransform->Get_State(EState::Up) * m_vRightEngineOffset.y;
+			vEnginePos += m_pTransform->Get_State(EState::Look) * m_vRightEngineOffset.z * 100.f;
+			m_pRightEngineEffect->Set_EngineOffset(vEnginePos);
+			m_pRightEngineEffect->Set_IsBoost(m_IsBoost);
+		}
+
+		// Wing-Boost Effect
+		if (m_fStamina > 1.f)
+		{
+			if (m_pLeftWingBoost) {
+				_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+				vWingPos += m_pTransform->Get_State(EState::Right) * m_vLeftWingOffset.x;
+				vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
+				vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z * 100.f;
+				m_pLeftWingBoost->Set_WingOffset(vWingPos);
+				m_pLeftWingBoost->Set_IsBoost(m_IsMove);
+			}
+			if (m_pRightWingBoost) {
+				_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
+				vWingPos += m_pTransform->Get_State(EState::Right) * m_vRightWingOffset.x;
+				vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
+				vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z  * 100.f;
+				m_pRightWingBoost->Set_WingOffset(vWingPos);
+				m_pRightWingBoost->Set_IsBoost(m_IsMove);
+			}
+		}
 	}
 
-	// Wing-Boost Effect
-	if (m_fStamina > 1.f)
-	{
-		if (m_pLeftWingBoost) {
-			_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
-			vWingPos += m_pTransform->Get_State(EState::Right) * m_vLeftWingOffset.x;
-			vWingPos += m_pTransform->Get_State(EState::Up) * m_vLeftWingOffset.y;
-			vWingPos += m_pTransform->Get_State(EState::Look) * m_vLeftWingOffset.z;
-			m_pLeftWingBoost->Set_WingOffset(vWingPos);
-			m_pLeftWingBoost->Set_IsBoost(m_IsMove);
-		}
-		if (m_pRightWingBoost) {
-			_float3 vWingPos = m_pTransform->Get_TransformDesc().vPosition;
-			vWingPos += m_pTransform->Get_State(EState::Right) * m_vRightWingOffset.x;
-			vWingPos += m_pTransform->Get_State(EState::Up) * m_vRightWingOffset.y;
-			vWingPos += m_pTransform->Get_State(EState::Look) * m_vRightWingOffset.z;
-			m_pRightWingBoost->Set_WingOffset(vWingPos);
-			m_pRightWingBoost->Set_IsBoost(m_IsMove);
-		}
-	}
 }
 
 HRESULT CPlayer::Ready_GameObject_Prototype()
