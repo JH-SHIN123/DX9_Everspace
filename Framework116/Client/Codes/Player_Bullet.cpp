@@ -168,20 +168,39 @@ HRESULT CPlayer_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	else if (iWeapon == WEAPON_MACHINEGUN)
 		CEffectHandler::Add_Layer_Effect_Gatling(this, &m_pGatlingParticle);
 
-
-	STAT_INFO tStatus;
-	tStatus.iAtk = 100;
-	
-
-	if (FAILED(CGameObject::Add_Component(
-		EResourceType::Static,
-		L"Component_Status_Info",
-		L"Com_StatInfo",
-		(CComponent**)&m_pInfo,
-		&tStatus)))
+	if (iWeapon == WEAPON_MACHINEGUN)
 	{
-		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
-		return E_FAIL;
+		STAT_INFO tStatus;
+		tStatus.iAtk = 100;
+
+
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_Status_Info",
+			L"Com_StatInfo",
+			(CComponent**)&m_pInfo,
+			&tStatus)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
+	}
+	else if (iWeapon == WEAPON_LAZER)
+	{
+		STAT_INFO tStatus;
+		tStatus.iAtk = 250;
+
+
+		if (FAILED(CGameObject::Add_Component(
+			EResourceType::Static,
+			L"Component_Status_Info",
+			L"Com_StatInfo",
+			(CComponent**)&m_pInfo,
+			&tStatus)))
+		{
+			PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
+			return E_FAIL;
+		}
 	}
 	
 

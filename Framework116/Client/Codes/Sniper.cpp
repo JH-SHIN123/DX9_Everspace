@@ -557,7 +557,7 @@ _uint CSniper::Make_LockOn()
 			}
 			if (!m_IsHUDLockOn)
 			{
-
+				m_pManagement->PlaySound(L"Lock_On.ogg", CSoundMgr::LOCKON);
 				CGameObject* pLockOn = nullptr;
 				UI_DESC HUD_Lock_On;
 				HUD_Lock_On.tTransformDesc.vPosition = { 11110.f, 0.f, 0.f };

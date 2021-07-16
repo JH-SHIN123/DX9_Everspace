@@ -68,7 +68,7 @@ HRESULT CStage::Ready_Scene()
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
-	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
+	m_pManagement->PlaySound(L"Kickstart_My_Heart.mp3", CSoundMgr::BGM);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 

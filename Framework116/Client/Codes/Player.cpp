@@ -189,7 +189,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// HP 세팅
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 100;
+	tStatus.iMaxHp = 300;
 	tStatus.iHp = tStatus.iMaxHp;
 
 	if (FAILED(CGameObject::Add_Component(
@@ -929,6 +929,8 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 	{
 		if (!m_bFirstLocked)
 		{
+			m_pManagement->StopSound(CSoundMgr::LOCKON_ALERT);
+			m_pManagement->PlaySound(L"LockOnAlert.ogg", CSoundMgr::LOCKON_ALERT);
 			CGameObject* pGameObject = nullptr;
 			//알림생성
    			UI_DESC LockOnAlert;
