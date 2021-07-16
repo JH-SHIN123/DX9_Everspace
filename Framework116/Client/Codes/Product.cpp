@@ -118,6 +118,8 @@ HRESULT CProduct::Ready_GameObject(void * pArg/* = nullptr*/)
 			return E_FAIL;
 		}
 	}
+
+
 	return S_OK;
 }
 
@@ -313,9 +315,9 @@ void CProduct::Get_Product()
 	case EProduct::Missile:
 		m_pLobby->SetMissileCount((_uint)m_eRank + 1);
 		break;
-	case EProduct::VMax_Buff:
-		m_pLobby->SetVMaxBuffItemCount((_uint)m_eRank + 1);
-		break;
+	//case EProduct::VMax_Buff:
+	//	m_pLobby->SetVMaxBuffItemCount((_uint)m_eRank + 1);
+	//	break;
 	}
 	m_pLobby->Set_UnitInfo(tCurUnitInfo);
 }
@@ -330,41 +332,42 @@ void CProduct::Set_Text()
 	switch (m_eProduct)
 	{
 	case EProduct::ATK_UP:
-		str = L"공격력 증가!";
+		str = L"공격력 증가";
 		break;
 	case EProduct::DEF_UP:
-		str = L"방어력 증가!";
+		str = L"방어력 증가";
 		break;
 	case EProduct::MAX_HP_UP:
-		str = L"최대체력 증가!";
+		str = L"최대체력 증가";
 		break;
 	case EProduct::MAX_SHIELD_UP:
-		str = L"쉴드량 증가!";
+		str = L"쉴드량 증가";
 		break;
 	case EProduct::MONEY:
-		str = L"돈 획득!";
+		str = L"돈 획득";
 		break;
 	case EProduct::Atk_Buff:
-		str = L"공격력 버프 아이템!!";
+		str = L"공격력 버프 아이템";
 		break;
 	case EProduct::Def_Buff:
-		str = L"방어력 버프 아이템!!";
+		str = L"방어력 버프 아이템";
 		break;
 	case EProduct::Hp_Buff:
-		str = L"체력 버프 아이템!!";
+		str = L"체력 버프 아이템";
 		break;
 	case EProduct::Energy_Buff:
-		str = L"에너지 버프 아이템!!";
+		str = L"에너지 버프 아이템";
 		break;
 	case EProduct::Missile:
-		str = L"미사일 획득!";
+		str = L"미사일 획득";
 		break;
-	case EProduct::VMax_Buff:
-		str = L"VMax버프 아이템!";
-		break;
+	//case EProduct::VMax_Buff:
+	//	str = L"VMax버프 아이템";
+	//	break;
 	}
+
 	Add_Font_InLayer(L"Layer_Font_Product", m_pFont, str, 
-		_float3(WINCX/2.f - 50.f, 200, 0), _float3(2,2, 0), D3DXCOLOR(255, 255, 255,255));
+		_float3(875.f, 680, 0), _float3( 1.5f, 1.5f, 0), D3DXCOLOR(255, 255, 255,255));
 }
 
 void CProduct::Add_Font_InLayer(wstring strLayerTag, CGameObject *& pFont, wstring str, _float3 vPos, _float3 vScale, D3DXCOLOR tColor)

@@ -48,7 +48,7 @@ HRESULT CLobbyUI::Ready_GameObject(void* pArg)
 	 m_vSecondNode = { -206.f,-123.f,0.f };
 	 m_vThirdNode = { 167.f,30.f,0.f };
 
-	
+
 	return S_OK;
 }
 

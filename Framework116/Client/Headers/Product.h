@@ -7,7 +7,7 @@ enum class EProduct
 	ATK_UP, DEF_UP, 
 	MAX_HP_UP, MAX_SHIELD_UP,
 	MONEY, Atk_Buff,Def_Buff,Hp_Buff,Energy_Buff,
-	Missile,VMax_Buff,
+	Missile,
 	PRODUCT_END
 };
 enum class ERank
