@@ -51,6 +51,7 @@ HRESULT CStage2::Ready_Scene()
 
 _uint CStage2::Update_Scene(_float fDeltaTime)
 {
+
 	CScene::Update_Scene(fDeltaTime);
 
 	m_pManagement->PlaySound(L"Tutorial_Ambience.ogg", CSoundMgr::BGM);
@@ -74,7 +75,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		{
 			//m_pManagement->Clear_NonStatic_Resources();
 			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-				CLoading::Create(m_pDevice, ESceneType::Stage2))))
+				CLoading::Create(m_pDevice, ESceneType::Lobby))))
 			{
 				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 				return E_FAIL;
@@ -129,6 +130,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 
 _uint CStage2::LateUpdate_Scene(_float fDeltaTime)
 {
+
 	CScene::LateUpdate_Scene(fDeltaTime);
 
 	// Boss
