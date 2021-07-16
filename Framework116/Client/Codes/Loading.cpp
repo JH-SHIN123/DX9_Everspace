@@ -1764,10 +1764,10 @@ HRESULT CLoading::Load_StageEffect_Resources()
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,
-		L"Component_Texture_Orange",
-		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/Gatling.png"))))
+		L"Component_Texture_Player_Bullet",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/Effect/Gatling.dds"))))
 	{
-		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Orange");
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Player_Bullet");
 		return E_FAIL;
 	}
 

@@ -239,7 +239,7 @@ HRESULT CEffectHandler::Add_Layer_Effect_Bullet(CGameObject* pTarget, CGameObjec
 
 HRESULT CEffectHandler::Add_Layer_Effect_Gatling(CGameObject * pTarget, CGameObject ** ppGameObject)
 {
-	PARTICLESYSTEM_DESC pSystemDesc;
+	/*PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_Smoke";
 	pSystemDesc.iNumParticles = 1;
 	pSystemDesc.tResetAttribute.fParticleSize = 0.5f;
@@ -262,7 +262,7 @@ HRESULT CEffectHandler::Add_Layer_Effect_Gatling(CGameObject * pTarget, CGameObj
 	}
 
 	CGameObject* pGameObject = *ppGameObject;
-	Safe_Release(pGameObject);
+	Safe_Release(pGameObject);*/
 
 	return S_OK;
 }

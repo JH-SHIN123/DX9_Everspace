@@ -33,6 +33,8 @@ private:
 	D3DMATERIAL9	m_tMaterial;
 	CStatus_Info* m_pInfo = nullptr;
 
+	CTexture* m_pTexture = nullptr;
+
 private:
 	//CTransform* m_pTargetTransform = nullptr;
 	CTransform* m_pPlayerTransform = nullptr;
