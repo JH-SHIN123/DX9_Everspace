@@ -19,6 +19,11 @@ public:
 	static CAimPanel* Create(LPDIRECT3DDEVICE9 pDevice);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 
+private:
+	void Rotate_AimPanel(const _float fDeltaTime);
+
+private:
+	_float m_fRotateAngleZ = 0.f;
 };
 
 #define __AIMPANEL_H__
