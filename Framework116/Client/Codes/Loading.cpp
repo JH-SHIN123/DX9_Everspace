@@ -373,6 +373,15 @@ HRESULT CLoading::Ready_LobbyResources()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage2",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage2.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage2");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Components
@@ -576,6 +585,15 @@ HRESULT CLoading::Load_Stage1_Prop_Resources()
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage3");
 		return E_FAIL;
 	}
+	/* For.Component_Texture_Skybox */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage2",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage2.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage2");
+		return E_FAIL;
+	}
 
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::Static,
@@ -746,6 +764,16 @@ HRESULT CLoading::Load_Stage2_Prop_Resources()
 		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage3.dds", 1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage3");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Skybox */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage2",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage2.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage2");
 		return E_FAIL;
 	}
 
@@ -961,6 +989,16 @@ HRESULT CLoading::Load_Stage3_Prop_Resources()
 		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage3.dds", 1))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage3");
+		return E_FAIL;
+	}
+
+	/* For.Component_Texture_Skybox */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_Skybox_Stage2",
+		CTexture::Create(m_pDevice, ETextureType::Cube, L"../../Resources/Textures/Skybox_Stage2.dds", 1))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Component_Texture_Skybox_Stage2");
 		return E_FAIL;
 	}
 	
