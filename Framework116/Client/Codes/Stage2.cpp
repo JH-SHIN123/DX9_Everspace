@@ -345,13 +345,14 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_HP_OutBar)))
 		return E_FAIL;
 
-	UI_DESC HeadUpDisplay;
-	HeadUpDisplay.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
-	HeadUpDisplay.tTransformDesc.vScale = { 945.f, 763.f, 0.f };
-	HeadUpDisplay.wstrTexturePrototypeTag = L"Component_Texture_Head_Up_Display";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HeadUpDisplay)))
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::Static,
+		L"GameObject_HUD_AimPanel",
+		L"Layer_HUD")))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
 		return E_FAIL;
-
+	}
 
 	return S_OK;
 }

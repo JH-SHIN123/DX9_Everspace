@@ -265,6 +265,9 @@
     <Filter Include="01.Scene\99.Loading\LoadingUI\Loading_Icon">
       <UniqueIdentifier>{f6c92128-b726-4732-8bb2-4a2e016894b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\09.HUD\13.AimPanel">
+      <UniqueIdentifier>{560fb2fb-731b-43ec-97c0-22faa887c8f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -505,6 +508,9 @@
     <ClInclude Include="..\Headers\LoadingIcon.h">
       <Filter>01.Scene\99.Loading\LoadingUI\Loading_Icon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\AimPanel.h">
+      <Filter>02.GameObject\09.HUD\13.AimPanel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -702,6 +708,7 @@
     <ClCompile Include="..\Codes\Shield_Battery.cpp">
       <Filter>02.GameObject\09.HUD\11.Shield_Battery</Filter>
     </ClCompile>
+    <ClCompile Include="..\Codes\Planet.cpp" />
     <ClCompile Include="..\Codes\BrokenPlane.cpp">
       <Filter>02.GameObject\12.EventObject\Broken</Filter>
     </ClCompile>
@@ -730,8 +737,8 @@
     <ClCompile Include="..\Codes\LoadingIcon.cpp">
       <Filter>01.Scene\99.Loading\LoadingUI\Loading_Icon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Codes\Planet.cpp">
-      <Filter>02.GameObject\14.Planet</Filter>
+    <ClCompile Include="..\Codes\AimPanel.cpp">
+      <Filter>02.GameObject\09.HUD\13.AimPanel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

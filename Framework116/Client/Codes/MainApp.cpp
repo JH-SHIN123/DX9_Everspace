@@ -14,6 +14,7 @@
 #include "Shield_Battery.h"
 #include "HUD_Effect_Damage.h"
 #include "HUD_Effect_Boost.h"
+#include "AimPanel.h"
 #include "QuestHandler.h"
 #include "Status_Info.h"
 #include "FadeIn.h"
@@ -206,13 +207,23 @@ HRESULT CMainApp::Ready_StaticResources()
 		return E_FAIL;
 	}
 
-	/* For.GameObject_AlertArrow */
+	/* For.GameObject_Shield_Battery */
 	if (FAILED(m_pManagement->Add_GameObject_Prototype(
 		EResourceType::Static,
 		L"GameObject_Shield_Battery",
 		CShield_Battery::Create(m_pDevice))))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add GameObject_Shield_Battery");
+		return E_FAIL;
+	}
+
+	/* For.GameObject_HUD_AimPanel */
+	if (FAILED(m_pManagement->Add_GameObject_Prototype(
+		EResourceType::Static,
+		L"GameObject_HUD_AimPanel",
+		CAimPanel::Create(m_pDevice))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add GameObject_HUD_AimPanel");
 		return E_FAIL;
 	}
 
