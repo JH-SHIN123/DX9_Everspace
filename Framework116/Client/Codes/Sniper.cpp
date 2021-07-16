@@ -6,6 +6,7 @@
 #include "Collision.h"
 #include "Pipeline.h"
 #include "New_LockOn.h"
+#include "Delivery.h"
 
 CSniper::CSniper(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -171,6 +172,10 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 			m_pLockOn->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
+
+		if(m_pManagement->Get_GameObject(L"Layer_Delivery") != nullptr)
+			((CDelivery*)m_pManagement->Get_GameObject(L"Layer_Delivery"))->Someone_Try_To_Kill_Me(false);
+
 		return DEAD_OBJECT;
 	}
 	if (nullptr == m_pHp_Bar)
@@ -297,7 +302,7 @@ _uint CSniper::Sniper_Battle(_float fDeltaTime)
 		_bool IsLockOn = RotateToDelivery(fDeltaTime);
 		if (IsLockOn == true)
 		{
-			Lock_On(fDeltaTime);
+			Lock_On_Delivery(fDeltaTime);
 		}
 		else
 			return 0;
@@ -395,6 +400,40 @@ _bool CSniper::RotateToDelivery(_float fDeltaTime)
 		IsLooking = false;
 
 	return IsLooking;
+}
+
+_uint CSniper::Lock_On_Delivery(_float fDeltaTime)
+{
+	m_IsLockOn = true;
+	m_fLockOnDelay += fDeltaTime;
+	if (m_fLockOnDelay >= 2.f)
+	{
+		((CDelivery*)m_pManagement->Get_GameObject(L"Layer_Delivery"))->Someone_Try_To_Kill_Me(true);
+
+		m_fSniperShootDelay += fDeltaTime;
+		// 락온을 4초동안 한다음에 투사체 하나 발사하자
+		if (m_fSniperShootDelay >= 4.f)
+		{
+			TRANSFORM_DESC* pArg = new TRANSFORM_DESC;
+
+			pArg->vPosition = m_pTransform->Get_State(EState::Position);
+			pArg->vRotate = m_pTransform->Get_TransformDesc().vRotate;
+
+			if (FAILED(m_pManagement->Add_GameObject_InLayer(
+				EResourceType::NonStatic,
+				L"GameObject_Sniper_Bullet",
+				L"Layer_Sniper_Bullet", pArg)))
+			{
+				PRINT_LOG(L"Error", L"Failed To Add GameObject_Sniper_Bullet In Layer");
+				return E_FAIL;
+			}
+			m_fSniperShootDelay = 0.f;
+			m_fLockOnDelay = 0.f;
+			((CDelivery*)m_pManagement->Get_GameObject(L"Layer_Delivery"))->Someone_Try_To_Kill_Me(false);
+		}
+	}
+
+	return 0;
 }
 
 _uint CSniper::Add_Hp_Bar(_float fDeltaTime)

@@ -21,6 +21,9 @@ public:
 	virtual _uint Render_GameObject() override;
 
 public:
+	void Someone_Try_To_Kill_Me(_bool _bLockOn) { m_bLockOn = _bLockOn; }
+
+public:
 	void Set_MoveStart(_bool bMove = true);
 
 public:
@@ -28,6 +31,7 @@ public:
 
 private:
 	void Update_Effect();
+	void Make_LockOn_Alert(_float fDeltaTime);
 
 private:
 	_uint Movement(_float fDeltaTime);
@@ -72,6 +76,12 @@ public: // Add_HP_Bar
 
 	// ±¸¤ÑÁ¶Ã¼
 	CStatus_Info* m_pInfo = nullptr;
+
+private:
+	class CLockOnAlert* m_pLockOnAlert = nullptr;
+	_bool m_bFirstLocked = false;
+	_bool  m_bLockOn = false;
+
 };
 
 

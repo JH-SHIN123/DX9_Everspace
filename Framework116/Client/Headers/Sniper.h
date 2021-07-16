@@ -35,7 +35,7 @@ public:
 	_uint Sniper_Battle(_float fDeltaTime);
 	_uint Lock_On(_float fDeltaTime);
 	_bool RotateToDelivery(_float fDeltaTime);
-
+	_uint Lock_On_Delivery(_float fDeltaTime);
 
 public: // Add_HP_Bar
 	_uint Add_Hp_Bar(_float fDeltaTime);
