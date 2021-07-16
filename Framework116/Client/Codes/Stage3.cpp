@@ -274,8 +274,8 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 				return;
 			}
-			return;
 			m_bLeaveScene = false;
+			return;
 		}
 	}
 

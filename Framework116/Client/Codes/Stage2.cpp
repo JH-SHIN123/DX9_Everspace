@@ -45,6 +45,7 @@ HRESULT CStage2::Ready_Scene()
 		return E_FAIL;
 
 	Ready_Asteroid();
+	//m_bSceneChange = true;
 
 	return S_OK;
 }
@@ -80,6 +81,8 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 				return E_FAIL;
 			}
+
+			m_fDelaySceneChange = 0.f;
 			return CHANGE_SCENE;
 		}
 		break;
@@ -97,9 +100,9 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 	}
 		break;
 	}
+
 	if (m_bSceneChange)
 	{
-
 		if (false == m_bFadeIn) {
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::Static,
@@ -122,8 +125,8 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
 				return E_FAIL;
 			}
-			return CHANGE_SCENE;
 			m_bLeaveScene = false;
+			return CHANGE_SCENE;
 		}
 	}
 
@@ -471,7 +474,6 @@ void CStage2::Ready_Asteroid()
 }
 _uint CStage2::Stage2_Flow(_float fDeltaTime)
 {
-
 	CPlayer* pPlayer = (CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player");
 	if (pPlayer)
 	{
@@ -636,9 +638,9 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 	case UPDATE_RESQUE:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
-			CMainCam* pCam = (CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
-			CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
-			pCam->Set_Transform(pTransform);
+			//CMainCam* pCam = (CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			//CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
+			//pCam->Set_Transform(pTransform);
 			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
 
 			{

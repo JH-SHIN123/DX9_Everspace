@@ -143,8 +143,8 @@ _uint CLoading::Update_Scene(_float fDeltaTime)
 				return UPDATE_ERROR;
 			}
 
-			return CHANGE_SCENE;
 			m_bLeaveScene = false;
+			return CHANGE_SCENE;
 		}
 	}
 

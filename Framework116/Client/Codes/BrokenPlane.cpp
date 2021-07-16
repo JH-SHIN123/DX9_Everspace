@@ -75,14 +75,13 @@ HRESULT CBrokenPlane::Ready_GameObject(void* pArg)
 		return E_FAIL;
 	}
 
-
-
 	return S_OK;
 }
 
 _uint CBrokenPlane::Update_GameObject(_float fDeltaTime)
 {
-	if (m_IsDead) return DEAD_OBJECT;
+	if (m_IsDead) 
+		return DEAD_OBJECT;
 
 	if (m_bCreateEffect)
 	{
@@ -112,7 +111,8 @@ _uint CBrokenPlane::Update_GameObject(_float fDeltaTime)
 
 _uint CBrokenPlane::LateUpdate_GameObject(_float fDeltaTime)
 {
-	if (m_IsDead) return DEAD_OBJECT;
+	if (m_IsDead)
+		return DEAD_OBJECT;
 
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
 
