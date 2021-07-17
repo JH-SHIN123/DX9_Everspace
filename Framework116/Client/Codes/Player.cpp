@@ -765,6 +765,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 		{
 			if (!m_IsMissile)
 			{
+				m_pManagement->PlaySound(L"Dialog_Launch_Missile.ogg", CSoundMgr::DIALOGUE2);
 				for (int i = 0; i < 4; ++i)
 				{
 					switch (i)
