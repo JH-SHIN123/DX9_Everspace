@@ -125,7 +125,6 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 					CEnding::Create(m_pDevice, ESceneType::Stage2))))
 				{
 					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-					return;
 				}
 			}
 			else
@@ -135,7 +134,6 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 
 				{
 					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-					return;
 				}
 			}
 

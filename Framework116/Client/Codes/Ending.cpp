@@ -50,7 +50,8 @@ _uint CEnding::Update_Scene(_float fDeltaTime)
 	{
 		if (m_fSkipDeltaT >= m_fSkipTime)
 		{
-			m_bSkipVideo = true;
+			if(GetAsyncKeyState(VK_RETURN) & 0x8000)
+				m_bSkipVideo = true;
 		}
 		else m_fSkipDeltaT += fDeltaTime;
 	}
