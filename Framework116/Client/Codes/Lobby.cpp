@@ -48,7 +48,7 @@ HRESULT CLobby::Ready_Scene()
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
 	lightDesc.vLightDir = { 1.0f, -0.0f, 0.25f };
-	lightDesc.tLightColor = D3DCOLOR_XRGB(227, 204, 178);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(255, 255, 255);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 

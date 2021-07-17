@@ -357,7 +357,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetAtkBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetAtkBuffItemCount(-1);
-						tUnitInfo.iAtk += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iAtk += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 						
 						if (m_pFontAtkUpCount)
 						{
@@ -374,7 +374,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetDefBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetDefBuffItemCount(-1);
-						tUnitInfo.iDef += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iDef += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontDefUpCount)
 						{
@@ -391,7 +391,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetHpBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetHpBuffItemCount(-1);
-						tUnitInfo.iMaxHp += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxHp += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontHpUpCount)
 						{
@@ -408,7 +408,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetEnergyBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetEnergyBuffItemCount(-1);
-						tUnitInfo.iMaxEnergy += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxEnergy += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontEnergyUpCount)
 						{
@@ -425,7 +425,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetMissileCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetMissileCount(-1);
-						tUnitInfo.iFireRate += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iFireRate += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontMissileCount)
 						{
@@ -442,7 +442,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetVMaxBuffItem() >= 1)
 					{
 						CDataBase::Get_Instance()->SetVMaxBuffItemCount(-1);
-						tUnitInfo.iMaxShield += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxShield += (_uint)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontVMaxCount)
 						{
