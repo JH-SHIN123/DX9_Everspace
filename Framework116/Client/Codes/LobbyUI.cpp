@@ -8,6 +8,7 @@
 #include"Product.h"
 #include"LobbyCam.h"
 #include"DataBase.h"
+#include"Pipeline.h"
 
 USING(Engine)
 
@@ -118,6 +119,8 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	m_pController->Update_Controller();
 	Update_SceneSelect(fDeltaTime);
 	Check_Picking();
+	CheckItemBounds();
+	
 	OnMouseButton();
 	Key_Check(fDeltaTime);
 	return NO_EVENT;
@@ -137,6 +140,7 @@ _uint CLobbyUI::LateUpdate_GameObject(_float fDeltaTime)
 	}
 	
 	CGameObject::LateUpdate_GameObject(fDeltaTime);
+	UseItem(fDeltaTime);
 
 	if (m_bCancel)
 	{
@@ -256,27 +260,39 @@ void CLobbyUI::CheckItemBounds()
 {
 	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect() || m_pLobby->Get_StartUnPacking())
 		return;
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_Product")
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
 		return;
 	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
 		_float3 vPos = _float3(0.f, 0.f, 0.f);
 		_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
 		_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 		vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 		vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 		vPos.y -= 30.f;
+		RECT rc;
 		for(int  i = 0 ; i <3 ; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
 				int iIndex = i * 3 + j;
-
-				m_tUIBounds.left = (LONG)(vPos.x - (vSize.x / 2.f) + (j*vSize.x));
-				m_tUIBounds.top = (LONG)(vPos.y - (vSize.y / 2.f) + (i*vSize.y));
-				m_tUIBounds.right = (LONG)(vPos.x + (vSize.x / 2.f)+(j*vSize.x));
-				m_tUIBounds.bottom = (LONG)(vPos.y + (vSize.y / 2.f) + (i*vSize.y));
+				rc.left		= (LONG)(vPos.x - (vSize.x / 2.f) + (j*160.f));
+				rc.right	= (LONG)(vPos.x + (vSize.x / 2.f) +	(j* 160.f));
+				rc.top		= (LONG)(vPos.y - (vSize.y / 2.f) + (i* 160.f));
+				rc.bottom	= (LONG)(vPos.y + (vSize.y / 2.f) + (i* 160.f));
 				
+				if (PtInRect(&rc, pt))
+				{
+					if (!m_iItemClicked[iIndex])
+						m_iItemClicked[iIndex] = TRUE;
+					else if (m_iItemClicked[iIndex] == TRUE)
+						m_iItemClicked[iIndex] = 2;
+				}
+				else
+					m_iItemClicked[iIndex] = FALSE;
 
 			}
 		}
@@ -294,6 +310,157 @@ void CLobbyUI::Check_Picking()
 			Set_IsPicking(TRUE);
 	else
 			Set_IsPicking(FALSE);
+}
+
+void CLobbyUI::UseItem(_float fDeltaTime)
+{
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
+		return;
+	for (int i = 0; i < 9; i++)
+	{
+		if (m_iItemClicked[i] == 3)
+		{
+			m_fShowUsingItemFrame -= fDeltaTime*120.f*4.f;
+			if (m_fShowUsingItemFrame <= 0.f)
+			{
+				m_fShowUsingItemFrame = 120.f;
+				m_iItemClicked[i] = FALSE;
+			}
+			return;
+		}
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			_uint iIndex = i * 3 + j;
+			if (m_iItemClicked[iIndex] == 2)
+			{
+				_float3 vFirstPos = m_pTransform->Get_TransformDesc().vPosition;
+				_float3 vScale = m_pTransform->Get_TransformDesc().vScale;
+				_float3 vPos = { 0,0,0 };
+				TCHAR szBuf[32] = L"";
+				vPos.x = vFirstPos.x + j * 160;
+				vPos.y = vFirstPos.y - i * 160;
+
+				_float3 vDecartFontPos = vPos;
+				_float3 vFontPos = { 0,0,0 };
+				_float3 vFontSize = { 1.f,1.f,1.f };
+				vFontPos.x = vDecartFontPos.x + _float(WINCX / 2.f);
+				vFontPos.y = _float(WINCY / 2.f) - vDecartFontPos.y;
+				vFontPos.x += 40.f;
+				vFontPos.y -= 60.f;
+				UNIT_INFO tUnitInfo = *CDataBase::Get_Instance()->Get_UnitInfo();
+				switch (iIndex)
+				{
+				case 1:
+					if (CDataBase::Get_Instance()->GetAtkBuffItemCount() >= 1)
+					{
+						CDataBase::Get_Instance()->SetAtkBuffItemCount(-1);
+						tUnitInfo.iAtk += CPipeline::GetRandomFloat(1, 3) * 10;
+						
+						if (m_pFontAtkUpCount)
+						{
+							m_pFontAtkUpCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontAtkUpCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetAtkBuffItemCount(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				case 2:
+					if (CDataBase::Get_Instance()->GetDefBuffItemCount() >= 1)
+					{
+						CDataBase::Get_Instance()->SetDefBuffItemCount(-1);
+						tUnitInfo.iDef += CPipeline::GetRandomFloat(1, 3) * 10;
+
+						if (m_pFontDefUpCount)
+						{
+							m_pFontDefUpCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontDefUpCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetDefBuffItemCount(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				case 3:
+					if (CDataBase::Get_Instance()->GetHpBuffItemCount() >= 1)
+					{
+						CDataBase::Get_Instance()->SetHpBuffItemCount(-1);
+						tUnitInfo.iMaxHp += CPipeline::GetRandomFloat(1, 3) * 10;
+
+						if (m_pFontHpUpCount)
+						{
+							m_pFontHpUpCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontHpUpCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetHpBuffItemCount(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				case 4:
+					if (CDataBase::Get_Instance()->GetEnergyBuffItemCount() >= 1)
+					{
+						CDataBase::Get_Instance()->SetEnergyBuffItemCount(-1);
+						tUnitInfo.iMaxEnergy += CPipeline::GetRandomFloat(1, 3) * 10;
+
+						if (m_pFontEnergyUpCount)
+						{
+							m_pFontEnergyUpCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontEnergyUpCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetEnergyBuffItemCount(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				case 5:
+					if (CDataBase::Get_Instance()->GetMissileCount() >= 1)
+					{
+						CDataBase::Get_Instance()->SetMissileCount(-1);
+						tUnitInfo.iFireRate += CPipeline::GetRandomFloat(1, 3) * 10;
+
+						if (m_pFontMissileCount)
+						{
+							m_pFontMissileCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontMissileCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetMissileCount(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				case 6:
+					if (CDataBase::Get_Instance()->GetVMaxBuffItem() >= 1)
+					{
+						CDataBase::Get_Instance()->SetVMaxBuffItemCount(-1);
+						tUnitInfo.iMaxShield += CPipeline::GetRandomFloat(1, 3) * 10;
+
+						if (m_pFontVMaxCount)
+						{
+							m_pFontVMaxCount->Set_IsDead(TRUE);
+							Safe_Release(m_pFontVMaxCount);
+						}
+						_itow_s(CDataBase::Get_Instance()->GetVMaxBuffItem(), szBuf, 10);
+						Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
+							, szBuf, vFontPos, vFontSize
+							, D3DXCOLOR{ 255,255,255,255 });
+					}
+					break;
+				}
+				CDataBase::Get_Instance()->Set_UnitInfo(tUnitInfo);
+				m_iItemClicked[iIndex] = 3;
+			}
+		}
+	}	
 }
 
 void CLobbyUI::Key_Check(_float fDeltaTime)
@@ -563,40 +730,58 @@ _bool CLobbyUI::Render_ItemSlot()
 			switch (iIndex)
 			{
 			case 1:
-				_itow_s(CDataBase::Get_Instance()->GetAtkBuffItemCount(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });
+				if (!m_pFontAtkUpCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetAtkBuffItemCount(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontAtkUpCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });
+				}
 				break;
 			case 2:
-				_itow_s(CDataBase::Get_Instance()->GetDefBuffItemCount(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });
+				if (!m_pFontDefUpCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetDefBuffItemCount(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontDefUpCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });
+				}
 				break;
 			case 3:
-				_itow_s(CDataBase::Get_Instance()->GetHpBuffItemCount(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });
+				if (!m_pFontHpUpCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetHpBuffItemCount(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontHpUpCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });
+				}
 				break;
-			case 4:	
-				_itow_s(CDataBase::Get_Instance()->GetEnergyBuffItemCount(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });
+			case 4:
+				if (!m_pFontEnergyUpCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetEnergyBuffItemCount(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontEnergyUpCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });
+				}
 				break;
 			case 5:
-				_itow_s(CDataBase::Get_Instance()->GetMissileCount(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });		
+				if (!m_pFontMissileCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetMissileCount(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontMissileCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });		
+				}
 				break;
 			case 6:
-				_itow_s(CDataBase::Get_Instance()->GetVMaxBuffItem(), szBuf, 10);
-				Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
-				, szBuf, vFontPos, vFontSize
-				, D3DXCOLOR{ 255,255,255,255 });
+				if (!m_pFontVMaxCount)
+				{
+					_itow_s(CDataBase::Get_Instance()->GetVMaxBuffItem(), szBuf, 10);
+					Add_Font_InLayer(L"Layer_Font_ItemCount", m_pFontVMaxCount
+					, szBuf, vFontPos, vFontSize
+					, D3DXCOLOR{ 255,255,255,255 });
+				}
 				break;
 				}
 			matView._11 = vScale.x;
@@ -607,6 +792,20 @@ _bool CLobbyUI::Render_ItemSlot()
 			/////////////////////////////////////////////////////////////////
 			m_pTexture->Set_Texture(iIndex);
 			m_pVIBuffer->Render_VIBuffer();
+			if (iIndex == 0)
+				continue;
+			if (m_iItemClicked[iIndex] == 1)
+			{
+				m_pTexture->Set_Texture(7);
+				m_pVIBuffer->Render_VIBuffer();
+			}
+			else if(m_iItemClicked[iIndex] == 3)
+			{
+				matView._22 = m_fShowUsingItemFrame;
+				m_pDevice->SetTransform(D3DTS_VIEW, &matView);
+				m_pTexture->Set_Texture(8);
+				m_pVIBuffer->Render_VIBuffer();
+			}
 		}
 	}
 	return TRUE;

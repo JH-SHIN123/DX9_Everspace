@@ -34,7 +34,7 @@ public:
 public:
 	void Set_DistanceFromTarget(_float fDist) { m_fDistanceFromTarget = fDist; }
 	void Set_CamAngle(_float fRadian) { m_fCamAngle = fRadian; }
-	void Set_Transform(CTransform* pTransform) { m_pPlayerTransform = pTransform; }
+	void Set_Transform(CTransform* pTransform);
 	// 1인칭 카메라 1차 Test 실패 ㅋㅋ
 	_uint FPSMovement(_float fDeltaTime);
 	_uint SetCameraFPS(_float fDeltaTime);

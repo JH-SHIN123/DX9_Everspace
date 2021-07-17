@@ -13,13 +13,18 @@ CBullet_EMP_Bomb::CBullet_EMP_Bomb(LPDIRECT3DDEVICE9 pDevice)
 
 CBullet_EMP_Bomb::CBullet_EMP_Bomb(const CBullet_EMP_Bomb & other)
 	: CGameObject(other)
+	, m_IsDestroyedRing_1(other.m_IsDestroyedRing_1)
+	, m_IsDestroyedRing_2(other.m_IsDestroyedRing_2)
 	, m_fExplosionRadius(other.m_fExplosionRadius)
+	, m_fExplosionScale(other.m_fExplosionScale)
 	, m_fExplosionTime(other.m_fExplosionTime)
 	, m_IsExplosion(other.m_IsExplosion)
 	, m_IsTracking(other.m_IsTracking)
+	, m_fRealScale(other.m_fRealScale)
 	, m_fLiveTime(other.m_fLiveTime)
 	, m_fTurnTime(other.m_fTurnTime)
 	, m_tMaterial(other.m_tMaterial)
+	, m_iHitCount(other.m_iHitCount)
 	, m_IsMove(other.m_IsMove)
 	, m_IsBOOM(other.m_IsBOOM)
 {
@@ -73,7 +78,7 @@ HRESULT CBullet_EMP_Bomb::Ready_GameObject(void * pArg/* = nullptr*/)
 	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
 	TransformDesc.fSpeedPerSec = 30.f;
 	TransformDesc.fRotatePerSec = D3DXToRadian(20.f);
-	TransformDesc.vScale = { 1.f, 1.f, 1.f };
+	TransformDesc.vScale = { m_fRealScale, m_fRealScale, m_fRealScale };
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -85,7 +90,6 @@ HRESULT CBullet_EMP_Bomb::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-	// asdasd
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
@@ -143,7 +147,6 @@ _uint CBullet_EMP_Bomb::Update_GameObject(_float fDeltaTime)
 	Explosion(fDeltaTime);
 
 
-
 	m_pTransform->Update_Transform();
 	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
 
@@ -162,6 +165,34 @@ _uint CBullet_EMP_Bomb::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (FAILED(m_pManagement->Add_GameObject_InRenderer(ERenderType::NonAlpha, this)))
 		return UPDATE_ERROR;
+
+	if (m_IsCollide == true)
+	{
+		++m_iHitCount;
+
+		switch (m_iHitCount)
+		{
+		case 2:
+			m_IsDestroyedRing_1 = true;
+			m_fExplosionScale = 1.0015f;
+			CEffectHandler::Add_Layer_Effect_Boss_FireBullet(m_pTransform->Get_State(EState::Position), 1.f);
+			Safe_Release(m_pRing_1);
+			break;
+		case 4:
+			m_IsDestroyedRing_2 = true;
+			m_fExplosionScale = 1.001f;
+			CEffectHandler::Add_Layer_Effect_Boss_FireBullet(m_pTransform->Get_State(EState::Position), 1.f);
+			Safe_Release(m_pRing_2);
+			break;
+		case 8:
+			m_fExplosionScale = 1.f;
+			break;
+		default:
+			break;
+		}
+		//m_fRealScale *= 0.9f;
+		m_IsCollide = false;
+	}
 
 
 	m_fLiveTime -= fDeltaTime;
@@ -197,10 +228,12 @@ _uint CBullet_EMP_Bomb::Render_GameObject()
 		m_pMesh->Render_Mesh();
 
 		m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransformRing_1->Get_TransformDesc().matWorld);
-		m_pRing_1->Render_Mesh();
+		if(m_IsDestroyedRing_1 == false)
+			m_pRing_1->Render_Mesh();
 
 		m_pDevice->SetTransform(D3DTS_WORLD, &m_pTransformRing_2->Get_TransformDesc().matWorld);
-		m_pRing_2->Render_Mesh();
+		if (m_IsDestroyedRing_2 == false)
+			m_pRing_2->Render_Mesh();
 	}
 
 
@@ -285,6 +318,18 @@ _uint CBullet_EMP_Bomb::Move_Rotate(_float fDeltaTime)
 	return _uint();
 }
 
+void CBullet_EMP_Bomb::ScaleUp()
+{
+	m_fRealScale *= 1.0005f;
+	_float3 vScale = { m_fRealScale, m_fRealScale, m_fRealScale };
+
+	m_pTransform->Set_Scale(vScale);
+	m_pTransformRing_1->Set_Scale(vScale);
+	m_pTransformRing_2->Set_Scale(vScale);
+
+	//m_pCollide->Resize_Shpere(m_fRealScale);
+}
+
 _uint CBullet_EMP_Bomb::Rotate_X(_float fDeltaTime)
 {
 	_float3 vTargetPos = m_pTargetTransform->Get_State(EState::Position);
@@ -358,25 +403,41 @@ _uint CBullet_EMP_Bomb::Rotate_Y(_float fDeltaTime)
 
 void CBullet_EMP_Bomb::Explosion(_float fDeltaTime)
 {
+	//if (m_fExplosionTime >= -0.5f)
+	//	ScaleUp();
+			
 	if (m_fExplosionTime <= 0.f)
 	{
+
 		if (m_fExplosionTime >= -0.525f)
 		{
 			m_IsExplosion = true;
-			m_fExplosionRadius *= 1.0015f;
+			m_fExplosionRadius *= m_fExplosionScale;
 			m_pCollide->Resize_Shpere(m_fExplosionRadius);
 
 			if (m_IsBOOM == false)
 			{
-				CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 1.f);
+				if(m_IsDestroyedRing_1 == false && m_IsDestroyedRing_2 == false)
+					CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 1.f);
+
+				if (m_IsDestroyedRing_1 == true && m_IsDestroyedRing_2 == false)
+					CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 0.7f);
+
+				if (m_IsDestroyedRing_1 == true && m_IsDestroyedRing_2 == true)
+					CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 0.3f);
+
 				m_IsBOOM = true;
 			}
 		}
 	}
 
+	//if(m_fExplosionTime >= 3.f)
+	//{
+	ScaleUp();
+	//}
 
 	m_fExplosionTime -= fDeltaTime;
-
+	
 }
 
 HRESULT CBullet_EMP_Bomb::Ready_GameObject_EMP()

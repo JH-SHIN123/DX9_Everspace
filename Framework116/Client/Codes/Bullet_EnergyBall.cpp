@@ -36,7 +36,6 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 {
 	CGameObject::Ready_GameObject(pArg);
 
-	//m_iRandScale = (_int)(CPipeline::GetRandomFloat(1.f, 5.f));
 	m_fRealScale = 4.f;
 
 	// For.Com_VIBuffer
@@ -66,8 +65,8 @@ HRESULT CBullet_EnergyBall::Ready_GameObject(void * pArg/* = nullptr*/)
 	TRANSFORM_DESC TransformDesc;
 	TransformDesc.vPosition = ((TRANSFORM_DESC*)pArg)->vPosition;//_float3(10.f, 3.f, 20.f);
 	TransformDesc.vRotate = ((TRANSFORM_DESC*)pArg)->vRotate;
-	TransformDesc.fSpeedPerSec = 40.f;
-	TransformDesc.fRotatePerSec = D3DXToRadian(90.f);
+	TransformDesc.fSpeedPerSec = 70.f;
+	TransformDesc.fRotatePerSec = D3DXToRadian(80.f);
 	TransformDesc.vScale = { m_fRealScale, m_fRealScale, m_fRealScale };
 
 	if (FAILED(CGameObject::Add_Component(

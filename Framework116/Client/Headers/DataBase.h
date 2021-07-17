@@ -18,6 +18,7 @@ public:
 
 	_uint Get_Money()const;
 	UNIT_INFO* Get_UnitInfo();
+
 	_uint GetAtkBuffItemCount() { return m_iAtkBuffItem; }
 	_uint GetDefBuffItemCount() { return m_iDefBuffItem; }
 	_uint GetHpBuffItemCount() { return m_iHpBuffItem; }
@@ -37,12 +38,12 @@ private:
 	_uint m_iMoney = 300000;
 	UNIT_INFO m_tUnitInfo = { 20,30,50,30,40,70 };;
 
-	_uint m_iAtkBuffItem = 0;
-	_uint m_iDefBuffItem = 0;
-	_uint m_iHpBuffItem = 0;
-	_uint m_iEnergyBuffItem = 0;
-	_uint m_iMissileCount = 0;
-	_uint m_iVMaxBuffItem = 0;
+	_uint m_iAtkBuffItem = 10;
+	_uint m_iDefBuffItem = 10;
+	_uint m_iHpBuffItem = 10;
+	_uint m_iEnergyBuffItem = 10;
+	_uint m_iMissileCount = 10;
+	_uint m_iVMaxBuffItem = 10;
 
 };
 

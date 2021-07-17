@@ -658,9 +658,29 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(const _float3 
 {
 	PARTICLESYSTEM_DESC pSystemDesc;
 	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP";
-	pSystemDesc.iNumParticles = 7;
+	pSystemDesc.iNumParticles = 30;
 	pSystemDesc.tResetAttribute.fParticleSize = 40.f * _fSize;
-	pSystemDesc.tResetAttribute.fParticleSpeed = 50.f;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 300.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.f;
+	pSystemDesc.tTransformDesc.vPosition = _vPos;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
+	}
+
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP_Explosion";
+	pSystemDesc.iNumParticles = 10;
+	pSystemDesc.tResetAttribute.fParticleSize = 20.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 350.f * _fSize;
 	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
 	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
 	pSystemDesc.tTransformDesc.vPosition = _vPos;
@@ -676,6 +696,27 @@ HRESULT CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(const _float3 
 	{
 		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
 	}
+
+	pSystemDesc.wstrTexturePrototypeTag = L"Component_Texture_BossEMP_2";
+	pSystemDesc.iNumParticles = 10;
+	pSystemDesc.tResetAttribute.fParticleSize = 40.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleSpeed = 350.f * _fSize;
+	pSystemDesc.tResetAttribute.fParticleAlphaFadeSpeed = 0.1f;
+	pSystemDesc.tResetAttribute.fLifeTime = 2.5f;
+	pSystemDesc.tTransformDesc.vPosition = _vPos;
+	pSystemDesc.tResetAttribute.vColorRed_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorGreen_RandomRange = { 1.f,1.f };
+	pSystemDesc.tResetAttribute.vColorBlue_RandomRange = { 1.f,1.f };
+
+	if (FAILED(CManagement::Get_Instance()->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_ExplosionSystem",
+		L"Layer_ExplosionSystem",
+		(void*)&pSystemDesc)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Particle Yellow In Layer");
+	}
+
 
 	return S_OK;
 }

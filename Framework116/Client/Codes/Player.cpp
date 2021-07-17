@@ -931,6 +931,7 @@ void CPlayer::Make_LockOn_Alert(_float fDeltaTime)
 		if (!m_bFirstLocked)
 		{
 			m_pManagement->StopSound(CSoundMgr::LOCKON_ALERT);
+			m_pManagement->PlaySound(L"Dialogue_When_LockedOn.ogg", CSoundMgr::DIALOGUE2);
 			m_pManagement->PlaySound(L"LockOnAlert.ogg", CSoundMgr::LOCKON_ALERT);
 			CGameObject* pGameObject = nullptr;
 			//알림생성

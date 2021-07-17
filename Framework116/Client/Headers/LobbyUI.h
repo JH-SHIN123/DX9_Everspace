@@ -20,6 +20,7 @@ private:
 	void Update_Bounds();
 	void CheckItemBounds();
 	void Check_Picking();
+	void UseItem(_float fDeltaTime);
 	void Key_Check(_float fDeltaTime);
 	void OnMouseButton();
 
@@ -84,7 +85,9 @@ private:
 	//For.ItemFrame
 	_bool m_bStart = false;
 	_float3 m_vStartPos = {0,0,0};
-	_bool m_bItemClicked[9] = { 0,0,0,0,0,0,0,0,0 };
+
+	_uint m_iItemClicked[9] = { 0,0,0,0,0,0,0,0,0 };
+	_float m_fShowUsingItemFrame = 120.f;
 	CGameObject* m_pFontAtkUpCount = nullptr;
 	CGameObject* m_pFontDefUpCount = nullptr;
 	CGameObject* m_pFontHpUpCount = nullptr;
