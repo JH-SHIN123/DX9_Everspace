@@ -194,6 +194,11 @@ _uint CDrone::LateUpdate_GameObject(_float fDeltaTime)
 		if (m_pLockOn)
 			m_pLockOn->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
+		_int iRand = rand() % 2;
+		if (iRand == 0)
+		{
+			m_pManagement->PlaySound(L"Dialog_Kill.ogg", CSoundMgr::DIALOGUE1);
+		}
 		return DEAD_OBJECT;
 	}
 	if (nullptr == m_pHp_Bar)

@@ -389,6 +389,7 @@ _uint CPlayer::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (m_IsCollide == true)
 	{
+		m_pManagement->PlaySound(L"Dialog_Im_Hit.ogg", CSoundMgr::DIALOGUE2);
 		_float fDamage = _float(m_pInfo->Get_HittedDamage());
 		_float fMaxHp = _float(m_pInfo->Get_MaxHp());
 		m_pHp_Bar->Set_ScaleX((-fDamage / fMaxHp) * m_fHpLength);

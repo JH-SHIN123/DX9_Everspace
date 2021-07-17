@@ -175,7 +175,11 @@ _uint CSniper::LateUpdate_GameObject(_float fDeltaTime)
 
 		if(m_pManagement->Get_GameObject(L"Layer_Delivery") != nullptr)
 			((CDelivery*)m_pManagement->Get_GameObject(L"Layer_Delivery"))->Someone_Try_To_Kill_Me(false);
-
+		_int iRand = rand() % 2;
+		if (iRand == 0)
+		{
+			m_pManagement->PlaySound(L"Dialog_Kill.ogg", CSoundMgr::DIALOGUE1);
+		}
 		return DEAD_OBJECT;
 	}
 	if (nullptr == m_pHp_Bar)

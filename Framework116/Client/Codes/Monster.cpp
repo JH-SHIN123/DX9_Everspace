@@ -189,6 +189,11 @@ _uint CMonster::LateUpdate_GameObject(_float fDeltaTime)
 			m_pLockOn->Set_IsDead(TRUE);
 		m_pManagement->PlaySound(L"Ship_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 		((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Someone_Try_To_Kill_Me(false);
+		_int iRand = rand() % 2;
+		if (iRand == 0)
+		{
+			m_pManagement->PlaySound(L"Dialog_Kill.ogg", CSoundMgr::DIALOGUE1);
+		}
 		return DEAD_OBJECT;
 	}
 	if (nullptr == m_pHp_Bar)
