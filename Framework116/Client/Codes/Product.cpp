@@ -282,7 +282,7 @@ void CProduct::Render_Product()
 
 void CProduct::Get_Product()
 {
-	UNIT_INFO tCurUnitInfo = *CDataBase::Get_Instance()->Get_UnitInfo();
+	STAT_INFO tCurUnitInfo = *CDataBase::Get_Instance()->Get_StatInfo();
 	switch (m_eProduct)
 	{
 	case EProduct::ATK_UP:
@@ -319,7 +319,7 @@ void CProduct::Get_Product()
 	//	m_pLobby->SetVMaxBuffItemCount((_uint)m_eRank + 1);
 	//	break;
 	}
-	CDataBase::Get_Instance()->Set_UnitInfo(tCurUnitInfo);
+	CDataBase::Get_Instance()->Set_StatInfo(tCurUnitInfo);
 }
 
 void CProduct::Set_Text()

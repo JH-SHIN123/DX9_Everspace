@@ -11,6 +11,7 @@
 #include "MainCam.h"
 #include "LockOnAlert.h"
 #include "HUD_Effect_Boost.h"
+#include"DataBase.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -188,17 +189,14 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 
 	// HP 세팅
-	// -> 싱글톤으로 데이터 받아와서 세팅
-	STAT_INFO tStatus;
-	tStatus.iMaxHp = 300;
-	tStatus.iHp = tStatus.iMaxHp;
 
+	STAT_INFO tStat = *CDataBase::Get_Instance()->Get_StatInfo();
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Status_Info",
 		L"Com_StatInfo",
 		(CComponent**)&m_pInfo,
-		&tStatus)))
+		&tStat)))
 	{
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;

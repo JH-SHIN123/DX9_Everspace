@@ -34,8 +34,8 @@ private:
 	CTransform* m_pTransform = nullptr;
 	CTexture*	m_pTexture = nullptr;
 
-	UNIT_INFO*	m_pUnitInfo = nullptr;
-	UNIT_INFO	m_tPreUnitInfo = {0,0,0,0,0,0};
+	STAT_INFO*	m_pUnitInfo = nullptr;
+	STAT_INFO	m_tPreUnitInfo;
 
 };
 
