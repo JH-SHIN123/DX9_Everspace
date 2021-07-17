@@ -9,6 +9,7 @@
 #include"LobbyCam.h"
 #include"DataBase.h"
 #include"Pipeline.h"
+#include"SoundMgr.h"
 
 USING(Engine)
 
@@ -320,9 +321,15 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 	{
 		if (m_iItemClicked[i] == 3)
 		{
+			if (i == 0)
+				continue;
+
+			m_pManagement->PlaySoundW(L"Parts_Upgrade.ogg", CSoundMgr::LOBBY_EFFECT);
+		
 			m_fShowUsingItemFrame -= fDeltaTime*120.f*4.f;
 			if (m_fShowUsingItemFrame <= 0.f)
-			{
+			{ 
+				m_pManagement->StopSound(CSoundMgr::LOBBY_EFFECT);
 				m_fShowUsingItemFrame = 120.f;
 				m_iItemClicked[i] = FALSE;
 			}
