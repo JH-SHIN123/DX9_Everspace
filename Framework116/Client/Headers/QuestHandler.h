@@ -33,7 +33,6 @@ public:
 	HRESULT Set_Start_Quest(EQuest eQuest);
 	_int	Set_Counting(const _int iCount = 1);
 	_int	Set_ClearStage(EStageClear eClearStage);
-
 public:
 	const wstring& Get_QusetName() const;
 	_int  Get_CountRemaining();

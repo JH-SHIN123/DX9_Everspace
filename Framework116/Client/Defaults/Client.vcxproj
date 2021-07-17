@@ -175,6 +175,7 @@
     <ClInclude Include="..\Headers\DataBase.h" />
     <ClInclude Include="..\Headers\Delivery.h" />
     <ClInclude Include="..\Headers\Drone.h" />
+    <ClInclude Include="..\Headers\Ending.h" />
     <ClInclude Include="..\Headers\HP_Bar.h" />
     <ClInclude Include="..\Headers\LoadingIcon.h" />
     <ClInclude Include="..\Headers\LoadingUI.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="..\Codes\DataBase.cpp" />
     <ClCompile Include="..\Codes\Delivery.cpp" />
     <ClCompile Include="..\Codes\Drone.cpp" />
+    <ClCompile Include="..\Codes\Ending.cpp" />
     <ClCompile Include="..\Codes\HP_Bar.cpp" />
     <ClCompile Include="..\Codes\LoadingIcon.cpp" />
     <ClCompile Include="..\Codes\LoadingUI.cpp" />

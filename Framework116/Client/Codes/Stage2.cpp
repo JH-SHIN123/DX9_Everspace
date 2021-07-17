@@ -4,6 +4,8 @@
 #include"Player.h"
 #include"Pipeline.h"
 #include"Loading.h"
+#include "Ending.h"
+
 CStage2::CStage2(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
 {
@@ -90,6 +92,7 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
 			{
 				CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
+				m_bStageClear = true;
 				m_bSceneChange = TRUE;
 			}
 		}
@@ -115,14 +118,26 @@ _uint CStage2::Update_Scene(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			m_bLeaveScene = false;
-			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-				CLoading::Create(m_pDevice, ESceneType::Lobby))))
+			// Ending Scene
+			if (m_bStageClear)
 			{
-				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-				return E_FAIL;
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Ending,
+					CEnding::Create(m_pDevice, ESceneType::Stage2))))
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				}
+			}
+			else
+			{
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+					CLoading::Create(m_pDevice, ESceneType::Lobby))))
+
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+				}
 			}
 
+			m_bLeaveScene = false;
 			return CHANGE_SCENE;
 		}
 	}

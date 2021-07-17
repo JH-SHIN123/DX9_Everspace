@@ -43,6 +43,9 @@ public:
 	virtual void Free() override;
 	
 private:
+	_bool m_bStageClear = false;
+
+private:
 	//For.FlyingAsteroid
 	_float m_fFlyingAsteroidTime = 1.f;
 	_bool m_bStartFlyAway = FALSE;

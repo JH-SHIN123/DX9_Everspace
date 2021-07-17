@@ -271,6 +271,9 @@
     <Filter Include="01.Scene\02.Lobby\03.DataBase">
       <UniqueIdentifier>{de2ef466-8453-4d09-876f-e64a256a4b33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Scene\03.Ending">
+      <UniqueIdentifier>{13990eb3-fe08-48e0-9d7d-df3f74679f86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -517,6 +520,9 @@
     <ClInclude Include="..\Headers\DataBase.h">
       <Filter>01.Scene\02.Lobby\03.DataBase</Filter>
     </ClInclude>
+    <ClInclude Include="..\Headers\Ending.h">
+      <Filter>01.Scene\03.Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -748,6 +754,9 @@
     </ClCompile>
     <ClCompile Include="..\Codes\DataBase.cpp">
       <Filter>01.Scene\02.Lobby\03.DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Codes\Ending.cpp">
+      <Filter>01.Scene\03.Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

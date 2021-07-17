@@ -55,6 +55,7 @@ private:
 private:
 	_bool m_bFadeIn = false;
 	_bool m_bSceneChange = false;
+	_bool m_bStageClear = false;
 
 private:
 	_bool m_IsAllMonsterBoom = false;
