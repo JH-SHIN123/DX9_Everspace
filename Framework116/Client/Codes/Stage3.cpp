@@ -49,7 +49,7 @@ HRESULT CStage3::Ready_Scene()
 
 	LIGHT_DESC lightDesc;
 	lightDesc.eLightType = ELightType::Directional;
-	lightDesc.tLightColor = D3DCOLOR_XRGB(227, 204, 178);
+	lightDesc.tLightColor = D3DCOLOR_XRGB(135, 135, 135);
 	if (FAILED(Add_Layer_Light(L"Layer_Light", &lightDesc)))
 		return E_FAIL;
 
@@ -60,7 +60,7 @@ HRESULT CStage3::Ready_Scene()
 	m_IsAllBoom = false;
 	m_IsGameOver = false;
 	m_fBoomTime = 0.f;
-
+	m_eStageBGM = STAGE_BGM::End;
 	return S_OK;
 }
 
@@ -68,9 +68,21 @@ _uint CStage3::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
 
+
 	CQuestHandler::Get_Instance()->Update_Quest();
 	Stage_Flow(fDeltaTime);
 
+	switch (m_eStageBGM)
+	{
+	case STAGE_BGM::Delivery:
+		m_pManagement->PlaySound(L"Delivery_Opening.ogg", CSoundMgr::BGM);
+		break;
+	case STAGE_BGM::Boss:
+		m_pManagement->PlaySound(L"Boss_Opening.mp3", CSoundMgr::BGM);
+		break;
+	default:
+		break;
+	}
 
 	return _uint();
 }
@@ -91,10 +103,10 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Bullet", L"Layer_Sniper");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Player_Missile", L"Layer_Sniper");
 
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
-	//CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Sniper_Bullet", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
+	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Sniper_Bullet", L"Layer_Player");
 
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Delivery");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Delivery");
@@ -138,6 +150,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 				if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Opening)))
 					return;
 				++m_iFlowCount;
+				m_eStageBGM = STAGE_BGM::Delivery;
 			}
 		}
 		break;
@@ -161,6 +174,9 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 	{
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
+			m_pManagement->StopSound(CSoundMgr::BGM);
+			m_eStageBGM = STAGE_BGM::Boss;
+
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Stage3_Boss_Opening)))
 				return;
 			++m_iFlowCount;
@@ -291,9 +307,9 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 					return;
 				}
 			}
-
 			m_bLeaveScene = false;
 			return;
+//			m_bLeaveScene = false;
 		}
 	}
 

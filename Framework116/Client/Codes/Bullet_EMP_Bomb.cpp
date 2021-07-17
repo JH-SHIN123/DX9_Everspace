@@ -426,6 +426,8 @@ void CBullet_EMP_Bomb::Explosion(_float fDeltaTime)
 				if (m_IsDestroyedRing_1 == true && m_IsDestroyedRing_2 == true)
 					CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 0.3f);
 
+				m_pManagement->PlaySound(L"Boss_EMP_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
+
 				m_IsBOOM = true;
 			}
 		}

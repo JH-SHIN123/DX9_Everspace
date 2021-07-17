@@ -38,7 +38,7 @@ private:
 
 	_float m_fTrackingTime = 1.f;
 	_bool m_IsTracking = false;
-	_float m_fLiveTime = 15.f;
+	_float m_fLiveTime = 12.f;
 	_float m_fRealScale;
 	//_int m_iRandScale;
 
