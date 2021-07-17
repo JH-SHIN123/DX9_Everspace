@@ -61,6 +61,8 @@ HRESULT CStage::Ready_Scene()
 	m_bSceneChange = false;
 	m_bFadeIn = false;
 	m_bLeaveScene = false;
+	m_IsRadioOff = false;
+	m_eBGM = STAGE1_BGM::Opening;
 
 	return S_OK;
 }
@@ -68,13 +70,29 @@ HRESULT CStage::Ready_Scene()
 _uint CStage::Update_Scene(_float fDeltaTime)
 {
 	CScene::Update_Scene(fDeltaTime);
-	m_pManagement->PlaySound(L"Kickstart_My_Heart.mp3", CSoundMgr::BGM);
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 
 	Stage_Flow(fDeltaTime);
 
+	switch (m_eBGM)
+	{
+	case STAGE1_BGM::Opening:
+		if (m_IsRadioOff == false)
+		{
+			m_pManagement->PlaySound(L"Tutorial_Opening.mp3", CSoundMgr::BGM);
+		}
 
+		break;
+	case STAGE1_BGM::Change:
+		m_pManagement->PlaySound(L"Tutorial_ChangeBGM.ogg", CSoundMgr::BGM);
+		break;
+	case STAGE1_BGM::Ring:
+		m_pManagement->PlaySound(L"Tutorial_Ring.ogg", CSoundMgr::BGM);
+		break;
+	default:
+		break;
+	}
 
 	return _uint();
 }
@@ -134,6 +152,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		return S_OK;
 
 	case 1:
+	{
 		if (((CMainCam*)(m_pManagement->Get_GameObject(L"Layer_Cam")))->Get_SoloMoveMode() == ESoloMoveMode::End)
 		{
 			if (FAILED(Add_Layer_MissionUI(L"Layer_MissionUI", EQuest::Stage_1_Ring)))
@@ -141,16 +160,43 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 			++m_iFlowCount;
 		}
 		return S_OK;
+	}
+
 	case 2:
+	{
+		if (CQuestHandler::Get_Instance()->Get_IsSpecial_Script(EQuest::Stage_1_Ring) == true)
+		{
+			m_IsRadioOff = true;
+			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Tutorial_ChangeBGM)))
+				return E_FAIL;
+			++m_iFlowCount;
+		}
+		return S_OK;
+	}
+
+	case 3:
+	{
+		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
+		if (Check == true)
+		{
+			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_2);
+			m_eBGM = STAGE1_BGM::Change;
+			++m_iFlowCount;
+		}
+		return S_OK;
+	}
+	case 4:
+	{
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
 			if (FAILED(Add_Layer_ScriptUI(L"Layer_ScriptUI", EScript::Tutorial_Ring_Clear)))
 				return E_FAIL;
 			++m_iFlowCount;
 		}
-
 		return S_OK;
-	case 3:
+	}
+
+	case 5:
 	{
 		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
 		if (Check == true)
@@ -160,7 +206,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		}
 		return S_OK;
 	}
-	case 4:
+	case 6:
 	{
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
@@ -170,7 +216,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		}
 		return S_OK;
 	}
-	case 5:
+	case 7:
 	{
 		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
 		if (Check == true)
@@ -182,7 +228,7 @@ _uint CStage::Stage_Flow(_float fDeltaTime)
 		return S_OK;
 	}
 
-	case 6:
+	case 8:
 	{
 		_bool Check = (m_pManagement->Get_GameObjectList(L"Layer_ScriptUI"))->empty();
 		if (Check == true)

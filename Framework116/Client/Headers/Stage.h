@@ -7,6 +7,14 @@
 #include "ScriptUI.h"
 
 USING(Engine)
+typedef enum class tagStage1_BGM
+{
+	Opening,
+	Change,
+	Ring,
+	End
+}STAGE1_BGM;
+
 class CStage final : public CScene
 {
 public:
@@ -50,6 +58,9 @@ private:
 	_bool m_bFadeIn = false;
 	_bool m_bSceneChange = false;
 
+private:
+	STAGE1_BGM m_eBGM;
+	_bool m_IsRadioOff;
 };
 
 #define __STAGE_H__

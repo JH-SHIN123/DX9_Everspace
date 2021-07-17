@@ -18,6 +18,9 @@ public:
 	virtual _uint LateUpdate_GameObject(_float fDeltaTime) override;
 	virtual _uint Render_GameObject() override;
 
+public:
+	void Set_Radius(_float fRadius);
+
 private:
 	_uint Down(_float fDeltaTime);
 	_uint Rotate_Ring(_float fDeltaTime);
@@ -25,7 +28,6 @@ private:
 	_uint Homing(_float fDeltaTime);
 	_uint Move_Rotate(_float fDeltaTime);
 	void  ScaleUp();
-
 
 private:
 	_uint Rotate_X(_float fDeltaTime);
@@ -61,6 +63,7 @@ private:
 	_bool	m_IsMove			= false;
 	_bool	m_IsDestroyedRing_1 = false;
 	_bool	m_IsDestroyedRing_2 = false;
+	_bool	m_IsRadiusReszie	= false;
 
 	_float	m_fRealScale		= 3.f;
 	_float	m_fTurnTime			= 1.25f;

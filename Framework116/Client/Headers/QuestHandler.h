@@ -33,6 +33,8 @@ public:
 	HRESULT Set_Start_Quest(EQuest eQuest);
 	_int	Set_Counting(const _int iCount = 1);
 	_int	Set_ClearStage(EStageClear eClearStage);
+	void	Set_IsSpecial_Script(_bool IsSpecialScript);
+
 public:
 	const wstring& Get_QusetName() const;
 	_int  Get_CountRemaining();
@@ -43,6 +45,7 @@ public:
 	_bool Get_IsStage_1_Locked();
 	_bool Get_IsStage_2_Locked();
 	_bool Get_IsStage_3_Locked();
+	_bool Get_IsSpecial_Script(EQuest eQuest);
 
 public: // 로비씬 가야할 때
 	_bool Get_IsPlayer_Dead();
@@ -82,6 +85,9 @@ private:
 	list<class CGameObject*> m_listTargetObject;
 	CTransform* m_pPlayerTransform = nullptr;
 	_float4 m_vSearchTagetDis[20];
+
+private:
+//	_bool	m_IsSpecial_Script = false; // 퀘 도중 스크립트
 };
 
 #define __UIHANDLER_H__

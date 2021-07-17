@@ -13,6 +13,7 @@
 #include "Bullet_Laser.h"
 #include "Planet.h"
 #include "Asteroid.h"
+#include "ScriptUI.h"
 
 IMPLEMENT_SINGLETON(CQuestHandler)
 
@@ -33,6 +34,7 @@ HRESULT CQuestHandler::Set_Start_Quest(EQuest eQuest)
 	m_IsRetry = false;
 	m_IsArrivePlayer = false;
 	m_IsArriveObject = false;
+	//m_IsSpecial_Script = false;
 	m_iCount = 0;
 	m_iCount_Max = 0;
 	m_fTimer = 0.f;
@@ -169,6 +171,35 @@ _bool CQuestHandler::Get_IsStage_2_Locked()
 _bool CQuestHandler::Get_IsStage_3_Locked()
 {
 	return m_bClear[2];
+}
+
+_bool CQuestHandler::Get_IsSpecial_Script(EQuest eQuest)
+{
+	switch (m_eNowQuest)
+	{
+	case EQuest::Stage_1_Ring:
+	{
+		if (m_iCount == 3)
+			return TRUE;
+	}
+		break;
+	case EQuest::Stage_1_Target:
+		break;
+	case EQuest::Stage_2_Dodge:
+		break;
+	case EQuest::Stage_2_Rescue:
+		break;
+	case EQuest::Stage_3_Delivery:
+		break;
+	case EQuest::Stage_3_Boss:
+		break;
+	case EQuest::End:
+		break;
+	default:
+		break;
+	}
+
+	return FALSE;
 }
 
 _bool CQuestHandler::Get_IsPlayer_Dead()
@@ -479,6 +510,7 @@ void CQuestHandler::Update_Quest_Stage1_Ring()
 			++i;
 		}
 	}
+
 
 	m_iCount -= i;
 	m_IsClear = bAllTargetCollide;

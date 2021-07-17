@@ -105,13 +105,13 @@ _uint CStage3::LateUpdate_Scene(_float fDeltaTime)
 
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Player");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Player");
-	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Player");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Sniper_Bullet", L"Layer_Player");
-
+	CCollisionHandler::Collision_PlayerToEMPBomb(L"Layer_Player", L"Layer_Bullet_EMP_Bomb");
+	
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EnergyBall", L"Layer_Delivery");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_Laser", L"Layer_Delivery");
 	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Bullet_EMP_Bomb", L"Layer_Delivery");
-	CCollisionHandler::Collision_SphereToSphere_Damage(L"Layer_Sniper_Bullet", L"Layer_Delivery");
+	CCollisionHandler::Collision_PlayerToEMPBomb(L"Layer_Delivery", L"Layer_Bullet_EMP_Bomb");
 
 	CCollisionHandler::Collision_PlayerToBoss(L"Layer_Player", L"Layer_Boss_Monster");
 
@@ -320,38 +320,31 @@ void CStage3::All_Monster_Boom(_float fDeltaTime)
 	if (m_IsAllMonsterBoom == FALSE)
 		return;
 
-
-
 	_bool bCheck = m_pManagement->Get_GameObjectList(L"Layer_Monster")->empty();
 
-	if (bCheck == TRUE)
-		return;
-
-	list<class CGameObject*> listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Monster"));
-
-	for (auto& iter : listObjectList)
+	if (bCheck == FALSE)
 	{
-		iter->Set_IsDead(TRUE);
+		list<class CGameObject*> listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Monster"));
+
+		for (auto& iter : listObjectList)
+		{
+			iter->Set_IsDead(TRUE);
+		}
 	}
-
-
-
 
 	bCheck = m_pManagement->Get_GameObjectList(L"Layer_Sniper")->empty();
 
-	if (bCheck == TRUE)
-		return;
-
-	listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Sniper"));
-
-	for (auto& iter : listObjectList)
+	if (bCheck == FALSE)
 	{
-		iter->Set_IsDead(TRUE);
+		list<class CGameObject*> listObjectList = *(m_pManagement->Get_GameObjectList(L"Layer_Sniper"));
+
+		for (auto& iter : listObjectList)
+		{
+			iter->Set_IsDead(TRUE);
+		}
 	}
 
-
 	m_IsAllBoom = true;
-
 	m_IsAllMonsterBoom = false;
 }
 
