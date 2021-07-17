@@ -109,7 +109,7 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// HP ¼¼ÆÃ
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 900;
+	tStatus.iMaxHp = 12000;
 	tStatus.iHp = tStatus.iMaxHp;
 
 	if (FAILED(CGameObject::Add_Component(
@@ -526,7 +526,7 @@ _uint CBoss_Monster::Fire_EMP(_float fDeltaTime)
 {
 	m_fEmpBomb_CoolTime += fDeltaTime;
 
-	if (m_fEmpBomb_CoolTime >= 5.f)
+	if (m_fEmpBomb_CoolTime >= 7.f)
 	{
 		m_fEmpBomb_CoolTime = 0.f;
 

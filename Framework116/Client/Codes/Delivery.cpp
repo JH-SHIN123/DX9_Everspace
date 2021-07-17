@@ -143,8 +143,8 @@ _uint CDelivery::Update_GameObject(_float fDeltaTime)
     if (m_IsDead) return DEAD_OBJECT;
     CGameObject::Update_GameObject(fDeltaTime);
 
-	if (m_IsStart == true)
-		Movement(fDeltaTime);
+	//if (m_IsStart == true)
+	//	Movement(fDeltaTime);
 
 	if (!m_IsHPBar)
 	{

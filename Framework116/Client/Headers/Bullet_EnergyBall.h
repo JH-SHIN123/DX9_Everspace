@@ -19,9 +19,9 @@ public:
 	virtual _uint Render_GameObject() override;
 
 private:
-	_uint Movement(_float fDeltaTime);
-	_uint Fire_Triger(_float fDeltaTime);
-	_uint BillBoard();
+	_uint	Movement(_float fDeltaTime);
+	_uint	Fire_Triger(_float fDeltaTime);
+	_uint	BillBoard();
 
 public:
 	static CBullet_EnergyBall* Create(LPDIRECT3DDEVICE9 pDevice, PASSDATA_OBJECT* pData = nullptr);
@@ -38,7 +38,7 @@ private:
 
 	_float m_fTrackingTime = 1.f;
 	_bool m_IsTracking = false;
-	_float m_fLiveTime = 10.f;
+	_float m_fLiveTime = 15.f;
 	_float m_fRealScale;
 	//_int m_iRandScale;
 

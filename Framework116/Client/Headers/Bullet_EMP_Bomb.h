@@ -24,6 +24,8 @@ private:
 	_uint Movement(_float fDeltaTime);
 	_uint Homing(_float fDeltaTime);
 	_uint Move_Rotate(_float fDeltaTime);
+	void  ScaleUp();
+
 
 private:
 	_uint Rotate_X(_float fDeltaTime);
@@ -41,29 +43,38 @@ public:
 	virtual void Free() override;
 
 private:
-	CGeoMesh_Sphere*  m_pMesh = nullptr;
-	CGeoMesh_Torus*  m_pRing_1 = nullptr;
-	CGeoMesh_Torus*  m_pRing_2 = nullptr;
-	CTransform*		m_pTransform = nullptr;
-	CTransform*		m_pTransformRing_1 = nullptr;
-	CTransform*		m_pTransformRing_2 = nullptr;
-	CTransform*		m_pTargetTransform = nullptr;
-	CCollideSphere* m_pCollide = nullptr;
-	CStatus_Info*	m_pInfo = nullptr;
+	CGeoMesh_Sphere*	m_pMesh				= nullptr;
+	CGeoMesh_Torus*		m_pRing_1			= nullptr;
+	CGeoMesh_Torus*		m_pRing_2			= nullptr;
+	CTransform*			m_pTransform		= nullptr;
+	CTransform*			m_pTransformRing_1	= nullptr;
+	CTransform*			m_pTransformRing_2	= nullptr;
+	CTransform*			m_pTargetTransform	= nullptr;
+	CCollideSphere*		m_pCollide			= nullptr;
+	CStatus_Info*		m_pInfo				= nullptr;
+	class CGameObject*	m_pEffect			= nullptr;
 
-	_bool	m_IsBOOM		= false;
-	_bool	m_IsTracking	= false;
-	_bool	m_IsExplosion	= false;
-	_bool	m_IsMove		= false;
-	_float	m_fTurnTime		= 1.25f;
-	_float	m_fLiveTime		= 11.25f;
-	_float	m_fExplosionTime = 10.f;
-	_float	m_fExplosionRadius = 1.f;
-	_float3 m_vHomingDir = {};
+private:
+	_bool	m_IsBOOM			= false;
+	_bool	m_IsTracking		= false;
+	_bool	m_IsExplosion		= false;
+	_bool	m_IsMove			= false;
+	_bool	m_IsDestroyedRing_1 = false;
+	_bool	m_IsDestroyedRing_2 = false;
+
+	_float	m_fRealScale		= 3.f;
+	_float	m_fTurnTime			= 1.25f;
+	_float	m_fLiveTime			= 11.25f;
+	_float	m_fExplosionTime	= 10.f;
+	_float	m_fExplosionRadius	= 1.f;
+	_float  m_fExplosionScale	= 1.002f;
+
+	_float3 m_vHomingDir		= { 0.f, 0.f, 0.f };
+
+	_int	m_iHitCount			= 0;
 
 	D3DMATERIAL9 m_tMaterial;
 
-	class CGameObject* m_pEffect = nullptr;
 };
 
 #define __BULLET_EMP_BOMB_H__
