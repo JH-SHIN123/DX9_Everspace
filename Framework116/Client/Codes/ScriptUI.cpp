@@ -391,7 +391,7 @@ void CScriptUI::Script_Tutorial()
 		if (m_iPreSound != m_iCurSound)
 		{
 			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
-			m_pManagement->PlaySound(L"Tutorial_Dialogue5.ogg", CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue2.ogg", CSoundMgr::DIALOGUE1);
 			m_iCurSound = m_dwScriptNext;
 		}
 		m_ePortrait = EPortraitNumber::Player;
@@ -487,6 +487,7 @@ void CScriptUI::Script_Tutorial_ChangeBGM()
 		m_wstrScript = L"흠.. 알았네.. 훈련을 진행하도록 하지";
 		break;
 	default:
+		m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
 		m_wstrName = L"";
 		m_wstrScript = L"";
 		m_eScriptFlow = EScriptFlow::BlackBar_End;
@@ -723,7 +724,7 @@ void CScriptUI::Script_Stg2_Begin()
 		break;
 	case 3:
 		m_ePortrait = EPortraitNumber::End;
-		m_wstrScript = L"무전기에서 호루라기 소리가 들린다!";
+		m_wstrScript = L"*무전기에서 호루라기 소리가 들린다*";
 		break;
 	case 4:
 		if (m_iPreSound != m_iCurSound)
@@ -761,7 +762,7 @@ void CScriptUI::Script_Stg2_Begin()
 		break;
 	case 8:
 		m_ePortrait = EPortraitNumber::Player;
-		m_wstrScript = L"신 세계 프로젝트를 수행하기 위해 현재 노르망디 대은하로 순항 중에 있습니다!";
+		m_wstrScript = L"신세계 프로젝트를 수행하기 위해 현재 노르망디 대은하로 순항 중에 있습니다!";
 		break;
 	case 9:
 		m_ePortrait = EPortraitNumber::Player;
@@ -996,7 +997,7 @@ void CScriptUI::Script_Stg2_Finish_AsteroidFlyAway()
 	case 4:
 		m_IsSoundFirst = true;
 		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrScript = L"쳇!!";
+		m_wstrScript = L"으하하하! 신세계 프로젝트는 아주 순조로워!!";
 		break;
 	default:
 		m_wstrName = L"";
@@ -1142,7 +1143,7 @@ void CScriptUI::Script_Stg2_Clear()
 			m_iCurSound = m_dwScriptNext;
 		}
 		m_ePortrait = EPortraitNumber::Politician;
-		m_wstrScript = L"오오...주여..";
+		m_wstrScript = L"하아... 당신은..?";
 		break;
 	case 2:
 		if (m_iPreSound != m_iCurSound)
@@ -1152,7 +1153,7 @@ void CScriptUI::Script_Stg2_Clear()
 			m_iCurSound = m_dwScriptNext;
 		}
 		m_ePortrait = EPortraitNumber::Politician;
-		m_wstrScript = L"이대로 꼼짝없이 죽는줄 알았습니다...";
+		m_wstrScript = L"탈다림 소속 연합군...!";
 		break;
 	case 3:
 		if (m_iPreSound != m_iCurSound)
@@ -1164,7 +1165,17 @@ void CScriptUI::Script_Stg2_Clear()
 		m_ePortrait = EPortraitNumber::Player;
 		m_wstrScript = L"이제 괜찮습니다!!어서 옮겨 타 본국으로 귀환하시지요!!";
 		break;
-	case 4:
+	case 3:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage2_Dialogue27.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"저는 네라짐 소속이 아닙니다! 어서..!!";
+		break;
+	case 5:
 		if (m_iPreSound != m_iCurSound)
 		{
 			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
@@ -1172,7 +1183,17 @@ void CScriptUI::Script_Stg2_Clear()
 			m_iCurSound = m_dwScriptNext;
 		}
 		m_ePortrait = EPortraitNumber::Politician;
-		m_wstrScript = L"네!!";
+		m_wstrScript = L"당신은 탈다림의 진실을 잘 모르는것 같군요...";
+		break;
+	case 6:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage2_Dialogue28.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Politician;
+		m_wstrScript = L"먼저 진실을 말해드리겠습니다. 그 후에 그쪽으로 옮겨 타겠습니다..";
 		break;
 	default:
 		m_IsSoundFirst = true;

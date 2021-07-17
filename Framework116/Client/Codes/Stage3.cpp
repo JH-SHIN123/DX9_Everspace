@@ -163,6 +163,8 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 				return;
 
 			((CDelivery*)(m_pManagement->Get_GameObject(L"Layer_Delivery")))->Set_MoveStart(TRUE);
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"ship_horn.mp3", CSoundMgr::DIALOGUE1);
 
 			++m_iFlowCount;
 		}
