@@ -13,8 +13,8 @@ HRESULT CEnding::Ready_Scene()
 	CScene::Ready_Scene();
 
 	::SetWindowText(g_hWnd, L"Logo");
-	m_pManagement->StopSound(CSoundMgr::BGM);
-
+	//m_pManagement->StopSound(CSoundMgr::BGM);
+	m_pManagement->StopAll();
 	m_pManagement->Clear_NonStatic_Resources();
 
 	const TCHAR* videoPath = nullptr;
@@ -48,7 +48,7 @@ _uint CEnding::Update_Scene(_float fDeltaTime)
 	if (m_bStart)
 	{
 		m_pManagement->Play_MCIVideoEx();
-		m_pManagement->PlaySound(m_pAudioFileName, CSoundMgr::BGM);
+		m_pManagement->PlaySound(m_pAudioFileName, CSoundMgr::LOADING);
 		m_bStart = false;
 	}
 

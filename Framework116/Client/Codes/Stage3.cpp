@@ -72,6 +72,9 @@ _uint CStage3::Update_Scene(_float fDeltaTime)
 	CQuestHandler::Get_Instance()->Update_Quest();
 	Stage_Flow(fDeltaTime);
 
+	if (m_bLeaveScene)
+		return CHANGE_SCENE;
+	
 	switch (m_eStageBGM)
 	{
 	case STAGE_BGM::Delivery:
@@ -307,7 +310,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 					return;
 				}
 			}
-			m_bLeaveScene = false;
+			//m_bLeaveScene = false;
 			return;
 //			m_bLeaveScene = false;
 		}

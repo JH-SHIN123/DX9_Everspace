@@ -74,7 +74,7 @@ HRESULT CLoading::Ready_Scene()
 	CScene::Ready_Scene();
 
 	::SetWindowText(g_hWnd, L"Loading");
-	m_pManagement->StopSound(CSoundMgr::BGM);
+	m_pManagement->StopAll();
 
 	// 클론들 비우기
 	m_pManagement->Clear_NonStatic_Resources();

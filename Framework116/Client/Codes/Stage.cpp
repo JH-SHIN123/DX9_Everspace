@@ -73,7 +73,10 @@ _uint CStage::Update_Scene(_float fDeltaTime)
 
 	CQuestHandler::Get_Instance()->Update_Quest();
 
-	Stage_Flow(fDeltaTime);
+	_uint iResult = Stage_Flow(fDeltaTime);
+
+	if (iResult == CHANGE_SCENE)
+		return iResult;
 
 	switch (m_eBGM)
 	{
@@ -374,8 +377,6 @@ void CStage::Free()
 {
 	/* 자식의 소멸자 호출 순서처럼 Free도 같은 순서로 호출해주자*/
 	/* 1.자식 리소스 먼저 정리하고난 뒤 */
-
-	m_pManagement->StopAll();
 	CScene::Free(); // 2.부모 리소스 정리	
 }
 

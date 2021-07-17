@@ -661,9 +661,9 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 	case UPDATE_RESQUE:
 		if (CQuestHandler::Get_Instance()->Get_IsClear())
 		{
-			//CMainCam* pCam = (CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
-			//CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
-			//pCam->Set_Transform(pTransform);
+			CMainCam* pCam = (CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam");
+			CTransform* pTransform = (CTransform*)m_pManagement->Get_Component(L"Layer_Broken_Plane", L"Com_Transform");
+			pCam->Set_Transform(pTransform);
 			if (!m_pManagement->Get_GameObjectList(L"Layer_ScriptUI")->size())
 
 			{
