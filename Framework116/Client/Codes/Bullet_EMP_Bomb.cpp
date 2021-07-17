@@ -18,6 +18,7 @@ CBullet_EMP_Bomb::CBullet_EMP_Bomb(const CBullet_EMP_Bomb & other)
 	, m_fExplosionRadius(other.m_fExplosionRadius)
 	, m_fExplosionScale(other.m_fExplosionScale)
 	, m_fExplosionTime(other.m_fExplosionTime)
+	, m_IsRadiusReszie(other.m_IsRadiusReszie)
 	, m_IsExplosion(other.m_IsExplosion)
 	, m_IsTracking(other.m_IsTracking)
 	, m_fRealScale(other.m_fRealScale)
@@ -148,7 +149,12 @@ _uint CBullet_EMP_Bomb::Update_GameObject(_float fDeltaTime)
 
 
 	m_pTransform->Update_Transform();
-	m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+
+	if(m_IsRadiusReszie == false)
+		m_pCollide->Update_Collide(m_pTransform->Get_TransformDesc().matWorld);
+
+	if (m_IsRadiusReszie == true)
+		m_pCollide->Resize_Shpere(0.f);
 
 	m_pTransformRing_1->Set_Position(m_pTransform->Get_State(EState::Position));
 	m_pTransformRing_2->Set_Position(m_pTransform->Get_State(EState::Position));
@@ -242,6 +248,14 @@ _uint CBullet_EMP_Bomb::Render_GameObject()
 #endif
 
 	return _uint();
+}
+
+void CBullet_EMP_Bomb::Set_Radius(_float fRadius)
+{
+	m_IsRadiusReszie = true;
+	m_pCollide->Resize_Shpere(fRadius);
+
+	m_IsDead = true;
 }
 
 _uint CBullet_EMP_Bomb::Down(_float fDeltaTime)
@@ -412,8 +426,11 @@ void CBullet_EMP_Bomb::Explosion(_float fDeltaTime)
 		if (m_fExplosionTime >= -0.525f)
 		{
 			m_IsExplosion = true;
-			m_fExplosionRadius *= m_fExplosionScale;
-			m_pCollide->Resize_Shpere(m_fExplosionRadius);
+			if (m_IsRadiusReszie == false)
+			{
+				m_fExplosionRadius *= m_fExplosionScale;
+				m_pCollide->Resize_Shpere(m_fExplosionRadius);
+			}
 
 			if (m_IsBOOM == false)
 			{
@@ -425,6 +442,8 @@ void CBullet_EMP_Bomb::Explosion(_float fDeltaTime)
 
 				if (m_IsDestroyedRing_1 == true && m_IsDestroyedRing_2 == true)
 					CEffectHandler::Add_Layer_Effect_BossBullet_EMP_Exlposion(m_pTransform->Get_State(EState::Position), 0.3f);
+
+				m_pManagement->PlaySound(L"Boss_EMP_Explosion.ogg", CSoundMgr::SHIP_EXPLOSION);
 
 				m_IsBOOM = true;
 			}

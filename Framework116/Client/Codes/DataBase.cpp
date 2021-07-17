@@ -5,6 +5,15 @@ IMPLEMENT_SINGLETON(CDataBase)
 
 CDataBase::CDataBase()
 {
+	m_tStatInfo.iAtk = 20;
+	m_tStatInfo.iDef = 30;
+	m_tStatInfo.iMaxHp = 50;
+	m_tStatInfo.iHp = 50;
+	m_tStatInfo.iMaxShield = 30;
+	m_tStatInfo.iShield = 30;
+	m_tStatInfo.iMaxEnergy = 40;
+	m_tStatInfo.iEnergy = 40;
+	m_tStatInfo.iFireRate = 70;
 }
 
 CDataBase::~CDataBase()
@@ -15,12 +24,12 @@ _uint CDataBase::Get_Money() const
 	return m_iMoney;
 }
 
-UNIT_INFO * CDataBase::Get_UnitInfo()
+STAT_INFO * CDataBase::Get_StatInfo()
 {
-	return &m_tUnitInfo;
+	return &m_tStatInfo;
 }
 
-void CDataBase::Set_UnitInfo(UNIT_INFO _tUnitInfo)
+void CDataBase::Set_StatInfo(STAT_INFO _tUnitInfo)
 {
 	if (_tUnitInfo.iAtk >= 100)
 	{
@@ -49,7 +58,7 @@ void CDataBase::Set_UnitInfo(UNIT_INFO _tUnitInfo)
 		_tUnitInfo.iEnergy = 100;
 		_tUnitInfo.iMaxEnergy = 100;
 	}
-	m_tUnitInfo = _tUnitInfo;
+	m_tStatInfo = _tUnitInfo;
 }
 
 void CDataBase::Set_Money(_uint _iMoney)

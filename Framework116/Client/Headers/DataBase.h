@@ -15,9 +15,9 @@ private:
 	~CDataBase();
 
 public:
-
+	
 	_uint Get_Money()const;
-	UNIT_INFO* Get_UnitInfo();
+	STAT_INFO* Get_StatInfo();
 
 	_uint GetAtkBuffItemCount() { return m_iAtkBuffItem; }
 	_uint GetDefBuffItemCount() { return m_iDefBuffItem; }
@@ -32,11 +32,11 @@ public:
 	void SetEnergyBuffItemCount(_uint iPlus) { m_iEnergyBuffItem += iPlus; }
 	void SetMissileCount(_uint iPlus) { m_iMissileCount += iPlus; }
 	void SetVMaxBuffItemCount(_uint iPlus) { m_iVMaxBuffItem += iPlus; }
-	void Set_UnitInfo(UNIT_INFO _tUnitInfo);
+	void Set_StatInfo(STAT_INFO _tUnitInfo);
 	void Set_Money(_uint _iMoney);
 private:
 	_uint m_iMoney = 300000;
-	UNIT_INFO m_tUnitInfo = { 20,30,50,30,40,70 };;
+	STAT_INFO m_tStatInfo;
 
 	_uint m_iAtkBuffItem = 10;
 	_uint m_iDefBuffItem = 10;

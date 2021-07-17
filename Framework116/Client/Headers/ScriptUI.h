@@ -9,6 +9,7 @@ USING(Engine)
 
 enum class EScript {
 	Tutorial,
+	Tutorial_ChangeBGM,
 	Tutorial_Ring_Clear,
 	Tutorial_Target_Clear,
 	Stg2_Begin, Stg2_AfterCamProduction,
@@ -59,6 +60,7 @@ private: //대화 순서
 
 private: //대화
 	void Script_Tutorial();
+	void Script_Tutorial_ChangeBGM();
 	void Script_Tutorial_Ring_Clear();
 	void Script_Tutorial_Target_Clear();
 	void Script_Stg2_Begin();

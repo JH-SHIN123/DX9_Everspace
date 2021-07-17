@@ -9,7 +9,7 @@
 #include"LobbyCam.h"
 #include"DataBase.h"
 #include"Pipeline.h"
-
+#include"SoundMgr.h"
 USING(Engine)
 
 CLobbyUI::CLobbyUI(LPDIRECT3DDEVICE9 pDevice)
@@ -320,9 +320,15 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 	{
 		if (m_iItemClicked[i] == 3)
 		{
+			if (i == 0)
+				continue;
+
+			m_pManagement->PlaySoundW(L"Parts_Upgrade.ogg", CSoundMgr::LOBBY_EFFECT);
+		
 			m_fShowUsingItemFrame -= fDeltaTime*120.f*4.f;
 			if (m_fShowUsingItemFrame <= 0.f)
-			{
+			{ 
+				m_pManagement->StopSound(CSoundMgr::LOBBY_EFFECT);
 				m_fShowUsingItemFrame = 120.f;
 				m_iItemClicked[i] = FALSE;
 			}
@@ -350,14 +356,15 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 				vFontPos.y = _float(WINCY / 2.f) - vDecartFontPos.y;
 				vFontPos.x += 40.f;
 				vFontPos.y -= 60.f;
-				UNIT_INFO tUnitInfo = *CDataBase::Get_Instance()->Get_UnitInfo();
+
+				STAT_INFO tUnitInfo = *CDataBase::Get_Instance()->Get_StatInfo();
 				switch (iIndex)
 				{
 				case 1:
 					if (CDataBase::Get_Instance()->GetAtkBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetAtkBuffItemCount(-1);
-						tUnitInfo.iAtk += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iAtk += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 						
 						if (m_pFontAtkUpCount)
 						{
@@ -374,7 +381,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetDefBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetDefBuffItemCount(-1);
-						tUnitInfo.iDef += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iDef += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontDefUpCount)
 						{
@@ -391,7 +398,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetHpBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetHpBuffItemCount(-1);
-						tUnitInfo.iMaxHp += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxHp += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontHpUpCount)
 						{
@@ -408,7 +415,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetEnergyBuffItemCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetEnergyBuffItemCount(-1);
-						tUnitInfo.iMaxEnergy += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxEnergy += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontEnergyUpCount)
 						{
@@ -425,7 +432,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetMissileCount() >= 1)
 					{
 						CDataBase::Get_Instance()->SetMissileCount(-1);
-						tUnitInfo.iFireRate += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iFireRate += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontMissileCount)
 						{
@@ -442,7 +449,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					if (CDataBase::Get_Instance()->GetVMaxBuffItem() >= 1)
 					{
 						CDataBase::Get_Instance()->SetVMaxBuffItemCount(-1);
-						tUnitInfo.iMaxShield += CPipeline::GetRandomFloat(1, 3) * 10;
+						tUnitInfo.iMaxShield += (_int)CPipeline::GetRandomFloat(1, 3) * 10;
 
 						if (m_pFontVMaxCount)
 						{
@@ -456,7 +463,7 @@ void CLobbyUI::UseItem(_float fDeltaTime)
 					}
 					break;
 				}
-				CDataBase::Get_Instance()->Set_UnitInfo(tUnitInfo);
+				CDataBase::Get_Instance()->Set_StatInfo(tUnitInfo);
 				m_iItemClicked[iIndex] = 3;
 			}
 		}

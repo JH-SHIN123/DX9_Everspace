@@ -67,7 +67,7 @@ HRESULT CStatus::Ready_GameObject(void * pArg/* = nullptr*/)
 		PRINT_LOG(L"Error", L"Failed To Add_Component Com_Transform");
 		return E_FAIL;
 	}
-
+	ZeroMemory(&m_tPreUnitInfo, sizeof(STAT_INFO));
 	return S_OK;
 }
 
@@ -163,14 +163,14 @@ _uint CStatus::Movement(_float fDeltaTime)
 
 _bool CStatus::UpdateHexagon(_float fDeltaTime)
 {
-	m_pUnitInfo = CDataBase::Get_Instance()->Get_UnitInfo();
+	m_pUnitInfo = CDataBase::Get_Instance()->Get_StatInfo();
 	if (!m_pUnitInfo)
 		return FALSE;
 	static _float fUpdateTime = 0;
 	fUpdateTime+=fDeltaTime;
 	if (fUpdateTime <= 0.1f)
 		return FALSE;
-	UNIT_INFO m_tCurUnitInfo = *m_pUnitInfo;
+	STAT_INFO m_tCurUnitInfo = *m_pUnitInfo;
 	_bool bUpdate = FALSE;
 	if (m_tCurUnitInfo.iAtk != m_tPreUnitInfo.iAtk)
 	{

@@ -71,9 +71,9 @@ _uint CAimPanel::Update_GameObject(_float fDeltaTime)
 	POINT p1, p2;
 	GetClientRect(g_hWnd, &rc);
 
-	p1.x = rc.left + 700;
+	p1.x = rc.left + 800;
 	p1.y = rc.top + 100;
-	p2.x = rc.right - 700;
+	p2.x = rc.right - 800;
 	p2.y = rc.bottom - 100;
 
 	ClientToScreen(g_hWnd, &p1);

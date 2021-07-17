@@ -45,6 +45,10 @@ public:
 private:
 	_bool m_bStageClear = false;
 
+	_bool m_bStartStage = true;
+	_bool m_bStartFlyAwaySound = false;
+	_bool m_bFinishFlyAwaySound = false;
+
 private:
 	//For.FlyingAsteroid
 	_float m_fFlyingAsteroidTime = 1.f;

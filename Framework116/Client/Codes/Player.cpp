@@ -11,6 +11,7 @@
 #include "MainCam.h"
 #include "LockOnAlert.h"
 #include "HUD_Effect_Boost.h"
+#include"DataBase.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 pDevice)
 	: CGameObject(pDevice)
@@ -187,12 +188,10 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// HP ¼¼ÆÃ
-
 	STAT_INFO tStatus;
-
 	tStatus.iMaxHp = 1;
 	tStatus.iHp = tStatus.iMaxHp;
-	
+
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Status_Info",

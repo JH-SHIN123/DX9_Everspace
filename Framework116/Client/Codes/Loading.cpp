@@ -1521,6 +1521,16 @@ HRESULT CLoading::Load_HUD_Resources()
 		return E_FAIL;
 	}
 
+	/* For.Component_Texture_LockOnAlert_Delivery */
+	if (FAILED(m_pManagement->Add_Component_Prototype(
+		EResourceType::NonStatic,
+		L"Component_Texture_LockOnAlert_Delivery",
+		CTexture::Create(m_pDevice, ETextureType::Normal, L"../../Resources/Textures/HUD/LockOnAlert_Delivery.png"))))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add LockOnAlert_Delivery");
+		return E_FAIL;
+	}
+
 	/* For.Component_Texture_Crosshair */
 	if (FAILED(m_pManagement->Add_Component_Prototype(
 		EResourceType::NonStatic,

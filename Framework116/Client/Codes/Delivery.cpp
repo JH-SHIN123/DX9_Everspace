@@ -277,7 +277,7 @@ void CDelivery::Make_LockOn_Alert(_float fDeltaTime)
 			UI_DESC LockOnAlert;
 			LockOnAlert.tTransformDesc.vPosition = { 900.f, 300.f, 0.f };
 			LockOnAlert.tTransformDesc.vScale = { 0.f, 0.f, 0.f };
-			LockOnAlert.wstrTexturePrototypeTag = L"GameObject_LockOnAlert_Delivery";
+			LockOnAlert.wstrTexturePrototypeTag = L"Component_Texture_LockOnAlert_Delivery";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
 				EResourceType::NonStatic,
 				L"GameObject_LockOnAlert",

@@ -11,6 +11,13 @@
 
 USING(Engine)
 
+typedef enum class tagSatge_BackGroundMusic
+{
+	Delivery,
+	Boss,
+	End
+}STAGE_BGM;
+
 class CStage3 final : public CScene
 {
 public:
@@ -62,7 +69,8 @@ private:
 	_bool m_IsAllBoom = false;
 	_bool m_IsGameOver = false;
 	_float m_fBoomTime = 0.f;
-	//list<class CGameObject*> m_listObjectList;
+
+	STAGE_BGM m_eStageBGM = STAGE_BGM::End;
 };
 
 #define __STAGE3_H__

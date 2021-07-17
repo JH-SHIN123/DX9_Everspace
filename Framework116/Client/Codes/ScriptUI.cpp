@@ -170,6 +170,13 @@ _uint CScriptUI::LateUpdate_GameObject(_float fDeltaTime)
 		case EScript::Tutorial:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::Stage1_Ring);
 			break;
+
+		case EScript::Tutorial_ChangeBGM:
+			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
+			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
+			CQuestHandler::Get_Instance()->Lock_MonsterAI(false);
+			break;
+
 		case EScript::Tutorial_Ring_Clear:
 			((CMainCam*)m_pManagement->Get_GameObject(L"Layer_Cam"))->Set_IsSoloMove(ESoloMoveMode::End);
 			((CPlayer*)m_pManagement->Get_GameObject(L"Layer_Player"))->Set_IsCameraMove(false);
@@ -273,6 +280,9 @@ _uint CScriptUI::Script_Check()
 	{
 	case EScript::Tutorial:
 		Script_Tutorial();
+		break;
+	case EScript::Tutorial_ChangeBGM:
+		Script_Tutorial_ChangeBGM();
 		break;
 	case EScript::Tutorial_Ring_Clear:
 		Script_Tutorial_Ring_Clear();
@@ -384,9 +394,9 @@ void CScriptUI::Script_Tutorial()
 			m_pManagement->PlaySound(L"Tutorial_Dialogue5.ogg", CSoundMgr::DIALOGUE1);
 			m_iCurSound = m_dwScriptNext;
 		}
-		m_ePortrait = EPortraitNumber::Admiral;
-		m_wstrName = L"사령관 헥터 도일";
-		m_wstrScript = L"그 전에 주위를 한번 둘러보게나";
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrName = L"잭 한마";
+		m_wstrScript = L"하하 맞겨만 주십시오!";
 		break;
 	case 5:
 		m_IsSoundFirst = true;
@@ -401,6 +411,90 @@ void CScriptUI::Script_Tutorial()
 		break;
 	}
 	m_dwScriptCountMax = m_wstrScript.length();
+}
+
+void CScriptUI::Script_Tutorial_ChangeBGM()
+{
+	if (m_IsSoundFirst)
+	{
+		m_iPreSound = 1234;
+		m_IsSoundFirst = false;
+	}
+	else
+		m_iPreSound = m_dwScriptNext;
+
+	switch (m_dwScriptNext)
+	{
+	case 0:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue2.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"이봐 신병! 훈련을 뭐라고 생각하는겐가?";
+		break;
+	case 1:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue8.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"뭐하나! 어서 라디오 끄게!!";
+		break;
+	case 2:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Radio_Off.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Player;
+		m_pManagement->StopSound(CSoundMgr::BGM);
+		m_wstrScript = L"*라디오 끄는 소리*";
+		break;
+	case 3:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue8.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"제정신인가? 훈련에 진지하게 임해주게";
+		break;
+	case 4:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue5.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Player;
+		m_wstrScript = L"... 알겠습니다. 죄송합니다.";
+		break;
+	case 5:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Tutorial_Dialogue8.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
+		m_ePortrait = EPortraitNumber::Admiral;
+		m_wstrScript = L"흠.. 알았네.. 훈련을 진행하도록 하지";
+		break;
+	default:
+		m_wstrName = L"";
+		m_wstrScript = L"";
+		m_eScriptFlow = EScriptFlow::BlackBar_End;
+		break;
+	}
+	m_dwScriptCountMax = m_wstrScript.length();
+
+	Portrait_Check();
 }
 
 void CScriptUI::Script_Tutorial_Ring_Clear()
