@@ -109,7 +109,7 @@ HRESULT CBoss_Monster::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// HP ¼¼ÆÃ
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 12000;
+	tStatus.iMaxHp = 21000;
 	tStatus.iHp = tStatus.iMaxHp;
 
 	if (FAILED(CGameObject::Add_Component(

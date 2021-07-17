@@ -125,7 +125,7 @@ HRESULT CDrone::Ready_GameObject(void* pArg)
 	//m_fHp = 100.f;
 	//m_fFullHp = m_fHp;
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 300;
+	tStatus.iMaxHp = 500;
 	tStatus.iHp = tStatus.iMaxHp;
 
 	if (FAILED(CGameObject::Add_Component(

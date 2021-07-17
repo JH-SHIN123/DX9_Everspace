@@ -103,7 +103,7 @@ HRESULT CMonster::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	STAT_INFO tStatus;
-	tStatus.iMaxHp = 300;
+	tStatus.iMaxHp = 410;
 	tStatus.iHp = tStatus.iMaxHp;
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
