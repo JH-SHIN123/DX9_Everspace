@@ -179,7 +179,7 @@ _bool CQuestHandler::Get_IsSpecial_Script(EQuest eQuest)
 	{
 	case EQuest::Stage_1_Ring:
 	{
-		if (m_iCount == 3)
+		if (m_iCount == 9)
 			return TRUE;
 	}
 		break;

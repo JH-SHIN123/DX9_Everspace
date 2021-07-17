@@ -1165,7 +1165,7 @@ void CScriptUI::Script_Stg2_Clear()
 		m_ePortrait = EPortraitNumber::Player;
 		m_wstrScript = L"이제 괜찮습니다!!어서 옮겨 타 본국으로 귀환하시지요!!";
 		break;
-	case 3:
+	case 4:
 		if (m_iPreSound != m_iCurSound)
 		{
 			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
