@@ -118,6 +118,8 @@ _uint CLobbyUI::Update_GameObject(_float fDeltaTime)
 	m_pController->Update_Controller();
 	Update_SceneSelect(fDeltaTime);
 	Check_Picking();
+	CheckItemBounds();
+
 	OnMouseButton();
 	Key_Check(fDeltaTime);
 	return NO_EVENT;
@@ -256,27 +258,40 @@ void CLobbyUI::CheckItemBounds()
 {
 	if (m_pLobby->Get_IsGatcha() || m_pLobby->Get_SceneSelect() || m_pLobby->Get_StartUnPacking())
 		return;
-	if (m_wstrTexturePrototypeTag != L"Component_Texture_Product")
+	if (m_wstrTexturePrototypeTag != L"Component_Texture_PlaneTemplete")
 		return;
 	if (m_pController->Key_Down(KEY_LBUTTON))
 	{
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(g_hWnd, &pt);
 		_float3 vPos = _float3(0.f, 0.f, 0.f);
 		_float3 vDecartPos = m_pTransform->Get_TransformDesc().vPosition;
 		_float3 vSize = m_pTransform->Get_TransformDesc().vScale;
 		vPos.x = vDecartPos.x + _float(WINCX / 2.f);
 		vPos.y = _float(WINCY / 2.f) - vDecartPos.y;
 		vPos.y -= 30.f;
+		RECT rc;
 		for(int  i = 0 ; i <3 ; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
 				int iIndex = i * 3 + j;
 
-				m_tUIBounds.left = (LONG)(vPos.x - (vSize.x / 2.f) + (j*vSize.x));
-				m_tUIBounds.top = (LONG)(vPos.y - (vSize.y / 2.f) + (i*vSize.y));
-				m_tUIBounds.right = (LONG)(vPos.x + (vSize.x / 2.f)+(j*vSize.x));
-				m_tUIBounds.bottom = (LONG)(vPos.y + (vSize.y / 2.f) + (i*vSize.y));
+				rc.left		= (LONG)(vPos.x - (vSize.x / 2.f) + (j*160.f));
+				rc.right	= (LONG)(vPos.x + (vSize.x / 2.f) +	(j* 160.f));
+				rc.top		= (LONG)(vPos.y - (vSize.y / 2.f) + (i* 160.f));
+				rc.bottom	= (LONG)(vPos.y + (vSize.y / 2.f) + (i* 160.f));
 				
+				if (PtInRect(&rc, pt))
+				{
+					if (!m_iItemClicked[iIndex])
+						m_iItemClicked[iIndex] = TRUE;
+					else if (m_iItemClicked[iIndex] == TRUE)
+						m_iItemClicked[iIndex] = 2;
+				}
+				else
+					m_iItemClicked[iIndex] = FALSE;
 
 			}
 		}
@@ -294,6 +309,31 @@ void CLobbyUI::Check_Picking()
 			Set_IsPicking(TRUE);
 	else
 			Set_IsPicking(FALSE);
+}
+
+void CLobbyUI::UseItem(_float fDeltaTime)
+{
+	for (int i = 0; i < 9; i++)
+	{
+		if (m_iItemClicked[i]==2)
+		{
+			switch (i)
+			{
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			}
+		}
+	}
 }
 
 void CLobbyUI::Key_Check(_float fDeltaTime)
@@ -607,6 +647,11 @@ _bool CLobbyUI::Render_ItemSlot()
 			/////////////////////////////////////////////////////////////////
 			m_pTexture->Set_Texture(iIndex);
 			m_pVIBuffer->Render_VIBuffer();
+			if (m_iItemClicked[iIndex] > 0)
+			{
+				m_pTexture->Set_Texture(7);
+				m_pVIBuffer->Render_VIBuffer();
+			}
 		}
 	}
 	return TRUE;
