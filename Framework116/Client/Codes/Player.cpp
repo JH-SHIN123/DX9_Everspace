@@ -186,12 +186,13 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-
 	// HP 세팅
-	STAT_INFO tStatus;
-	tStatus.iMaxHp = 300;
-	tStatus.iHp = tStatus.iMaxHp;
 
+	STAT_INFO tStatus;
+
+	tStatus.iMaxHp = 1;
+	tStatus.iHp = tStatus.iMaxHp;
+	
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
 		L"Component_Status_Info",
@@ -203,40 +204,6 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 		return E_FAIL;
 	}
 
-	CGameObject* pGameObject = nullptr;
-	UI_DESC HUD_Hp_Bar;
-	HUD_Hp_Bar.tTransformDesc.vPosition = { -828.5f, 455.f, 0.f };
-	HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()), 8.f, 0.f };
-	HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_HP_Bar",
-		L"Layer_HP_Bar",
-		&HUD_Hp_Bar, &pGameObject)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
-		return E_FAIL;
-	}
-	m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
-	m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_PLAYER);
-
-	// 스태미너 바
-	CGameObject* pGameObjectStamina = nullptr;
-	UI_DESC HUD_Stamina_Bar;
-	HUD_Stamina_Bar.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
-	HUD_Stamina_Bar.tTransformDesc.vScale = { m_fStamina * (m_fStaminaLength / m_fFullStamina), 8.f, 0.f };
-	HUD_Stamina_Bar.wstrTexturePrototypeTag = L"Component_Texture_Stamina_Bar";
-	if (FAILED(m_pManagement->Add_GameObject_InLayer(
-		EResourceType::NonStatic,
-		L"GameObject_Stamina_Bar",
-		L"Layer_Stamina_Bar",
-		&HUD_Stamina_Bar, &pGameObjectStamina)))
-	{
-		PRINT_LOG(L"Error", L"Failed To Add Stamina UI In Layer");
-		return E_FAIL;
-	}
-	m_pStamina_Bar = static_cast<CStamina_Bar*>(pGameObjectStamina);
-	m_pStamina_Bar->Who_Make_Me(m_pStamina_Bar->MAKER_PLAYER);
 
 	// For.Com_Collide
 	PASSDATA_COLLIDE tCollide;
@@ -303,6 +270,11 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 _uint CPlayer::Update_GameObject(_float fDeltaTime)
 {
+	if (m_bFirstHPSet)
+	{
+		Init_Set();
+		m_bFirstHPSet = false;
+	}
 	CGameObject::Update_GameObject(fDeltaTime);
 
 	KeyProcess(fDeltaTime);
@@ -913,7 +885,7 @@ void CPlayer::Increase_Stamina(const _float fDeltaTime)
 		m_fStaminaIncreaseDelay += fDeltaTime;
 		if (m_fStaminaIncreaseDelay >= 1.2f)
 		{
-			if (m_fStamina < 100.f)
+			if (m_fStamina < m_fFullStamina)
 			{
 				m_fStamina += 0.2f;
 				m_pStamina_Bar->Set_ScaleX(0.2f / m_fFullStamina * m_fStaminaLength);
@@ -1247,4 +1219,63 @@ _uint CPlayer::Make_Arrow()
 
 
 	return _uint();
+}
+
+void CPlayer::Init_Set()
+{
+	_uint iStage = m_pManagement->Get_Current_Scene_Type();
+	switch (iStage)
+	{
+	case (_uint)ESceneType::Stage:
+		m_pInfo->Set_MaxHp(1000);
+		m_pInfo->Set_Hp(1000);
+		m_fFullStamina = 100.f;
+		m_fStamina = m_fFullStamina;
+		break;
+	case (_uint)ESceneType::Stage2:
+		m_pInfo->Set_MaxHp(3000);
+		m_pInfo->Set_Hp(3000);
+		m_fFullStamina = 200.f;
+		m_fStamina = m_fFullStamina;
+		break;
+	case (_uint)ESceneType::Stage3:
+		m_pInfo->Set_MaxHp(5000);
+		m_pInfo->Set_Hp(5000);
+		m_fFullStamina = 300.f;
+		m_fStamina = m_fFullStamina;
+		break;
+	}
+
+	CGameObject* pGameObject = nullptr;
+	UI_DESC HUD_Hp_Bar;
+	HUD_Hp_Bar.tTransformDesc.vPosition = { -828.5f, 455.f, 0.f };
+	HUD_Hp_Bar.tTransformDesc.vScale = { m_pInfo->Get_Hp() * (m_fHpLength / m_pInfo->Get_MaxHp()), 8.f, 0.f };
+	HUD_Hp_Bar.wstrTexturePrototypeTag = L"Component_Texture_HP_Bar";
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_HP_Bar",
+		L"Layer_HP_Bar",
+		&HUD_Hp_Bar, &pGameObject)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add UI In Layer");
+	}
+	m_pHp_Bar = static_cast<CHP_Bar*>(pGameObject);
+	m_pHp_Bar->Who_Make_Me(m_pHp_Bar->MAKER_PLAYER);
+
+	// 스태미너 바
+	CGameObject* pGameObjectStamina = nullptr;
+	UI_DESC HUD_Stamina_Bar;
+	HUD_Stamina_Bar.tTransformDesc.vPosition = { 0.f, 0.f, 0.f };
+	HUD_Stamina_Bar.tTransformDesc.vScale = { m_fStamina * (m_fStaminaLength / m_fFullStamina), 8.f, 0.f };
+	HUD_Stamina_Bar.wstrTexturePrototypeTag = L"Component_Texture_Stamina_Bar";
+	if (FAILED(m_pManagement->Add_GameObject_InLayer(
+		EResourceType::NonStatic,
+		L"GameObject_Stamina_Bar",
+		L"Layer_Stamina_Bar",
+		&HUD_Stamina_Bar, &pGameObjectStamina)))
+	{
+		PRINT_LOG(L"Error", L"Failed To Add Stamina UI In Layer");
+	}
+	m_pStamina_Bar = static_cast<CStamina_Bar*>(pGameObjectStamina);
+	m_pStamina_Bar->Who_Make_Me(m_pStamina_Bar->MAKER_PLAYER);
 }

@@ -114,9 +114,10 @@ private: // HP, 스태미너 관련
 	_float m_fHpLength = 256.f;
 
 	class CStamina_Bar* m_pStamina_Bar = nullptr;
-	_float m_fStamina = 100.f;
+	_float m_fStamina = 0.f;
 	_float m_fMinStamina = 10.f;
-	_float m_fFullStamina = 100.f;
+	_float m_fFullStamina = 0.f;
+	///////////////////////////////////////////////////////////////////
 	_float m_fStaminaLength = 256.f;
 	_bool m_IsStaminaShrink = false;
 	_float m_fStaminaIncreaseDelay = 0.f;
@@ -160,6 +161,10 @@ public:
 	// 운석 날아오는중에는 렌더하지 말아줭..
 private:
 	_bool m_IsAstroidStage = false;
+
+public:
+	void Init_Set();
+	_bool m_bFirstHPSet = true;
 
 
 };

@@ -82,7 +82,7 @@ HRESULT CSniper_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// For.Com_Collide
 	BOUNDING_SPHERE BoundingSphere;
-	BoundingSphere.fRadius = 1.f;
+	BoundingSphere.fRadius = 5.f;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
@@ -105,7 +105,7 @@ HRESULT CSniper_Bullet::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 	
 	STAT_INFO tStatus;
-	tStatus.iAtk = 50;
+	tStatus.iAtk = 80;
 
 	if (FAILED(CGameObject::Add_Component(
 		EResourceType::Static,
