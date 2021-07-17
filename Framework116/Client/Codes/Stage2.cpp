@@ -295,12 +295,12 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 
 	// Skill OverDrive
 
-	UI_DESC OverdriveHUD;
-	OverdriveHUD.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
-	OverdriveHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-	OverdriveHUD.wstrTexturePrototypeTag = L"Component_Texture_Overdrive_HUD";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
-		return E_FAIL;
+	//UI_DESC OverdriveHUD;
+	//OverdriveHUD.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
+	//OverdriveHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+	//OverdriveHUD.wstrTexturePrototypeTag = L"Component_Texture_Overdrive_HUD";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &OverdriveHUD)))
+	//	return E_FAIL;
 
 	//UI_DESC HUD_Boarder_OverDrive;
 	//HUD_Boarder_OverDrive.tTransformDesc.vPosition = { -20.f, 435.f, 0.f };
@@ -310,12 +310,12 @@ HRESULT CStage2::Add_Layer_HUD(const wstring& LayerTag)
 	//	return E_FAIL;
 
 	// Skill Shield
-	UI_DESC HUD_Shield_Battery;
-	HUD_Shield_Battery.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
-	HUD_Shield_Battery.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
-	HUD_Shield_Battery.wstrTexturePrototypeTag = L"Component_Texture_Shield_Battery_HUD";
-	if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
-		return E_FAIL;
+	//UI_DESC HUD_Shield_Battery;
+	//HUD_Shield_Battery.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
+	//HUD_Shield_Battery.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
+	//HUD_Shield_Battery.wstrTexturePrototypeTag = L"Component_Texture_Shield_Battery_HUD";
+	//if (FAILED(Add_Layer_UI(L"Layer_HUD", &HUD_Shield_Battery)))
+	//	return E_FAIL;
 
 	//UI_DESC HUD_Boarder_Shield;
 	//HUD_Boarder_Shield.tTransformDesc.vPosition = { 260.f, 435.f, 0.f };
@@ -556,7 +556,7 @@ _uint CStage2::Stage2_Flow(_float fDeltaTime)
 
 			/////////////////////// 최초 무기(펄스) HUD 생성.
 			UI_DESC LaserHUD;
-			LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			LaserHUD.tTransformDesc.vPosition = { -810.f, 360.f, 0.f };
 			LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 			LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(

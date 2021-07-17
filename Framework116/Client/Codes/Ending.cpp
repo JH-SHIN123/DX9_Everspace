@@ -52,17 +52,7 @@ _uint CEnding::Update_Scene(_float fDeltaTime)
 		m_bStart = false;
 	}
 
-	if (false == m_bSkipVideo)
-	{
-		if (m_fSkipDeltaT >= m_fSkipTime)
-		{
-			if(GetAsyncKeyState(VK_RETURN) & 0x8000)
-				m_bSkipVideo = true;
-		}
-		else m_fSkipDeltaT += fDeltaTime;
-	}
-
-	if (false == m_pManagement->IsPlaying_MCIVideoEx() || m_bSkipVideo)
+	if (false == m_pManagement->IsPlaying_MCIVideoEx())
 	{
 		if (false == m_bFadeIn) {
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(

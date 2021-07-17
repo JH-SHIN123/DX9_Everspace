@@ -173,7 +173,7 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 
 	// 최초 무기(펄스) HUD 생성.
 	UI_DESC LaserHUD;
-	LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+	LaserHUD.tTransformDesc.vPosition = { -810.f, 360.f, 0.f };
 	LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 	LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 
@@ -562,7 +562,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 			m_iWeapon = WEAPON_LAZER;
 			UI_DESC LaserHUD;
-			LaserHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			LaserHUD.tTransformDesc.vPosition = { -810.f, 360.f, 0.f };
 			LaserHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 			LaserHUD.wstrTexturePrototypeTag = L"Component_Texture_Laser_HUD";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -580,7 +580,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 			m_iWeapon = WEAPON_MACHINEGUN;
 			UI_DESC MachinegunHUD;
-			MachinegunHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			MachinegunHUD.tTransformDesc.vPosition = { -810.f, 360.f, 0.f };
 			MachinegunHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 			MachinegunHUD.wstrTexturePrototypeTag = L"Component_Texture_Machinegun_HUD";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
@@ -599,7 +599,7 @@ void CPlayer::KeyProcess(_float fDeltaTime)
 			m_pManagement->Get_GameObjectList(L"Layer_HUD_Weapon")->front()->Set_IsDead(TRUE);
 			m_iWeapon = WEAPON_MISSILE;
 			UI_DESC MissileHUD;
-			MissileHUD.tTransformDesc.vPosition = { -300.f, 435.f, 0.f };
+			MissileHUD.tTransformDesc.vPosition = { -810.f, 360.f, 0.f };
 			MissileHUD.tTransformDesc.vScale = { 130.f, 90.f, 0.f };
 			MissileHUD.wstrTexturePrototypeTag = L"Component_Texture_Missile_HUD";
 			if (FAILED(m_pManagement->Add_GameObject_InLayer(
