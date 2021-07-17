@@ -10,6 +10,7 @@ enum class ESceneType : unsigned int
 	Stage2,
 	Stage3,
 	Lobby,
+	Ending,
 	None = 4294967295
 };
 

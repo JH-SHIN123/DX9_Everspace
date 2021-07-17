@@ -375,6 +375,10 @@ HRESULT CManagement::Play_MCIVideoEx()
 
 HRESULT CManagement::Release_MCIVideoEx()
 {
+	//m_pDevice_Manager->Render_Begin();
+	//m_pDevice_Manager->Render_End();
+	MoveWindow(m_hVideo, 0, 0, 0, 0, FALSE);
+
 	MCIWndClose(m_hVideo);
 	MCIWndDestroy(m_hVideo);
 	m_hVideo = NULL;
@@ -404,7 +408,7 @@ void CManagement::Set_IsPlayingVideo(const _bool _isPlaying)
 
 void CManagement::Free()
 {
-	Release_MCIVideoEx();
+	//Release_MCIVideoEx();
 
 	if (Safe_Release(m_pFrame_Manager))
 	{

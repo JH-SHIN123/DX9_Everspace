@@ -332,7 +332,7 @@ _uint CMonster::Search_Target(_float fDeltaTime)
 
 	m_eAttackTarget = EAttackTarget::End;
 
-	if (fDist <= 400.f && fDist != 0.f)
+	if (fDist <= 300.f && fDist != 0.f)
 	{
 		Add_Hp_Bar(fDeltaTime);
 		m_eAttackTarget = EAttackTarget::Player;
@@ -405,7 +405,11 @@ _uint CMonster::Monster_Battle(_float fDeltaTime)
 	// 플레이어와 호위차의 거리가 작다면
 	// 플레이어 공격
 	// 아니면 호위차 공격
-
+	_uint iStage = m_pManagement->Get_Current_Scene_Type();
+	if (iStage == (_uint)ESceneType::Stage2)
+	{
+		m_eAttackTarget = EAttackTarget::Player;
+	}
 	if (m_eAttackTarget == EAttackTarget::Player)
 	{
 		// 플레이어가 호위차 주변에 잘 있으니 플레이어 공격

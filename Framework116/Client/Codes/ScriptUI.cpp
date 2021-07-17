@@ -1104,6 +1104,12 @@ void CScriptUI::Script_Stage3_Opening()
 	switch (m_dwScriptNext)
 	{
 	case 0:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue1.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"좋아 무사히 가이아 행성 구역에 도착했군, 앞으로 얼마 안남았네";
 		break;
@@ -1120,22 +1126,52 @@ void CScriptUI::Script_Stage3_Opening()
 		m_wstrScript = L"...";
 		break;
 	case 4:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue2.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"이런!";
 		break;
 	case 5:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue3.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"감청이다! 정찰조는 당했다고 밖에 생각이 들지 않는다!";
 		break;
 	case 6:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue4.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"적이 매복해 있을 것이다, 포위 당하기 전에 소탕한다.";
 		break;
 	case 7:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue5.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"2인 1조로 행동한다, 수송기체는 느리니 자네가 호위를 하는 식이 맞겠군.";
 		break;
 	case 8:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue6.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"감청의 시도가 있을 수 있으니 다른 무전 채널을 이용한다.";
 		break;
@@ -1144,12 +1180,18 @@ void CScriptUI::Script_Stage3_Opening()
 		m_wstrScript = L"알겠습니다!";
 		break;
 	case 10:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue7.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"잘 부탁하네 신병.";
 		break;
 	case 11:
 		m_ePortrait = EPortraitNumber::Player;
-		m_wstrScript = L"맏겨만 주십시오!";
+		m_wstrScript = L"맡겨만 주십시오!";
 		break;
 	default:
 		m_IsSoundFirst = true;
@@ -1175,6 +1217,12 @@ void CScriptUI::Script_Stage3_Boss_Opening()
 	switch (m_dwScriptNext)
 	{
 	case 0:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue8.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"앗! 저건!";
 		break;
@@ -1183,10 +1231,22 @@ void CScriptUI::Script_Stage3_Boss_Opening()
 		m_wstrScript = L"왜 그러십니까?";
 		break;
 	case 2:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue9.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"전방에 적군 기체로 판별되는 함선이 있다!";
 		break;
 	case 3:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue10.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"제길... 본부와 교신이 되지않아..!";
 		break;
@@ -1203,10 +1263,22 @@ void CScriptUI::Script_Stage3_Boss_Opening()
 		m_wstrScript = L"끝까지 호위를 하겠습니다.";
 		break;
 	case 7:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue11.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"자네는 겁도 없나?";
 		break;
 	case 8:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue12.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Delivery;
 		m_wstrScript = L"이 임무를 완수하면 내가 맥주라도 쏘겠네, 약속하지";
 		break;
@@ -1220,7 +1292,7 @@ void CScriptUI::Script_Stage3_Boss_Opening()
 		break;
 	case 11:
 		m_ePortrait = EPortraitNumber::Player;
-		m_wstrScript = L"맏겨만 주십시오!";
+		m_wstrScript = L"맡겨만 주십시오!";
 		break;
 	default:
 		m_IsSoundFirst = true;
@@ -1262,6 +1334,12 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 		m_wstrScript = L"본부, 화물 운송을 완료 하였다.";
 		break;
 	case 4:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue13.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"대단해!! 아주 잘했네 제군들!!";
 		break;
@@ -1278,6 +1356,12 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 		m_wstrScript = L"임무를 무사히 완수한 잭 한마 이병에게 표창을 하셨으면 합니다.";
 		break;
 	case 8:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue14.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"잘 알았네. 잭 한마 이병! 임무를 완수해주어 고맙네!";
 		break;
@@ -1298,6 +1382,12 @@ void CScriptUI::Script_Stage3_Boss_Clear()
 		m_wstrScript = L"...아뿔싸...!!!";
 		break;
 	case 13:
+		if (m_iPreSound != m_iCurSound)
+		{
+			m_pManagement->StopSound(CSoundMgr::DIALOGUE1);
+			m_pManagement->PlaySound(L"Stage3_Dialogue15.ogg", CSoundMgr::DIALOGUE1);
+			m_iCurSound = m_dwScriptNext;
+		}
 		m_ePortrait = EPortraitNumber::Admiral;
 		m_wstrScript = L"하하하, 곧 구조선이 도착할것이니 조금만 기다리게나";
 		break;

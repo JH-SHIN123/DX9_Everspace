@@ -1075,6 +1075,16 @@ void CMainCam::Free()
 	CCamera::Free();
 }
 
+void CMainCam::Set_Transform(CTransform * pTransform)
+{
+	if (nullptr == pTransform)
+		return;
+	if (m_pPlayerTransform)
+		Safe_Release(m_pPlayerTransform);
+	m_pPlayerTransform = pTransform;
+	Safe_AddRef(m_pPlayerTransform);
+}
+
 _uint CMainCam::FPSMovement(_float fDeltaTime)
 {
 	return _uint();

@@ -9,6 +9,7 @@
 #include "ScriptUI.h"
 #include "Delivery.h"
 #include "Loading.h"
+#include "Ending.h"
 
 CStage3::CStage3(LPDIRECT3DDEVICE9 pDevice)
 	: CScene(pDevice)
@@ -220,7 +221,7 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 		if (Check == true)
 		{
 			CQuestHandler::Get_Instance()->Set_ClearStage(EStageClear::Stage_3);
-
+			m_bStageClear = true;
 			++m_iFlowCount;
 		}
 	}
@@ -286,15 +287,29 @@ void CStage3::Stage_Flow(_float fDeltaTime)
 		}
 		if (m_bLeaveScene)
 		{
-			//m_pManagement->Clear_NonStatic_Resources();
-			if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
-				CLoading::Create(m_pDevice, ESceneType::Lobby))))
+			// Ending Scene
+			if (m_bStageClear)
 			{
-				PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
-				return;
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Ending,
+					CEnding::Create(m_pDevice, ESceneType::Stage3))))
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+					return;
+				}
 			}
-			return;
+			else
+			{
+				if (FAILED(CManagement::Get_Instance()->Setup_CurrentScene((_uint)ESceneType::Loading,
+					CLoading::Create(m_pDevice, ESceneType::Lobby))))
+
+				{
+					PRINT_LOG(L"Error", L"Failed To Setup Stage Scene");
+					return;
+				}
+			}
 			m_bLeaveScene = false;
+			return;
+//			m_bLeaveScene = false;
 		}
 	}
 
