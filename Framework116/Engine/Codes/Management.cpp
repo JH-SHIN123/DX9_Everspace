@@ -358,8 +358,10 @@ HRESULT CManagement::Create_MCIVideoEx(HWND hWnd, HINSTANCE hInstance, const TCH
 	if (NULL != m_hVideo)
 		Release_MCIVideoEx();
 
-	m_hVideo = MCIWndCreate(hWnd, hInstance, WS_CHILD | WS_VISIBLE | MCIWNDF_NOPLAYBAR
-		, pPath);
+	m_hVideo = MCIWndCreate(hWnd, hInstance,
+		MCIWNDF_NOTIFYANSI | MCIWNDF_NOMENU |
+		MCIWNDF_NOTIFYALL | MCIWNDF_NOPLAYBAR,
+		pPath);
 
 	MoveWindow(m_hVideo, 0, 0, iWinCx, iWinCy, FALSE);
 
