@@ -152,11 +152,6 @@ void CLobbyScriptUI::BlackBar_Start(_float fDeltaTime)
 {
 	if (m_vUI_BlackBar_Up_Pos.y <= 510.f)
 	{
-		if (!m_bSoundOnce)
-		{
-			m_pManagement->PlaySound(L"PopUp_Quest2.ogg", CSoundMgr::SCRIPT_POPUP);
-			m_bSoundOnce = true;
-		}
 		return ;
 	}
 	_float fSpeedPerSec = 0.f;

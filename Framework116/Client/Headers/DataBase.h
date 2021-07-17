@@ -38,21 +38,14 @@ private:
 	_uint m_iMoney = 300000;
 	STAT_INFO m_tStatInfo;
 
-<<<<<<< HEAD
+
 	_uint m_iAtkBuffItem = 0;
 	_uint m_iDefBuffItem = 0;
 	_uint m_iHpBuffItem = 0;
 	_uint m_iEnergyBuffItem = 0;
 	_uint m_iMissileCount = 0;
 	_uint m_iVMaxBuffItem = 0;
-=======
-	_uint m_iAtkBuffItem = 10;
-	_uint m_iDefBuffItem = 10;
-	_uint m_iHpBuffItem = 10;
-	_uint m_iEnergyBuffItem = 10;
-	_uint m_iMissileCount = 10;
-	_uint m_iVMaxBuffItem = 10;
->>>>>>> main
+
 
 };
 

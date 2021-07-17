@@ -5,7 +5,7 @@ IMPLEMENT_SINGLETON(CDataBase)
 
 CDataBase::CDataBase()
 {
-<<<<<<< HEAD
+
 	m_tStatInfo.iAtk = 10;
 	m_tStatInfo.iDef = 10;
 	m_tStatInfo.iMaxHp = 10;
@@ -15,17 +15,7 @@ CDataBase::CDataBase()
 	m_tStatInfo.iMaxEnergy = 10;
 	m_tStatInfo.iEnergy = 10;
 	m_tStatInfo.iFireRate = 10;
-=======
-	m_tStatInfo.iAtk = 20;
-	m_tStatInfo.iDef = 30;
-	m_tStatInfo.iMaxHp = 50;
-	m_tStatInfo.iHp = 50;
-	m_tStatInfo.iMaxShield = 30;
-	m_tStatInfo.iShield = 30;
-	m_tStatInfo.iMaxEnergy = 40;
-	m_tStatInfo.iEnergy = 40;
-	m_tStatInfo.iFireRate = 70;
->>>>>>> main
+
 }
 
 CDataBase::~CDataBase()

@@ -188,12 +188,6 @@ HRESULT CPlayer::Ready_GameObject(void * pArg/* = nullptr*/)
 	}
 
 	// HP ¼¼ÆÃ
-<<<<<<< HEAD
-=======
-	STAT_INFO tStatus;
-	tStatus.iMaxHp = 1;
-	tStatus.iHp = tStatus.iMaxHp;
->>>>>>> main
 
 	STAT_INFO tStat = *CDataBase::Get_Instance()->Get_StatInfo();
 	if (FAILED(CGameObject::Add_Component(
