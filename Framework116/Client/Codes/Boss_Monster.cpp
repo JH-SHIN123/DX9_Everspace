@@ -170,7 +170,15 @@ _uint CBoss_Monster::LateUpdate_GameObject(_float fDeltaTime)
 
 	if (m_pInfo->Get_Hp() <= 0)
 	{
-		CEffectHandler::Add_Layer_Effect_Explosion(m_pTransform->Get_State(EState::Position), 1.f);
+		_float3 vMyPos = m_pTransform->Get_State(EState::Position);
+		_float3 vLook = m_pTransform->Get_State(EState::Look);
+		D3DXVec3Normalize(&vLook, &vLook);
+		_float3 vBack = vMyPos - vLook * 30.f;
+		_float3 vFront = vMyPos - vLook * 30.f;
+
+		CEffectHandler::Add_Layer_Effect_Explosion(vBack, 4.f);
+		CEffectHandler::Add_Layer_Effect_Explosion(vFront, 4.f);
+
 		m_IsDead = true;
 		if (m_pHp_Bar)
 			m_pHp_Bar->Set_IsDead(TRUE);
