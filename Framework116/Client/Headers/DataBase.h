@@ -26,12 +26,14 @@ public:
 	_uint GetMissileCount() { return m_iMissileCount; }
 	_uint GetVMaxBuffItem() { return m_iVMaxBuffItem; }
 
-	void SetAtkBuffItemCount(_uint iPlus) { m_iAtkBuffItem += iPlus; }
-	void SetDefBuffItemCount(_uint iPlus) { m_iDefBuffItem += iPlus; }
-	void SetHpBuffItemCount(_uint iPlus) { m_iHpBuffItem += iPlus; }
-	void SetEnergyBuffItemCount(_uint iPlus) { m_iEnergyBuffItem += iPlus; }
-	void SetMissileCount(_uint iPlus) { m_iMissileCount += iPlus; }
-	void SetVMaxBuffItemCount(_uint iPlus) { m_iVMaxBuffItem += iPlus; }
+	void SetAtkBuffItemCount(_uint iPlus);
+	void SetDefBuffItemCount(_uint iPlus);
+	void SetHpBuffItemCount(_uint iPlus);
+	void SetEnergyBuffItemCount(_uint iPlus);
+	void SetMissileCount(_uint iPlus);
+	void SetVMaxBuffItemCount(_uint iPlus);
+
+
 	void Set_StatInfo(STAT_INFO _tUnitInfo);
 	void Set_Money(_uint _iMoney);
 private:

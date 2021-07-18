@@ -1,8 +1,8 @@
-﻿  Boss_Monster.cpp
+﻿  DataBase.cpp
   Generating code
-  47 of 2103 functions ( 2.2%) were compiled, the rest were copied from previous compilation.
+  11 of 2103 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 DataBase.obj : warning LNK4020: a type record in 'd:\jusin\sr_everspace\framework116\client\defaults\release\vc140.pdb' is corrupted; some symbols and types may not be accessible from the debugger
 Delivery.obj : warning LNK4020: a type record in 'd:\jusin\sr_everspace\framework116\client\defaults\release\vc140.pdb' is corrupted; some symbols and types may not be accessible from the debugger
